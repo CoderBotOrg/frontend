@@ -1,5 +1,5 @@
 <template>
-<div id="app">
+
   <v-app id="inspire">
     <v-navigation-drawer
       fixed
@@ -7,7 +7,7 @@
       app
     >
       <v-list dense>
-        <v-list-tile @click="">
+        <v-list-tile>
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -15,21 +15,78 @@
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="">
+
+        Utente
+        <v-list-tile>
           <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
+            <v-icon>account_box</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Contact</v-list-tile-title>
+            <v-list-tile-title>Luigi Beretta</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        Attività
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>add</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Nuova</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>open_in_new</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Apri</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>close</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Chiudi</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        Altro
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Impostazioni</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
       </v-list>
     </v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>Coderbot</v-toolbar-title>
     </v-toolbar>
     <v-content>
+      <p class="display-3"> Benvenuto in CoderBot </p>
+      <p class="display-1"> Scegli un'azione per iniziare </p>
+      <v-btn depressed large color="primary"><v-icon left dark>open_in_new</v-icon>Apri Attività</v-btn> <br>
+      <v-btn depressed large color="primary"><v-icon left dark>add</v-icon>Nuova Attività</v-btn> <br>
+      <v-btn depressed large color="primary"><v-icon left dark>settings</v-icon>Impostazioni</v-btn> <br>
+      <v-btn depressed large color="primary"><v-icon left dark>help</v-icon>Aiuto</v-btn> <br>
+
       <v-container fluid fill-height>
         <v-layout
           justify-center
@@ -37,20 +94,12 @@
         >
           <v-flex text-xs-center>
             <v-tooltip left>
-              <v-btn icon large :href="source" target="_blank" slot="activator">
-                <v-icon large>code</v-icon>
-              </v-btn>
-              <span>Source</span>
             </v-tooltip>
           </v-flex>
         </v-layout>
       </v-container>
     </v-content>
-    <v-footer color="indigo" app inset>
-      <span class="white--text">&copy; 2017</span>
-    </v-footer>
   </v-app>
-</div>
 </template>
 
 <script>
