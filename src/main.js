@@ -11,24 +11,19 @@ import 'vuetify/dist/vuetify.min.css';
 // Components
 import App from './App';
 import page from './components/Page';
-
-import * as THREE from 'three';
-import * as AR from 'ar.js/three.js/build/ar';
-
-// import THREEx from './ar.js'
+import arexample from './components/ARexample'
 
 // Configuration
 Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.prototype.$axios = axios.create();
-Vue.prototype.$THREE = THREE;
-Vue.prototype.$THREEx = AR;
 
 Vue.config.productionTip = false;
 
 // Routing
 const routes = [
   { path: '/', component: page },
+  { path: '/ar', component: arexample}
 ];
 
 const router = new VueRouter({
