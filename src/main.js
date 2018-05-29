@@ -12,10 +12,18 @@ import 'vuetify/dist/vuetify.min.css';
 import App from './App';
 import page from './components/Page';
 
+import * as THREE from 'three';
+import * as AR from 'ar.js/three.js/build/ar';
+
+// import THREEx from './ar.js'
+
 // Configuration
 Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.prototype.$axios = axios.create();
+Vue.prototype.$THREE = THREE;
+Vue.prototype.$THREEx = AR;
+
 Vue.config.productionTip = false;
 
 // Routing
