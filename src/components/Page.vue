@@ -82,6 +82,7 @@
     <v-content>
       <p class="display-3"> Benvenuto in CoderBot </p>
       <p class="display-1"> Scegli un'azione per iniziare </p>
+
       <v-btn depressed large color="primary"><v-icon left dark>open_in_new</v-icon>Apri Attività</v-btn> <br>
       <v-btn depressed large color="primary"><v-icon left dark>add</v-icon>Nuova Attività</v-btn> <br>
       <v-btn depressed large color="primary"><v-icon left dark>settings</v-icon>Impostazioni</v-btn> <br>
@@ -100,8 +101,8 @@
       </v-container>
     </v-content>
   </v-app>
-</template>
 
+</template>
 <script>
 export default {
   name: 'HelloWorld',

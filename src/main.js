@@ -11,16 +11,19 @@ import 'vuetify/dist/vuetify.min.css';
 // Components
 import App from './App';
 import page from './components/Page';
+import arexample from './components/ARexample'
 
 // Configuration
 Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.prototype.$axios = axios.create();
+
 Vue.config.productionTip = false;
 
 // Routing
 const routes = [
   { path: '/', component: page },
+  { path: '/ar', component: arexample}
 ];
 
 const router = new VueRouter({
