@@ -11,7 +11,8 @@ import 'vuetify/dist/vuetify.min.css';
 // Components
 import App from './App';
 import page from './components/Page';
-import arexample from './components/ARexample'
+import arexample from './components/ARexample';
+import run from './components/Run';
 
 // Configuration
 Vue.use(VueRouter);
@@ -23,7 +24,8 @@ Vue.config.productionTip = false;
 // Routing
 const routes = [
   { path: '/', component: page },
-  { path: '/ar', component: arexample}
+  { path: '/run', component: run },
+  { path: '/ar', component: arexample }
 ];
 
 const router = new VueRouter({
