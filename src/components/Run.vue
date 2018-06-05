@@ -5,10 +5,37 @@
         <v-flex xs12 lg6>
           <img :src="webcamStream"/>
         </v-flex>
-        <v-flex xs12 lg6 style="background-color: black; color:white">
-          <pre>
-          asdfTest
-          </pre>
+        <v-flex xs12 lg6>
+        <v-layout row wrap>
+          <v-flex xs12 sm12>
+            <v-btn-toggle>
+
+              <v-btn flat>
+                <v-icon>keyboard_arrow_up</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-flex>
+          <v-flex xs12 sm12>
+            <v-btn-toggle>
+              <v-btn flat>
+                <v-icon>keyboard_arrow_left</v-icon>
+              </v-btn>
+
+              <v-btn flat>
+                <v-icon>keyboard_arrow_right</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-flex>
+          <v-flex xs12 sm12>
+            <v-btn-toggle>
+
+              <v-btn flat>
+                <v-icon>keyboard_arrow_down</v-icon>
+              </v-btn>
+
+            </v-btn-toggle>
+          </v-flex>
+        </v-layout>
         </v-flex>
       </v-layout>
     </v-container>
