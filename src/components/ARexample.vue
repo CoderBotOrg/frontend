@@ -1,14 +1,39 @@
 <template>
   <div>
-    <v-btn v-on:click="initAR()">Init AR</v-btn>
+
+   <div id="img"></div>
+   <div id="btn">
+    <v-btn v-on:click="initAR()">Show AR</v-btn>
+    <v-btn v-on:click="removeAr()">Hide AR</v-btn>
+   </div>
+
+    
   </div>
 </template>
 
 <script>
   export default {
     name : '',
+    data : function () {
+      return {
+        obj : new THREE.Object3D(),
+        created : 0,
+        visible : 1
+      }
+    },
     methods: {
       initAR : function () {
+        //this.obj = new THREE.Object3D();
+        //console.log(this.obj);
+        if(this.created == 1){
+          if(this.visible == 0){
+            this.visible = 1;
+            this.obj.visible = true;
+          }
+         
+          
+        }else{
+        
         THREEx.ArToolkitContext.baseURL = 'static/'
         console.log("ecomi")
         //////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +50,8 @@
   renderer.domElement.style.position = 'absolute'
   renderer.domElement.style.top = '0px'
   renderer.domElement.style.left = '0px'
-  document.body.appendChild( renderer.domElement );
+  document.getElementById("img").appendChild( renderer.domElement);
+  //document.ar.appendChild( renderer.domElement );
 
   // array of functions for the rendering loop
   var onRenderFcts= [];
@@ -125,28 +151,45 @@
   //    add an object in the scene
   //////////////////////////////////////////////////////////////////////////////////
 
+ 
+     var onProgress = function(xhr) {
+                if (xhr.lengthComputable) {
+                    var percentComplete = xhr.loaded / xhr.total * 100;
+                    console.log(Math.round(percentComplete, 2) + '% downloaded');
+                }
+            };
 
-    var onProgress = function ( xhr ) {
-          if ( xhr.lengthComputable ) {
-            var percentComplete = xhr.loaded / xhr.total * 100;
-            console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-          }
-        };
+            //console.log(this.obj);
+            var onError = function(xhr) {};
+            THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
+            function loader(materials, obj){
+               materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath('static/obj/');
+                objLoader.load('futurama.obj', function(object) {
+                    this.obj.add(object);
+                    scene.add(this.obj);  
 
-            var onError = function ( xhr ) { };
-        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+                }, onProgress);
 
-    var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setPath( 'static/obj/' );
-        mtlLoader.load( 'futurama.mtl', function( materials ) {
-          materials.preload();
-          var objLoader = new THREE.OBJLoader();
-          objLoader.setMaterials( materials );
-          objLoader.setPath( 'static/obj/' );
-          objLoader.load( 'futurama.obj', function ( object ) {
-            scene.add( object );
-          }, onProgress );
-        });
+            };
+
+
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.setPath('static/obj/');
+            mtlLoader.load('futurama.mtl', function(materials) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.setPath('static/obj/');
+                objLoader.load('futurama.obj', function(object) {
+                    this.obj.add(object);
+                    scene.add(this.obj);  
+
+                }.bind(this), onProgress);
+            }.bind(this));
+           // console.log(this.obj);
 
 
 
@@ -175,7 +218,18 @@
       onRenderFct(deltaMsec/1000, nowMsec/1000)
     })
   })
+  this.created = 1;
+        }
+      },
+      removeAr : function(){
+        //console.log(this.count);
+        this.obj.visible = false;
+        this.visible = false;
+        
+        
+        
       }
+
     }
 
   }
