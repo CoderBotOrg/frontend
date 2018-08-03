@@ -13,6 +13,7 @@ import App from './App';
 import page from './components/Page';
 import arexample from './components/ARexample';
 import run from './components/Run';
+import blocklyTest from './components/BlocklyTest';
 
 // Configuration
 Vue.use(VueRouter);
@@ -25,7 +26,8 @@ Vue.config.productionTip = false;
 const routes = [
   { path: '/', component: page },
   { path: '/run', component: run },
-  { path: '/ar', component: arexample }
+  { path: '/ar', component: arexample },
+  { path: '/blockly', component: blocklyTest}
 ];
 
 const router = new VueRouter({
