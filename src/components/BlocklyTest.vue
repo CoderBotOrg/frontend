@@ -1,16 +1,35 @@
 <template> 
  <div class="hello"> 
  	aa
-   <div id="blocklyDiv" style="height: 480px; width: 600px;">
-   </div> 
-    <xml id="toolbox" ref=toolbox style="display: none"> 
-     <block type="controls_if"></block> 
-     <block type="text"></block> <block type="text_print"></block> 
-    </xml> 
-   </div> 
+   <div ref="blocklyDiv" id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+   	<xml ref="toolbox" id="toolbox" style="display: none">
+  <block type="controls_if"></block>
+  <block type="controls_repeat_ext"></block>
+  <block type="logic_compare"></block>
+  <block type="math_number"></block>
+  <block type="math_arithmetic"></block>
+  <block type="text"></block>
+  <block type="text_print"></block>
+</xml>
+</div>
 </template>
 
-<script> 
 
- var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')}); 
+
+<script>
+// var workspace = Blockly.inject('blocklyDiv', {toolbox: this.$refs.toolbox}); 
+
+export default {
+  name: 'BlocklyTest',
+  data() {
+    return {
+      msg: 'test',
+    };
+  },
+  mounted(){
+  	var workspacePlayground = Blockly.inject(this.$refs.blocklyDiv, {toolbox: this.$refs.toolbox});
+    console.log(this.$refs.blocklyDiv)
+  }
+};
 </script>
