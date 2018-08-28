@@ -52,6 +52,13 @@ module.exports = {
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
+        test: /\.xml$/,
+        loader: 'url-loader',
+        options: {
+          name: utils.assetsPath('assets/[name].[ext]')
+        }
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
