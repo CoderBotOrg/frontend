@@ -15,10 +15,14 @@ import arexample from './components/ARexample';
 import run from './components/Run';
 import blocklyTest from './components/BlocklyTest';
 
+// Utils
+import base64 from 'base-64'
+
 // Configuration
 Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.prototype.$axios = axios.create();
+Vue.prototype.$base64 = base64
 
 Vue.config.productionTip = false;
 
