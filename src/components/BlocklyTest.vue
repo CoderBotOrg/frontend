@@ -73,6 +73,12 @@ export default {
 		// blocks.js
 		//  Extensions to Blockly's language and Python generator.
 
+		/*
+		This is here because it needs to reach the configurations from 
+		the part above, which will be fetched from remote.
+		*/
+		
+
 		'use strict';
 
 		Blockly.HSV_SATURATION=.99;
