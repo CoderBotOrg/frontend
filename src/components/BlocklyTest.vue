@@ -30,8 +30,21 @@ export default {
 			this.$refs.blocklyDiv,
 			// Options
 			{
-				toolbox:serializedToolbox
-			});
+				toolbox			: serializedToolbox,
+				//path				: '../../', // ? this makes to load audio assets from /media FIXME
+				// TODO: Use values from fetched configuration!
+				scrollbars	: true, 
+				//MaxBlocks		: -1, // -1 as infinite not working FIXME
+				zoom :
+				{
+					controls 	: true,
+					wheel 		: false,
+					startScale: 1.0,
+					maxScale 	: 1.5,
+					minScale	: 0.2 
+				}
+			}
+		);
 
 		// coderbot.cfg data (temp workaround, must be fetched from backend)
 		var CODERBOT_MOV_FW_DEF_SPEED=100;
