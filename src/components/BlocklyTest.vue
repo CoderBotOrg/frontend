@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<div ref="blocklyDiv" id="blocklyDiv" style="height: 480px; width: 600px;">
+		<div ref="blocklyTotal" class="blocklyTotal">
+			<div ref="blocklyArea" class="blocklyArea">
+				<div ref="blocklyDiv" class="blocklyDiv">
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -16,6 +20,8 @@ export default {
 		};
 	},
 	mounted() {
+		const blocklyArea = this.$refs.blocklyArea
+		const blocklyDiv = this.$refs.blocklyDiv
 		// Should be dependent on the chosen toolbox,
 		//  possibly an AJAX call if it's a custom toolbox (?)
 		var toolbox = require('../assets/toolbox_advanced.xml')
@@ -27,7 +33,7 @@ export default {
 		// Initialise Blockly Instance
 		var workspace = Blockly.inject(
 			// Blockly container
-			this.$refs.blocklyDiv,
+			blocklyDiv,
 			// Options
 			{
 				toolbox			: serializedToolbox,
@@ -45,6 +51,24 @@ export default {
 				}
 			}
 		);
+
+		const onresize = function() {
+			console.log('a')
+			// Compute the absolute coordinates and dimensions of blocklyArea.
+			let element = blocklyArea;
+			do {
+				element = element.offsetParent;
+			} while (element);
+			
+			const offsetWidth = blocklyArea.offsetWidth;
+			blocklyDiv.style.width = `${offsetWidth}px`;
+			const offsetHeight = blocklyArea.offsetHeight;
+			blocklyDiv.style.height = `${offsetHeight}px`;
+		};
+		window.addEventListener('resize', onresize, false);
+		
+		onresize();
+		Blockly.svgResize(workspace);
 
 		// coderbot.cfg data (temp workaround, must be fetched from backend)
 		var CODERBOT_MOV_FW_DEF_SPEED=100;
@@ -1124,3 +1148,22 @@ export default {
 	}
 };
 </script>
+
+
+<style scoped>
+
+.blocklyDiv {
+  position: absolute;
+}
+.blocklyArea {
+  height: 97%;
+  width: 100%;
+}
+
+.blocklyTotal {
+  line-height: 0;
+  position: absolute;
+  width: 100%;
+  height: 80%;
+}
+</style>
