@@ -15,7 +15,7 @@ export default {
 	name: 'Blockly',
 	data() {
 		return {
-			test: 'a',
+			a: '',
 		};
 	},
 	methods : {
@@ -25,13 +25,18 @@ export default {
 			do {
 				element = element.offsetParent;
 			} while (element);
-			
+
 			const offsetWidth = this.$refs.blocklyArea.offsetWidth;
 			this.$refs.blocklyDiv.style.width = `${offsetWidth}px`;
 			const offsetHeight = this.$refs.blocklyArea.offsetHeight;
 			this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
 		},
 		initcfg(){
+			var b = "test";
+		},
+		blocksExtensions(){
+
+			var cfg = Object();
 			// coderbot.cfg data (temp workaround, must be fetched from backend)
 			var CODERBOT_MOV_FW_DEF_SPEED=100;
 			var CODERBOT_MOV_FW_DEF_ELAPSE=1; // to check
@@ -48,7 +53,7 @@ export default {
 			var CODERBOT_CTRL_TR_SPEED=80;
 			var CODERBOT_CTRL_TR_ELAPSE=0.5; // to check
 			var CODERBOT_CTRL_COUNTER=true; // to check
-			var CODERBOT_CTRL_MOVE_MOTION=true; // to check
+			var CODERBOT_CTRL_MOVE_MOTION=true; //t o check
 			var CODERBOT_CTRL_MOVE_MPU=true; // to check
 			var CODERBOT_CNN_MODEL_LIST=""
 
@@ -68,28 +73,30 @@ export default {
 			BotMessages.TagAlreadyExists = "Tag already exists.";
 			BotMessages.ColorAtPoint = "Color at point: ";
 			BotMessages.ModelTraining = "Model is training, check model lists to monitor training status.";
-		},
-		blocksExtensions(){
+
 			// blocks.js
 			//  Extensions to Blockly's language and Python generator.
 
 			/*
-			This is here because it needs to reach the configurations from 
+			This is here because it needs to reach the configurations from
 			the part above, which will be fetched from remote.
 			*/
-			
+
 
 			'use strict';
 
 			Blockly.HSV_SATURATION=.99;
 			Blockly.HSV_VALUE=.99;
 
+			const self = this
+
 			Blockly.Blocks['coderbot_repeat'] = {
 				/**
 				 * Block for repeat n times (internal number).
 				 * @this Blockly.Block
 				 */
-				init: function() {
+				init: function(self) {
+					console.log('test')
 					this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
 					this.setColour(120);
 					var di = this.appendDummyInput();
@@ -97,7 +104,7 @@ export default {
 						di.appendField(new Blockly.FieldImage('/images/blocks/loop_repeat.png', 32, 32, '*'));
 					} else {
 							di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
-					}		
+					}
 					di.appendField(new Blockly.FieldTextInput('10',
 									Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
 					if(CODERBOT_PROG_LEVEL.indexOf("basic")<0) {
@@ -180,9 +187,9 @@ export default {
 
 			Blockly.Python['coderbot_moveBackward'] = function(block) {
 				// Generate Python for moving forward.
-				if(CODERBOT_PROG_MOVE_MOTION) {    
+				if(CODERBOT_PROG_MOVE_MOTION) {
 					return 'get_motion().move(dist=' + (-CODERBOT_MOV_FW_DEF_ELAPSE) + ')\n';
-					
+
 				} else {
 					return 'get_bot().backward(speed=' + CODERBOT_MOV_FW_DEF_SPEED + ', elapse=' + CODERBOT_MOV_FW_DEF_ELAPSE + ')\n';
 				}
@@ -241,7 +248,7 @@ export default {
 					return 'get_bot().turn_angle(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', angle=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
 				} else {
 					return 'get_bot().right(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', elapse=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
-				} 
+				}
 			};
 
 			Blockly.Blocks['coderbot_audio_say'] = {
@@ -306,7 +313,7 @@ export default {
 							[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT, 'RIGHT']]
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
 					this.setColour(40);
-					
+
 					this.appendDummyInput("ACTION")
 						 .appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOVE)
 						 .appendField(new Blockly.FieldDropdown(ACTIONS), 'ACTION');
@@ -409,7 +416,7 @@ export default {
 				init: function() {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Motor');
 					this.setColour(40);
-					
+
 					this.appendValueInput('SPEED_LEFT')
 							.setCheck('Number')
 							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR + " " + Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_LEFT);
@@ -662,7 +669,7 @@ export default {
 					this.setColour(250);
 					this.appendDummyInput()
 							.appendField(Blockly.Msg.CODERBOT_SENSOR_AVERAGE)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_HUE, 'H'], 
+							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_HUE, 'H'],
 																											[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_SATURATION, 'S'],
 																											[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_VALUE, 'V'],
 																											[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_ALL,'ALL']]), 'RETVAL')
@@ -690,7 +697,7 @@ export default {
 					this.setColour(250);
 					this.appendDummyInput()
 							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA, 'alpha'], 
+							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA, 'alpha'],
 																											[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_NUM, 'num'],
 																											[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHANUM,'alphanum'],
 																											[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_UNSPEC,'unspec']]), 'ACCEPT')
@@ -841,7 +848,7 @@ export default {
 				var code = 'def event_generator_' + coderbot_generator_id + '():\n' +
 									 '  while True:\n' +
 									 '    get_prog_eng().check_end()\n' +
-									 statements_event_generator + '\n' + 
+									 statements_event_generator + '\n' +
 									 'get_event().register_event_generator(event_generator_' + coderbot_generator_id + ')'
 				coderbot_generator_id++;
 				return code;
@@ -870,7 +877,7 @@ export default {
 									 Blockly.Generator.prototype.INDENT + 'event_data = json.loads(message)\n' +
 									 event_statements + '\n' +
 									 'get_event().register_event_listener(\'' + event_topic + '\', event_listener_' + coderbot_listener_id + ')'
-				coderbot_listener_id++; 
+				coderbot_listener_id++;
 				return code;
 			};
 
@@ -1116,7 +1123,7 @@ export default {
 		var b64Toolbox = toolbox.substring(21).toString()
 		// Decode it and get the clean serialized XML as plain string
 		var serializedToolbox = this.$base64.decode(b64Toolbox)
-		
+
 		// Initialise Blockly Instance
 		var workspace = Blockly.inject(
 			// Blockly container
@@ -1126,7 +1133,7 @@ export default {
 				toolbox			: serializedToolbox,
 				//path				: '../../', // ? this makes to load audio assets from /media FIXME
 				// TODO: Use values from fetched configuration!
-				scrollbars	: true, 
+				scrollbars	: true,
 				//MaxBlocks		: -1, // -1 as infinite not working FIXME
 				zoom :
 				{
@@ -1134,14 +1141,14 @@ export default {
 					wheel 		: false,
 					startScale: 1.0,
 					maxScale 	: 1.5,
-					minScale	: 0.2 
+					minScale	: 0.2
 				}
 			}
 		);
 
 		// Pass the reference to the method to call, don't execute it (`()`)
 		window.addEventListener('resize', this.resizeWorkspace, false);
-		
+
 		// Initial resize
 		this.resizeWorkspace()
 		Blockly.svgResize(workspace);
