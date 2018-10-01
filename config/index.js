@@ -9,6 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
+    // On development, use "/" as base path
     assetsPublicPath: '/',
     proxyTable: {},
 
@@ -50,7 +51,8 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    // On production, we serve the build from Flask
+    assetsPublicPath: '/vue/',
 
     /**
      * Source Maps
