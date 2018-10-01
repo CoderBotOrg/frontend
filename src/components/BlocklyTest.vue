@@ -15,7 +15,7 @@ export default {
 	name: 'Blockly',
 	data() {
 		return {
-			a: '',
+			a: ''
 		};
 	},
 	methods : {
