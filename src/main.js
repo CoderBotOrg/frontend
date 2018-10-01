@@ -9,8 +9,8 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 
 // Components
-import App from './App';
-import page from './components/Page';
+import app from './App';
+import landing from './components/Landing';
 import arexample from './components/ARexample';
 import run from './components/Run';
 import blocklyTest from './components/BlocklyTest';
@@ -46,5 +46,5 @@ const router = new VueRouter({
 new Vue({
   router,
   el: '#app',
-  render: h => h(App),
+  render: h => h(app),
 });
