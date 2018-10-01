@@ -29,7 +29,7 @@ Vue.config.productionTip = false;
 
 // Routing
 const routes = [
-  { path: '/', component: page },
+  { path: '/', component: landing },
   { path: '/run', component: run },
   { path: '/ar', component: arexample },
   { path: '/blockly', component: blocklyTest},
