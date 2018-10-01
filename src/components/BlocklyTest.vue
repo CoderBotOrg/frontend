@@ -1,11 +1,30 @@
 <template>
 	<div>
-		<div ref="blocklyTotal" class="blocklyTotal">
-			<div ref="blocklyArea" class="blocklyArea">
-				<div ref="blocklyDiv" class="blocklyDiv">
+		<v-tabs v-model="tabs" fixed-tabs color="transparent" icons-and-text>
+			<v-tab href="#mobile-tabs-5-1" class="primary--text">
+				Blockly<v-icon>widgets</v-icon>
+			</v-tab>
+			<v-tab href="#mobile-tabs-5-2" class="primary--text">
+				Code<v-icon>code</v-icon>
+			</v-tab>
+		</v-tabs>
+		<v-tabs-items v-model="tabs" class="white elevation-1">
+			<v-tab-item id="mobile-tabs-5-1">
+				Blockly starts here...
+				<div>
+					<div ref="blocklyTotal" class="blocklyTotal">
+						<div ref="blocklyArea" class="blocklyArea">
+							<div ref="blocklyDiv" class="blocklyDiv">
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+				Blockly ends here...
+			</v-tab-item>
+			<v-tab-item id="mobile-tabs-5-2">
+				Python code here...
+			</v-tab-item>
+		</v-tabs-items>
 	</div>
 </template>
 
@@ -15,7 +34,8 @@ export default {
 	name: 'Blockly',
 	data() {
 		return {
-			a: ''
+			a: '',
+			tabs: null,
 		};
 	},
 	methods : {
