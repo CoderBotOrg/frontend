@@ -85,8 +85,8 @@ export default {
   },
   data() {
     return {
-      webcamStream: process.env.CB_ENDPOINT + '/video/stream',
-      CB: process.env.CB_ENDPOINT,
+      webcamStream: process.env.CB_ENDPOINT_v1 + '/video/stream',
+      CB: process.env.CB_ENDPOINT_v2,
     };
   },
   mounted() {
