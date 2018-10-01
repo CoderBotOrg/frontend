@@ -1,12 +1,25 @@
 <template>
-	<div id="activity">
-		        <v-textarea
-          name="input-7-1"
-          label="Default style"
-          value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-          hint="Hint text"
-        ></v-textarea>
-	</div>
+<div id="activity">
+	<h2 class="text-xs-left">Dati Progetto </h2>
+	<v-form v-model="valid">
+		<v-text-field
+			v-model="name"
+			label="Nome"
+			required
+		></v-text-field>
+		<v-text-field
+			v-model="description"
+			label="Descrizione"
+		></v-text-field>
+	</v-form>
+				<v-select
+				v-model="select"
+				:items="viste"
+				label="Vista predefinita"
+				required
+			></v-select>
+	<h2 class="text-xs-left">Tipografia </h2>
+</div>
 </template>
 
 <script>
@@ -17,6 +30,11 @@ export default {
 			drawer: null,
 			source: null,
 			msg: 'Welcome to Your Vue.js App',
+			viste: [
+				{ text: 'Esecuzione', value: 'exec', },
+				{ text: 'Blocchi', value: 'blocks' },
+				{ text: 'Python', value: 'python', disabled: true }
+			],
 		};
 	},
 };
