@@ -14,6 +14,7 @@ import page from './components/Page';
 import arexample from './components/ARexample';
 import run from './components/Run';
 import blocklyTest from './components/BlocklyTest';
+import activity from './components/Activity'
 
 // Utils
 import base64 from 'base-64'
@@ -31,7 +32,8 @@ const routes = [
   { path: '/', component: page },
   { path: '/run', component: run },
   { path: '/ar', component: arexample },
-  { path: '/blockly', component: blocklyTest}
+  { path: '/blockly', component: blocklyTest},
+  { path: '/new', component: activity}
 ];
 
 const router = new VueRouter({
