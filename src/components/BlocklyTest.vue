@@ -1,11 +1,31 @@
 <template>
 	<div>
-		<div ref="blocklyTotal" class="blocklyTotal">
-			<div ref="blocklyArea" class="blocklyArea">
-				<div ref="blocklyDiv" class="blocklyDiv">
+
+		<v-tabs v-model="tabs" fixed-tabs color="transparent" icons-and-text>
+			<v-tab href="#mobile-tabs-5-1" class="primary--text">
+				Blockly<v-icon>widgets</v-icon>
+			</v-tab>
+			<v-tab href="#mobile-tabs-5-2" class="primary--text">
+				Code<v-icon>code</v-icon>
+			</v-tab>
+		</v-tabs>
+		<v-tabs-items v-model="tabs" class="white elevation-1">
+			<v-tab-item style="height: 480px; width: 600px;" id="mobile-tabs-5-1">
+				Blockly starts here...
+				<div style="height: 480px; width: 600px;" >
+					<div ref="blocklyTotal" style="height: 480px; width: 600px;"  class="blocklyTotal">
+						<div ref="blocklyArea" style="height: 480px; width: 600px;"  class="blocklyArea">
+							<div ref="blocklyDiv"  style="height: 480px; width: 600px;"  class="blocklyDiv">
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+				Blockly ends here...
+			</v-tab-item>
+			<v-tab-item id="mobile-tabs-5-2">
+				Python code here...
+			</v-tab-item>
+		</v-tabs-items>
 	</div>
 </template>
 
@@ -15,7 +35,8 @@ export default {
 	name: 'Blockly',
 	data() {
 		return {
-			a: ''
+			a: '',
+			tabs: null,
 		};
 	},
 	methods : {
@@ -1145,14 +1166,14 @@ export default {
 				}
 			}
 		);
-
+		/*
 		// Pass the reference to the method to call, don't execute it (`()`)
 		window.addEventListener('resize', this.resizeWorkspace, false);
 
 		// Initial resize
 		this.resizeWorkspace()
 		Blockly.svgResize(workspace);
-
+		*/
 		this.initcfg();
 
 		this.blocksExtensions();
