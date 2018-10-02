@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 // Vue base
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -7,6 +8,10 @@ import VueRouter from 'vue-router';
 import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+
+// Fonts
+import 'typeface-roboto'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 // Components
 import app from './App';
