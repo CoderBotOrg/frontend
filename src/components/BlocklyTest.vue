@@ -1,5 +1,6 @@
 <template>
 	<div>
+
 		<v-app id="inspire">
 
 	    <v-navigation-drawer
@@ -87,10 +88,19 @@
 		      	<v-icon>play_arrow</v-icon>
 				Esegui
 			  </v-btn>
+			 		      <v-btn v-on:click="getProgramCode()" flat>
+		      	<v-icon>play_arrow</v-icon>
+				Mostra codice
+			  </v-btn>
 
 		    <v-btn icon v-if="status == 200">
       			<v-icon @click="dialog = true">
       			check_circle
+      			</v-icon>
+    		</v-btn>
+       		<v-btn icon v-else-if="status == 1">
+      			<v-icon @click="dialog = true">
+      			error_outline
       			</v-icon>
     		</v-btn>
     		<v-btn icon v-else>
@@ -112,12 +122,40 @@
 				</div>
 			</div>
 		</div>
-
+		
 		</v-content>
+				    <v-dialog
+      v-model="dialogCode"
+      
+    >
+    
+      <v-card>
+        <v-card-title class="headline">Codice</v-card-title>
+
+        <v-card-text class="text-xs-left">
+          <pre>{{ code }} </pre>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialogCode = false"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
 		    <v-dialog
       v-model="dialog"
       max-width="290"
     >
+
       <v-card>
         <v-card-title class="headline">Stato del Coderbot</v-card-title>
 
@@ -138,6 +176,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
 	</v-app>
 
 	</div>
@@ -149,12 +188,15 @@ export default {
 	name: 'Blockly',
 	data() {
 		return {
-			drawer: null,
+			drawer: false,
 			a: '',
 			tabs: null,
 			dialog: false,
+			dialogCode: false,
 			CB: process.env.CB_ENDPOINT_v2,
 			status: 0,
+			code: '',
+			workspace: null,
 		};
 	},
 	computed: {
@@ -1275,6 +1317,13 @@ export default {
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
 		},
+		getProgramCode(){
+        	Blockly.Python.STATEMENT_PREFIX = null;
+		    Blockly.Python.addReservedWords();
+		    Blockly.Python.INFINITE_LOOP_TRAP = null;
+		    this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
+        	this.$data.dialogCode = true
+		}
 	},
 
 	mounted() {
@@ -1293,7 +1342,7 @@ export default {
 		var serializedToolbox = this.$base64.decode(b64Toolbox)
 
 		// Initialise Blockly Instance
-		var workspace = Blockly.inject(
+		this.$data.workspace = Blockly.inject(
 			// Blockly container
 			blocklyDiv,
 			// Options
