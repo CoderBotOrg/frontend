@@ -37,7 +37,7 @@ const routes = [
   { path: '/', component: landing },
   { path: '/run', component: run },
   { path: '/ar', component: arexample },
-  { path: '/blockly', component: blocklyTest},
+  { path: '/blockly', component: blocklyTest, props: true},
   { path: '/new', component: activity}
 ];
 

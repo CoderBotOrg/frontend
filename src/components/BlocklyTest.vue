@@ -1,31 +1,145 @@
 <template>
 	<div>
+		<v-app id="inspire">
 
-		<v-tabs v-model="tabs" fixed-tabs color="transparent" icons-and-text>
-			<v-tab href="#mobile-tabs-5-1" class="primary--text">
-				Blockly<v-icon>widgets</v-icon>
-			</v-tab>
-			<v-tab href="#mobile-tabs-5-2" class="primary--text">
-				Code<v-icon>code</v-icon>
-			</v-tab>
-		</v-tabs>
-		<v-tabs-items v-model="tabs" class="white elevation-1">
-			<v-tab-item style="height: 480px; width: 600px;" id="mobile-tabs-5-1">
-				Blockly starts here...
-				<div style="height: 480px; width: 600px;" >
-					<div ref="blocklyTotal" style="height: 480px; width: 600px;"  class="blocklyTotal">
-						<div ref="blocklyArea" style="height: 480px; width: 600px;"  class="blocklyArea">
-							<div ref="blocklyDiv"  style="height: 480px; width: 600px;"  class="blocklyDiv">
-							</div>
-						</div>
+	    <v-navigation-drawer
+	      fixed
+	      v-model="drawer"
+	      app
+	    >
+
+	    <v-list dense>
+	        <v-list-tile>
+	          <v-list-tile-action>
+	            <v-icon>home</v-icon>
+	          </v-list-tile-action>
+	          <v-list-tile-content>
+	            <v-list-tile-title>Home</v-list-tile-title>
+	          </v-list-tile-content>
+	        </v-list-tile>
+
+	        Utente
+	        <v-list-tile>
+	          <v-list-tile-action>
+	            <v-icon>account_box</v-icon>
+	          </v-list-tile-action>
+	          <v-list-tile-content>
+	            <v-list-tile-title>Luigi Beretta</v-list-tile-title>
+	          </v-list-tile-content>
+	        </v-list-tile>
+
+	        <v-list-tile>
+	          <v-list-tile-action>
+	            <v-icon>exit_to_app</v-icon>
+	          </v-list-tile-action>
+	          <v-list-tile-content>
+	            <v-list-tile-title>Logout</v-list-tile-title>
+	          </v-list-tile-content>
+	        </v-list-tile>
+
+	        Attività
+	        <v-list-tile>
+	          <v-list-tile-action>
+	            <v-icon>add</v-icon>
+	          </v-list-tile-action>
+	          <v-list-tile-content>
+	            <v-list-tile-title>Nuova</v-list-tile-title>
+	          </v-list-tile-content>
+	        </v-list-tile>
+
+	        <v-list-tile>
+	          <v-list-tile-action>
+	            <v-icon>open_in_new</v-icon>
+	          </v-list-tile-action>
+	          <v-list-tile-content>
+	            <v-list-tile-title>Apri</v-list-tile-title>
+	          </v-list-tile-content>
+	        </v-list-tile>
+
+	        <v-list-tile>
+	          <v-list-tile-action>
+	            <v-icon>close</v-icon>
+	          </v-list-tile-action>
+	          <v-list-tile-content>
+	            <v-list-tile-title>Chiudi</v-list-tile-title>
+	          </v-list-tile-content>
+	        </v-list-tile>
+
+	        Altro
+	        <v-list-tile>
+	          <v-list-tile-action>
+	            <v-icon>settings</v-icon>
+	          </v-list-tile-action>
+	          <v-list-tile-content>
+	            <v-list-tile-title>Impostazioni</v-list-tile-title>
+	          </v-list-tile-content>
+	        </v-list-tile>
+	    </v-list>
+
+	    </v-navigation-drawer>
+
+		<v-toolbar color="indigo" dark fixed app>
+	      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+	      <v-toolbar-title>Coderbot</v-toolbar-title>
+	      <v-spacer></v-spacer>
+		  <v-toolbar-items class="hidden-sm-and-down">
+		      <v-btn flat>
+		      	<v-icon>play_arrow</v-icon>
+				Esegui
+			  </v-btn>
+
+		    <v-btn icon v-if="status == 200">
+      			<v-icon @click="dialog = true">
+      			check_circle
+      			</v-icon>
+    		</v-btn>
+    		<v-btn icon v-else>
+      			<v-icon @click="dialog = true">
+      			error
+      			</v-icon>
+    		</v-btn>
+				
+				
+		  </v-toolbar-items>
+	    </v-toolbar>
+
+		<v-content>
+		<div style="height: 480px; width: 600px;" >
+			<div ref="blocklyTotal" style="height: 480px; width: 600px;"  class="blocklyTotal">
+				<div ref="blocklyArea" style="height: 480px; width: 600px;"  class="blocklyArea">
+					<div ref="blocklyDiv"  style="height: 480px; width: 600px;"  class="blocklyDiv">
 					</div>
 				</div>
-				Blockly ends here...
-			</v-tab-item>
-			<v-tab-item id="mobile-tabs-5-2">
-				Python code here...
-			</v-tab-item>
-		</v-tabs-items>
+			</div>
+		</div>
+
+		</v-content>
+		    <v-dialog
+      v-model="dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">Stato del Coderbot</v-card-title>
+
+        <v-card-text>
+          {{ statusText }}
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog = false"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+	</v-app>
+
 	</div>
 </template>
 
@@ -35,11 +149,38 @@ export default {
 	name: 'Blockly',
 	data() {
 		return {
+			drawer: null,
 			a: '',
 			tabs: null,
+			dialog: false,
+			CB: process.env.CB_ENDPOINT_v2,
+			status: 0,
 		};
 	},
+	computed: {
+		statusText: function() {
+			if (this.$data.status) {
+				return 'Coderbot risulta online e funzionante.'
+			} else {
+				return 'Coderbot risulta offline e rotto'
+			}
+		}
+	},
 	methods : {
+		pollStatus() {
+			let axios = this.$axios
+			let CB = this.$data.CB
+			let status = this.$data.status
+			axios.get(CB+'/status')
+				.then(function(response) {
+					this.$data.status = response.status
+				}.bind(this))
+				.catch(function(error) {
+				    // handle error
+				    console.log(error);
+				    this.$data.status = 0
+				}.bind(this))
+		},
 		resizeWorkspace() {
 			// Compute the absolute coordinates and dimensions of blocklyArea.
 			let element = this.$refs.blocklyArea;
@@ -1135,7 +1276,13 @@ export default {
 			};
 		},
 	},
+
 	mounted() {
+		this.pollStatus();
+		setInterval(function() {
+			this.pollStatus();
+		}.bind(this), 1000)
+
 		const blocklyDiv = this.$refs.blocklyDiv
 		// Should be dependent on the chosen toolbox,
 		//  possibly an AJAX call if it's a custom toolbox (?)
