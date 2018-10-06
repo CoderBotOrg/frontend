@@ -8,6 +8,7 @@ import VueRouter from 'vue-router';
 import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+import 'prismjs/themes/prism.css'
 
 // Fonts
 import 'typeface-roboto'

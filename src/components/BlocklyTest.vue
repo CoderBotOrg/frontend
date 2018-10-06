@@ -114,6 +114,7 @@
 	    </v-toolbar>
 
 		<v-content>
+
 		<div style="height: 480px; width: 600px;" >
 			<div ref="blocklyTotal" style="height: 480px; width: 600px;"  class="blocklyTotal">
 				<div ref="blocklyArea" style="height: 480px; width: 600px;"  class="blocklyArea">
@@ -133,8 +134,11 @@
         <v-card-title class="headline">Codice</v-card-title>
 
         <v-card-text class="text-xs-left">
-          <pre>{{ code }} </pre>
+        	f
+        <prism language="python"> {{ code }} </prism>
+    	
         </v-card-text>
+
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -183,9 +187,16 @@
 </template>
 
 
+
 <script>
+import 'prismjs'
+import 'prismjs/components/prism-python.js'
+
 export default {
 	name: 'Blockly',
+	components: {
+      Prism: () => import('vue-prism-component')
+    },
 	data() {
 		return {
 			drawer: false,
@@ -1323,6 +1334,7 @@ export default {
 		    Blockly.Python.INFINITE_LOOP_TRAP = null;
 		    this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
         	this.$data.dialogCode = true
+        	console.log(this.$data.code)
 		}
 	},
 
