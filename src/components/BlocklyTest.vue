@@ -84,8 +84,8 @@
 	      <v-toolbar-title>Coderbot</v-toolbar-title>
 	      <v-spacer></v-spacer>
 		  <v-toolbar-items class="hidden-sm-and-down">
-		      <v-btn flat>
-		      	<v-icon>play_arrow</v-icon>
+		      <v-btn v-on:click="runProgram()" flat>
+		      <v-icon>play_arrow</v-icon>
 				Esegui
 			  </v-btn>
 			 		      <v-btn v-on:click="getProgramCode()" flat>
@@ -1334,7 +1334,27 @@ export default {
 		    Blockly.Python.INFINITE_LOOP_TRAP = null;
 		    this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
         	this.$data.dialogCode = true
-        	console.log(this.$data.code)
+		},
+		runProgram(){
+			let axios = this.$axios
+			let CB = this.$data.CB
+			// POST /program/save
+			var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
+        	var dom_code = Blockly.Xml.domToText(xml_code);
+	        window.LoopTrap = 1000;
+	        Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+	        var code = Blockly.Python.workspaceToCode(this.$data.workspace);
+	        Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+	        axios.post(CB+'/exec', {
+	        	name: 'Hello, World!',
+	        	dom_code,
+	        	code
+	        })
+	        .then(function (response) {
+    			console.log(response);
+  			})
+
 		}
 	},
 
