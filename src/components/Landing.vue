@@ -1,5 +1,9 @@
 <template>
 	<div>
+        <prism language="javascript">
+          var a
+        </prism>
+
       <p class="display-3"> Benvenuto in CoderBot </p>
       <p class="display-1"> Scegli un'azione per iniziare </p>
 
@@ -22,6 +26,7 @@
     </div>
 </template>
 <script>
+
 export default {
   name: 'HelloWorld',
   data() {

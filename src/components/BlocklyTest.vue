@@ -134,7 +134,7 @@
         <v-card-title class="headline">Codice</v-card-title>
 
         <v-card-text class="text-xs-left">
-        	f
+        
         <prism language="python"> {{ code }} </prism>
     	
         </v-card-text>
