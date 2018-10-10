@@ -19,7 +19,7 @@ import app from './App';
 import landing from './components/Landing';
 import arexample from './components/ARexample';
 import run from './components/Run';
-import blocklyTest from './components/BlocklyTest';
+import blockly from './components/Blockly';
 import activity from './components/Activity'
 
 // Utils
@@ -38,7 +38,7 @@ const routes = [
   { path: '/', component: landing },
   { path: '/run', component: run },
   { path: '/ar', component: arexample },
-  { path: '/blockly', component: blocklyTest, props: true},
+  { path: '/blockly', component: blockly, props: true},
   { path: '/new', component: activity}
 ];
 
