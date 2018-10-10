@@ -10,6 +10,7 @@ Once the backend is online:
 
 ```bash
 git clone https://github.com/CoderBotOrg/vue-app.git
+cd vue-app
 npm install
 npm run dev
 ```
