@@ -181,6 +181,32 @@
       </v-card>
     </v-dialog>
 
+   	<v-dialog
+      v-model="generalDialog"
+      max-width="290"
+    >
+
+      <v-card>
+        <v-card-title class="headline">{{ generalDialogTitle }}</v-card-title>
+
+        <v-card-text>
+          {{ generalDialogText }}
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="generalDialog = false"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
 	</v-app>
 
 	</div>
@@ -204,10 +230,13 @@ export default {
 			tabs: null,
 			dialog: false,
 			dialogCode: false,
-			CB: process.env.CB_ENDPOINT_v2,
+			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			status: 0,
 			code: '',
 			workspace: null,
+			generalDialog: false,
+			generalDialogText: null,
+			generalDialogTitle: null
 		};
 	},
 	computed: {
@@ -1336,24 +1365,31 @@ export default {
         	this.$data.dialogCode = true
 		},
 		runProgram(){
-			let axios = this.$axios
-			let CB = this.$data.CB
-			// POST /program/save
-			var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
-        	var dom_code = Blockly.Xml.domToText(xml_code);
-	        window.LoopTrap = 1000;
-	        Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
-	        var code = Blockly.Python.workspaceToCode(this.$data.workspace);
-	        Blockly.Python.INFINITE_LOOP_TRAP = null;
+			if (this.$data.status) {
+				let axios = this.$axios
+				let CB = this.$data.CB
+				// POST /program/save
+				var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
+	        	var dom_code = Blockly.Xml.domToText(xml_code);
+		        window.LoopTrap = 1000;
+		        Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+		        var code = Blockly.Python.workspaceToCode(this.$data.workspace);
+		        Blockly.Python.INFINITE_LOOP_TRAP = null;
 
-	        axios.post(CB+'/exec', {
-	        	name: 'Hello, World!',
-	        	dom_code,
-	        	code
-	        })
-	        .then(function (response) {
-    			console.log(response);
-  			})
+		        axios.post(CB+'/exec', {
+		        	name: 'Hello, World!',
+		        	dom_code,
+		        	code
+		        })
+		        .then(function (response) {
+	    			console.log(response);
+	  			})	
+			} else {
+				this.$data.generalDialog = true;
+				this.$data.generalDialogTitle = 'Errore',
+				this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
+			}
+
 
 		}
 	},
