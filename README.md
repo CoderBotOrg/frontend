@@ -2,29 +2,27 @@
 
 > Coderbot web app in Vue.js
 
-## Build Setup
+## Quickstart
 
-``` bash
-# install dependencies
+Run the backend in stub mode, following the instructions [here](https://github.com/CoderBotOrg/coderbot/blob/develop/README.md).
+
+Once the backend is online:
+
+```bash
+git clone https://github.com/CoderBotOrg/vue-app.git
 npm install
-
-# serve with hot reload at localhost:8080
 npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+By default, the build configuration assumes you have the backend available at `localhost:5000`. Change the `CB_ENDPOINT` value according to your setup (e.g. different location, production, static ip of a real RPi running the backend) in the `config/dev.eng.js` file.
+
+To serve in production, change `CB_ENDPOINT` to `'""'` and
+
+```bash
+# build the web application
+npm run build
+# move the produced folder in the backend
+mv dist ../coderbot/
+```
+
+At this point, the Flask backend server the built application at `/vue`.
