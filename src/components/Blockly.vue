@@ -1,219 +1,158 @@
 <template>
 	<div>
-
 		<v-app id="inspire">
-
-	    <v-navigation-drawer
-	      fixed
-	      v-model="drawer"
-	      app
-	    >
-
-	    <v-list dense>
-	        <v-list-tile>
-	          <v-list-tile-action>
-	            <v-icon>home</v-icon>
-	          </v-list-tile-action>
-	          <v-list-tile-content>
-	            <v-list-tile-title>Home</v-list-tile-title>
-	          </v-list-tile-content>
-	        </v-list-tile>
-
-	        Utente
-	        <v-list-tile>
-	          <v-list-tile-action>
-	            <v-icon>account_box</v-icon>
-	          </v-list-tile-action>
-	          <v-list-tile-content>
-	            <v-list-tile-title>Luigi Beretta</v-list-tile-title>
-	          </v-list-tile-content>
-	        </v-list-tile>
-
-	        <v-list-tile>
-	          <v-list-tile-action>
-	            <v-icon>exit_to_app</v-icon>
-	          </v-list-tile-action>
-	          <v-list-tile-content>
-	            <v-list-tile-title>Logout</v-list-tile-title>
-	          </v-list-tile-content>
-	        </v-list-tile>
-
-	        Attività
-	        <v-list-tile>
-	          <v-list-tile-action>
-	            <v-icon>add</v-icon>
-	          </v-list-tile-action>
-	          <v-list-tile-content>
-	            <v-list-tile-title>Nuova</v-list-tile-title>
-	          </v-list-tile-content>
-	        </v-list-tile>
-
-	        <v-list-tile>
-	          <v-list-tile-action>
-	            <v-icon>open_in_new</v-icon>
-	          </v-list-tile-action>
-	          <v-list-tile-content>
-	            <v-list-tile-title>Apri</v-list-tile-title>
-	          </v-list-tile-content>
-	        </v-list-tile>
-
-	        <v-list-tile>
-	          <v-list-tile-action>
-	            <v-icon>close</v-icon>
-	          </v-list-tile-action>
-	          <v-list-tile-content>
-	            <v-list-tile-title>Chiudi</v-list-tile-title>
-	          </v-list-tile-content>
-	        </v-list-tile>
-
-	        Altro
-	        <v-list-tile>
-	          <v-list-tile-action>
-	            <v-icon>settings</v-icon>
-	          </v-list-tile-action>
-	          <v-list-tile-content>
-	            <v-list-tile-title>Impostazioni</v-list-tile-title>
-	          </v-list-tile-content>
-	        </v-list-tile>
-	    </v-list>
-
-	    </v-navigation-drawer>
-
-		<v-toolbar color="indigo" dark fixed app>
-	      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-	      <v-toolbar-title>Coderbot</v-toolbar-title>
-	      <v-spacer></v-spacer>
-		  <v-toolbar-items class="hidden-sm-and-down">
-		      <v-btn v-on:click="runProgram()" flat>
-		      <v-icon>play_arrow</v-icon>
-				Esegui
-			  </v-btn>
-			 		      <v-btn v-on:click="getProgramCode()" flat>
-		      	<v-icon>play_arrow</v-icon>
-				Mostra codice
-			  </v-btn>
-
-		    <v-btn icon v-if="status == 200">
-      			<v-icon @click="dialog = true">
-      			check_circle
-      			</v-icon>
-    		</v-btn>
-       		<v-btn icon v-else-if="status == 1">
-      			<v-icon @click="dialog = true">
-      			error_outline
-      			</v-icon>
-    		</v-btn>
-    		<v-btn icon v-else>
-      			<v-icon @click="dialog = true">
-      			error
-      			</v-icon>
-    		</v-btn>
-				
-				
-		  </v-toolbar-items>
-	    </v-toolbar>
-
-		<v-content>
-
-		<div style="height: 480px; width: 600px;" >
-			<div ref="blocklyTotal" style="height: 480px; width: 600px;"  class="blocklyTotal">
-				<div ref="blocklyArea" style="height: 480px; width: 600px;"  class="blocklyArea">
-					<div ref="blocklyDiv"  style="height: 480px; width: 600px;"  class="blocklyDiv">
+			<v-navigation-drawer fixed v-model="drawer" app>
+				<v-list dense>
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-icon>home</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Home</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					Utente
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-icon>account_box</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Luigi Beretta</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-icon>exit_to_app</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Logout</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					Attività
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-icon>add</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Nuova</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-icon>open_in_new</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Apri</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-icon>close</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Chiudi</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					Altro
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-icon>settings</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Impostazioni</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+				</v-list>
+			</v-navigation-drawer>
+			<v-toolbar color="indigo" dark fixed app>
+				<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+				<v-toolbar-title>Coderbot</v-toolbar-title>
+				<v-spacer></v-spacer>
+				<v-toolbar-items class="hidden-sm-and-down">
+					<v-btn v-on:click="runProgram()" flat>
+						<v-icon>play_arrow</v-icon>
+						Esegui
+					</v-btn>
+					<v-btn v-on:click="getProgramCode()" flat>
+						<v-icon>play_arrow</v-icon>
+						Mostra codice
+					</v-btn>
+					<v-btn icon v-if="status == 200">
+						<v-icon @click="dialog = true">
+							check_circle
+						</v-icon>
+					</v-btn>
+					<v-btn icon v-else-if="status == 1">
+						<v-icon @click="dialog = true">
+							error_outline
+						</v-icon>
+					</v-btn>
+					<v-btn icon v-else>
+						<v-icon @click="dialog = true">
+							error
+						</v-icon>
+					</v-btn>
+				</v-toolbar-items>
+			</v-toolbar>
+			<v-content>
+				<div style="height: 480px; width: 600px;">
+					<div ref="blocklyTotal" style="height: 480px; width: 600px;" class="blocklyTotal">
+						<div ref="blocklyArea" style="height: 480px; width: 600px;" class="blocklyArea">
+							<div ref="blocklyDiv" style="height: 480px; width: 600px;" class="blocklyDiv">
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		
-		</v-content>
-				    <v-dialog
-      v-model="dialogCode"
-      
-    >
-    
-      <v-card>
-        <v-card-title class="headline">Codice</v-card-title>
-
-        <v-card-text class="text-xs-left">
-        
-        <prism language="python"> {{ code }} </prism>
-    	
-        </v-card-text>
-
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="dialogCode = false"
-          >
-            Ok
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-
-		    <v-dialog
-      v-model="dialog"
-      max-width="290"
-    >
-
-      <v-card>
-        <v-card-title class="headline">Stato del Coderbot</v-card-title>
-
-        <v-card-text>
-          {{ statusText }}
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="dialog = false"
-          >
-            Ok
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-   	<v-dialog
-      v-model="generalDialog"
-      max-width="290"
-    >
-
-      <v-card>
-        <v-card-title class="headline">{{ generalDialogTitle }}</v-card-title>
-
-        <v-card-text>
-          {{ generalDialogText }}
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="generalDialog = false"
-          >
-            Ok
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-	</v-app>
-
+			</v-content>
+			<!-- -->
+			<v-dialog v-model="dialogCode">
+				<v-card>
+					<v-card-title class="headline">Codice</v-card-title>
+					<v-card-text class="text-xs-left">
+						<prism language="python"> {{ code }} </prism>
+					</v-card-text>
+					<v-divider></v-divider>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="green darken-1" flat="flat" @click="dialogCode = false">
+							Ok
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
+			<v-dialog v-model="dialog" max-width="290">
+				<v-card>
+					<v-card-title class="headline">Stato del Coderbot</v-card-title>
+					<v-card-text>
+						{{ statusText }}
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="green darken-1" flat="flat" @click="dialog = false">
+							Ok
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
+			<v-dialog v-model="generalDialog" max-width="290">
+				<v-card>
+					<v-card-title class="headline">{{ generalDialogTitle }}</v-card-title>
+					<v-card-text>
+						{{ generalDialogText }}
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="green darken-1" flat="flat" @click="generalDialog = false">
+							Ok
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+		</v-app>
 	</div>
 </template>
-
-
-
 <script>
 import 'prismjs'
 import 'prismjs/components/prism-python.js'
@@ -221,8 +160,9 @@ import 'prismjs/components/prism-python.js'
 export default {
 	name: 'Blockly',
 	components: {
-      Prism: () => import('vue-prism-component')
-    },
+		Prism: () =>
+			import('vue-prism-component')
+	},
 	data() {
 		return {
 			drawer: false,
@@ -248,19 +188,19 @@ export default {
 			}
 		}
 	},
-	methods : {
+	methods: {
 		pollStatus() {
 			let axios = this.$axios
 			let CB = this.$data.CB
 			let status = this.$data.status
-			axios.get(CB+'/status')
+			axios.get(CB + '/status')
 				.then(function(response) {
 					this.$data.status = response.status
 				}.bind(this))
 				.catch(function(error) {
-				    // handle error
-				    console.log(error);
-				    this.$data.status = 0
+					// handle error
+					console.log(error);
+					this.$data.status = 0
 				}.bind(this))
 		},
 		resizeWorkspace() {
@@ -275,31 +215,31 @@ export default {
 			const offsetHeight = this.$refs.blocklyArea.offsetHeight;
 			this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
 		},
-		initcfg(){
+		initcfg() {
 			var b = "test";
 		},
-		blocksExtensions(){
+		blocksExtensions() {
 
 			var cfg = Object();
 			// coderbot.cfg data (temp workaround, must be fetched from backend)
-			var CODERBOT_MOV_FW_DEF_SPEED=100;
-			var CODERBOT_MOV_FW_DEF_ELAPSE=1; // to check
-			var CODERBOT_MOV_TR_DEF_SPEED=85;
-			var CODERBOT_MOV_TR_DEF_ELAPSE=-1; // to check
-			var CODERBOT_PROG_MOVE_MOTION=true; // to check
-			var CODERBOT_PROG_MOVE_MPU=true; // to check
-			var CODERBOT_PROG_LEVEL="adv";
-			var CODERBOT_PROG_SCROLLBARS=true; // to check
-			var CODERBOT_PROG_MAXBLOCKS=-1;
-			var CODERBOT_PROG_SAVEONRUN=true; // to check
-			var CODERBOT_CTRL_FW_SPEED=100;
-			var CODERBOT_CTRL_FW_ELAPSE=1;
-			var CODERBOT_CTRL_TR_SPEED=80;
-			var CODERBOT_CTRL_TR_ELAPSE=0.5; // to check
-			var CODERBOT_CTRL_COUNTER=true; // to check
-			var CODERBOT_CTRL_MOVE_MOTION=true; //t o check
-			var CODERBOT_CTRL_MOVE_MPU=true; // to check
-			var CODERBOT_CNN_MODEL_LIST=""
+			var CODERBOT_MOV_FW_DEF_SPEED = 100;
+			var CODERBOT_MOV_FW_DEF_ELAPSE = 1; // to check
+			var CODERBOT_MOV_TR_DEF_SPEED = 85;
+			var CODERBOT_MOV_TR_DEF_ELAPSE = -1; // to check
+			var CODERBOT_PROG_MOVE_MOTION = true; // to check
+			var CODERBOT_PROG_MOVE_MPU = true; // to check
+			var CODERBOT_PROG_LEVEL = "adv";
+			var CODERBOT_PROG_SCROLLBARS = true; // to check
+			var CODERBOT_PROG_MAXBLOCKS = -1;
+			var CODERBOT_PROG_SAVEONRUN = true; // to check
+			var CODERBOT_CTRL_FW_SPEED = 100;
+			var CODERBOT_CTRL_FW_ELAPSE = 1;
+			var CODERBOT_CTRL_TR_SPEED = 80;
+			var CODERBOT_CTRL_TR_ELAPSE = 0.5; // to check
+			var CODERBOT_CTRL_COUNTER = true; // to check
+			var CODERBOT_CTRL_MOVE_MOTION = true; //t o check
+			var CODERBOT_CTRL_MOVE_MPU = true; // to check
+			var CODERBOT_CNN_MODEL_LIST = ""
 
 			var BotMessages = Object();
 			BotMessages.Input = "Say what:";
@@ -329,8 +269,8 @@ export default {
 
 			'use strict';
 
-			Blockly.HSV_SATURATION=.99;
-			Blockly.HSV_VALUE=.99;
+			Blockly.HSV_SATURATION = .99;
+			Blockly.HSV_VALUE = .99;
 
 			const self = this
 
@@ -344,18 +284,18 @@ export default {
 					this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
 					this.setColour(120);
 					var di = this.appendDummyInput();
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
 						di.appendField(new Blockly.FieldImage('/images/blocks/loop_repeat.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
+						di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
 					}
 					di.appendField(new Blockly.FieldTextInput('10',
-									Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")<0) {
-							di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES);
+						Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") < 0) {
+						di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES);
 					}
 					var si = this.appendStatementInput('DO');
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")<0) {
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") < 0) {
 						si.appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
 					}
 					this.setPreviousStatement(true);
@@ -369,9 +309,9 @@ export default {
 				var repeats = parseInt(block.getFieldValue('TIMES'), 10);
 				var branch = Blockly.Python.statementToCode(block, 'DO');
 				branch = Blockly.Python.addLoopTrap(branch, block.id) ||
-						Blockly.Python.LOOP_PASS;
+					Blockly.Python.LOOP_PASS;
 				var loopVar = Blockly.Python.variableDB_.getDistinctName(
-						'count', Blockly.Variables.NAME_TYPE);
+					'count', Blockly.Variables.NAME_TYPE);
 				var code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
 				return code;
 			};
@@ -379,7 +319,7 @@ export default {
 			Blockly.Python['text_print'] = function(block) {
 				// Print statement.
 				var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
-						Blockly.Python.ORDER_NONE) || '\'\'';
+					Blockly.Python.ORDER_NONE) || '\'\'';
 				return 'get_cam().set_text(' + argument0 + ')\n';
 			};
 
@@ -390,10 +330,10 @@ export default {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
 					this.setColour(40);
 					var di = this.appendDummyInput()
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							di.appendField(new Blockly.FieldImage('/images/blocks/move_forward.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						di.appendField(new Blockly.FieldImage('/images/blocks/move_forward.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CODERBOT_MOVE_FORWARD)
+						di.appendField(Blockly.Msg.CODERBOT_MOVE_FORWARD)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -404,7 +344,7 @@ export default {
 
 			Blockly.Python['coderbot_moveForward'] = function(block) {
 				// Generate Python for moving forward.
-				if(CODERBOT_PROG_MOVE_MOTION) {
+				if (CODERBOT_PROG_MOVE_MOTION) {
 					return 'get_motion().move(dist=' + CODERBOT_MOV_FW_DEF_ELAPSE + ')\n';
 
 				} else {
@@ -418,10 +358,10 @@ export default {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
 					this.setColour(40);
 					var di = this.appendDummyInput()
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							di.appendField(new Blockly.FieldImage('/images/blocks/move_backward.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						di.appendField(new Blockly.FieldImage('/images/blocks/move_backward.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CODERBOT_MOVE_BACKWARD)
+						di.appendField(Blockly.Msg.CODERBOT_MOVE_BACKWARD)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -431,7 +371,7 @@ export default {
 
 			Blockly.Python['coderbot_moveBackward'] = function(block) {
 				// Generate Python for moving forward.
-				if(CODERBOT_PROG_MOVE_MOTION) {
+				if (CODERBOT_PROG_MOVE_MOTION) {
 					return 'get_motion().move(dist=' + (-CODERBOT_MOV_FW_DEF_ELAPSE) + ')\n';
 
 				} else {
@@ -445,10 +385,10 @@ export default {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
 					this.setColour(40);
 					var di = this.appendDummyInput()
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							di.appendField(new Blockly.FieldImage('/images/blocks/move_left.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						di.appendField(new Blockly.FieldImage('/images/blocks/move_left.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CODERBOT_MOVE_LEFT);
+						di.appendField(Blockly.Msg.CODERBOT_MOVE_LEFT);
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -458,9 +398,9 @@ export default {
 
 			Blockly.Python['coderbot_turnLeft'] = function(block) {
 				// Generate Python for turning left.
-				if(CODERBOT_PROG_MOVE_MOTION) {
+				if (CODERBOT_PROG_MOVE_MOTION) {
 					return 'get_motion().turn(angle=' + (-CODERBOT_MOV_TR_DEF_ELAPSE) + ')\n';
-				} else if(CODERBOT_PROG_MOVE_MPU) {
+				} else if (CODERBOT_PROG_MOVE_MPU) {
 					return 'get_bot().turn_angle(speed=' + (-CODERBOT_MOV_TR_DEF_SPEED) + ', angle=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
 				} else {
 					return 'get_bot().left(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', elapse=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
@@ -473,10 +413,10 @@ export default {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
 					this.setColour(40);
 					var di = this.appendDummyInput()
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							di.appendField(new Blockly.FieldImage('/images/blocks/move_right.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						di.appendField(new Blockly.FieldImage('/images/blocks/move_right.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CODERBOT_MOVE_RIGHT)
+						di.appendField(Blockly.Msg.CODERBOT_MOVE_RIGHT)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -486,9 +426,9 @@ export default {
 
 			Blockly.Python['coderbot_turnRight'] = function(block) {
 				// Generate Python for turning left or right.
-				if(CODERBOT_PROG_MOVE_MOTION) {
+				if (CODERBOT_PROG_MOVE_MOTION) {
 					return 'get_motion().turn(angle=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
-				} else if(CODERBOT_PROG_MOVE_MPU) {
+				} else if (CODERBOT_PROG_MOVE_MPU) {
 					return 'get_bot().turn_angle(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', angle=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
 				} else {
 					return 'get_bot().right(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', elapse=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
@@ -502,15 +442,17 @@ export default {
 					this.setColour(220);
 					var vi = this.appendValueInput('TEXT');
 					vi.setCheck(["String", "Number", "Date"]);
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							vi.appendField(new Blockly.FieldImage('/images/blocks/say.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						vi.appendField(new Blockly.FieldImage('/images/blocks/say.png', 32, 32, '*'));
 					} else {
 						vi.appendField(Blockly.Msg.CODERBOT_SAY);
 					}
-					vi.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_LOCALE_EN, 'en'],
-																	[Blockly.Msg.CODERBOT_LOCALE_IT, 'it'],
-																										[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr'],
-											[Blockly.Msg.CODERBOT_LOCALE_ES, 'es']]), 'LOCALE')
+					vi.appendField(new Blockly.FieldDropdown([
+						[Blockly.Msg.CODERBOT_LOCALE_EN, 'en'],
+						[Blockly.Msg.CODERBOT_LOCALE_IT, 'it'],
+						[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr'],
+						[Blockly.Msg.CODERBOT_LOCALE_ES, 'es']
+					]), 'LOCALE')
 
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -521,7 +463,7 @@ export default {
 			Blockly.Python['coderbot_audio_say'] = function(block) {
 				// Generate Python for turning left or right.
 				var text = Blockly.Python.valueToCode(block, 'TEXT',
-						Blockly.Python.ORDER_NONE) || '\'\'';
+					Blockly.Python.ORDER_NONE) || '\'\'';
 				var locale = block.getFieldValue('LOCALE');
 				return 'get_audio().say(' + text + ', locale="' + locale + '")\n';
 			};
@@ -532,8 +474,8 @@ export default {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Sleep');
 					this.setColour(290);
 					this.appendValueInput('ELAPSE')
-							.setCheck(["Number"])
-							.appendField(Blockly.Msg.CODERBOT_SLEEP);
+						.setCheck(["Number"])
+						.appendField(Blockly.Msg.CODERBOT_SLEEP);
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
 					this.setTooltip(('CoderBot_sleepTooltip'));
@@ -543,30 +485,31 @@ export default {
 			Blockly.Python['coderbot_sleep'] = function(block) {
 				// Generate Python for sleeping.
 				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE',
-						Blockly.Python.ORDER_NONE) || '\'\'';
+					Blockly.Python.ORDER_NONE) || '\'\'';
 				return 'get_bot().sleep(' + elapse + ')\n';
 			};
 
 			Blockly.Blocks['coderbot_adv_move'] = {
 				// Block for moving forward.
 				init: function() {
-					var ACTIONS =
-							[[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
-							[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD'],
-							[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT, 'LEFT'],
-							[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT, 'RIGHT']]
+					var ACTIONS = [
+						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
+						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD'],
+						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT, 'LEFT'],
+						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT, 'RIGHT']
+					]
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
 					this.setColour(40);
 
 					this.appendDummyInput("ACTION")
-						 .appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOVE)
-						 .appendField(new Blockly.FieldDropdown(ACTIONS), 'ACTION');
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOVE)
+						.appendField(new Blockly.FieldDropdown(ACTIONS), 'ACTION');
 					this.appendValueInput('SPEED')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_SPEED);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_SPEED);
 					this.appendValueInput('ELAPSE')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE);
 					this.setInputsInline(true);
 					// Assign 'this' to a variable for use in the tooltip closure below.
 					var thisBlock = this;
@@ -597,7 +540,7 @@ export default {
 				var action = tuple[0];
 				var speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
 				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE);
-				var code = "get_bot()." + action + "(speed=" + speed + ", elapse="+elapse+")\n";
+				var code = "get_bot()." + action + "(speed=" + speed + ", elapse=" + elapse + ")\n";
 				return code;
 			};
 
@@ -608,8 +551,8 @@ export default {
 					this.setColour(40);
 
 					this.appendValueInput('DIST')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_MOTION_MOVE + " " + Blockly.Msg.CODERBOT_MOVE_MOTION_DIST);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_MOTION_MOVE + " " + Blockly.Msg.CODERBOT_MOVE_MOTION_DIST);
 					this.setInputsInline(true);
 					// Assign 'this' to a variable for use in the tooltip closure below.
 					var thisBlock = this;
@@ -635,8 +578,8 @@ export default {
 					this.setColour(40);
 
 					this.appendValueInput('ANGLE')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_MOTION_TURN + " " + Blockly.Msg.CODERBOT_MOVE_MOTION_ANGLE);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_MOTION_TURN + " " + Blockly.Msg.CODERBOT_MOVE_MOTION_ANGLE);
 					this.setInputsInline(true);
 					// Assign 'this' to a variable for use in the tooltip closure below.
 					var thisBlock = this;
@@ -662,20 +605,20 @@ export default {
 					this.setColour(40);
 
 					this.appendValueInput('SPEED_LEFT')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR + " " + Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_LEFT);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR + " " + Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_LEFT);
 					this.appendValueInput('SPEED_RIGHT')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_RIGHT);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_RIGHT);
 					this.appendValueInput('ELAPSE')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE);
 					this.appendValueInput('STEPS_LEFT')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_LEFT);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_LEFT);
 					this.appendValueInput('STEPS_RIGHT')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_RIGHT);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_RIGHT);
 					this.setInputsInline(true);
 					// Assign 'this' to a variable for use in the tooltip closure below.
 					var thisBlock = this;
@@ -705,7 +648,7 @@ export default {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Stop');
 					this.setColour(40);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_MOVE_STOP);
+						.appendField(Blockly.Msg.CODERBOT_MOVE_STOP);
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
 					this.setTooltip(('CoderBot_stopTooltip'));
@@ -724,10 +667,10 @@ export default {
 					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
 					this.setColour(120);
 					var di = this.appendDummyInput()
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							di.appendField(new Blockly.FieldImage('/images/blocks/photo_take.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						di.appendField(new Blockly.FieldImage('/images/blocks/photo_take.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CODERBOT_PHOTO_TAKE)
+						di.appendField(Blockly.Msg.CODERBOT_PHOTO_TAKE)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -747,10 +690,10 @@ export default {
 					this.setColour(120);
 
 					var di = this.appendDummyInput()
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							di.appendField(new Blockly.FieldImage('/images/blocks/video_rec.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						di.appendField(new Blockly.FieldImage('/images/blocks/video_rec.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CODERBOT_VIDEO_REC)
+						di.appendField(Blockly.Msg.CODERBOT_VIDEO_REC)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -770,10 +713,10 @@ export default {
 					this.setColour(120);
 
 					var di = this.appendDummyInput()
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							di.appendField(new Blockly.FieldImage('/images/blocks/video_stop.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						di.appendField(new Blockly.FieldImage('/images/blocks/video_stop.png', 32, 32, '*'));
 					} else {
-							di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP)
+						di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -795,7 +738,7 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD);
 					this.setOutput(true, 'Number');
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
 				}
@@ -816,7 +759,7 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDLINE);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDLINE);
 					this.setOutput(true, 'Array');
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
 				}
@@ -837,7 +780,7 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL);
 					this.setOutput(true, 'Number');
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
 				}
@@ -858,8 +801,13 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDFACE)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_X, 'X'], [Blockly.Msg.CODERBOT_SENSOR_FINDFACE_Y, 'Y'],[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_SIZE, 'SIZE'],[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_ALL,'ALL']]), 'RETVAL')
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDFACE)
+						.appendField(new Blockly.FieldDropdown([
+							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_X, 'X'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_Y, 'Y'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_SIZE, 'SIZE'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_ALL, 'ALL']
+						]), 'RETVAL')
 					this.setInputsInline(true);
 					this.setOutput(true, ['Number', 'Array']);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -869,7 +817,7 @@ export default {
 			Blockly.Python['coderbot_adv_findFace'] = function(block) {
 				// Boolean values true and false.
 				var retval = block.getFieldValue('RETVAL');
-				var ret_code = {'X': '[0]', 'Y': '[1]', 'SIZE': '[2]', 'ALL': ''}[retval];
+				var ret_code = { 'X': '[0]', 'Y': '[1]', 'SIZE': '[2]', 'ALL': '' } [retval];
 				var code = 'get_cam().find_face()' + ret_code;
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
@@ -883,11 +831,15 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_FIND)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_DIST, 'DIST'], [Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_ANGLE, 'ANGLE'],[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_BOTH,'BOTH']]), 'RETVAL')
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_COLOR);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_FIND)
+						.appendField(new Blockly.FieldDropdown([
+							[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_DIST, 'DIST'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_ANGLE, 'ANGLE'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_BOTH, 'BOTH']
+						]), 'RETVAL')
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_COLOR);
 					this.appendValueInput('COLOR')
-							.setCheck(['Colour','String']);
+						.setCheck(['Colour', 'String']);
 					this.setInputsInline(true);
 					this.setOutput(true, ['Number', 'Array']);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -898,7 +850,7 @@ export default {
 				// Boolean values true and false.
 				var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_NONE);
 				var retval = block.getFieldValue('RETVAL');
-				var ret_code = {'DIST': '[0]', 'ANGLE': '[1]', 'BOTH': ''}[retval];
+				var ret_code = { 'DIST': '[0]', 'ANGLE': '[1]', 'BOTH': '' } [retval];
 				var code = 'get_cam().find_color(' + color + ')' + ret_code;
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
@@ -912,11 +864,13 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_AVERAGE)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_HUE, 'H'],
-																											[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_SATURATION, 'S'],
-																											[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_VALUE, 'V'],
-																											[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_ALL,'ALL']]), 'RETVAL')
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_AVERAGE)
+						.appendField(new Blockly.FieldDropdown([
+							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_HUE, 'H'],
+							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_SATURATION, 'S'],
+							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_VALUE, 'V'],
+							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_ALL, 'ALL']
+						]), 'RETVAL')
 					this.setInputsInline(true);
 					this.setOutput(true, ['Number', 'Array']);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -926,7 +880,7 @@ export default {
 			Blockly.Python['coderbot_cam_average'] = function(block) {
 				// Boolean values true and false.
 				var retval = block.getFieldValue('RETVAL');
-				var ret_code = {'H': '[0]', 'S': '[1]', 'V': '[2]', 'ALL': ''}[retval];
+				var ret_code = { 'H': '[0]', 'S': '[1]', 'V': '[2]', 'ALL': '' } [retval];
 				var code = 'get_cam().get_average()' + ret_code;
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
@@ -940,14 +894,16 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA, 'alpha'],
-																											[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_NUM, 'num'],
-																											[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHANUM,'alphanum'],
-																											[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_UNSPEC,'unspec']]), 'ACCEPT')
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_COLOR);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND)
+						.appendField(new Blockly.FieldDropdown([
+							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA, 'alpha'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_NUM, 'num'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHANUM, 'alphanum'],
+							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_UNSPEC, 'unspec']
+						]), 'ACCEPT')
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_COLOR);
 					this.appendValueInput('COLOR')
-							.setCheck(['Colour','String']);
+						.setCheck(['Colour', 'String']);
 					this.setInputsInline(true);
 					this.setOutput(true, ['Number', 'Array']);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -958,7 +914,7 @@ export default {
 				// Boolean values true and false.
 				var accept = block.getFieldValue('ACCEPT');
 				var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_NONE);
-				var code = 'get_cam().find_text(accept="' + accept + '", back_color=' + color  + ')';
+				var code = 'get_cam().find_text(accept="' + accept + '", back_color=' + color + ')';
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
 
@@ -971,7 +927,7 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDQRCODE);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDQRCODE);
 					this.setOutput(true, 'String');
 					this.setInputsInline(true);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -993,7 +949,7 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDARCODE);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDARCODE);
 					this.setOutput(true, 'HashMap');
 					this.setInputsInline(true);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -1015,7 +971,7 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDLOGO);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDLOGO);
 					this.setOutput(true, 'Number');
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
 				}
@@ -1036,7 +992,7 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS);
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS);
 					this.setOutput(true, 'String');
 					this.setInputsInline(true);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -1058,8 +1014,8 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS)
-							.appendField(new Blockly.FieldDropdown(CODERBOT_CNN_MODEL_LIST), 'MODEL');
+						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS)
+						.appendField(new Blockly.FieldDropdown(CODERBOT_CNN_MODEL_LIST), 'MODEL');
 					this.setInputsInline(true);
 					this.setOutput(true, ['Array']);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -1068,19 +1024,19 @@ export default {
 
 			Blockly.Python['coderbot_adv_cnn_classify'] = function(block) {
 				var model = block.getFieldValue('MODEL');
-				var class_scores = 'get_cam().cnn_classify("'+ model +'")';
+				var class_scores = 'get_cam().cnn_classify("' + model + '")';
 				return [class_scores, Blockly.Python.ORDER_ATOMIC];
 			};
 
 			Blockly.Blocks['coderbot_event_generator'] = {
 				init: function() {
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_EVENT_GENERATOR);
+						.appendField(Blockly.Msg.CODERBOT_EVENT_GENERATOR);
 					this.appendStatementInput("generator_statements")
-							.setCheck(null);
+						.setCheck(null);
 					this.setColour(15);
-			 this.setTooltip("event generator");
-			 this.setHelpUrl("");
+					this.setTooltip("event generator");
+					this.setHelpUrl("");
 				}
 			};
 
@@ -1090,10 +1046,10 @@ export default {
 				var statements_event_generator = Blockly.Python.statementToCode(block, 'generator_statements');
 				Blockly.Generator.prototype.INDENT = '  ';
 				var code = 'def event_generator_' + coderbot_generator_id + '():\n' +
-									 '  while True:\n' +
-									 '    get_prog_eng().check_end()\n' +
-									 statements_event_generator + '\n' +
-									 'get_event().register_event_generator(event_generator_' + coderbot_generator_id + ')'
+					'  while True:\n' +
+					'    get_prog_eng().check_end()\n' +
+					statements_event_generator + '\n' +
+					'get_event().register_event_generator(event_generator_' + coderbot_generator_id + ')'
 				coderbot_generator_id++;
 				return code;
 			};
@@ -1101,15 +1057,15 @@ export default {
 			Blockly.Blocks['coderbot_event_listener'] = {
 				init: function() {
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_EVENT_WHEN)
-							.appendField(new Blockly.FieldTextInput("event_topic"), "event_topic")
-							.appendField(Blockly.Msg.CODERBOT_EVENT_WITH + " event_data");
+						.appendField(Blockly.Msg.CODERBOT_EVENT_WHEN)
+						.appendField(new Blockly.FieldTextInput("event_topic"), "event_topic")
+						.appendField(Blockly.Msg.CODERBOT_EVENT_WITH + " event_data");
 					this.appendStatementInput("event_statements")
-							.setCheck(null);
+						.setCheck(null);
 					this.setInputsInline(true);
 					this.setColour(15);
-			 this.setTooltip("");
-			 this.setHelpUrl("");
+					this.setTooltip("");
+					this.setHelpUrl("");
 				}
 			};
 
@@ -1118,9 +1074,9 @@ export default {
 				var event_topic = block.getFieldValue('event_topic');
 				var event_statements = Blockly.Python.statementToCode(block, 'event_statements');
 				var code = 'def event_listener_' + coderbot_listener_id + '(message):\n' +
-									 Blockly.Generator.prototype.INDENT + 'event_data = json.loads(message)\n' +
-									 event_statements + '\n' +
-									 'get_event().register_event_listener(\'' + event_topic + '\', event_listener_' + coderbot_listener_id + ')'
+					Blockly.Generator.prototype.INDENT + 'event_data = json.loads(message)\n' +
+					event_statements + '\n' +
+					'get_event().register_event_listener(\'' + event_topic + '\', event_listener_' + coderbot_listener_id + ')'
 				coderbot_listener_id++;
 				return code;
 			};
@@ -1128,17 +1084,17 @@ export default {
 			Blockly.Blocks['coderbot_event_publisher'] = {
 				init: function() {
 					this.appendValueInput("event_data")
-							.appendField(Blockly.Msg.CODERBOT_EVENT_PUBLISH)
-							.setCheck(null);
+						.appendField(Blockly.Msg.CODERBOT_EVENT_PUBLISH)
+						.setCheck(null);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_EVENT_ON_TOPIC)
-							.appendField(new Blockly.FieldTextInput("event_topic"), "event_topic");
+						.appendField(Blockly.Msg.CODERBOT_EVENT_ON_TOPIC)
+						.appendField(new Blockly.FieldTextInput("event_topic"), "event_topic");
 					this.setInputsInline(true);
 					this.setPreviousStatement(true, null);
 					this.setNextStatement(true, null);
 					this.setColour(15);
-			 this.setTooltip("event publisher");
-			 this.setHelpUrl("");
+					this.setTooltip("event publisher");
+					this.setHelpUrl("");
 				}
 			};
 
@@ -1152,16 +1108,16 @@ export default {
 			Blockly.Blocks['hashmap_get_value'] = {
 				init: function() {
 					this.appendValueInput("key")
-							.setCheck("String")
-							.appendField("get");
+						.setCheck("String")
+						.appendField("get");
 					this.appendValueInput("map")
-							.setCheck("HashMap")
-							.appendField("from ");
+						.setCheck("HashMap")
+						.appendField("from ");
 					this.setInputsInline(true);
 					this.setOutput(true, null);
 					this.setColour(230);
-			 this.setTooltip("get an item from an hashmap");
-			 this.setHelpUrl("");
+					this.setTooltip("get an item from an hashmap");
+					this.setHelpUrl("");
 				}
 			};
 
@@ -1175,15 +1131,15 @@ export default {
 			Blockly.Blocks['hashmap_get_keys'] = {
 				init: function() {
 					this.appendDummyInput()
-							.appendField("get keys");
+						.appendField("get keys");
 					this.appendValueInput("map")
-							.setCheck("HashMap")
-							.appendField("from ");
+						.setCheck("HashMap")
+						.appendField("from ");
 					this.setInputsInline(true);
 					this.setOutput(true, "Array");
 					this.setColour(230);
-			 this.setTooltip("get keys from an hashmap");
-			 this.setHelpUrl("");
+					this.setTooltip("get keys from an hashmap");
+					this.setHelpUrl("");
 				}
 			};
 
@@ -1197,20 +1153,22 @@ export default {
 			Blockly.Blocks['coderbot_conv_get_action'] = {
 				init: function() {
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_CONVERSATION_PARSE);
+						.appendField(Blockly.Msg.CODERBOT_CONVERSATION_PARSE);
 					this.appendValueInput("query")
-							.setCheck("String");
+						.setCheck("String");
 					this.appendDummyInput()
-							.appendField("in")
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_LOCALE_EN, 'en'],
-																											[Blockly.Msg.CODERBOT_LOCALE_IT, 'it'],
-																											[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr'],
-																											[Blockly.Msg.CODERBOT_LOCALE_ES, 'es']]), "locale");
+						.appendField("in")
+						.appendField(new Blockly.FieldDropdown([
+							[Blockly.Msg.CODERBOT_LOCALE_EN, 'en'],
+							[Blockly.Msg.CODERBOT_LOCALE_IT, 'it'],
+							[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr'],
+							[Blockly.Msg.CODERBOT_LOCALE_ES, 'es']
+						]), "locale");
 					this.setInputsInline(true);
 					this.setOutput(true, "HashMap");
 					this.setColour(230);
-			 this.setTooltip("");
-			 this.setHelpUrl("");
+					this.setTooltip("");
+					this.setHelpUrl("");
 				}
 			};
 
@@ -1230,11 +1188,11 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(220);
 					this.appendValueInput('FILENAME')
-							.setCheck('String')
-							.appendField(Blockly.Msg.CODERBOT_AUDIO_RECORD_FILE_NAME);
+						.setCheck('String')
+						.appendField(Blockly.Msg.CODERBOT_AUDIO_RECORD_FILE_NAME);
 					this.appendValueInput('ELAPSE')
-							.setCheck('Number')
-							.appendField(Blockly.Msg.CODERBOT_AUDIO_RECORD_FILE_ELAPSE);
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_AUDIO_RECORD_FILE_ELAPSE);
 					this.setInputsInline(true);
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -1245,9 +1203,9 @@ export default {
 			Blockly.Python['coderbot_audio_record'] = function(block) {
 
 				var filename = Blockly.Python.valueToCode(block, 'FILENAME',
-						Blockly.Python.ORDER_NONE) || '\'\'';
+					Blockly.Python.ORDER_NONE) || '\'\'';
 				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE',
-						Blockly.Python.ORDER_NONE) || '\'\'';
+					Blockly.Python.ORDER_NONE) || '\'\'';
 				var code = 'get_audio().record_to_file(filename=' + filename + ', elapse=' + elapse + ')\n';
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
@@ -1259,10 +1217,10 @@ export default {
 					this.setColour(220);
 					var vi = this.appendValueInput('FILENAME');
 					vi.setCheck("String");
-					if(CODERBOT_PROG_LEVEL.indexOf("basic")>=0) {
-							vi.appendField(new Blockly.FieldImage('/images/blocks/play.png', 32, 32, '*'));
+					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
+						vi.appendField(new Blockly.FieldImage('/images/blocks/play.png', 32, 32, '*'));
 					} else {
-							vi.appendField(Blockly.Msg.CODERBOT_AUDIO_PLAY_FILE);
+						vi.appendField(Blockly.Msg.CODERBOT_AUDIO_PLAY_FILE);
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -1273,7 +1231,7 @@ export default {
 			Blockly.Python['coderbot_audio_play'] = function(block) {
 				// Generate Python for turning left or right.
 				var filename = Blockly.Python.valueToCode(block, 'FILENAME',
-						Blockly.Python.ORDER_NONE) || '\'\'';
+					Blockly.Python.ORDER_NONE) || '\'\'';
 				return 'get_audio().play(' + filename + ')\n';
 			};
 
@@ -1286,11 +1244,11 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(220);
 					this.appendValueInput('LEVEL')
-							.setCheck(["Number"])
-							.appendField(Blockly.Msg.CODERBOT_AUDIO_HEAR + Blockly.Msg.CODERBOT_AUDIO_HEAR_LEVEL);
+						.setCheck(["Number"])
+						.appendField(Blockly.Msg.CODERBOT_AUDIO_HEAR + Blockly.Msg.CODERBOT_AUDIO_HEAR_LEVEL);
 					this.appendValueInput('ELAPSE')
-							.setCheck(["Number"])
-							.appendField(Blockly.Msg.CODERBOT_AUDIO_HEAR_ELAPSE);
+						.setCheck(["Number"])
+						.appendField(Blockly.Msg.CODERBOT_AUDIO_HEAR_ELAPSE);
 					this.setInputsInline(true);
 					this.setOutput(true, ['Number']);
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -1301,7 +1259,7 @@ export default {
 				// Boolean values true and false.
 				var level = Blockly.Python.valueToCode(block, 'LEVEL', Blockly.Python.ORDER_NONE) || '\'\'';
 				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE) || '\'\'';
-				var code = 'get_audio().hear(level=' + level + ', elapse=' + elapse  + ')';
+				var code = 'get_audio().hear(level=' + level + ', elapse=' + elapse + ')';
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
 
@@ -1314,11 +1272,13 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(220);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_AUDIO_LISTEN)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_LOCALE_EN, 'en-US'],
-																											[Blockly.Msg.CODERBOT_LOCALE_IT, 'it-IT'],
-																											[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr-FR'],
-																											[Blockly.Msg.CODERBOT_LOCALE_ES, 'es-ES']]), 'MODEL');
+						.appendField(Blockly.Msg.CODERBOT_AUDIO_LISTEN)
+						.appendField(new Blockly.FieldDropdown([
+							[Blockly.Msg.CODERBOT_LOCALE_EN, 'en-US'],
+							[Blockly.Msg.CODERBOT_LOCALE_IT, 'it-IT'],
+							[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr-FR'],
+							[Blockly.Msg.CODERBOT_LOCALE_ES, 'es-ES']
+						]), 'MODEL');
 					this.setInputsInline(true);
 					this.setOutput(true, 'String');
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
@@ -1341,10 +1301,12 @@ export default {
 					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
 					this.setColour(250);
 					this.appendDummyInput()
-							.appendField(Blockly.Msg.CODERBOT_SONAR_GET_DISTANCE)
-							.appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_SONAR_SENSOR_1, "0"],
-																											[Blockly.Msg.CODERBOT_SONAR_SENSOR_2, "1"],
-																											[Blockly.Msg.CODERBOT_SONAR_SENSOR_3, "2"]]), 'SONAR');
+						.appendField(Blockly.Msg.CODERBOT_SONAR_GET_DISTANCE)
+						.appendField(new Blockly.FieldDropdown([
+							[Blockly.Msg.CODERBOT_SONAR_SENSOR_1, "0"],
+							[Blockly.Msg.CODERBOT_SONAR_SENSOR_2, "1"],
+							[Blockly.Msg.CODERBOT_SONAR_SENSOR_3, "2"]
+						]), 'SONAR');
 					this.setOutput(true, 'Number');
 					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
 				}
@@ -1357,37 +1319,37 @@ export default {
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
 		},
-		getProgramCode(){
-        	Blockly.Python.STATEMENT_PREFIX = null;
-		    Blockly.Python.addReservedWords();
-		    Blockly.Python.INFINITE_LOOP_TRAP = null;
-		    this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
-        	this.$data.dialogCode = true
+		getProgramCode() {
+			Blockly.Python.STATEMENT_PREFIX = null;
+			Blockly.Python.addReservedWords();
+			Blockly.Python.INFINITE_LOOP_TRAP = null;
+			this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
+			this.$data.dialogCode = true
 		},
-		runProgram(){
+		runProgram() {
 			if (this.$data.status) {
 				let axios = this.$axios
 				let CB = this.$data.CB
 				// POST /program/save
 				var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
-	        	var dom_code = Blockly.Xml.domToText(xml_code);
-		        window.LoopTrap = 1000;
-		        Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
-		        var code = Blockly.Python.workspaceToCode(this.$data.workspace);
-		        Blockly.Python.INFINITE_LOOP_TRAP = null;
+				var dom_code = Blockly.Xml.domToText(xml_code);
+				window.LoopTrap = 1000;
+				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+				var code = Blockly.Python.workspaceToCode(this.$data.workspace);
+				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
-		        axios.post(CB+'/exec', {
-		        	name: 'Hello, World!',
-		        	dom_code,
-		        	code
-		        })
-		        .then(function (response) {
-	    			console.log(response);
-	  			})	
+				axios.post(CB + '/exec', {
+						name: 'Hello, World!',
+						dom_code,
+						code
+					})
+					.then(function(response) {
+						console.log(response);
+					})
 			} else {
 				this.$data.generalDialog = true;
 				this.$data.generalDialogTitle = 'Errore',
-				this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
+					this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
 			}
 
 
@@ -1415,18 +1377,17 @@ export default {
 			blocklyDiv,
 			// Options
 			{
-				toolbox			: serializedToolbox,
+				toolbox: serializedToolbox,
 				//path				: '../../', // ? this makes to load audio assets from /media FIXME
 				// TODO: Use values from fetched configuration!
-				scrollbars	: true,
+				scrollbars: true,
 				//MaxBlocks		: -1, // -1 as infinite not working FIXME
-				zoom :
-				{
-					controls 	: true,
-					wheel 		: false,
+				zoom: {
+					controls: true,
+					wheel: false,
 					startScale: 1.0,
-					maxScale 	: 1.5,
-					minScale	: 0.2
+					maxScale: 1.5,
+					minScale: 0.2
 				}
 			}
 		);
@@ -1444,9 +1405,8 @@ export default {
 
 	}
 };
+
 </script>
-
-
 <style scoped>
 .blocklyDiv {
 	position: absolute;
@@ -1463,4 +1423,5 @@ export default {
 	width: 100%;
 	height: 90%;
 }
+
 </style>
