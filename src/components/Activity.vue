@@ -89,8 +89,16 @@
 							<h3 class="text-xs-left">Tipografia </h3>
 							<v-slider :label="'Grandezza testo'" v-model="fontSize" :tick-labels="fontSizeLabels" :max="3" step="1" ticks="always" tick-size="3"></v-slider>
 							<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
-							<v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
-							<v-select v-if="daltonicSwitch" v-model="daltonic" :items="daltonicModes" label="Tipo daltonismo" required></v-select>
+							<v-layout row wrap>
+							  <v-flex>
+							    <v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
+							  </v-flex>
+							  <v-flex >
+							    <v-select v-if="daltonicSwitch" v-model="daltonic" :items="daltonicModes" label="Tipo daltonismo" required></v-select>
+							  </v-flex>
+							</v-layout>
+							
+							
 							<span v-bind:style="bodyUIstyleObj">Lorem Ipsum e robbe varie</span>
 							<v-radio-group v-model="bodyFont" column>
 								Carattere tipografico dell'interfaccia<br><br>
@@ -160,7 +168,7 @@ export default {
 			let obj = {
 				fontSize: '36px',
 				fontFamily,
-				backgroundColor: 'gray'
+				backgroundColor: ''
 			}
 			
 			return obj
@@ -176,7 +184,7 @@ export default {
 			let obj = {
 				fontSize: '28px',
 				fontFamily,
-				backgroundColor: 'gray'
+				backgroundColor: '',
 			}
 			
 			return obj
