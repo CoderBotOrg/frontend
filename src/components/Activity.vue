@@ -109,6 +109,35 @@
 							<h3 class="text-xs-left">Lingua</h3>
 							<v-select v-model="uiLang" :items="langs" label="Lingua Interfaccia" required></v-select>
 							<v-select v-model="blocklyLang" :items="langs" label="Lingua Blocchi" required></v-select>
+							<br>
+							<h3 class="text-xs-left">Viste disponibili</h3>
+							<v-layout row wrap>
+							  <v-flex>
+							  	<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
+							  </v-flex>
+							  <v-flex>
+							  	<v-checkbox disabled v-model="availableViews" label="Editor Python" value="python"></v-checkbox>
+							  </v-flex>
+							  <v-flex>
+							  	<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
+							  </v-flex>
+							</v-layout>
+						<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
+						<br><br>
+						<h3 class="text-xs-left">Funzionalità sperimentali</h3>
+						<v-switch color="orange darken-3" :label="`Abilità funzionalità sperimentali`" v-model="experimental"></v-switch>
+						<v-layout row wrap>
+						  <v-flex>
+						    <v-switch v-if="experimental" :label="`Cronologia Modifiche`" v-model="editHistory"></v-switch>
+						  </v-flex>
+						  <v-flex >
+						    <v-switch v-if="editHistory" :label="`Permetti navigazione nella cronologia modifiche`" v-model="navHistory"></v-switch>
+						  </v-flex>
+						</v-layout>
+						
+						
+						<v-switch v-if="experimental" :label="`Esecuzione passo passo`" v-model="stepbystep"></v-switch>
+						
 						</v-flex>
 					</v-layout>
 				</v-container>
@@ -145,6 +174,11 @@ export default {
 			],
 			uiLang: 'Italiano',
 			blocklyLang: 'Inglese',
+			availableViews: [],
+			editHistory: false,
+			navHistory: false,
+			experimental: true,
+			stepbystep: false,
 			drawer: null,
 			source: null,
 			msg: 'Welcome to Your Vue.js App',
