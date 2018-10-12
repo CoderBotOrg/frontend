@@ -8,6 +8,7 @@ import VueRouter from 'vue-router';
 import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+
 import 'prismjs/themes/prism.css'
 
 // Fonts
@@ -21,6 +22,7 @@ import arexample from './components/ARexample';
 import run from './components/Run';
 import blockly from './components/Blockly';
 import activity from './components/Activity'
+import settings from './components/Settings'
 
 // Utils
 import base64 from 'base-64'
@@ -38,8 +40,9 @@ const routes = [
   { path: '/', component: landing },
   { path: '/run', component: run },
   { path: '/ar', component: arexample },
-  { path: '/blockly', component: blockly, props: true},
-  { path: '/new', component: activity}
+  { path: '/blockly', component: blockly},
+  { path: '/new', component: activity},
+  { path: '/settings', component: settings}
 ];
 
 const router = new VueRouter({
