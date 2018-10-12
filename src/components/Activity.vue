@@ -91,13 +91,15 @@
 							<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
 							<v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
 							<v-select v-if="daltonicSwitch" v-model="daltonic" :items="daltonicModes" label="Tipo daltonismo" required></v-select>
+							<span v-bind:style="bodyUIstyleObj">Lorem Ipsum e robbe varie</span>
 							<v-radio-group v-model="bodyFont" column>
 								Carattere tipografico dell'interfaccia<br><br>
 								<v-radio label="Roboto" value="Roboto"></v-radio>
-								<v-radio label="Open Sans" value="OpenSans"></v-radio>
+								<v-radio label="Open Sans" value="opensans"></v-radio>
 								<v-radio label="Test Me (Altà leggibilità, indicato per dislessia)" value="testme"></v-radio>
 								<v-radio label="Open-Dyslexic (Altà leggibilità, indicato per dislessia)" value="open-dys"></v-radio>
 							</v-radio-group>
+							<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
 							<v-radio-group v-model="codeFont" column>
 								Carattere tipografico del codice (valori, editor di codice)<br><br>
 								<v-radio label="Iosevka" value="iosevka"></v-radio>
@@ -112,32 +114,30 @@
 							<br>
 							<h3 class="text-xs-left">Viste disponibili</h3>
 							<v-layout row wrap>
-							  <v-flex>
-							  	<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
-							  </v-flex>
-							  <v-flex>
-							  	<v-checkbox disabled v-model="availableViews" label="Editor Python" value="python"></v-checkbox>
-							  </v-flex>
-							  <v-flex>
-							  	<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
-							  </v-flex>
+								<v-flex>
+									<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
+								</v-flex>
+								<v-flex>
+									<v-checkbox disabled v-model="availableViews" label="Editor Python" value="python"></v-checkbox>
+								</v-flex>
+								<v-flex>
+									<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
+								</v-flex>
 							</v-layout>
-						<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
-						<br><br>
-						<h3 class="text-xs-left">Funzionalità sperimentali</h3>
-						<v-switch color="orange darken-3" :label="`Abilità funzionalità sperimentali`" v-model="experimental"></v-switch>
-						<v-layout row wrap>
-						  <v-flex>
-						    <v-switch v-if="experimental" :label="`Cronologia Modifiche`" v-model="editHistory"></v-switch>
-						  </v-flex>
-						  <v-flex >
-						    <v-switch v-if="editHistory" :label="`Permetti navigazione nella cronologia modifiche`" v-model="navHistory"></v-switch>
-						  </v-flex>
-						</v-layout>
-						
-						
-						<v-switch v-if="experimental" :label="`Esecuzione passo passo`" v-model="stepbystep"></v-switch>
-						
+							<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
+							<br><br>
+							<h3 class="text-xs-left">Funzionalità sperimentali</h3>
+							<v-switch color="orange darken-3" :label="`Abilità funzionalità sperimentali`" v-model="experimental"></v-switch>
+							<v-layout row wrap>
+								<v-flex>
+									<v-switch v-if="experimental" :label="`Cronologia Modifiche`" v-model="editHistory"></v-switch>
+								</v-flex>
+								<v-flex>
+									<v-switch v-if="editHistory" :label="`Permetti navigazione nella cronologia modifiche`" v-model="navHistory"></v-switch>
+								</v-flex>
+							</v-layout>
+							<v-switch v-if="experimental" :label="`Esecuzione passo passo`" v-model="stepbystep"></v-switch>
+							<v-switch disabled v-if="experimental" :label="`Realtà Aumentata`" v-model="ar"></v-switch>
 						</v-flex>
 					</v-layout>
 				</v-container>
@@ -148,6 +148,41 @@
 <script>
 export default {
 	name: 'HelloWorld',
+	computed: {
+		bodyUIstyleObj: function() {
+			let bodyFont = this.$data.bodyFont
+			let fontFamily = ''
+			if (bodyFont == 'opensans')
+				fontFamily = 'Open Sans'
+			else if (bodyFont == 'roboto')
+				fontFamily = 'Roboto'
+
+			let obj = {
+				fontSize: '36px',
+				fontFamily,
+				backgroundColor: 'gray'
+			}
+			
+			return obj
+		},
+		codeUIstyleObj: function() {
+			let codeFont = this.$data.codeFont
+			let fontFamily = ''
+			if (codeFont == 'iosevka')
+				fontFamily = 'Iosevka'
+			else if (codeFont == 'inconsolata')
+				fontFamily = 'hack'
+
+			let obj = {
+				fontSize: '28px',
+				fontFamily,
+				backgroundColor: 'gray'
+			}
+			
+			return obj
+		},		
+
+	},
 	data() {
 		return {
 			value: 0,
