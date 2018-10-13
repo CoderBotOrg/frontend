@@ -68,7 +68,7 @@
 				<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 				<v-toolbar-title>Coderbot</v-toolbar-title>
 				<v-spacer></v-spacer>
-				<v-toolbar-items class="hidden-sm-and-down">
+				<v-toolbar-items>
 					<v-btn v-on:click="runProgram()" flat>
 						<v-icon>play_arrow</v-icon>
 						Esegui
@@ -109,7 +109,7 @@
 				<v-card>
 					<v-card-title class="headline">Codice</v-card-title>
 					<v-card-text class="text-xs-left">
-						<prism language="python"> {{ code }} </prism>
+						<prism language="python">{{ code }} </prism>
 					</v-card-text>
 					<v-divider></v-divider>
 					<v-card-actions>
@@ -344,7 +344,7 @@ export default {
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
 						di.appendField(new Blockly.FieldImage('/images/blocks/move_forward.png', 32, 32, '*'));
 					} else {
-						di.appendField(Blockly.Msg.CODERBOT_MOVE_FORWARD)
+						di.appendField("Hello, World!")
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
@@ -1341,6 +1341,7 @@ export default {
 			Blockly.Python.addReservedWords();
 			Blockly.Python.INFINITE_LOOP_TRAP = null;
 			this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
+			console.log(this.$data.code)
 			this.$data.dialogCode = true
 
 			if (this.$data.experimental) {
