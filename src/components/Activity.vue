@@ -88,11 +88,11 @@
 								<!-- Column A -->
 								<v-flex xs12 md6>
 									<h3 class="text-xs-left">Dati Attività </h3>
-									<v-form v-model="valid">
+									<v-form>
 										<v-text-field v-model="name" label="Nome" required></v-text-field>
 										<v-text-field v-model="description" label="Descrizione"></v-text-field>
 									</v-form>
-									<v-select v-model="select" :items="viste" label="Vista predefinita" required></v-select>
+									<v-select v-model="defaultView" :items="viste" label="Vista predefinita" required></v-select>
 									<h3 class="text-xs-left">Tipografia </h3>
 									<v-slider :label="'Grandezza testo'" v-model="fontSize" :tick-labels="fontSizeLabels" :max="3" step="1" ticks="always" tick-size="3"></v-slider>
 									<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
@@ -155,15 +155,12 @@
 							</v-layout>
 						</v-container>
 					</v-tab-item>
-
 					<v-tab-item>
-						Tab 2
+					
 					</v-tab-item>
-
 					<v-tab-item>
 						Tab 3
 					</v-tab-item>
-
 					<v-tab-item>
 						Tab 4
 					</v-tab-item>
@@ -173,6 +170,7 @@
 	</div>
 </template>
 <script>
+
 export default {
 	name: 'HelloWorld',
 	computed: {
@@ -213,6 +211,8 @@ export default {
 	data() {
 		return {
 			value: 0,
+			name: null,
+			description: null,
 			fontSize: 1,
 			fontSizeLabels: [
 				'Piccolo',
@@ -241,8 +241,10 @@ export default {
 			navHistory: false,
 			experimental: true,
 			stepbystep: false,
+			defaultView: null,
 			tab: null,
 			tabs: ['Generali', 'Barra degli Strumenti', 'Palette Comandi', 'Vista Esecuzione'],
+			ar: false,
 			drawer: null,
 			source: null,
 			msg: 'Welcome to Your Vue.js App',
@@ -258,4 +260,13 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.rounded1 {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px; 
+    width: 100px;
+}
+
+
 </style>
