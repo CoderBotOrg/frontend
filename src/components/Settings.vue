@@ -84,13 +84,27 @@
 				<v-tabs-items v-model="tab">
 					<v-tab-item>
 						<br>
-							<v-btn color="info">Spegni</v-btn>
-							<v-btn color="info">Riavvia</v-btn>
-							<v-btn color="warning">Aggiorna</v-btn>
-						
+						<v-btn color="info">Spegni</v-btn>
+						<v-btn color="info">Riavvia</v-btn>
+						<v-btn color="warning">Aggiorna</v-btn>
+						<br><br>
+						<div v-for="(value, key, index) in cbInfo">
+							{{ key }}: <code>{{ value }}</code>
+						</div>
+						<v-text-field v-model="cbName" label="Nome CoderBot"></v-text-field>
+						<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>
 					</v-tab-item>
 					<v-tab-item>
-						2
+						<v-radio-group v-model="wifiMode" column>
+							Configurazione di Rete
+							<v-radio label="Connetti ad una rete WiFi già esistente (client)" value="wificlient"></v-radio>
+							<v-radio label="Lascia che CoderBot configuri la propria rete WiFi locale (ad-hoc)" value="wifiadhoc"></v-radio>
+							<div v-if="wifiMode == 'wificlient'">
+								<v-text-field v-model="wifiSSID" label="SSID"></v-text-field>
+								<v-text-field v-model="wifiPsw" label="Password"></v-text-field>
+							</div>
+							<div v-if="wifiMode =='wifiadhoc'"> SSID: <code> coderbot </code> Password: <code>coderb0t01 </code> </div>
+						</v-radio-group>
 					</v-tab-item>
 					<v-tab-item>
 						Tab 3
@@ -108,9 +122,18 @@ export default {
 	name: 'HelloWorld',
 	data() {
 		return {
+			cbName: 'CoderBot di Antonio',
+			wifiMode: 'wifiadhoc',
+			cbInfo: {
+				'Modello': 'CDRBT-01-2017-1',
+				'Seriale': '740129387591e',
+				'Versione Software Base': '0.1',
+				'Versione Backend': '0.3.1a',
+				'Versione Web App': '0.1-prelease'
+			},
 			drawer: null,
 			tab: null,
-			tabs: ['Generali'],
+			tabs: ['Generali', 'Rete'],
 		}
 	}
 }
