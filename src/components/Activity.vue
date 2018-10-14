@@ -161,31 +161,28 @@
 							</v-flex>
 							<v-flex xs10>
 								<br>
-								<span @click="addButton()"> Aggiungi bottone <br><br> </span>
 								
+								<v-btn @click="addButton()" outline color="green">
+										<v-icon>add</v-icon> Aggiungi
+									</v-btn>
 								<div v-for="button, i in buttons">
 									<v-card>
-									Bottone {{i + 1}}
-									<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
-									<v-select :items="actions" label="Azione"></v-select>
-									<v-select
-									  :items="colors"
-									  v-model="button.color"
-									  label="Colore"
-									></v-select>
-									<v-text-field v-model="button.icon" label="Icona"></v-text-field>
-									
-									<v-btn color="blue-grey" class="white--text">
-										{{ button.label }}
-										<v-icon right dark>{{ button.icon }}</v-icon>
+										Bottone {{i + 1}}
+										<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
+										<v-select :items="actions" label="Azione"></v-select>
+										<v-select :items="colors" v-model="button.color" label="Colore"></v-select>
+										<v-text-field v-model="button.icon" label="Icona"></v-text-field>
+										<v-btn :color="button.color" class="white--text">
+											{{ button.label }}
+											<v-icon right dark>{{ button.icon }}</v-icon>
+										</v-btn>
+									<v-btn @click="removeButton(i)"outline color="indigo">
+										<v-icon>remove</v-icon> Rimuovi
 									</v-btn>
-
-									<span @click="removeButton(i)"> Rimuovi bottone </span>
 									</v-card>
+									
 									<br>
 								</div>
-							
-
 							</v-flex>
 						</v-layout>
 						<v-flex xs2>
@@ -242,10 +239,14 @@ export default {
 	},
 	data() {
 		return {
+			icon: 'remove',
+			colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black', 'grey', 'black', 'white'],
 			actions: ['Esegui', 'Salva', 'Salva con Nome'],
 			buttons: [{
 				label: 'Esegui',
-				icon: 'Play'
+				icon: 'Play',
+				color: 'red',
+				icon: 'remove'
 
 			}],
 			defaultButton: {
