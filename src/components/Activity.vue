@@ -209,6 +209,7 @@
 												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
 												Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
 												<v-text-field v-model="button.icon" label="Icona"></v-text-field>
+												<v-divider></v-divider>
 												<v-btn :color="button.colorBtn" :class="button.colorText">
 													{{ button.label }}
 													<v-icon right dark>{{ button.icon }}</v-icon>
@@ -294,10 +295,6 @@ export default {
 				{ text:'Mostra Codice', value: 'showcode'},
 			],
 			buttons: null,
-			defaultButton: {
-				label: '',
-				icon: ''
-			},
 			value: 0,
 			name: null,
 			description: null,
@@ -348,7 +345,9 @@ export default {
 	},
 	methods: {
 		addButton: function() {
-			this.$data.buttons.push(this.$data.defaultButton)
+			this.$data.buttons.push({
+				label: '',
+			})
 		},
 		removeButton: function(index) {
 			this.$data.buttons.splice(index, 1)
