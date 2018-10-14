@@ -130,60 +130,53 @@
 										<div class="cardContent">
 											<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
 											<v-radio-group v-model="codeFont" column>
-												
 												<v-radio label="Iosevka" value="iosevka"></v-radio>
 												<v-radio label="Inconsolata" value="inconsolata"></v-radio>
 											</v-radio-group>
 										</div>
 									</v-card>
-								
 									<br><br>
 									<h3 class="text-xs-left">Lingua</h3>
 									<v-card>
-									  <div class="cardContent">
-
-									<v-select v-model="uiLang" :items="langs" label="Lingua Interfaccia" required></v-select>
-									<v-select v-model="blocklyLang" :items="langs" label="Lingua Blocchi" required></v-select>
-									</div>
+										<div class="cardContent">
+											<v-select v-model="uiLang" :items="langs" label="Lingua Interfaccia" required></v-select>
+											<v-select v-model="blocklyLang" :items="langs" label="Lingua Blocchi" required></v-select>
+										</div>
 									</v-card>
 									<br><br>
 									<h3 class="text-xs-left">Viste disponibili</h3>
-
 									<v-card>
-									  <div class="cardContent">
-									<v-layout row wrap>
-										<v-flex>
-											<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
-										</v-flex>
-										<v-flex>
-											<v-checkbox disabled v-model="availableViews" label="Editor Python" value="python"></v-checkbox>
-										</v-flex>
-										<v-flex>
-											<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
-										</v-flex>
-										<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
-									</v-layout>
-
-									</div>
+										<div class="cardContent">
+											<v-layout row wrap>
+												<v-flex>
+													<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
+												</v-flex>
+												<v-flex>
+													<v-checkbox disabled v-model="availableViews" label="Editor Python" value="python"></v-checkbox>
+												</v-flex>
+												<v-flex>
+													<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
+												</v-flex>
+												<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
+											</v-layout>
+										</div>
 									</v-card>
-									
 									<br><br>
 									<h3 class="text-xs-left">Funzionalità sperimentali</h3>
 									<v-card>
-									  <div class="cardContent">
-
-									<v-switch color="orange darken-3" :label="`Abilità funzionalità sperimentali`" v-model="experimental"></v-switch>
-									<v-layout row wrap>
-										<v-flex>
-											<v-switch v-if="experimental" :label="`Cronologia Modifiche`" v-model="editHistory"></v-switch>
-										</v-flex>
-										<v-flex>
-											<v-switch v-if="editHistory" :label="`Permetti navigazione nella cronologia modifiche`" v-model="navHistory"></v-switch>
-										</v-flex>
-									</v-layout>
-									<v-switch v-if="experimental" :label="`Esecuzione passo passo`" v-model="stepbystep"></v-switch>
-									<v-switch disabled v-if="experimental" :label="`Realtà Aumentata`" v-model="ar"></v-switch>
-									</div>
+										<div class="cardContent">
+											<v-switch color="orange darken-3" :label="`Abilità funzionalità sperimentali`" v-model="experimental"></v-switch>
+											<v-layout row wrap>
+												<v-flex>
+													<v-switch v-if="experimental" :label="`Cronologia Modifiche`" v-model="editHistory"></v-switch>
+												</v-flex>
+												<v-flex>
+													<v-switch v-if="editHistory" :label="`Permetti navigazione nella cronologia modifiche`" v-model="navHistory"></v-switch>
+												</v-flex>
+											</v-layout>
+											<v-switch v-if="experimental" :label="`Esecuzione passo passo`" v-model="stepbystep"></v-switch>
+											<v-switch disabled v-if="experimental" :label="`Realtà Aumentata`" v-model="ar"></v-switch>
+										</div>
 									</v-card>
 								</v-flex>
 							</v-layout>
@@ -191,45 +184,42 @@
 					</v-tab-item>
 					<v-tab-item>
 						<v-container grid-list-md text-xs-center>
-						<v-flex xs12 md6 offset-md3>
-							
-							<v-flex>
-								<br>
-								<v-btn @click="addButton()" outline color="green">
-									<v-icon>add</v-icon> Aggiungi
-								</v-btn>
-								<v-btn @click="restoreDefaults()" outline color="blue">
-									<v-icon>undo</v-icon> Predefiniti
-								</v-btn>
-								<v-btn @click="removeAll()" outline color="red">
-									<v-icon>clear</v-icon> Rimuovi tutti
-								</v-btn>
-								<br><br>
-								<div v-for="button, i in buttons">
-									<h3>Bottone {{i + 1}}</h3>
-									<v-card>
-										<div class="cardContent">
-											<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
-											<v-select :items="actions" label="Azione">
-											</v-select>
-											<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
-											Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
-											<v-text-field v-model="button.icon" label="Icona"></v-text-field>
-											<v-btn :color="button.colorBtn" :class="button.colorText">
-												{{ button.label }}
-												<v-icon right dark>{{ button.icon }}</v-icon>
-											</v-btn>
-											<v-btn @click="removeButton(i)" outline color="indigo">
-												<v-icon>remove</v-icon> Rimuovi
-											</v-btn>
-										</div>
-									</v-card>
+							<v-flex xs12 md6 offset-md3>
+								<v-flex>
 									<br>
-								</div>
+									<v-btn @click="addButton()" outline color="green">
+										<v-icon>add</v-icon> Aggiungi
+									</v-btn>
+									<v-btn @click="restoreDefaults()" outline color="blue">
+										<v-icon>undo</v-icon> Predefiniti
+									</v-btn>
+									<v-btn @click="removeAll()" outline color="red">
+										<v-icon>clear</v-icon> Rimuovi tutti
+									</v-btn>
+									<br><br>
+									<div v-for="button, i in buttons">
+										<h3>Bottone {{i + 1}} <v-btn @click="removeButton(i)" flat icon>
+													<v-icon>clear</v-icon>
+												</v-btn></h3> 
+										<v-card>
+											<div class="cardContent">
+												<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
+												<v-select v-model="button.action" :items="actions" label="Azione">
+												</v-select>
+												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
+												Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
+												<v-text-field v-model="button.icon" label="Icona"></v-text-field>
+												<v-btn :color="button.colorBtn" :class="button.colorText">
+													{{ button.label }}
+													<v-icon right dark>{{ button.icon }}</v-icon>
+												</v-btn>
+											</div>
+										</v-card>
+										<br>
+									</div>
+								</v-flex>
 							</v-flex>
-						</v-flex>
-						
-					</v-container>
+						</v-container>
 					</v-tab-item>
 					<v-tab-item>
 						Tab 3
@@ -287,7 +277,6 @@ export default {
 	},
 	data() {
 		return {
-			icon: 'remove',
 			colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black', 'grey', 'black', 'white'],
 			textColors: [{
 					text: "Bianco",
@@ -298,14 +287,13 @@ export default {
 					value: 'black--text'
 				}
 			],
-			actions: ['Esegui', 'Salva', 'Salva con Nome'],
-			buttons: [{
-				label: 'Esegui',
-				icon: 'Play',
-				colorBtn: 'red',
-				colorText: 'white--text',
-				icon: 'remove',
-			}],
+			actions: [
+				{ text:'Esegui', value: 'run'},
+				{ text:'Salva', value: 'save'},
+				{ text:'Salva con Nome', value: 'saveas'},
+				{ text:'Mostra Codice', value: 'showcode'},
+			],
+			buttons: null,
 			defaultButton: {
 				label: '',
 				icon: ''
@@ -355,6 +343,9 @@ export default {
 			],
 		};
 	},
+	mounted() {
+		this.restoreDefaults();
+	},
 	methods: {
 		addButton: function() {
 			this.$data.buttons.push(this.$data.defaultButton)
@@ -367,12 +358,20 @@ export default {
 		},
 		restoreDefaults: function() {
 			this.$data.buttons = [{
-				label: 'Esegui',
-				icon: 'Play',
-				colorBtn: 'red',
-				colorText: 'white--text',
-				icon: 'remove',
-			}]
+					label: 'Esegui Roba',
+					icon: 'play_arrow',
+					colorBtn: 'green',
+					colorText: 'white--text',
+					action: 'run'
+				},
+				{
+					label: 'Codice',
+					icon: 'code',
+					colorBtn: 'blue',
+					colorText: 'white--text',
+					action: 'showcode'
+				}
+			]
 		}
 	}
 };
@@ -386,7 +385,9 @@ export default {
 	padding: 20px;
 	width: 100px;
 }
+
 .cardContent {
 	padding: 16px;
 }
+
 </style>
