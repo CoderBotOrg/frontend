@@ -159,28 +159,33 @@
 						<v-layout row wrap>
 							<v-flex xs1>
 							</v-flex>
-							<v-flex xs10>
+							<v-flex style="height:100%" xs10>
 								<br>
-								
 								<v-btn @click="addButton()" outline color="green">
-										<v-icon>add</v-icon> Aggiungi
-									</v-btn>
+									<v-icon>add</v-icon> Aggiungi
+								</v-btn>
+								<v-btn @click="restoreDefaults()" outline color="blue">
+									<v-icon>undo</v-icon> Predefiniti
+								</v-btn>
+								<v-btn @click="removeAll()" outline color="red">
+									<v-icon>clear</v-icon> Rimuovi tutti
+								</v-btn>
 								<div v-for="button, i in buttons">
 									<v-card>
 										Bottone {{i + 1}}
 										<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
 										<v-select :items="actions" label="Azione"></v-select>
-										<v-select :items="colors" v-model="button.color" label="Colore"></v-select>
+										<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
+										Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
 										<v-text-field v-model="button.icon" label="Icona"></v-text-field>
-										<v-btn :color="button.color" class="white--text">
+										<v-btn :color="button.colorBtn" :class="button.colorText">
 											{{ button.label }}
 											<v-icon right dark>{{ button.icon }}</v-icon>
 										</v-btn>
-									<v-btn @click="removeButton(i)"outline color="indigo">
-										<v-icon>remove</v-icon> Rimuovi
-									</v-btn>
+										<v-btn @click="removeButton(i)" outline color="indigo">
+											<v-icon>remove</v-icon> Rimuovi
+										</v-btn>
 									</v-card>
-									
 									<br>
 								</div>
 							</v-flex>
@@ -200,8 +205,13 @@
 	</div>
 </template>
 <script>
+import Swatches from 'vue-swatches'
+
+// Import the styles too, globally
+import "vue-swatches/dist/vue-swatches.min.css"
 export default {
 	name: 'HelloWorld',
+	components: { Swatches },
 	computed: {
 		bodyUIstyleObj: function() {
 			let bodyFont = this.$data.bodyFont
@@ -241,13 +251,22 @@ export default {
 		return {
 			icon: 'remove',
 			colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black', 'grey', 'black', 'white'],
+			textColors: [{
+					text: "Bianco",
+					value: 'white--text'
+				},
+				{
+					text: "Nero",
+					value: 'black--text'
+				}
+			],
 			actions: ['Esegui', 'Salva', 'Salva con Nome'],
 			buttons: [{
 				label: 'Esegui',
 				icon: 'Play',
-				color: 'red',
-				icon: 'remove'
-
+				colorBtn: 'red',
+				colorText: 'white--text',
+				icon: 'remove',
 			}],
 			defaultButton: {
 				label: '',
@@ -304,6 +323,18 @@ export default {
 		},
 		removeButton: function(index) {
 			this.$data.buttons.splice(index, 1)
+		},
+		removeAll: function() {
+			this.$data.buttons = []
+		},
+		restoreDefaults: function() {
+			this.$data.buttons = [{
+				label: 'Esegui',
+				icon: 'Play',
+				colorBtn: 'red',
+				colorText: 'white--text',
+				icon: 'remove',
+			}]
 		}
 	}
 };
