@@ -26,4 +26,6 @@ npm run build
 mv dist ../coderbot/
 ```
 
-At this point, the Flask backend server the built application at `/vue`.
+At this point, the Flask backend serves the built application at `/vue`.
+
+Another build value you may want to edit it's `assetsPublicPath` in `config/index.js`, which allows to serve the application from a subfolder.
