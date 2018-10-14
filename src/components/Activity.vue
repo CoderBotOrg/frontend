@@ -156,7 +156,40 @@
 						</v-container>
 					</v-tab-item>
 					<v-tab-item>
-					
+						<v-layout row wrap>
+							<v-flex xs1>
+							</v-flex>
+							<v-flex xs10>
+								<br>
+								<span @click="addButton()"> Aggiungi bottone <br><br> </span>
+								
+								<div v-for="button, i in buttons">
+									<v-card>
+									Bottone {{i + 1}}
+									<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
+									<v-select :items="actions" label="Azione"></v-select>
+									<v-select
+									  :items="colors"
+									  v-model="button.color"
+									  label="Colore"
+									></v-select>
+									<v-text-field v-model="button.icon" label="Icona"></v-text-field>
+									
+									<v-btn color="blue-grey" class="white--text">
+										{{ button.label }}
+										<v-icon right dark>{{ button.icon }}</v-icon>
+									</v-btn>
+
+									<span @click="removeButton(i)"> Rimuovi bottone </span>
+									</v-card>
+									<br>
+								</div>
+							
+
+							</v-flex>
+						</v-layout>
+						<v-flex xs2>
+						</v-flex>
 					</v-tab-item>
 					<v-tab-item>
 						Tab 3
@@ -170,7 +203,6 @@
 	</div>
 </template>
 <script>
-
 export default {
 	name: 'HelloWorld',
 	computed: {
@@ -210,6 +242,16 @@ export default {
 	},
 	data() {
 		return {
+			actions: ['Esegui', 'Salva', 'Salva con Nome'],
+			buttons: [{
+				label: 'Esegui',
+				icon: 'Play'
+
+			}],
+			defaultButton: {
+				label: '',
+				icon: ''
+			},
 			value: 0,
 			name: null,
 			description: null,
@@ -255,18 +297,24 @@ export default {
 			],
 		};
 	},
+	methods: {
+		addButton: function() {
+			this.$data.buttons.push(this.$data.defaultButton)
+		},
+		removeButton: function(index) {
+			this.$data.buttons.splice(index, 1)
+		}
+	}
 };
 
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .rounded1 {
-    border-radius: 25px;
-    border: 2px solid #73AD21;
-    padding: 20px; 
-    width: 100px;
+	border-radius: 25px;
+	border: 2px solid #73AD21;
+	padding: 20px;
+	width: 100px;
 }
-
 
 </style>
