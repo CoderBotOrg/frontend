@@ -86,46 +86,71 @@
 						<v-container grid-list-md text-xs-center>
 							<v-layout row wrap>
 								<!-- Column A -->
-								<v-flex xs12 md6>
+								<v-flex xs12 md6 offset-md3>
 									<h3 class="text-xs-left">Dati Attività </h3>
-									<v-form>
-										<v-text-field v-model="name" label="Nome" required></v-text-field>
-										<v-text-field v-model="description" label="Descrizione"></v-text-field>
-									</v-form>
-									<v-select v-model="defaultView" :items="viste" label="Vista predefinita" required></v-select>
+									<v-card>
+										<v-form class="cardContent">
+											<v-text-field v-model="name" label="Nome" required></v-text-field>
+											<v-text-field v-model="description" label="Descrizione"></v-text-field>
+											<v-select v-model="defaultView" :items="viste" label="Vista predefinita" required></v-select>
+										</v-form>
+									</v-card>
+									<br><br>
 									<h3 class="text-xs-left">Tipografia </h3>
-									<v-slider :label="'Grandezza testo'" v-model="fontSize" :tick-labels="fontSizeLabels" :max="3" step="1" ticks="always" tick-size="3"></v-slider>
-									<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
-									<v-layout row wrap>
-										<v-flex>
-											<v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
-										</v-flex>
-										<v-flex>
-											<v-select v-if="daltonicSwitch" v-model="daltonic" :items="daltonicModes" label="Tipo daltonismo" required></v-select>
-										</v-flex>
-									</v-layout>
-									<span v-bind:style="bodyUIstyleObj">Lorem Ipsum e robbe varie</span>
-									<v-radio-group v-model="bodyFont" column>
-										Carattere tipografico dell'interfaccia<br><br>
-										<v-radio label="Roboto" value="Roboto"></v-radio>
-										<v-radio label="Open Sans" value="opensans"></v-radio>
-										<v-radio label="Test Me (Altà leggibilità, indicato per dislessia)" value="testme"></v-radio>
-										<v-radio label="Open-Dyslexic (Altà leggibilità, indicato per dislessia)" value="open-dys"></v-radio>
-									</v-radio-group>
-									<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
-									<v-radio-group v-model="codeFont" column>
-										Carattere tipografico del codice (valori, editor di codice)<br><br>
-										<v-radio label="Iosevka" value="iosevka"></v-radio>
-										<v-radio label="Inconsolata" value="inconsolata"></v-radio>
-									</v-radio-group>
-								</v-flex>
-								<!-- Column B -->
-								<v-flex xs12 md6>
+									<v-card>
+										<div class="cardContent">
+											<v-slider :label="'Grandezza testo'" v-model="fontSize" :tick-labels="fontSizeLabels" :max="3" step="1" ticks="always" tick-size="3"></v-slider>
+											<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
+											<v-layout row wrap>
+												<v-flex>
+													<v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
+												</v-flex>
+												<v-flex>
+													<v-select v-if="daltonicSwitch" v-model="daltonic" :items="daltonicModes" label="Tipo daltonismo" required></v-select>
+												</v-flex>
+											</v-layout>
+										</div>
+									</v-card>
+									<br><br>
+									<h3 class="text-xs-left">Carattere tipografico dell'interfaccia</h3>
+									<v-card>
+										<div class="cardContent">
+											<span v-bind:style="bodyUIstyleObj">Lorem Ipsum e robbe varie</span>
+											<v-radio-group v-model="bodyFont" column>
+												<v-radio label="Roboto" value="Roboto"></v-radio>
+												<v-radio label="Open Sans" value="opensans"></v-radio>
+												<v-radio label="Test Me (Altà leggibilità, indicato per dislessia)" value="testme"></v-radio>
+												<v-radio label="Open-Dyslexic (Altà leggibilità, indicato per dislessia)" value="open-dys"></v-radio>
+											</v-radio-group>
+										</div>
+									</v-card>
+									<br><br>
+									<h3 class="text-xs-left">Carattere tipografico del codice (valori, editor di codice)</h3>
+									<v-card>
+										<div class="cardContent">
+											<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
+											<v-radio-group v-model="codeFont" column>
+												
+												<v-radio label="Iosevka" value="iosevka"></v-radio>
+												<v-radio label="Inconsolata" value="inconsolata"></v-radio>
+											</v-radio-group>
+										</div>
+									</v-card>
+								
+									<br><br>
 									<h3 class="text-xs-left">Lingua</h3>
+									<v-card>
+									  <div class="cardContent">
+
 									<v-select v-model="uiLang" :items="langs" label="Lingua Interfaccia" required></v-select>
 									<v-select v-model="blocklyLang" :items="langs" label="Lingua Blocchi" required></v-select>
-									<br>
+									</div>
+									</v-card>
+									<br><br>
 									<h3 class="text-xs-left">Viste disponibili</h3>
+
+									<v-card>
+									  <div class="cardContent">
 									<v-layout row wrap>
 										<v-flex>
 											<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
@@ -136,10 +161,17 @@
 										<v-flex>
 											<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
 										</v-flex>
+										<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
 									</v-layout>
-									<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
+
+									</div>
+									</v-card>
+									
 									<br><br>
 									<h3 class="text-xs-left">Funzionalità sperimentali</h3>
+									<v-card>
+									  <div class="cardContent">
+
 									<v-switch color="orange darken-3" :label="`Abilità funzionalità sperimentali`" v-model="experimental"></v-switch>
 									<v-layout row wrap>
 										<v-flex>
@@ -151,15 +183,17 @@
 									</v-layout>
 									<v-switch v-if="experimental" :label="`Esecuzione passo passo`" v-model="stepbystep"></v-switch>
 									<v-switch disabled v-if="experimental" :label="`Realtà Aumentata`" v-model="ar"></v-switch>
+									</div>
+									</v-card>
 								</v-flex>
 							</v-layout>
 						</v-container>
 					</v-tab-item>
 					<v-tab-item>
-						<v-layout row wrap>
-							<v-flex xs1>
-							</v-flex>
-							<v-flex style="height:100%" xs10>
+						<v-container grid-list-md text-xs-center>
+						<v-flex xs12 md6 offset-md3>
+							
+							<v-flex>
 								<br>
 								<v-btn @click="addButton()" outline color="green">
 									<v-icon>add</v-icon> Aggiungi
@@ -170,28 +204,32 @@
 								<v-btn @click="removeAll()" outline color="red">
 									<v-icon>clear</v-icon> Rimuovi tutti
 								</v-btn>
+								<br><br>
 								<div v-for="button, i in buttons">
+									<h3>Bottone {{i + 1}}</h3>
 									<v-card>
-										Bottone {{i + 1}}
-										<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
-										<v-select :items="actions" label="Azione"></v-select>
-										<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
-										Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
-										<v-text-field v-model="button.icon" label="Icona"></v-text-field>
-										<v-btn :color="button.colorBtn" :class="button.colorText">
-											{{ button.label }}
-											<v-icon right dark>{{ button.icon }}</v-icon>
-										</v-btn>
-										<v-btn @click="removeButton(i)" outline color="indigo">
-											<v-icon>remove</v-icon> Rimuovi
-										</v-btn>
+										<div class="cardContent">
+											<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
+											<v-select :items="actions" label="Azione">
+											</v-select>
+											<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
+											Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
+											<v-text-field v-model="button.icon" label="Icona"></v-text-field>
+											<v-btn :color="button.colorBtn" :class="button.colorText">
+												{{ button.label }}
+												<v-icon right dark>{{ button.icon }}</v-icon>
+											</v-btn>
+											<v-btn @click="removeButton(i)" outline color="indigo">
+												<v-icon>remove</v-icon> Rimuovi
+											</v-btn>
+										</div>
 									</v-card>
 									<br>
 								</div>
 							</v-flex>
-						</v-layout>
-						<v-flex xs2>
 						</v-flex>
+						
+					</v-container>
 					</v-tab-item>
 					<v-tab-item>
 						Tab 3
@@ -348,5 +386,7 @@ export default {
 	padding: 20px;
 	width: 100px;
 }
-
+.cardContent {
+	padding: 16px;
+}
 </style>
