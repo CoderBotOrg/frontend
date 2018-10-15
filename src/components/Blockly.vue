@@ -69,40 +69,34 @@
 				<v-toolbar-title>Coderbot</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
-					<v-btn @click="saveProgram" flat>
-						<v-icon>save</v-icon>
-						Salva
+					<!-- template serves as an invisible wrapper to conditional render more than one element -->
+					<template v-if="status == 200">
+						<v-btn @click="saveProgram" flat>
+							<v-icon>save</v-icon>
+							Salva
+						</v-btn>
+						<v-btn @click="salva = true, newProgramName = programName" flat>
+							<v-icon>edit</v-icon>
+							Salva con nome
+						</v-btn>
+						<v-btn @click="loadProgramList" flat>
+							<v-icon>folder_open</v-icon>
+							Carica
+						</v-btn>
+						<v-btn v-on:click="runProgram()" flat>
+							<v-icon>play_arrow</v-icon>
+							Esegui
+						</v-btn>
+						<v-btn v-on:click="getProgramCode()" flat>
+							<v-icon>code</v-icon>
+							Mostra codice
+						</v-btn>
+					</template>
+					<v-btn @click="dialog = true" icon v-if="status == 200">
+						<v-icon>check_circle</v-icon>
 					</v-btn>
-					<v-btn @click="salva = true, newProgramName = programName" flat>
-						<v-icon>edit</v-icon>
-						Salva con nome
-					</v-btn>
-					<v-btn @click="loadProgramList" flat>
-						<v-icon>folder_open</v-icon>
-						Carica
-					</v-btn>
-					<v-btn v-on:click="runProgram()" flat>
-						<v-icon>play_arrow</v-icon>
-						Esegui
-					</v-btn>
-					<v-btn v-on:click="getProgramCode()" flat>
-						<v-icon>play_arrow</v-icon>
-						Mostra codice
-					</v-btn>
-					<v-btn icon v-if="status == 200">
-						<v-icon @click="dialog = true">
-							check_circle
-						</v-icon>
-					</v-btn>
-					<v-btn icon v-else-if="status == 1">
-						<v-icon @click="dialog = true">
-							error_outline
-						</v-icon>
-					</v-btn>
-					<v-btn icon v-else>
-						<v-icon @click="dialog = true">
-							error
-						</v-icon>
+					<v-btn @click="dialog = true" icon v-else>
+						<v-icon>error</v-icon>
 					</v-btn>
 				</v-toolbar-items>
 			</v-toolbar>
