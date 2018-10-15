@@ -1,71 +1,9 @@
 <template>
 	<div>
 		<v-app id="inspire">
-			<v-navigation-drawer fixed v-model="drawer" app>
-				<v-list dense>
-					<v-list-tile>
-						<v-list-tile-action>
-							<v-icon>home</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Home</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					Utente
-					<v-list-tile>
-						<v-list-tile-action>
-							<v-icon>account_box</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Luigi Beretta</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile>
-						<v-list-tile-action>
-							<v-icon>exit_to_app</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Logout</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					Attività
-					<v-list-tile>
-						<v-list-tile-action>
-							<v-icon>add</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Nuova</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile>
-						<v-list-tile-action>
-							<v-icon>open_in_new</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Apri</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					<v-list-tile>
-						<v-list-tile-action>
-							<v-icon>close</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Chiudi</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-					Altro
-					<v-list-tile>
-						<v-list-tile-action>
-							<v-icon>settings</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Impostazioni</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-				</v-list>
-			</v-navigation-drawer>
+			<sidebar></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
-				<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
 				<v-toolbar-title>Nuova Attività</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
@@ -200,7 +138,7 @@
 									<div v-for="button, i in buttons">
 										<h3>Bottone {{i + 1}} <v-btn @click="removeButton(i)" flat icon>
 													<v-icon>clear</v-icon>
-												</v-btn></h3> 
+												</v-btn></h3>
 										<v-card>
 											<div class="cardContent">
 												<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
@@ -223,7 +161,7 @@
 						</v-container>
 					</v-tab-item>
 					<v-tab-item>
-						Tab 3
+						<wsFactory />
 					</v-tab-item>
 					<v-tab-item>
 						Tab 4
@@ -235,12 +173,14 @@
 </template>
 <script>
 import Swatches from 'vue-swatches'
-
-// Import the styles too, globally
 import "vue-swatches/dist/vue-swatches.min.css"
+
+import wsFactory from "../components/wsFactory"
+import sidebar from "../components/Sidebar"
+
 export default {
-	name: 'HelloWorld',
-	components: { Swatches },
+	name: 'Activity',
+	components: { Swatches, wsFactory, sidebar },
 	computed: {
 		bodyUIstyleObj: function() {
 			let bodyFont = this.$data.bodyFont
@@ -271,7 +211,6 @@ export default {
 				fontFamily,
 				backgroundColor: '',
 			}
-
 			return obj
 		},
 
@@ -289,10 +228,10 @@ export default {
 				}
 			],
 			actions: [
-				{ text:'Esegui', value: 'run'},
-				{ text:'Salva', value: 'save'},
-				{ text:'Salva con Nome', value: 'saveas'},
-				{ text:'Mostra Codice', value: 'showcode'},
+				{ text: 'Esegui', value: 'run' },
+				{ text: 'Salva', value: 'save' },
+				{ text: 'Salva con Nome', value: 'saveas' },
+				{ text: 'Mostra Codice', value: 'showcode' },
 			],
 			buttons: null,
 			value: 0,
@@ -330,7 +269,7 @@ export default {
 			tab: null,
 			tabs: ['Generali', 'Barra degli Strumenti', 'Palette Comandi', 'Vista Esecuzione'],
 			ar: false,
-			drawer: null,
+			//drawer: null,
 			source: null,
 			msg: 'Welcome to Your Vue.js App',
 			viste: [
@@ -344,6 +283,10 @@ export default {
 		this.restoreDefaults();
 	},
 	methods: {
+		toggleSidebar: function() {
+			let currentStatus = this.$store.getters.drawerStatus
+			this.$store.commit('toggleDrawer', !currentStatus)
+		},
 		addButton: function() {
 			this.$data.buttons.push({
 				label: '',

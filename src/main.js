@@ -5,6 +5,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+// Vuex
+import store from './store/index'
+
 import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
@@ -42,7 +45,7 @@ const routes = [
   { path: '/ar', component: arexample },
   { path: '/blockly', component: blockly},
   { path: '/new', component: activity},
-  { path: '/settings', component: settings}
+  { path: '/settings', component: settings},
 ];
 
 const router = new VueRouter({
@@ -53,6 +56,7 @@ const router = new VueRouter({
 /* eslint-disable no-new */
 new Vue({
   router,
+  store,
   el: '#app',
   render: h => h(app),
 });

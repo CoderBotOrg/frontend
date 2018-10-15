@@ -107,7 +107,7 @@
 						</v-radio-group>
 					</v-tab-item>
 					<v-tab-item>
-						Tab 3
+						<wsFactory></wsFactory>
 					</v-tab-item>
 					<v-tab-item>
 						Tab 4
@@ -118,6 +118,8 @@
 	</div>
 </template>
 <script>
+import wsFactory from '../components/wsFactory';
+
 export default {
 	name: 'HelloWorld',
 	data() {
