@@ -59,7 +59,7 @@
 							<v-list-tile-title ripple @click="loadProgram(program)">
 								{{ program }}
 							</v-list-tile-title>
-							<v-btn flat icon color="red darken-1" ripple @click="deleteProgramDlg(program)">
+							<v-btn flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program)">
 								<v-icon>delete</v-icon>
 							</v-btn>
 						</v-list-tile>
@@ -67,7 +67,7 @@
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="green darken-1" flat="flat" @click="carica = false">
-							Ok
+							Annulla
 						</v-btn>
 					</v-card-actions>
 				</v-card>
