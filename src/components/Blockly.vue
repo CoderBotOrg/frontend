@@ -69,6 +69,18 @@
 				<v-toolbar-title>Coderbot</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
+					<v-btn @click="saveProgram" flat>
+						<v-icon>save</v-icon>
+						Salva
+					</v-btn>
+					<v-btn @click="salva = true, newProgramName = programName" flat>
+						<v-icon>edit</v-icon>
+						Salva con nome
+					</v-btn>
+					<v-btn @click="loadProgramList" flat>
+						<v-icon>folder_open</v-icon>
+						Carica
+					</v-btn>
 					<v-btn v-on:click="runProgram()" flat>
 						<v-icon>play_arrow</v-icon>
 						Esegui
@@ -104,6 +116,83 @@
 					</div>
 				</div>
 			</v-content>
+			<!-- Dialogs -->
+			<v-dialog v-model="carica" max-width="290">
+				<v-card>
+					<v-card-title class="headline">
+						Lista Programmi
+					</v-card-title>
+					<v-list>
+						<v-list-tile v-for="program in programList" :key="program.el" avatar @click="">
+							<v-list-tile-title ripple @click="loadProgram(program)">
+								{{ program }}
+							</v-list-tile-title>
+							<v-btn outline color="red darken-1" ripple @click="deleteProgramDlg(program)">
+								<v-icon>delete</v-icon>
+							</v-btn>
+						</v-list-tile>
+					</v-list>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="green darken-1" flat="flat" @click="carica = false">
+							Ok
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
+			<v-dialog v-model="salva" max-width="430">
+				<v-card>
+					<v-card-title class="headline">
+						Salva con nome
+					</v-card-title>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-card-text>
+							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus></v-text-field>
+						</v-card-text>
+						<v-btn color="red darken-1" flat="flat" @click="salva = false">
+							Annulla
+						</v-btn>
+						<v-btn color="green darken-1" flat="flat" @click="saveProgramAs(), salva = false">
+							Ok
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
+			<v-dialog v-model="unvalidName" max-width="290">
+				<v-card>
+					<v-card-title class="headline">ERRORE</v-card-title>
+					<v-card-text>
+						Il nome del programma non deve essere vuoto
+					</v-card-text>
+					<v-card-actions>
+						<v-btn color="green darken-1" flat="flat" @click="unvalidName = false, salva = true">
+							Ok
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
+			<v-dialog v-model="del" max-width="500">
+				<v-card>
+					<v-card-title class="headline">
+						Cancella
+					</v-card-title>
+					<v-card-actions>
+						<v-card-text>
+							Sei sicuro di voler cancellare: "{{newProgramName}}"?
+						</v-card-text>
+						<v-btn color="red darken-1" flat="flat" @click="del = false">
+							No
+						</v-btn>
+						<v-btn color="green darken-1" flat="flat" @click="del = false, carica = false, deleteProgram(newProgramName)">
+							Si
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
 			<!-- -->
 			<v-dialog v-model="dialogCode">
 				<v-card>
@@ -166,11 +255,11 @@ export default {
 	data() {
 		return {
 			drawer: false,
-			a: '',
 			tabs: null,
 			dialog: false,
 			dialogCode: false,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
+			CBv1: process.env.CB_ENDPOINT,
 			status: 0,
 			code: '',
 			workspace: null,
@@ -178,7 +267,14 @@ export default {
 			generalDialogText: null,
 			generalDialogTitle: null,
 			experimental: 1,
-			execMode: "fullExec", // can be 'fullExec' or 'stepByStep'
+			execMode: "fullExec", // can be 'fullExec' or 'stepByStep',
+			carica: false,
+			programList: '',
+			salva: false,
+			programName: '',
+			newProgramName: '',
+			unvalidName: false,
+			del: false,
 		};
 	},
 	computed: {
@@ -191,6 +287,95 @@ export default {
 		}
 	},
 	methods: {
+		getProgramData() {
+			console.log("get")
+			let name = this.$data.programName
+			let workspace = this.$data.workspace
+			let xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+			let dom_code = Blockly.Xml.domToText(xml_code);
+
+			window.LoopTrap = 1000;
+			Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+			let code = Blockly.Python.workspaceToCode(workspace);
+			Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+			return { name: name, dom_code: dom_code, code: code };
+		},
+		saveProgramAs: function(e) {
+			if (this.$data.newProgramName != '') {
+				this.$data.programName = this.$data.newProgramName
+				this.$data.newProgramName = ''
+				this.saveProgram()
+			} else {
+				this.$data.unvalidName = true
+			}
+		},
+		saveProgram() {
+			if (this.$data.programName != '') {
+				let axios = this.$axios
+				let CB = this.$data.CB
+				console.log("save")
+				let data = this.getProgramData()
+				axios.post(CB + '/save', {
+						name: data.name,
+						dom_code: data.dom_code,
+						code: data.code
+					})
+					.then(function() {
+						console.log("salvato")
+					})
+			} else {
+				this.$data.unvalidName = true
+			}
+
+		},
+		loadProgramList() {
+			let axios = this.$axios
+			let CBv1 = this.$data.CBv1
+			//let programList = this.$data.programList
+			axios.get(CBv1 + '/program/list')
+				.then(function(response) {
+					this.$data.carica = true,
+						this.$data.programList = response.data;
+				}.bind(this))
+		},
+		loadProgram(program) {
+			let axios = this.$axios
+			let CBv1 = this.$data.CBv1
+			let workspace = this.$data.workspace
+			this.$data.carica = false;
+			this.$data.programName = program
+			axios.get(CBv1 + '/program/load', {
+					params: {
+						name: program,
+					}
+				})
+				.then(function(data) {
+					workspace.clear();
+					var xml = Blockly.Xml.textToDom(data.data.dom_code);
+					Blockly.Xml.domToWorkspace(xml, workspace);
+				}.bind(this))
+		},
+		deleteProgramDlg(program) {
+			this.$data.newProgramName = program
+			this.$data.del = true
+		},
+		deleteProgram(program) {
+			if (this.$data.programName == program) {
+				this.$data.programName = ''
+				this.$data.code = ''
+				this.$data.workspace.clear()
+			}
+			let axios = this.$axios
+			let CB = this.$data.CB
+			console.log("delete")
+			axios.post(CB + '/delete', {
+					name: program
+				})
+				.then(function() {
+					console.log("deletato")
+				})
+		},
 		pollStatus() {
 			let axios = this.$axios
 			let CB = this.$data.CB
@@ -1393,8 +1578,6 @@ export default {
 				this.$data.generalDialogTitle = 'Errore',
 					this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
 			}
-
-
 		}
 	},
 
