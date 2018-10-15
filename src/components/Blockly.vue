@@ -127,7 +127,7 @@
 							<v-list-tile-title ripple @click="loadProgram(program)">
 								{{ program }}
 							</v-list-tile-title>
-							<v-btn outline color="red darken-1" ripple @click="deleteProgramDlg(program)">
+							<v-btn flat icon color="red darken-1" ripple @click="deleteProgramDlg(program)">
 								<v-icon>delete</v-icon>
 							</v-btn>
 						</v-list-tile>
