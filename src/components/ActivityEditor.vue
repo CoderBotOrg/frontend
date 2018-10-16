@@ -126,34 +126,24 @@
 								<v-flex>
 									<h3> Anteprima Toolbar </h3>
 									<v-toolbar>
-										
 										<v-toolbar-side-icon v-if="drawerEnabled"></v-toolbar-side-icon>
-										
 										<v-toolbar-title v-if="activityName">Attività 1</v-toolbar-title>
 										<v-spacer></v-spacer>
 										<v-toolbar-items>
-
 											<template v-for="button, i in buttons">
-											<v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
-												{{ button.label }}
-												<v-icon right dark>{{ button.icon }}</v-icon>
-											</v-btn>
-											&nbsp;&nbsp;
-
+												<v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
+													{{ button.label }}
+													<v-icon right dark>{{ button.icon }}</v-icon>
+												</v-btn>
+												&nbsp;&nbsp;
 											</template>
 										</v-toolbar-items>
 									</v-toolbar>
 									<br>
-									<v-switch
-      label="Icona menù laterale"
-      v-model="drawerEnabled"
-    ></v-switch>
-    <v-switch
-      label="Nome Attività"
-      v-model="activityName"
-    ></v-switch>
-    <br>
-    <h3> Modifica Pulsanti </h3>
+									<v-switch label="Icona menù laterale" v-model="drawerEnabled"></v-switch>
+									<v-switch label="Nome Attività" v-model="activityName"></v-switch>
+									<br>
+									<h3> Modifica Pulsanti </h3>
 									<v-btn @click="addButton()" outline color="green">
 										<v-icon>add</v-icon> Aggiungi
 									</v-btn>

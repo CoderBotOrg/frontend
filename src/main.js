@@ -25,7 +25,7 @@ import landing from './components/Landing';
 import arexample from './components/ARexample';
 import run from './components/Run';
 import blockly from './components/Blockly';
-import activity from './components/ActivityEditor'
+import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 
 // Utils
@@ -44,9 +44,9 @@ const routes = [
   { path: '/', component: landing },
   { path: '/run', component: run },
   { path: '/ar', component: arexample },
-  { path: '/blockly', component: blockly},
-  { path: '/new', component: activity},
-  { path: '/settings', component: settings},
+  { path: '/blockly', component: blockly },
+  { path: '/new', component: activityEditor },
+  { path: '/settings', component: settings },
 ];
 
 const router = new VueRouter({

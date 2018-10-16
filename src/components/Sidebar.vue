@@ -52,10 +52,10 @@ export default {
 	data() {
 		return {
 			socials: [
-				{ icon: 'fab fa-facebook', link: 'https://facebook.com/coderbot'},
-				{ icon: 'fab fa-twitter', link: 'https://twitter.com/coderbotorg'},
-				{ icon: 'fab fa-instagram', link: 'https://www.instagram.com/coderbotorg/'},
-				{ icon: 'fab fa-github', link: 'https://www.github.com/coderbotorg'},
+				{ icon: 'fab fa-facebook', link: 'https://facebook.com/coderbot' },
+				{ icon: 'fab fa-twitter', link: 'https://twitter.com/coderbotorg' },
+				{ icon: 'fab fa-instagram', link: 'https://www.instagram.com/coderbotorg/' },
+				{ icon: 'fab fa-github', link: 'https://www.github.com/coderbotorg' },
 			],
 		}
 	},
