@@ -30,6 +30,11 @@
 							Mostra codice
 						</v-btn>
 					</template>
+					<template v-else>
+						<v-btn flat>
+							<v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
+						</v-btn>
+					</template>
 					<v-btn @click="dialog = true" icon v-if="status == 200">
 						<v-icon>check_circle</v-icon>
 					</v-btn>
@@ -171,6 +176,12 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
+			<v-snackbar v-model="snackbar" :bottom="y === 'bottom'" :left="x === 'left'" :multi-line="mode === 'multi-line'" :right="x === 'right'" :timeout="5000" :top="y === 'top'" :vertical="mode === 'vertical'">
+				{{ snackText }}
+				<v-btn color="pink" flat @click="snackbar = false">
+					Chiudi
+				</v-btn>
+			</v-snackbar>
 		</v-app>
 	</div>
 </template>
@@ -188,13 +199,15 @@ export default {
 	},
 	data() {
 		return {
+			snackText: null,
+			snackbar: false,
 			drawer: false,
 			tabs: null,
 			dialog: false,
 			dialogCode: false,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			CBv1: process.env.CB_ENDPOINT,
-			status: 0,
+			status: null,
 			code: '',
 			workspace: null,
 			generalDialog: false,
@@ -214,7 +227,7 @@ export default {
 	computed: {
 		statusText: function() {
 			if (this.$data.status) {
-				return 'Coderbot risulta online e funzionante.'
+				return 'Coderbot risulta online e funzionante. '
 			} else {
 				return 'Coderbot risulta offline e rotto'
 			}
@@ -320,11 +333,23 @@ export default {
 			let status = this.$data.status
 			axios.get(CB + '/status')
 				.then(function(response) {
+					if (this.$data.status == 0 && response.status) {
+						this.$data.snackText = 'CoderBot è tornato online'
+						this.$data.snackbar = true
+					}
+
+					console.log(response)
+					this.$data.statusData = response.data
 					this.$data.status = response.status
 				}.bind(this))
 				.catch(function(error) {
 					// handle error
 					console.log(error);
+
+					if (this.$data.status) {
+						this.$data.snackText = 'CoderBot irrangiungibile'
+						this.$data.snackbar = true
+					}
 					this.$data.status = 0
 				}.bind(this))
 		},
@@ -1520,6 +1545,7 @@ export default {
 	},
 
 	mounted() {
+		this.$data.status = null
 		this.pollStatus();
 		setInterval(function() {
 			this.pollStatus();
