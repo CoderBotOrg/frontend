@@ -49,7 +49,8 @@
 				</div>
 			</v-content>
 			<!-- Dialogs -->
-			<v-dialog v-model="carica" max-width="290">
+			<v-dialog v-model="carica" max-width="290"
+			v-on:keydown.esc="carica = false">
 				<v-card>
 					<v-card-title class="headline">
 						Lista Programmi
@@ -66,7 +67,7 @@
 					</v-list>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="carica = false">
+						<v-btn color="red darken-1" flat @click="carica = false">
 							Annulla
 						</v-btn>
 					</v-card-actions>
@@ -81,26 +82,27 @@
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-card-text>
-							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus></v-text-field>
+							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keydown.enter="saveProgramAs(), salva = false" v-on:keydown.esc="salva = false" autofocus></v-text-field>
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="salva = false">
+						<v-btn color="red darken-1" flat @click="salva = false">
 							Annulla
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="saveProgramAs(), salva = false">
+						<v-btn color="green darken-1" flat @click="saveProgramAs(), salva = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
 			<!-- -->
-			<v-dialog v-model="unvalidName" max-width="290">
+			<v-dialog v-model="unvalidName" max-width="290"
+			v-on:keydown.enter="unvalidName = false, salva = true">
 				<v-card>
 					<v-card-title class="headline">ERRORE</v-card-title>
 					<v-card-text>
 						Il nome del programma non deve essere vuoto
 					</v-card-text>
 					<v-card-actions>
-						<v-btn color="green darken-1" flat="flat" @click="unvalidName = false, salva = true">
+						<v-btn color="green darken-1" flat @click="unvalidName = false, salva = true">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -116,10 +118,10 @@
 						<v-card-text>
 							Sei sicuro di voler cancellare: "{{newProgramName}}"?
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="del = false">
+						<v-btn color="red darken-1" flat @click="del = false">
 							No
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="del = false, carica = false, deleteProgram(newProgramName)">
+						<v-btn color="green darken-1" flat @click="del = false, carica = false, deleteProgram(newProgramName)">
 							Si
 						</v-btn>
 					</v-card-actions>
@@ -135,7 +137,7 @@
 					<v-divider></v-divider>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="dialogCode = false">
+						<v-btn color="green darken-1" flat @click="dialogCode = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -150,7 +152,7 @@
 					</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="dialog = false">
+						<v-btn color="green darken-1" flat @click="dialog = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -165,7 +167,7 @@
 					</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="generalDialog = false">
+						<v-btn color="green darken-1" flat @click="generalDialog = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
