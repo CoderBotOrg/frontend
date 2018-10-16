@@ -37,12 +37,7 @@
 									<h3 class="text-xs-left">Tipografia </h3>
 									<v-card>
 										<div class="cardContent">
-											<v-select
-											  :items="fontSizeLabels"
-											  v-model="fontSize"
-											  label="Grandezza testo"
-											></v-select>
-											
+											<v-select :items="fontSizeLabels" v-model="fontSize" label="Grandezza testo"></v-select>
 											<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
 											<v-layout row wrap>
 												<v-flex>
@@ -129,7 +124,36 @@
 						<v-container grid-list-md text-xs-center>
 							<v-flex xs12 md6 offset-md3>
 								<v-flex>
+									<h3> Anteprima Toolbar </h3>
+									<v-toolbar>
+										
+										<v-toolbar-side-icon v-if="drawerEnabled"></v-toolbar-side-icon>
+										
+										<v-toolbar-title v-if="activityName">Attività 1</v-toolbar-title>
+										<v-spacer></v-spacer>
+										<v-toolbar-items>
+
+											<template v-for="button, i in buttons">
+											<v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
+												{{ button.label }}
+												<v-icon right dark>{{ button.icon }}</v-icon>
+											</v-btn>
+											&nbsp;&nbsp;
+
+											</template>
+										</v-toolbar-items>
+									</v-toolbar>
 									<br>
+									<v-switch
+      label="Icona menù laterale"
+      v-model="drawerEnabled"
+    ></v-switch>
+    <v-switch
+      label="Nome Attività"
+      v-model="activityName"
+    ></v-switch>
+    <br>
+    <h3> Modifica Pulsanti </h3>
 									<v-btn @click="addButton()" outline color="green">
 										<v-icon>add</v-icon> Aggiungi
 									</v-btn>
@@ -141,7 +165,7 @@
 									</v-btn>
 									<br><br>
 									<div v-for="button, i in buttons">
-										<h3>Bottone {{i + 1}} <v-btn @click="removeButton(i)" flat icon>
+										<h3>Pulsante {{i + 1}} <v-btn @click="removeButton(i)" flat icon>
 													<v-icon>clear</v-icon>
 												</v-btn></h3>
 										<v-card>
@@ -187,7 +211,7 @@ export default {
 	name: 'ActivityEditor',
 	components: { Swatches, wsFactory, sidebar },
 	computed: {
-		prefix: function(){
+		prefix: function() {
 			if (this.$data.name != null && this.$data.name != '')
 				return '-'
 			else
@@ -244,6 +268,8 @@ export default {
 				{ text: 'Salva con Nome', value: 'saveas' },
 				{ text: 'Mostra Codice', value: 'showcode' },
 			],
+			drawerEnabled: true,
+			activityName: true,
 			buttons: null,
 			value: 0,
 			name: null,
