@@ -8,10 +8,12 @@ import VueRouter from 'vue-router';
 // Vuex
 import store from './store/index'
 
+// Main components
 import axios from 'axios';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 
+// PrismJS style (syntax highlight)
 import 'prismjs/themes/prism.css'
 
 // Fonts
@@ -28,7 +30,7 @@ import blockly from './components/Blockly';
 import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 
-// Utils
+// Utilities
 import base64 from 'base-64'
 
 // Configuration
@@ -54,7 +56,7 @@ const router = new VueRouter({
   routes, // short for `routes: routes` (ES6)
 });
 
-// This callback runs before every route change, including on page load.
+// This callback works as middleware: runs before every route change, including on page load.
 router.beforeEach((to, from, next) => {
   // This goes through the matched routes from last to first, finding the closest route with a title.
   // eg. if we have /some/deep/nested/route and /some, /deep, and /nested have titles, nested's will be chosen.
