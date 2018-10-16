@@ -4,7 +4,7 @@
 			<sidebar></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>Coderbot</v-toolbar-title>
+				<v-toolbar-title>CoderBot</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
