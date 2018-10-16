@@ -25,7 +25,7 @@ import landing from './components/Landing';
 import arexample from './components/ARexample';
 import run from './components/Run';
 import blockly from './components/Blockly';
-import activity from './components/Activity'
+import activity from './components/ActivityEditor'
 import settings from './components/Settings'
 
 // Utils

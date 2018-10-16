@@ -4,7 +4,7 @@
 			<sidebar></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>Nuova Attività</v-toolbar-title>
+				<v-toolbar-title>Nuova Attività {{prefix}} {{name}}</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<v-btn flat>
@@ -37,7 +37,12 @@
 									<h3 class="text-xs-left">Tipografia </h3>
 									<v-card>
 										<div class="cardContent">
-											<v-slider :label="'Grandezza testo'" v-model="fontSize" :tick-labels="fontSizeLabels" :max="3" step="1" ticks="always" tick-size="3"></v-slider>
+											<v-select
+											  :items="fontSizeLabels"
+											  v-model="fontSize"
+											  label="Grandezza testo"
+											></v-select>
+											
 											<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
 											<v-layout row wrap>
 												<v-flex>
@@ -179,9 +184,15 @@ import wsFactory from "../components/wsFactory"
 import sidebar from "../components/Sidebar"
 
 export default {
-	name: 'Activity',
+	name: 'ActivityEditor',
 	components: { Swatches, wsFactory, sidebar },
 	computed: {
+		prefix: function(){
+			if (this.$data.name != null && this.$data.name != '')
+				return '-'
+			else
+				return ''
+		},
 		bodyUIstyleObj: function() {
 			let bodyFont = this.$data.bodyFont
 			let fontFamily = ''
