@@ -17,6 +17,7 @@ import 'prismjs/themes/prism.css'
 // Fonts
 import 'typeface-roboto'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 // Components
 import app from './App';

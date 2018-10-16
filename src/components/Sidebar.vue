@@ -61,12 +61,33 @@
 						<v-list-tile-title>Impostazioni</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
+				<br><br><br>
+				
+				<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
+					<v-divider></v-divider>
+					<v-btn v-for="icon in icons" :key="icon" class="mx-3 gray--text" icon>
+						<v-icon size="24px">{{ icon }}</v-icon>
+					</v-btn>
+					<br>
+					&copy;2018 — <strong>UNIMIB</strong>
+				</div>
+			
 			</v-list>
 		</v-navigation-drawer>
 	</div>
 </template>
 <script>
 export default {
+	data() {
+		return {
+			icons: [
+				'fab fa-facebook',
+				'fab fa-twitter',
+				'fab fa-instagram',
+				'fab fa-github',
+			],
+		}
+	},
 	computed: {
 		drawer: {
 			get() {
