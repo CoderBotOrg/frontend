@@ -31,7 +31,11 @@
 						</v-btn>
 						<v-btn v-on:click="exportProgram()" flat>
 							<v-icon>fa-file-export</v-icon>
-							Esporta
+							&nbsp;&nbsp;Esporta
+						</v-btn>
+						<v-btn v-on:click="pickFile()" flat>
+							<v-icon>fa-file-import</v-icon>
+							&nbsp;&nbsp;Importa
 						</v-btn>
 					</template>
 					<template v-else>
@@ -57,6 +61,7 @@
 					</div>
 				</div>
 			</v-content>
+			<input type="file" style="display: none" ref="file" @change="importProgram">
 			<!-- Dialogs -->
 			<v-dialog v-model="carica" max-width="290">
 				<v-card>
@@ -180,7 +185,8 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<v-snackbar v-model="snackbar" :bottom="y === 'bottom'" :left="x === 'left'" :multi-line="mode === 'multi-line'" :right="x === 'right'" :timeout="5000" :top="y === 'top'" :vertical="mode === 'vertical'">
+			<!-- Notification Snackbar -->
+			<v-snackbar v-model="snackbar">
 				{{ snackText }}
 				<v-btn color="pink" flat @click="snackbar = false">
 					Chiudi
@@ -258,15 +264,37 @@ export default {
 		},
 		exportProgram() {
 			let data = JSON.stringify(this.getProgramData())
-			const blob = new Blob([data], { type: 'text/plain' })
+			const blob = new Blob([data], { type: 'text/json' })
 			const e = document.createEvent('MouseEvents'),
-			a = document.createElement('a');
+				a = document.createElement('a');
 			a.download = this.$data.programName + '.json' || 'noname.json'
 			a.href = window.URL.createObjectURL(blob);
 			a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
 			e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 			a.dispatchEvent(e);
 
+		},
+		pickFile () {
+            this.$refs.file.click()
+        },
+		importProgram(e) {
+			let workspace = this.$data.workspace
+			const files = e.target.files
+			if (files[0] !== undefined) {
+				let fileName = files[0].name
+				if (fileName.lastIndexOf('.') <= 0) {
+					return
+				}
+				const fr = new FileReader()
+				fr.readAsText(files[0])
+				fr.addEventListener('load', () => {
+					let importedProgram = JSON.parse(fr.result)
+					let xml = Blockly.Xml.textToDom(importedProgram["dom_code"]);
+					Blockly.Xml.domToWorkspace(xml, workspace);
+				})
+			} else {
+				console.log("Something went wrong importing")
+			}
 		},
 		saveProgramAs: function(e) {
 			if (this.$data.newProgramName != '') {
@@ -319,7 +347,7 @@ export default {
 				})
 				.then(function(data) {
 					workspace.clear();
-					var xml = Blockly.Xml.textToDom(data.data.dom_code);
+					let xml = Blockly.Xml.textToDom(data.data.dom_code);
 					Blockly.Xml.domToWorkspace(xml, workspace);
 				}.bind(this))
 		},
@@ -354,7 +382,7 @@ export default {
 						this.$data.snackbar = true
 					}
 
-					console.log(response)
+					//console.log(response)
 					this.$data.statusData = response.data
 					this.$data.status = response.status
 				}.bind(this))
