@@ -61,7 +61,9 @@
 					</div>
 				</div>
 			</v-content>
+			<!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
 			<input type="file" style="display: none" ref="file" @change="importProgram">
+			<!-- When the selection is completed, the result is then handled by importProgram -->
 			<!-- Dialogs -->
 			<v-dialog v-model="carica" max-width="290">
 				<v-card>
@@ -274,10 +276,13 @@ export default {
 			a.dispatchEvent(e);
 
 		},
-		pickFile () {
-            this.$refs.file.click()
-        },
+		pickFile() {
+			// Manually trigger the file dialog for the hidden file input form
+			this.$refs.file.click()
+		},
 		importProgram(e) {
+			// Once the file is selected, read it and populate the Blockly 
+			//  workspace with the contained program
 			let workspace = this.$data.workspace
 			const files = e.target.files
 			if (files[0] !== undefined) {
@@ -409,8 +414,69 @@ export default {
 			const offsetHeight = this.$refs.blocklyArea.offsetHeight;
 			this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
 		},
-		initcfg() {
-			var b = "test";
+		getProgramCode() {
+			if (this.$data.experimental) {
+				this.$data.experimental = false;
+				this.blocksExtensions();
+				this.$data.experimental = true;
+			}
+
+			Blockly.Python.STATEMENT_PREFIX = null;
+			Blockly.Python.addReservedWords();
+			Blockly.Python.INFINITE_LOOP_TRAP = null;
+			this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
+			console.log(this.$data.code)
+			this.$data.dialogCode = true
+
+			if (this.$data.experimental) {
+				this.blocksExtensions();
+			}
+		},
+		runProgramExperimental() {
+			if (this.$data.status) {
+				var xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+				var dom_code = Blockly.Xml.domToText(xml_code);
+				Blockly.Python.INFINITE_LOOP_TRAP = null;
+				//Injecting custom code
+				Blockly.Python.STATEMENT_PREFIX = 'if not is_execFull:\n data_coderbotStatus["prog_gen"]["status"] = "pause"\n saveStatus()\n signal.pause()\ndata_coderbotStatus["prog_gen"]["currentBlockId"] = str(%1)\nsaveStatus()\n';
+				Blockly.Python.addReservedWords('#highlightBlock');
+				var code_modified = Blockly.Python.workspaceToCode();
+
+				axios.post(CB + '/exec2', {
+					name: 'Hello, World',
+					dom_code,
+					code: code_modified,
+					mode: this.$data.execMode
+				})
+
+			}
+		},
+		runProgram() {
+			if (this.$data.status) {
+				let axios = this.$axios
+				let CB = this.$data.CB
+				// POST /program/save
+				var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
+				var dom_code = Blockly.Xml.domToText(xml_code);
+				window.LoopTrap = 1000;
+				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+				var code = Blockly.Python.workspaceToCode(this.$data.workspace);
+				Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+
+				axios.post(CB + '/exec', {
+						name: 'Hello, World!',
+						dom_code,
+						code
+					})
+					.then(function(response) {
+						console.log(response);
+					})
+			} else {
+				this.$data.generalDialog = true;
+				this.$data.generalDialogTitle = 'Errore',
+					this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
+			}
 		},
 		blocksExtensions() {
 
@@ -1521,70 +1587,6 @@ export default {
 				var code = sbsPrefix + 'get_bot().get_sonar_distance(' + sonar + ')';
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
-		},
-		getProgramCode() {
-			if (this.$data.experimental) {
-				this.$data.experimental = false;
-				this.blocksExtensions();
-				this.$data.experimental = true;
-			}
-
-			Blockly.Python.STATEMENT_PREFIX = null;
-			Blockly.Python.addReservedWords();
-			Blockly.Python.INFINITE_LOOP_TRAP = null;
-			this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
-			console.log(this.$data.code)
-			this.$data.dialogCode = true
-
-			if (this.$data.experimental) {
-				this.blocksExtensions();
-			}
-		},
-		runProgramExperimental() {
-			if (this.$data.status) {
-				var xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-				var dom_code = Blockly.Xml.domToText(xml_code);
-				Blockly.Python.INFINITE_LOOP_TRAP = null;
-				//Injecting custom code
-				Blockly.Python.STATEMENT_PREFIX = 'if not is_execFull:\n data_coderbotStatus["prog_gen"]["status"] = "pause"\n saveStatus()\n signal.pause()\ndata_coderbotStatus["prog_gen"]["currentBlockId"] = str(%1)\nsaveStatus()\n';
-				Blockly.Python.addReservedWords('#highlightBlock');
-				var code_modified = Blockly.Python.workspaceToCode();
-
-				axios.post(CB + '/exec2', {
-					name: 'Hello, World',
-					dom_code,
-					code: code_modified,
-					mode: this.$data.execMode
-				})
-
-			}
-		},
-		runProgram() {
-			if (this.$data.status) {
-				let axios = this.$axios
-				let CB = this.$data.CB
-				// POST /program/save
-				var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
-				var dom_code = Blockly.Xml.domToText(xml_code);
-				window.LoopTrap = 1000;
-				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
-				var code = Blockly.Python.workspaceToCode(this.$data.workspace);
-				Blockly.Python.INFINITE_LOOP_TRAP = null;
-
-
-				axios.post(CB + '/exec', {
-						name: 'Hello, World!',
-						dom_code,
-						code
-					})
-					.then(function(response) {
-						console.log(response);
-					})
-			} else {
-				this.$data.generalDialog = true;
-				this.$data.generalDialogTitle = 'Errore',
-					this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
-			}
 		}
 	},
 
