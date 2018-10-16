@@ -29,6 +29,10 @@
 							<v-icon>code</v-icon>
 							Mostra codice
 						</v-btn>
+						<v-btn v-on:click="exportProgram()" flat>
+							<v-icon>fa-file-export</v-icon>
+							Esporta
+						</v-btn>
 					</template>
 					<template v-else>
 						<v-btn flat>
@@ -251,6 +255,18 @@ export default {
 			Blockly.Python.INFINITE_LOOP_TRAP = null;
 
 			return { name: name, dom_code: dom_code, code: code };
+		},
+		exportProgram() {
+			let data = JSON.stringify(this.getProgramData())
+			const blob = new Blob([data], { type: 'text/plain' })
+			const e = document.createEvent('MouseEvents'),
+			a = document.createElement('a');
+			a.download = this.$data.programName + '.json' || 'noname.json'
+			a.href = window.URL.createObjectURL(blob);
+			a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+			e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+			a.dispatchEvent(e);
+
 		},
 		saveProgramAs: function(e) {
 			if (this.$data.newProgramName != '') {
