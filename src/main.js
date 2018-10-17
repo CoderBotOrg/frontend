@@ -14,20 +14,20 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 
 // PrismJS style (syntax highlight)
-import 'prismjs/themes/prism.css'
+//import 'prismjs/themes/prism.css'
 
 // Fonts
 import 'typeface-roboto'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import '@fortawesome/fontawesome-free/css/all.css'
+//import '@fortawesome/fontawesome-free/css/all.css'
 
 // Components
 import app from './App';
 import landing from './components/Landing';
-import arexample from './components/ARexample';
-import run from './components/Run';
+//import arexample from './components/ARexample';
+import control from './components/Control';
 import blockly from './components/Blockly';
-import activityEditor from './components/ActivityEditor'
+//import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 
 // Utilities
@@ -44,10 +44,10 @@ Vue.config.productionTip = false;
 // Routing
 const routes = [
   { path: '/', component: landing, meta: {title: 'CoderBot'} },
-  { path: '/run', component: run, meta: {title: 'CoderBot'} },
-  { path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
+  { path: '/control', component: control, meta: {title: 'CoderBot - Controlla'} },
+  //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
   { path: '/blockly', component: blockly, meta: {title: 'CoderBot - Blockly'}},
-  { path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
+  //{ path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
   { path: '/settings', component: settings , meta: {title: 'CoderBot - Impostazioni'}},
 ];
 

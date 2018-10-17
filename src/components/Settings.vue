@@ -54,16 +54,6 @@
 										</div>
 									</v-card>
 									<br>
-
-								</v-flex>
-							</v-layout>
-						</v-container>
-					</v-tab-item>
-					<v-tab-item>
-						<v-container grid-list-md text-xs-center>
-							<v-layout row wrap>
-								<!-- Column A -->
-								<v-flex xs12 md6 offset-md3>
 									<h3 class="text-xs-left">Configurazione di Rete</h3>
 									<v-card>
 										<div class="cardContent">
@@ -78,6 +68,14 @@
 											</v-radio-group>
 										</div>
 									</v-card>
+								</v-flex>
+							</v-layout>
+						</v-container>
+					</v-tab-item>
+					<v-tab-item>
+						<v-container grid-list-md text-xs-center>
+							<v-layout row wrap>
+								<v-flex xs12 md6 offset-md3>
 								</v-flex>
 							</v-layout>
 						</v-container>
