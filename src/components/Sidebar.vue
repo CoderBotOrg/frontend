@@ -4,10 +4,10 @@
 			<v-list dense>
 				<v-list-tile to="/">
 					<v-list-tile-action>
-						<v-icon>home</v-icon>
+						<v-icon large>home</v-icon>
 					</v-list-tile-action>
 					<v-list-tile-content>
-						<v-list-tile-title>Home</v-list-tile-title>
+						<v-list-tile-title class="navEntry">Home</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 				<!--
@@ -30,26 +30,26 @@
 				-->
 				<v-list-tile to="/program">
 					<v-list-tile-action>
-						<v-icon>flip_to_front</v-icon>
+						<v-icon large>flip_to_front</v-icon>
 					</v-list-tile-action>
 					<v-list-tile-content>
-						<v-list-tile-title>Programma</v-list-tile-title>
+						<v-list-tile-title class="navEntry">Programma</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 				<v-list-tile to="/control">
 					<v-list-tile-action>
-						<v-icon>games</v-icon>
+						<v-icon large>games</v-icon>
 					</v-list-tile-action>
 					<v-list-tile-content>
-						<v-list-tile-title>Controlla</v-list-tile-title>
+						<v-list-tile-title class="navEntry">Controlla</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 				<v-list-tile to="/settings">
 					<v-list-tile-action>
-						<v-icon>settings</v-icon>
+						<v-icon large>settings</v-icon>
 					</v-list-tile-action>
 					<v-list-tile-content>
-						<v-list-tile-title>Impostazioni</v-list-tile-title>
+						<v-list-tile-title class="navEntry">Impostazioni</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 				<br><br><br>
@@ -90,3 +90,8 @@ export default {
 }
 
 </script>
+<style scoped>
+.navEntry{
+	font-size: 15px;
+}
+</style>
