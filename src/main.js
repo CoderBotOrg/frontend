@@ -19,7 +19,7 @@ import 'vuetify/dist/vuetify.min.css';
 // Fonts
 import 'typeface-roboto'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-//import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 // Components
 import app from './App';
@@ -45,10 +45,10 @@ Vue.config.productionTip = false;
 const routes = [
   { path: '/', component: landing, meta: {title: 'CoderBot'} },
   { path: '/control', component: control, meta: {title: 'CoderBot - Controlla'} },
-  //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
-  { path: '/blockly', component: blockly, meta: {title: 'CoderBot - Blockly'}},
-  //{ path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
+  { path: '/program', component: blockly, meta: {title: 'CoderBot - Blockly'}},
   { path: '/settings', component: settings , meta: {title: 'CoderBot - Impostazioni'}},
+  //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
+  //{ path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
 ];
 
 
