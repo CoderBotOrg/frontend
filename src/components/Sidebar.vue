@@ -10,6 +10,7 @@
 						<v-list-tile-title>Home</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
+				<!--
 				<v-list-tile to="/activity">
 					<v-list-tile-action>
 						<v-icon>open_in_new</v-icon>
@@ -24,6 +25,23 @@
 					</v-list-tile-action>
 					<v-list-tile-content>
 						<v-list-tile-title>Nuova Attività</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
+				-->
+				<v-list-tile to="/program">
+					<v-list-tile-action>
+						<v-icon>flip_to_front</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title>Programma</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
+				<v-list-tile to="/control">
+					<v-list-tile-action>
+						<v-icon>games</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title>Controlla</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 				<v-list-tile to="/settings">
