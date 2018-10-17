@@ -7,8 +7,10 @@
 				<v-toolbar-title>CoderBot</v-toolbar-title>
 			</v-toolbar>
 			<v-content>
-				<p class="display-3"> Benvenuto in CoderBot </p>
-				<p class="display-1"> Scegli un'azione per iniziare </p>
+				<br>
+				<div style="font-size: 24px;"> Benvenuto in </div>
+				<div style="font-size: 80px; font-family: 'Space Mono'">CoderBot</div>
+				
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
 						<v-flex xs12 md6 offset-md3>
