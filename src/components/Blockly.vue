@@ -53,9 +53,9 @@
 			</v-toolbar>
 			<v-content>
 				<div style="height: 480px; width: 600px;">
-					<div ref="blocklyTotal" style="height: 480px; width: 600px;" class="blocklyTotal">
-						<div ref="blocklyArea" style="height: 480px; width: 600px;" class="blocklyArea">
-							<div ref="blocklyDiv" style="height: 480px; width: 600px;" class="blocklyDiv">
+					<div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
+						<div ref="blocklyArea" style="height: 100%; width: 100%;" class="blocklyArea">
+							<div ref="blocklyDiv" style="height: 100%; width: 100%;" class="blocklyDiv">
 							</div>
 						</div>
 					</div>
@@ -1626,15 +1626,15 @@ export default {
 				}
 			}
 		);
-		/*
+		
 		// Pass the reference to the method to call, don't execute it (`()`)
 		window.addEventListener('resize', this.resizeWorkspace, false);
 
 		// Initial resize
 		this.resizeWorkspace()
-		Blockly.svgResize(workspace);
-		*/
-		this.initcfg();
+		Blockly.svgResize(this.$data.workspace);
+		
+		
 
 		this.blocksExtensions();
 
