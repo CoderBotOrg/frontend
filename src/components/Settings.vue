@@ -53,7 +53,15 @@
 											<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>
 										</div>
 									</v-card>
-									<br>
+									<br><br>
+								</v-flex>
+							</v-layout>
+						</v-container>
+					</v-tab-item>
+					<v-tab-item>
+						<v-container grid-list-md text-xs-center>
+							<v-layout row wrap>
+								<v-flex xs12 md6 offset-md3>
 									<h3 class="text-xs-left">Configurazione di Rete</h3>
 									<v-card>
 										<div class="cardContent">
@@ -71,22 +79,79 @@
 								</v-flex>
 							</v-layout>
 						</v-container>
-					</v-tab-item>
-					<v-tab-item>
-						<v-container grid-list-md text-xs-center>
-							<v-layout row wrap>
-								<v-flex xs12 md6 offset-md3>
-								</v-flex>
-							</v-layout>
-						</v-container>
 						<v-card-text>
 						</v-card-text>
 					</v-tab-item>
 					<v-tab-item>
-						Tab 3
+						<v-container grid-list-md text-xs-center>
+							<v-layout row wrap>
+								<!-- Column A -->
+								<v-flex xs12 md6 offset-md3>
+									<h3 class="text-xs-left">Step timing | distance / angle</h3>
+									<v-card>
+										<div class="cardContent">
+											<v-text-field v-model="fwdSpeed" label="Forward speed" />
+											<v-text-field v-model="fwdElapse" label="Forward elapse / distance" />
+											<v-text-field v-model="turnSpeed" label="Turn speed" />
+											<v-text-field v-model="turnElapse" label="Turn elapse / angle" />
+										</div>
+									</v-card>
+									<br><br>
+									<h3 class="text-xs-left">Parametri Motori</h3>
+									<v-card>
+										<div class="cardContent">
+											<v-text-field v-model="motorMode" label="Motor control mode" />
+											<v-text-field v-model="trimFactor" label="Trim factor (1.0 = center)" />
+											<v-text-field v-model="power[0]" label="Power (target angle -15)" />
+											<v-text-field v-model="power[1]" label="Power (target angle -4)" />
+											<v-text-field v-model="power[2]" label="Power (target angle -1)" />
+										</div>
+									</v-card>
+								</v-flex>
+							</v-layout>
+						</v-container>
 					</v-tab-item>
 					<v-tab-item>
-						Tab 4
+						<v-container grid-list-md text-xs-center>
+							<v-layout row wrap>
+								<!-- Column A -->
+								<v-flex xs12 md6 offset-md3>
+									<h3 class="text-xs-left">Suoni personalizzati</h3>
+									<v-card>
+										<div class="cardContent">
+										<v-text-field v-model="startSound" label="Avvio" />
+										<v-text-field v-model="stopSound" label="Stop" />
+										<v-text-field v-model="shutterSound" label="Otturatore" />
+									</div>
+									</v-card>
+								</v-flex>
+							</v-layout>
+						</v-container>
+					</v-tab-item>
+					<v-tab-item>
+						<v-container grid-list-md text-xs-center>
+							<v-layout row wrap>
+								<!-- Column A -->
+								<v-flex xs12 md6 offset-md3>
+									<h3 class="text-xs-left">Funzione pulsante fisico</h3>
+									<v-card>
+										<div class="cardContent">
+											<v-radio-group v-model="btnFun" column>
+												<v-radio label="Nessuno" value="none" />
+												<v-radio label="Inizia/Interrompi programma corrente" value="startstop" />
+											</v-radio-group>
+										</div>
+									</v-card>
+									<br>
+									<h3 class="text-xs-left">Carica all'avvio</h3>
+									<v-card>
+										<div class="cardContent">
+											<v-text-field v-model="startupProgram" label="Nome script" />
+										</div>
+									</v-card>
+								</v-flex>
+							</v-layout>
+						</v-container>
 					</v-tab-item>
 				</v-tabs-items>
 			</v-content>
@@ -107,6 +172,9 @@ export default {
 	},
 	data() {
 		return {
+			power: [null, null, null],
+			startupProgram: null,
+			btnFun: null,
 			cbName: 'CoderBot di Antonio',
 			wifiMode: 'wifiadhoc',
 			cbInfo: {
@@ -118,7 +186,7 @@ export default {
 			},
 			drawer: null,
 			tab: null,
-			tabs: ['Generali', 'Rete'],
+			tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
 		}
 	}
 }

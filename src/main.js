@@ -14,7 +14,7 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 
 // PrismJS style (syntax highlight)
-//import 'prismjs/themes/prism.css'
+import 'prismjs/themes/prism.css'
 
 // Fonts
 import 'typeface-roboto'
