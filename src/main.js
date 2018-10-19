@@ -21,7 +21,8 @@ import 'prismjs/themes/prism.css'
 import 'typeface-roboto'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
-import 'typeface-space-mono'
+import 'typeface-cousine'
+import 'typeface-quicksand'
 
 // Components
 import app from './App';

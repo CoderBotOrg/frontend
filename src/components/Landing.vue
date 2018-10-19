@@ -9,8 +9,8 @@
 			<v-content>
 				<br>
 				<div style="font-size: 24px;"> Benvenuto in </div>
-				<div style="font-size: 80px; font-family: 'Space Mono'">CoderBot</div>
-				
+				<div style="font-size: 80px; font-family: 'Cousine'">CoderBot</div>
+				<div style="font-size: 18px;"> Scegli un'azione per iniziare! </div>
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
 						<v-flex xs12 md6 offset-md3>
