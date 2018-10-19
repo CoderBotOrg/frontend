@@ -11,7 +11,8 @@ import store from './store/index'
 // Main components
 import axios from 'axios';
 import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
+//import 'vuetify/dist/vuetify.min.css';
+import './main.styl'
 
 // PrismJS style (syntax highlight)
 import 'prismjs/themes/prism.css'
@@ -36,7 +37,8 @@ import base64 from 'base-64'
 
 // Configuration
 Vue.use(VueRouter);
-Vue.use(Vuetify);
+Vue.use(Vuetify)
+
 Vue.prototype.$axios = axios.create();
 Vue.prototype.$base64 = base64
 
