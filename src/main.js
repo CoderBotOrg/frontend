@@ -35,6 +35,9 @@ import settings from './components/Settings'
 
 // Utilities
 import base64 from 'base-64'
+// This is to serialize parameters to send them as URLencoded
+// https://github.com/axios/axios/issues/350#issuecomment-227270046
+import querystring from 'querystring'
 
 // Configuration
 Vue.use(VueRouter);
@@ -42,6 +45,7 @@ Vue.use(Vuetify)
 
 Vue.prototype.$axios = axios.create();
 Vue.prototype.$base64 = base64
+Vue.prototype.$qs = querystring
 
 Vue.config.productionTip = false;
 
