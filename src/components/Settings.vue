@@ -36,8 +36,9 @@
 										<h3 class="text-xs-left">Sistema </h3>
 										<v-card>
 											<div class="cardContent">
-												<v-text-field v-model="settings.cbName" label="Nome CoderBot"></v-text-field>
-												<br>
+												<v-select v-model="settings.progLevel" :items="blocklyToolboxItems" label="Livello Toolbox Blockly"></v-select>
+												<!--<v-text-field v-model="settings.cbName" label="Nome CoderBot"></v-text-field>
+												<br>-->
 												<div v-for="(value, key, index) in cb.info">
 													{{ key }}: <code>{{ value }}</code>
 												</div>
@@ -46,21 +47,22 @@
 										<br>
 										<h3 class="text-xs-left">Stato </h3>
 										<v-card>
-											<br>
-											<div v-for="(value, key, index) in cb.status">
-												{{ key }}: <code>{{ value }}</code>
+											<div class="cardContent">
+												<div v-for="(value, key, index) in cb.status">
+													{{ key }}: <code>{{ value }}</code>
+												</div>
+												<br>
 											</div>
-											<br>
-											<br>
 										</v-card>
 										<br>
 										<h3 class="text-xs-left"> Azioni </h3>
 										<v-card>
 											<div class="cardContent">
-												<v-btn color="info">Spegni</v-btn>
-												<v-btn color="info">Riavvia</v-btn>
+												<v-btn @click="shutdown" color="info">Spegni</v-btn>
+												<v-btn @click="reboot" color="info">Riavvia</v-btn>
+												<!--
 												<v-btn color="warning">Aggiorna</v-btn>
-												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>
+												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>-->
 											</div>
 										</v-card>
 										<br><br>
@@ -199,6 +201,25 @@ export default {
 		this.prepopulate();
 	},
 	methods: {
+		shutdown() {
+			let axios = this.$axios
+			let CBv1 = this.$data.CBv1
+			axios.get(CBv1 + '/bot', { params: { cmd: 'halt' } })
+				.then(function(response) {
+
+					this.$data.snackText = 'Coderbot in spegnimento..'
+					this.$data.snackbar = true
+				})
+		},
+		reboot() {
+			let axios = this.$axios
+			let CBv1 = this.$data.CBv1
+			axios.get(CBv1 + '/bot', { params: { cmd: 'reboot' } })
+				.then(function(response) {
+					this.$data.snackText = 'Riavvio iniziato...'
+					this.$data.snackbar = true
+				})
+		},
 		getInfoAndStatus() {
 			// Get bot info and status
 			let axios = this.$axios
@@ -306,6 +327,7 @@ export default {
 					data.stopSound = remoteConfig.sound_stop
 					data.shutterSound = remoteConfig.sound_shutter
 					data.startupProgram = remoteConfig.load_at_start
+					data.progLevel = remoteConfig.prog_level
 				}.bind(this))
 		},
 		save: function() {
@@ -315,9 +337,7 @@ export default {
 			let CBv1 = this.$data.CBv1
 			let data = this.$data.settings
 
-			if (selectedTab == 0) {
-				// New persistence endpoint
-			} else if (selectedTab == 1) {
+			if (selectedTab == 1) {
 				var valuesAsString = qs.stringify({
 					'wifi_mode': this.$data.settings.wifiMode,
 					'wifi_ssid': this.$data.settings.wifiSSID,
@@ -350,6 +370,7 @@ export default {
 					'sound_stop': data.stopSound,
 					'sound_shutter': data.shutterSound,
 					'load_at_start': data.startupProgram,
+					'prog_level': data.progLevel
 				})
 				axios.post(CBv1 + '/config', legacySettings)
 					.then(function() {
@@ -391,9 +412,15 @@ export default {
 				stopSound: null,
 				shutterSound: null,
 				startupProgram: null,
+				progLevel: null
 			},
 
-
+			blocklyToolboxItems: [
+				{text:'Movimento', value:'basic_move'},
+				{text:'Base', value:'basic'},
+				{text:'Standard', value:'std'},
+				{text:'Avanzate', value:'adv'},
+			],
 			cb: {
 				info: {
 					status: null,
@@ -420,6 +447,8 @@ export default {
 </script>
 <style scoped>
 .cardContent {
+	text-align: left;
+	font-size: 16px;
 	padding: 16px;
 }
 
