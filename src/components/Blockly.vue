@@ -245,7 +245,65 @@ export default {
 			}
 		}
 	},
+	mounted() {
+
+		let axios = this.$axios
+		this.$data.status = null
+		this.pollStatus();
+		setInterval(function() {
+			this.pollStatus();
+		}.bind(this), 1000)
+
+
+		axios.get(this.$data.CBv1 + '/config')
+			.then(function(response) {
+				let toolbox = response.data.prog_level
+				this.initBlockly(toolbox)
+			}.bind(this))
+
+	},
 	methods: {
+		initBlockly: function(toolboxLevel) {
+			const blocklyDiv = this.$refs.blocklyDiv
+			//console.log(toolboxLevel)
+			var toolbox = require('../assets/toolbox_' + toolboxLevel + '.xml')
+
+			// Clean the base64 encoding of the resource, removing meta infos
+			var b64Toolbox = toolbox.substring(21).toString()
+			// Decode it and get the clean serialized XML as plain string
+			var serializedToolbox = this.$base64.decode(b64Toolbox)
+			// Initialise Blockly Instance
+			this.$data.workspace = Blockly.inject(
+				// Blockly container
+				blocklyDiv,
+				// Options
+				{
+					toolbox: serializedToolbox,
+					//path				: '../../', // ? this makes to load audio assets from /media FIXME
+					// TODO: Use values from fetched configuration!
+					scrollbars: true,
+					//MaxBlocks		: -1, // -1 as infinite not working FIXME
+					zoom: {
+						controls: true,
+						wheel: false,
+						startScale: 1.0,
+						maxScale: 1.5,
+						minScale: 0.2
+					}
+				}
+			);
+
+			// Pass the reference to the method to call, don't execute it (`()`)
+			window.addEventListener('resize', this.resizeWorkspace, false);
+
+			// Initial resize
+			this.resizeWorkspace()
+			Blockly.svgResize(this.$data.workspace);
+
+
+
+			this.blocksExtensions();
+		},
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus
 			this.$store.commit('toggleDrawer', !currentStatus)
@@ -1589,56 +1647,6 @@ export default {
 			};
 		}
 	},
-
-	mounted() {
-		this.$data.status = null
-		this.pollStatus();
-		setInterval(function() {
-			this.pollStatus();
-		}.bind(this), 1000)
-
-		const blocklyDiv = this.$refs.blocklyDiv
-		// Should be dependent on the chosen toolbox,
-		//  possibly an AJAX call if it's a custom toolbox (?)
-		var toolbox = require('../assets/toolbox_advanced.xml')
-		// Clean the base64 encoding of the resource, removing meta infos
-		var b64Toolbox = toolbox.substring(21).toString()
-		// Decode it and get the clean serialized XML as plain string
-		var serializedToolbox = this.$base64.decode(b64Toolbox)
-
-		// Initialise Blockly Instance
-		this.$data.workspace = Blockly.inject(
-			// Blockly container
-			blocklyDiv,
-			// Options
-			{
-				toolbox: serializedToolbox,
-				//path				: '../../', // ? this makes to load audio assets from /media FIXME
-				// TODO: Use values from fetched configuration!
-				scrollbars: true,
-				//MaxBlocks		: -1, // -1 as infinite not working FIXME
-				zoom: {
-					controls: true,
-					wheel: false,
-					startScale: 1.0,
-					maxScale: 1.5,
-					minScale: 0.2
-				}
-			}
-		);
-		
-		// Pass the reference to the method to call, don't execute it (`()`)
-		window.addEventListener('resize', this.resizeWorkspace, false);
-
-		// Initial resize
-		this.resizeWorkspace()
-		Blockly.svgResize(this.$data.workspace);
-		
-		
-
-		this.blocksExtensions();
-
-	}
 };
 
 </script>
