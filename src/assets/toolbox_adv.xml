@@ -266,7 +266,7 @@
 				</block>
 			</value>
 		</block>
-	</category>{%if cam%}
+	</category>
 	<category name="Camera" colour="120">
 		<block type="coderbot_camera_photoTake"></block>
 		<block type="coderbot_camera_videoRec"></block>
@@ -293,9 +293,9 @@
 		<block type="coderbot_adv_findQRCode"></block>
 		<block type="coderbot_adv_findARCode"></block>
 		<block type="coderbot_adv_find_class"></block>
-		<block type="coderbot_adv_cnn_classify"></block>
+		<!--<block type="coderbot_adv_cnn_classify"></block>-->
 		<block type="coderbot_sonar_get_distance"></block>
-	</category>{%endif%}
+	</category>
 	<category name="Sound" colour="220">
 		<block type="coderbot_audio_say"></block>
 		<block type="coderbot_audio_record"></block>
