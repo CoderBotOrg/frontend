@@ -211,6 +211,7 @@ export default {
 	},
 	data() {
 		return {
+			settings: null,
 			snackText: null,
 			snackbar: false,
 			drawer: false,
@@ -257,15 +258,16 @@ export default {
 
 		axios.get(this.$data.CBv1 + '/config')
 			.then(function(response) {
-				let toolbox = response.data.prog_level
-				this.initBlockly(toolbox)
+				var settings = response.data
+				this.$data.settings = settings
+				this.initBlockly(settings)
 			}.bind(this))
 
 	},
 	methods: {
-		initBlockly: function(toolboxLevel) {
+		initBlockly: function(settings) {
+			let toolboxLevel = settings.prog_level
 			const blocklyDiv = this.$refs.blocklyDiv
-			//console.log(toolboxLevel)
 			var toolbox = require('../assets/toolbox_' + toolboxLevel + '.xml')
 
 			// Clean the base64 encoding of the resource, removing meta infos
@@ -300,9 +302,7 @@ export default {
 			this.resizeWorkspace()
 			Blockly.svgResize(this.$data.workspace);
 
-
-
-			this.blocksExtensions();
+			this.blocksExtensions(settings);
 		},
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus
@@ -332,7 +332,6 @@ export default {
 			a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
 			e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 			a.dispatchEvent(e);
-
 		},
 		pickFile() {
 			// Manually trigger the file dialog for the hidden file input form
@@ -385,7 +384,6 @@ export default {
 			} else {
 				this.$data.unvalidName = true
 			}
-
 		},
 		loadProgramList() {
 			let axios = this.$axios
@@ -475,7 +473,7 @@ export default {
 		getProgramCode() {
 			if (this.$data.experimental) {
 				this.$data.experimental = false;
-				this.blocksExtensions();
+				this.blocksExtensions(this.$data.settings);
 				this.$data.experimental = true;
 			}
 
@@ -487,7 +485,7 @@ export default {
 			this.$data.dialogCode = true
 
 			if (this.$data.experimental) {
-				this.blocksExtensions();
+				this.blocksExtensions(this.$data.settings)
 			}
 		},
 		runProgramExperimental() {
@@ -536,24 +534,27 @@ export default {
 					this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
 			}
 		},
-		blocksExtensions() {
-
+		blocksExtensions(settings) {
+			var settings = this.$data.settings
 			var cfg = Object();
+			
 			// coderbot.cfg data (temp workaround, must be fetched from backend)
-			var CODERBOT_MOV_FW_DEF_SPEED = 100;
-			var CODERBOT_MOV_FW_DEF_ELAPSE = 1; // to check
-			var CODERBOT_MOV_TR_DEF_SPEED = 85;
-			var CODERBOT_MOV_TR_DEF_ELAPSE = -1; // to check
+			var CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_elapse;
+			var CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_speed; // to check
+			var CODERBOT_MOV_TR_DEF_SPEED =  settings.move_tr_speed;
+			var CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
 			var CODERBOT_PROG_MOVE_MOTION = true; // to check
 			var CODERBOT_PROG_MOVE_MPU = true; // to check
-			var CODERBOT_PROG_LEVEL = "adv";
+
+			var CODERBOT_PROG_LEVEL = settings.prog_level;
+
 			var CODERBOT_PROG_SCROLLBARS = true; // to check
 			var CODERBOT_PROG_MAXBLOCKS = -1;
 			var CODERBOT_PROG_SAVEONRUN = true; // to check
-			var CODERBOT_CTRL_FW_SPEED = 100;
-			var CODERBOT_CTRL_FW_ELAPSE = 1;
-			var CODERBOT_CTRL_TR_SPEED = 80;
-			var CODERBOT_CTRL_TR_ELAPSE = 0.5; // to check
+			var CODERBOT_CTRL_FW_SPEED = settings.ctrl_fw_speed;
+			var CODERBOT_CTRL_FW_ELAPSE = settings.ctrl_fw_elapse;
+			var CODERBOT_CTRL_TR_SPEED = settings.ctrl_tr_speed;
+			var CODERBOT_CTRL_TR_ELAPSE = settings.ctrl_tr_elapse; // to check
 			var CODERBOT_CTRL_COUNTER = true; // to check
 			var CODERBOT_CTRL_MOVE_MOTION = true; //t o check
 			var CODERBOT_CTRL_MOVE_MPU = true; // to check
@@ -576,6 +577,7 @@ export default {
 			BotMessages.ColorAtPoint = "Color at point: ";
 			BotMessages.ModelTraining = "Model is training, check model lists to monitor training status.";
 
+			
 			// blocks.js
 			//  Extensions to Blockly's language and Python generator.
 
@@ -585,7 +587,7 @@ export default {
 			*/
 
 
-			'use strict';
+			
 
 			Blockly.HSV_SATURATION = .99;
 			Blockly.HSV_VALUE = .99;
@@ -607,12 +609,12 @@ export default {
 				 * @this Blockly.Block
 				 */
 				init: function(self) {
-					console.log('test')
+					
 					this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
 					this.setColour(120);
 					var di = this.appendDummyInput();
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/loop_repeat.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/loop_repeat.png', 32, 32, '*'));
 					} else {
 						di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
 					}
@@ -658,7 +660,7 @@ export default {
 					this.setColour(40);
 					var di = this.appendDummyInput()
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/move_forward.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_forward.png', 32, 32, '*'));
 					} else {
 						di.appendField("Hello, World!")
 					}
@@ -686,7 +688,7 @@ export default {
 					this.setColour(40);
 					var di = this.appendDummyInput()
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/move_backward.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_backward.png', 32, 32, '*'));
 					} else {
 						di.appendField(Blockly.Msg.CODERBOT_MOVE_BACKWARD)
 					}
@@ -713,7 +715,7 @@ export default {
 					this.setColour(40);
 					var di = this.appendDummyInput()
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/move_left.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_left.png', 32, 32, '*'));
 					} else {
 						di.appendField(Blockly.Msg.CODERBOT_MOVE_LEFT);
 					}
@@ -741,7 +743,7 @@ export default {
 					this.setColour(40);
 					var di = this.appendDummyInput()
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/move_right.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_right.png', 32, 32, '*'));
 					} else {
 						di.appendField(Blockly.Msg.CODERBOT_MOVE_RIGHT)
 					}
@@ -770,7 +772,7 @@ export default {
 					var vi = this.appendValueInput('TEXT');
 					vi.setCheck(["String", "Number", "Date"]);
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						vi.appendField(new Blockly.FieldImage('/images/blocks/say.png', 32, 32, '*'));
+						vi.appendField(new Blockly.FieldImage('/static/images/blocks/say.png', 32, 32, '*'));
 					} else {
 						vi.appendField(Blockly.Msg.CODERBOT_SAY);
 					}
@@ -995,7 +997,7 @@ export default {
 					this.setColour(120);
 					var di = this.appendDummyInput()
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/photo_take.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/photo_take.png', 32, 32, '*'));
 					} else {
 						di.appendField(Blockly.Msg.CODERBOT_PHOTO_TAKE)
 					}
@@ -1018,7 +1020,7 @@ export default {
 
 					var di = this.appendDummyInput()
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/video_rec.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/video_rec.png', 32, 32, '*'));
 					} else {
 						di.appendField(Blockly.Msg.CODERBOT_VIDEO_REC)
 					}
@@ -1041,7 +1043,7 @@ export default {
 
 					var di = this.appendDummyInput()
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/images/blocks/video_stop.png', 32, 32, '*'));
+						di.appendField(new Blockly.FieldImage('/static/images/blocks/video_stop.png', 32, 32, '*'));
 					} else {
 						di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP)
 					}
@@ -1545,7 +1547,7 @@ export default {
 					var vi = this.appendValueInput('FILENAME');
 					vi.setCheck("String");
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						vi.appendField(new Blockly.FieldImage('/images/blocks/play.png', 32, 32, '*'));
+						vi.appendField(new Blockly.FieldImage('/static/images/blocks/play.png', 32, 32, '*'));
 					} else {
 						vi.appendField(Blockly.Msg.CODERBOT_AUDIO_PLAY_FILE);
 					}
