@@ -11,17 +11,14 @@ import store from './store/index'
 // Main components
 import axios from 'axios';
 import Vuetify from 'vuetify';
-//import 'vuetify/dist/vuetify.min.css';
-import './main.styl'
 
-// PrismJS style (syntax highlight)
-import 'prismjs/themes/prism.css'
+// Application Style
+import './main.styl'
 
 // Fonts
 import 'typeface-roboto'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
-import 'typeface-cousine'
 import 'typeface-quicksand'
 import 'typeface-overpass'
 import 'typeface-overpass-mono'

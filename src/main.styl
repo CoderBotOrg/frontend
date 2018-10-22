@@ -1,8 +1,16 @@
 // Application Styling
-// Import then overwrite the default style
+// Import then overwrite the default styles
 
-// Variables
+// PrismJS theme
+@import 'prismjs/themes/prism.css'
+
+// Vuetify Variables
 @import '~vuetify/src/stylus/settings/_variables'
+
+// Vuetify Components
+@import '~vuetify/src/stylus/main'
+
+// Actual modifications
 
 $body-font-family = 'Open Sans'
 $heading-font-family = 'Overpass'
@@ -14,8 +22,6 @@ $font-weights = {
 	medium: 600,
 }
 
-// Components
-@import '~vuetify/src/stylus/main'
 
 h3
 	font-size: 20px
@@ -28,7 +34,7 @@ h3
 	
 .v-tabs__div
 	font-size: 15px
-	font-weight: 600
+	font-weight: 500
 	
 .v-navigation-drawer
 	.v-list .v-list__tile
@@ -37,3 +43,7 @@ h3
 
 .v-icon
 	font-weight: 500
+	
+code[class*="language-"]
+pre[class*="language-"]
+	font-size: 16px
