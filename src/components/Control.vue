@@ -42,17 +42,17 @@
 									</v-flex>
 									<v-flex xs12 sm12>
 										<v-btn-toggle>
-											<v-btn flat @click.native="move(1)" v-on:mouseup="stop()">
+											<v-btn flat v-on:mousedown="move(1)" v-on:mouseup="stop()">
 												<v-icon>keyboard_arrow_left</v-icon>
 											</v-btn>
-											<v-btn flat @click.native="move(2)" v-on:mouseup="stop()">
+											<v-btn flat v-on:mousedown="move(2)" v-on:mouseup="stop()">
 												<v-icon>keyboard_arrow_right</v-icon>
 											</v-btn>
 										</v-btn-toggle>
 									</v-flex>
 									<v-flex xs12 sm12>
 										<v-btn-toggle>
-											<v-btn flat @click.native="move(3)" v-on:mouseup="stop()">
+											<v-btn flat v-on:mousedown="move(3)" v-on:mouseup="stop()">
 												<v-icon>keyboard_arrow_down</v-icon>
 											</v-btn>
 										</v-btn-toggle>
@@ -115,6 +115,7 @@ export default {
 			this.$store.commit('toggleDrawer', !currentStatus)
 		},
 		move: function(direction) {
+			console.log("move")
 			let axios = this.$axios
 			let CB = this.$data.CB
 			if (direction == 0) {
@@ -160,6 +161,7 @@ export default {
 			}
 		},
 		stop: function() {
+			console.log("stopping")
 			let axios = this.$axios
 			let CB = this.$data.CB
 			axios.post(CB + '/stop').then(function(response) {

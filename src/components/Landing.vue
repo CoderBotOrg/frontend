@@ -72,7 +72,7 @@ export default {
 	font-family: 'Overpass Mono';
 	font-weight: 600;
 	letter-spacing: -5px;
-	background-color: black;
+	background-color: #070300;
 	color: transparent;
 	text-shadow: 3px 3px 3px rgba(255, 255, 255, 0.25);
 	-webkit-background-clip: text;

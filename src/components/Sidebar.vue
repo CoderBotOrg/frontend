@@ -91,7 +91,5 @@ export default {
 
 </script>
 <style scoped>
-.navEntry{
-	font-size: 15px;
-}
+
 </style>
