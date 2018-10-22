@@ -9,7 +9,7 @@
 			<v-content>
 				<br>
 				<div style="font-size: 24px;"> Benvenuto in </div>
-				<div style="font-size: 80px; font-family: 'Cousine'">CoderBot</div>
+				<div class="logo">CoderBot</div>
 				<div style="font-size: 18px;"> Scegli un'azione per iniziare! </div>
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
@@ -68,4 +68,10 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.logo {
+	font-size: 80px;
+	font-family: 'Overpass Mono';
+	font-weight: 600;
+	letter-spacing: -5px;
+}
 </style>
