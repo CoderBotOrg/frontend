@@ -1,7 +1,30 @@
-// main.styl
+// Application Styling
+// Import then overwrite the default style
+
+// Variables
 @import '~vuetify/src/stylus/settings/_variables'
 
-$body-font-family = 'QuickSand'
+$body-font-family = 'Open Sans'
+$button-font-weight = 600
+$list-title-font-weight = 600
+$navigation-drawer-item-font-size = 40px
 
+$font-weights = {
+	medium: 600,
+}
 
+// Components
 @import '~vuetify/src/stylus/main'
+
+.v-toolbar__title
+	font-size: 24px
+	
+.v-tabs__div
+	font-weight: 600
+	
+.v-navigation-drawer
+	.v-list .v-list__tile
+		font-weight: 600
+
+.v-icon
+	font-weight: 500
