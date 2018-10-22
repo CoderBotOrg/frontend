@@ -14,7 +14,6 @@
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
 						<v-flex xs12 md6 offset-md3>
-							
 							<v-btn flat large color="primary" to="program">
 								<v-icon left dark>flip_to_front</v-icon>Programma
 							</v-btn> <br>
@@ -73,5 +72,12 @@ export default {
 	font-family: 'Overpass Mono';
 	font-weight: 600;
 	letter-spacing: -5px;
+	background-color: black;
+	color: transparent;
+	text-shadow: 3px 3px 3px rgba(255, 255, 255, 0.25);
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	background-clip: text;
 }
+
 </style>
