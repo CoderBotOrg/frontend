@@ -572,8 +572,8 @@ export default {
 			var cfg = Object();
 
 			// coderbot.cfg data (temp workaround, must be fetched from backend)
-			var CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_elapse;
-			var CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_speed; // to check
+			var CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_speed;
+			var CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_elapse; // to check
 			var CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
 			var CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
 			var CODERBOT_PROG_MOVE_MOTION = false; // to check
@@ -695,7 +695,7 @@ export default {
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
 						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_forward.png', 32, 32, '*'));
 					} else {
-						di.appendField(Blockly.Msg.CODERBOT_MOVE_FORWARD)
+						di.appendField(Blockly.Msg.CODERBOT_MOVE_BACKWARD)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
