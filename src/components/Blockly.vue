@@ -4,7 +4,14 @@
 			<sidebar></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>CoderBot</v-toolbar-title>
+				<v-toolbar-title>
+					<template v-if="programName">
+						{{ programName }}
+					</template>
+					<template v-else>
+						(Senza Nome)
+					</template>
+				</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
@@ -21,7 +28,7 @@
 							<v-icon>folder_open</v-icon>
 							Carica
 						</v-btn>
-						<v-btn v-on:click="runProgram()" flat>
+						<v-btn v-on:click="runProgramLegacy()" flat>
 							<v-icon>play_arrow</v-icon>
 							Esegui
 						</v-btn>
@@ -226,7 +233,7 @@ export default {
 			generalDialog: false,
 			generalDialogText: null,
 			generalDialogTitle: null,
-			experimental: 1,
+			experimental: 0,
 			execMode: "fullExec", // can be 'fullExec' or 'stepByStep',
 			carica: false,
 			programList: '',
@@ -519,7 +526,6 @@ export default {
 				var code = Blockly.Python.workspaceToCode(this.$data.workspace);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
-
 				axios.post(CB + '/exec', {
 						name: 'Hello, World!',
 						dom_code,
@@ -534,14 +540,41 @@ export default {
 					this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
 			}
 		},
+		runProgramLegacy() {
+			if (this.$data.status) {
+				let axios = this.$axios
+				let CB = this.$data.CB
+				let qs = this.$qs
+
+				// POST /program/save
+				var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
+				var dom_code = Blockly.Xml.domToText(xml_code);
+				window.LoopTrap = 1000;
+				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+				var code = Blockly.Python.workspaceToCode(this.$data.workspace);
+				Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+				var valuesAsString = qs.stringify({
+					'name': 'Hello, World!',
+					'dom_code': dom_code,
+					'code': code,
+				})
+
+				axios.post(this.$data.CBv1 + '/program/exec', valuesAsString)
+					.then(function(response) {
+						console.log(response)
+					})
+
+			}
+		},
 		blocksExtensions(settings) {
 			var settings = this.$data.settings
 			var cfg = Object();
-			
+
 			// coderbot.cfg data (temp workaround, must be fetched from backend)
 			var CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_elapse;
 			var CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_speed; // to check
-			var CODERBOT_MOV_TR_DEF_SPEED =  settings.move_tr_speed;
+			var CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
 			var CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
 			var CODERBOT_PROG_MOVE_MOTION = true; // to check
 			var CODERBOT_PROG_MOVE_MPU = true; // to check
@@ -577,7 +610,7 @@ export default {
 			BotMessages.ColorAtPoint = "Color at point: ";
 			BotMessages.ModelTraining = "Model is training, check model lists to monitor training status.";
 
-			
+
 			// blocks.js
 			//  Extensions to Blockly's language and Python generator.
 
@@ -587,7 +620,7 @@ export default {
 			*/
 
 
-			
+
 
 			Blockly.HSV_SATURATION = .99;
 			Blockly.HSV_VALUE = .99;
@@ -609,7 +642,7 @@ export default {
 				 * @this Blockly.Block
 				 */
 				init: function(self) {
-					
+
 					this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
 					this.setColour(120);
 					var di = this.appendDummyInput();
