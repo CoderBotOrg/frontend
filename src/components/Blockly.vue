@@ -576,8 +576,8 @@ export default {
 			var CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_speed; // to check
 			var CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
 			var CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
-			var CODERBOT_PROG_MOVE_MOTION = true; // to check
-			var CODERBOT_PROG_MOVE_MPU = true; // to check
+			var CODERBOT_PROG_MOVE_MOTION = false; // to check
+			var CODERBOT_PROG_MOVE_MPU = false; // to check
 
 			var CODERBOT_PROG_LEVEL = settings.prog_level;
 
@@ -588,9 +588,9 @@ export default {
 			var CODERBOT_CTRL_FW_ELAPSE = settings.ctrl_fw_elapse;
 			var CODERBOT_CTRL_TR_SPEED = settings.ctrl_tr_speed;
 			var CODERBOT_CTRL_TR_ELAPSE = settings.ctrl_tr_elapse; // to check
-			var CODERBOT_CTRL_COUNTER = true; // to check
-			var CODERBOT_CTRL_MOVE_MOTION = true; //t o check
-			var CODERBOT_CTRL_MOVE_MPU = true; // to check
+			var CODERBOT_CTRL_COUNTER = true; // to check, never used
+			var CODERBOT_CTRL_MOVE_MOTION = false; //t o check
+			var CODERBOT_CTRL_MOVE_MPU = false; // to check
 			var CODERBOT_CNN_MODEL_LIST = ""
 
 			var BotMessages = Object();
@@ -695,7 +695,7 @@ export default {
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
 						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_forward.png', 32, 32, '*'));
 					} else {
-						di.appendField("Hello, World!")
+						di.appendField(Blockly.Msg.CODERBOT_MOVE_FORWARD)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
