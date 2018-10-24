@@ -7,67 +7,107 @@
 			<v-spacer></v-spacer>
 			<v-toolbar-items>
 				<template v-if="status == 200">
-					<v-btn @click="dialog = true" icon >
-					<v-icon>check_circle</v-icon>
-				</v-btn>
-
+					<v-btn @click="dialog = true" icon>
+						<v-icon>check_circle</v-icon>
+					</v-btn>
 				</template>
 				<template v-else>
-				<v-btn flat>
+					<v-btn flat>
 						<v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
 					</v-btn>
-				<v-btn @click="dialog = true" icon>
-					<v-icon>error</v-icon>
-				</v-btn>
+					<v-btn @click="dialog = true" icon>
+						<v-icon>error</v-icon>
+					</v-btn>
 				</template>
 			</v-toolbar-items>
 		</v-toolbar>
 		<v-content>
 			<template v-if="status == 200">
-			<div>
-				<v-container grid-list-md text-xs-center>
-					<v-layout row wrap>
-						<v-flex xs12 lg6>
-							<img :src="webcamStream"/>
+				<div>
+					<v-container grid-list-md text-xs-center>
+						<v-layout row wrap>
+							<v-flex xs12 lg6>
+								<img :src="webcamStream"/>
 
 				</v-flex>
-							<v-flex xs12 lg6>
-								<v-layout row wrap>
-									<v-flex xs12 sm12>
-										<v-btn-toggle>
-											<v-btn flat v-on:mousedown="move(0)" v-on:mouseup="stop()">
-												<v-icon>keyboard_arrow_up</v-icon>
-											</v-btn>
-										</v-btn-toggle>
-									</v-flex>
-									<v-flex xs12 sm12>
-										<v-btn-toggle>
-											<v-btn flat v-on:mousedown="move(1)" v-on:mouseup="stop()">
-												<v-icon>keyboard_arrow_left</v-icon>
-											</v-btn>
-											<v-btn flat v-on:mousedown="move(2)" v-on:mouseup="stop()">
-												<v-icon>keyboard_arrow_right</v-icon>
-											</v-btn>
-										</v-btn-toggle>
-									</v-flex>
-									<v-flex xs12 sm12>
-										<v-btn-toggle>
-											<v-btn flat v-on:mousedown="move(3)" v-on:mouseup="stop()">
-												<v-icon>keyboard_arrow_down</v-icon>
-											</v-btn>
-										</v-btn-toggle>
-									</v-flex>
-								</v-layout>
-							</v-flex>
-					</v-layout>
-				</v-container>
-			</div>
-		</template>
-		<template v-else>
-			<br>
-			In attesa che CoderBot torni online...<br>
-			<v-icon large>signal_wifi_off</v-icon>
-		</template>
+								<v-flex xs12 lg6>
+									<br>
+									<v-layout row wrap>
+										<v-flex xs12 sm12>
+											<v-btn-toggle>
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(0)" v-on:mouseup="stop()">
+													<v-icon dark>keyboard_arrow_up</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</v-flex>
+										<v-flex xs12 sm12>
+											<v-btn-toggle>
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(1)" v-on:mouseup="stop()">
+													<v-icon dark>keyboard_arrow_left</v-icon>
+												</v-btn>
+												<span style="background-color: #fafafa;width: 64px" > </span>
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(2)" v-on:mouseup="stop()">
+													<v-icon dark>keyboard_arrow_right</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</v-flex>
+										<v-flex xs12 sm12>
+											<v-btn-toggle>
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(3)" v-on:mouseup="stop()">
+													<v-icon dark>keyboard_arrow_down</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</v-flex>
+										<v-flex xs12 sm12>
+											<br><br><br>
+											<v-btn-toggle>
+
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="say()">
+													Pronuncia
+													<v-icon dark>chat_bubble_outline</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</v-flex>
+										<v-flex xs12 sm12>
+
+											<v-btn-toggle>
+
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="takePhoto()">
+													Scatta foto
+													<v-icon dark>camera_alt</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</v-flex>
+										
+										<v-flex xs12 sm12>
+											<v-btn-toggle>
+
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="recordVideo()">
+													Registra video
+													<v-icon dark>videocam</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</v-flex>
+										<v-flex xs12 sm12>
+											<v-btn-toggle>
+
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="showGallery()">
+													Galleria
+													<v-icon dark>photo_library</v-icon>
+												</v-btn>
+											</v-btn-toggle>
+										</v-flex>					
+									</v-layout>
+								</v-flex>
+						</v-layout>
+					</v-container>
+				</div>
+			</template>
+			<template v-else>
+				<br>
+				In attesa che CoderBot torni online...<br>
+				<v-icon large>signal_wifi_off</v-icon>
+			</template>
 		</v-content>
 		<v-snackbar v-model="snackbar">
 			{{ snackText }}
@@ -84,6 +124,10 @@ export default {
 	components: { sidebar },
 	name: 'HelloWorld',
 	methods: {
+		say(){},
+		takePhoto(){},
+		recordVideo(){},
+		showGallery(){},
 		pollStatus() {
 			let axios = this.$axios
 			let CB = this.$data.CB
@@ -170,15 +214,15 @@ export default {
 			let minTreshold = 500
 			let delay = minTreshold - pressDuration
 			console.log("Pressed for", pressDuration, "ms")
-			if (pressDuration < 500){
-				console.log("Too fast, postponing it by", delay ,"ms..")
-				setTimeout(function () {
+			if (pressDuration < 500) {
+				console.log("Too fast, postponing it by", delay, "ms..")
+				setTimeout(function() {
 					axios.post(CB + '/stop').then(function(response) {
 						console.log(response)
 					}).catch(function(error) {
 						console.log(error)
 					})
-				}, delay );
+				}, delay);
 			} else {
 				axios.post(CB + '/stop').then(function(response) {
 					console.log(response)
