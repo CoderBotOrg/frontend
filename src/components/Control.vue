@@ -115,6 +115,7 @@ export default {
 			this.$store.commit('toggleDrawer', !currentStatus)
 		},
 		move: function(direction) {
+			this.$data.pressDuration = performance.now()
 			console.log("move")
 			let axios = this.$axios
 			let CB = this.$data.CB
@@ -164,11 +165,27 @@ export default {
 			console.log("stopping")
 			let axios = this.$axios
 			let CB = this.$data.CB
-			axios.post(CB + '/stop').then(function(response) {
-				console.log(response)
-			}).catch(function(error) {
-				console.log(error)
-			})
+			let pressDuration = this.$data.pressDuration
+			pressDuration = performance.now() - this.$data.pressDuration
+			let minTreshold = 500
+			let delay = minTreshold - pressDuration
+			console.log("Pressed for", pressDuration, "ms")
+			if (pressDuration < 500){
+				console.log("Too fast, postponing it by", delay ,"ms..")
+				setTimeout(function () {
+					axios.post(CB + '/stop').then(function(response) {
+						console.log(response)
+					}).catch(function(error) {
+						console.log(error)
+					})
+				}, delay );
+			} else {
+				axios.post(CB + '/stop').then(function(response) {
+					console.log(response)
+				}).catch(function(error) {
+					console.log(error)
+				})
+			}
 		}
 	},
 	data() {
@@ -178,6 +195,7 @@ export default {
 			webcamStream: process.env.CB_ENDPOINT + process.env.APIv1 + '/video/stream',
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			status: null,
+			pressDuration: null,
 		};
 	},
 	mounted() {
