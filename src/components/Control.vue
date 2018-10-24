@@ -71,7 +71,7 @@
 										</v-flex>
 										<v-flex xs12 sm12>
 											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="takePhoto()">
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="takePhoto()" :disabled="!photoBtnEnabled">
 													Scatta foto
 													<v-icon dark>camera_alt</v-icon>
 												</v-btn>
@@ -79,9 +79,9 @@
 										</v-flex>
 										<v-flex xs12 sm12>
 											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="recordVideo()">
-													Registra video
-													<v-icon dark>videocam</v-icon>
+												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="videoHandler()" :disabled="!videoBtn.enabled">
+													{{ videoBtn.text }}
+													<v-icon dark>{{ videoBtn.icon }} </v-icon>
 												</v-btn>
 											</v-btn-toggle>
 										</v-flex>
@@ -120,9 +120,58 @@ export default {
 	components: { sidebar },
 	name: 'HelloWorld',
 	methods: {
-		say() {},
-		takePhoto() {},
-		recordVideo() {},
+		say() {
+
+		},
+		takePhoto() {
+			let CBv1 = this.$data.CBv1
+			let axios = this.$axios;
+			axios.get(CBv1, { params: { 'cmd': 'take_photo' } })
+				.then(function(response) {
+					this.$data.snackText = 'Foto scattata'
+					this.$data.snackbar = true
+					this.$data.photoBtnEnabled = false
+					setTimeout(function() {
+						this.$data.photoBtnEnabled = true
+					}.bind(this), 1000)
+
+				}.bind(this))
+		},
+		videoHandler() {
+			if (this.$data.videoBtn.action == 'record')
+				this.recordVideo()
+			else
+				this.stopVideoRecording()
+		},
+		recordVideo() {
+			let CBv1 = this.$data.CBv1
+			let axios = this.$axios;
+			axios.get(CBv1, { params: { 'cmd': 'video_rec' } })
+				.then(function(response) {
+					this.$data.snackText = 'Registrazione Avviata'
+					this.$data.snackbar = true
+					this.$data.videoBtn.text = 'Ferma registrazione video'
+					this.$data.videoBtn.icon = 'stop'
+					this.videoBtn.action = 'stop'
+
+				}.bind(this))
+		},
+		stopVideoRecording() {
+			let CBv1 = this.$data.CBv1
+			let axios = this.$axios;
+			axios.get(CBv1, { params: { 'cmd': 'video_rec' } })
+				.then(function(response) {
+					this.$data.snackText = 'Registrazione terminata'
+					this.$data.snackbar = true
+					this.$data.videoBtn.enabled = false
+					this.videoBtn.action = 'record'
+					setTimeout(function() {
+						this.$data.videoBtn.enabled = true
+						this.$data.videoBtn.text = 'Registra Video'
+						this.$data.videoBtn.icon = 'videocam'
+					}.bind(this), 1000)
+				}.bind(this))
+		},
 		showGallery() {},
 		pollStatus() {
 			let axios = this.$axios
@@ -156,7 +205,6 @@ export default {
 		},
 		move: function(direction) {
 			this.$data.pressDuration = performance.now()
-			console.log("move")
 			let axios = this.$axios
 			let CB = this.$data.CB
 			if (direction == 0) {
@@ -234,8 +282,17 @@ export default {
 			snackbar: false,
 			webcamStream: process.env.CB_ENDPOINT + process.env.APIv1 + '/video/stream',
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
+			CBv1: process.env.CB_ENDPOINT + process.env.APIv1,
 			status: null,
 			pressDuration: null,
+			photoBtnEnabled: true,
+			videoBtn: {
+				'text': 'Registra Video',
+				'icon': 'videocam',
+				'enabled': 'true',
+				'action': 'record'
+
+			}
 		};
 	},
 	mounted() {
