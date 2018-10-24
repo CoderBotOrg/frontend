@@ -10,6 +10,13 @@
 				<br>
 				<div style="font-size: 24px;"> Benvenuto in </div>
 				<div class="logo">CoderBot</div>
+				<v-flex xs11 md8 offset-md2>
+					<v-carousel hide-delimiters>
+						<v-carousel-item interval="10000" hide-controls v-for="(item,i) in carouselItems" :key="i" :src="item.src">
+						</v-carousel-item>
+					</v-carousel>
+				</v-flex>
+				<br>
 				<div style="font-size: 18px;"> Scegli un'azione per iniziare! </div>
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
@@ -57,6 +64,14 @@ export default {
 	},
 	data() {
 		return {
+			carouselItems: [{
+					src: 'static/images/coderbot_wide1.jpg'
+				},
+				{
+					src: 'static/images/coderbot_wide3.jpg'
+				},
+
+			],
 			drawer: null,
 			source: null,
 			msg: 'Welcome to Your Vue.js App',
