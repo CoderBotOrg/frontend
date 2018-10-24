@@ -4,7 +4,7 @@
 
 ## Quickstart
 
-Run the backend in stub mode, following the instructions [here](https://github.com/CoderBotOrg/coderbot/blob/develop/README.md).
+Run the backend, following the instructions [here](https://github.com/CoderBotOrg/coderbot/blob/develop/README.md).
 
 Once the backend is online:
 
@@ -29,3 +29,7 @@ mv dist ../coderbot/
 At this point, the Flask backend serves the built application at `/vue`.
 
 Another build value you may want to edit it's `assetsPublicPath` in `config/index.js`, which allows to serve the application from a subfolder.
+
+## Acknowledgments
+
+I'd like to sincere thank [uki](https://uki.nz/cv), Kael, ivansieder, Lloyd for helping me with vuejs/vuex/vuetify/javascript and providing appreciated insights and context.
