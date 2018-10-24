@@ -50,10 +50,12 @@
 							<v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
 						</v-btn>
 					</template>
+					<!--
 					<v-btn @click="dialog = true" icon v-if="status == 200">
 						<v-icon>check_circle</v-icon>
 					</v-btn>
-					<v-btn @click="dialog = true" icon v-else>
+					-->
+					<v-btn @click="dialog = true" icon v-if="status != 200">
 						<v-icon>error</v-icon>
 					</v-btn>
 				</v-toolbar-items>

@@ -6,12 +6,14 @@
 			<v-toolbar-title>CoderBot</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items>
+				<!--
 				<template v-if="status == 200">
 					<v-btn @click="dialog = true" icon>
 						<v-icon>check_circle</v-icon>
 					</v-btn>
 				</template>
-				<template v-else>
+			-->
+				<template v-if="status != 200">
 					<v-btn flat>
 						<v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
 					</v-btn>
@@ -61,7 +63,6 @@
 										<v-flex xs12 sm12>
 											<br><br><br>
 											<v-btn-toggle>
-
 												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="say()">
 													Pronuncia
 													<v-icon dark>chat_bubble_outline</v-icon>
@@ -69,19 +70,15 @@
 											</v-btn-toggle>
 										</v-flex>
 										<v-flex xs12 sm12>
-
 											<v-btn-toggle>
-
 												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="takePhoto()">
 													Scatta foto
 													<v-icon dark>camera_alt</v-icon>
 												</v-btn>
 											</v-btn-toggle>
 										</v-flex>
-										
 										<v-flex xs12 sm12>
 											<v-btn-toggle>
-
 												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="recordVideo()">
 													Registra video
 													<v-icon dark>videocam</v-icon>
@@ -90,13 +87,12 @@
 										</v-flex>
 										<v-flex xs12 sm12>
 											<v-btn-toggle>
-
 												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="showGallery()">
 													Galleria
 													<v-icon dark>photo_library</v-icon>
 												</v-btn>
 											</v-btn-toggle>
-										</v-flex>					
+										</v-flex>
 									</v-layout>
 								</v-flex>
 						</v-layout>
@@ -124,10 +120,10 @@ export default {
 	components: { sidebar },
 	name: 'HelloWorld',
 	methods: {
-		say(){},
-		takePhoto(){},
-		recordVideo(){},
-		showGallery(){},
+		say() {},
+		takePhoto() {},
+		recordVideo() {},
+		showGallery() {},
 		pollStatus() {
 			let axios = this.$axios
 			let CB = this.$data.CB
