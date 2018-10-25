@@ -58,8 +58,8 @@
 										<h3 class="text-xs-left"> Azioni </h3>
 										<v-card>
 											<div class="cardContent">
-												<v-btn @click="shutdown" color="info">Spegni</v-btn>
-												<v-btn @click="reboot" color="info">Riavvia</v-btn>
+												<v-btn @click="shutdown" color="info"><v-icon>fas fa-power-off</v-icon>  Spegni</v-btn>
+												<v-btn @click="reboot" color="info"><v-icon>fas fa-redo</v-icon> Riavvia</v-btn>
 												<!--
 												<v-btn color="warning">Aggiorna</v-btn>
 												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>-->
@@ -452,4 +452,9 @@ export default {
 	padding: 16px;
 }
 
+.fa, .fas, .fab {
+	font-weight: 600;
+	margin-right: 7px;
+	text-size:10px;
+}
 </style>
