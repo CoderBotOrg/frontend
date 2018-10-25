@@ -30,8 +30,7 @@
 						<v-layout row wrap>
 							<v-flex xs12 lg6>
 								<img :src="webcamStream"/>
-
-				</v-flex>
+								</v-flex>
 								<v-flex xs12 lg6>
 									<br>
 									<v-layout row wrap>
@@ -62,36 +61,28 @@
 										</v-flex>
 										<v-flex xs12 sm12>
 											<br><br><br>
-											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="say()">
-													Pronuncia
-													<v-icon dark>chat_bubble_outline</v-icon>
-												</v-btn>
-											</v-btn-toggle>
+											<v-btn large color="blue-grey darken-1" v-on:click="ttsdialog = true" class="controlBtn" :disabled="!ttsBtnEnabled">
+												Pronuncia
+												<v-icon>chat_bubble_outline</v-icon>
+											</v-btn>
 										</v-flex>
 										<v-flex xs12 sm12>
-											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="takePhoto()" :disabled="!photoBtnEnabled">
-													Scatta foto
-													<v-icon dark>camera_alt</v-icon>
-												</v-btn>
-											</v-btn-toggle>
+											<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="takePhoto()" :disabled="!photoBtnEnabled">
+												Scatta foto
+												<v-icon dark>camera_alt</v-icon>
+											</v-btn>
 										</v-flex>
 										<v-flex xs12 sm12>
-											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="videoHandler()" :disabled="!videoBtn.enabled">
-													{{ videoBtn.text }}
-													<v-icon dark>{{ videoBtn.icon }} </v-icon>
-												</v-btn>
-											</v-btn-toggle>
+											<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="videoHandler()" :disabled="!videoBtn.enabled">
+												{{ videoBtn.text }}
+												<v-icon dark>{{ videoBtn.icon }} </v-icon>
+											</v-btn>
 										</v-flex>
 										<v-flex xs12 sm12>
-											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:click="showGallery()">
-													Galleria
-													<v-icon dark>photo_library</v-icon>
-												</v-btn>
-											</v-btn-toggle>
+											<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="showGallery()">
+												Galleria
+												<v-icon dark>photo_library</v-icon>
+											</v-btn>
 										</v-flex>
 									</v-layout>
 								</v-flex>
@@ -111,6 +102,21 @@
 				Chiudi
 			</v-btn>
 		</v-snackbar>
+		<v-dialog v-model="ttsdialog" width="600px">
+			<v-card>
+				<v-card-title>
+					<span class="headline">Text to Speech</span>
+				</v-card-title>
+				<v-card-text>
+					<v-text-field v-model="ttstext" label="Frase da pronunciare" solo></v-text-field>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="gray darken-1" flat="flat" @click="ttsdialog=false">Annulla</v-btn>
+					<v-btn color="green darken-1" flat="flat" @click="say()">Pronuncia</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 	</v-app>
 </template>
 <script>
@@ -121,12 +127,23 @@ export default {
 	name: 'HelloWorld',
 	methods: {
 		say() {
-
+			let CBv1 = this.$data.CBv1
+			let axios = this.$axios;
+			axios.get(CBv1 + '/bot', { params: { 'cmd': 'say', 'param1': this.$data.ttstext } })
+				.then(function(response) {
+					this.$data.ttsBtnEnabled = false
+					this.$data.ttsdialog = false
+					this.$data.snackText = 'Sto pronunciando'
+					this.$data.snackbar = true
+					setTimeout(function() {
+						this.$data.ttsBtnEnabled = true
+					}.bind(this), this.$data.ttstext.length * 200)
+				}.bind(this))
 		},
 		takePhoto() {
 			let CBv1 = this.$data.CBv1
 			let axios = this.$axios;
-			axios.get(CBv1, { params: { 'cmd': 'take_photo' } })
+			axios.get(CBv1 + '/bot', { params: { 'cmd': 'take_photo' } })
 				.then(function(response) {
 					this.$data.snackText = 'Foto scattata'
 					this.$data.snackbar = true
@@ -146,10 +163,11 @@ export default {
 		recordVideo() {
 			let CBv1 = this.$data.CBv1
 			let axios = this.$axios;
-			axios.get(CBv1, { params: { 'cmd': 'video_rec' } })
+			axios.get(CBv1 + '/bot', { params: { 'cmd': 'video_rec' } })
 				.then(function(response) {
 					this.$data.snackText = 'Registrazione Avviata'
 					this.$data.snackbar = true
+					this.$data.photoBtnEnabled = false
 					this.$data.videoBtn.text = 'Ferma registrazione video'
 					this.$data.videoBtn.icon = 'stop'
 					this.videoBtn.action = 'stop'
@@ -159,7 +177,7 @@ export default {
 		stopVideoRecording() {
 			let CBv1 = this.$data.CBv1
 			let axios = this.$axios;
-			axios.get(CBv1, { params: { 'cmd': 'video_rec' } })
+			axios.get(CBv1 + '/bot', { params: { 'cmd': 'video_stop' } })
 				.then(function(response) {
 					this.$data.snackText = 'Registrazione terminata'
 					this.$data.snackbar = true
@@ -169,6 +187,7 @@ export default {
 						this.$data.videoBtn.enabled = true
 						this.$data.videoBtn.text = 'Registra Video'
 						this.$data.videoBtn.icon = 'videocam'
+						this.$data.photoBtnEnabled = true
 					}.bind(this), 1000)
 				}.bind(this))
 		},
@@ -278,6 +297,8 @@ export default {
 	},
 	data() {
 		return {
+			ttstext: null,
+			ttsdialog: false,
 			snackText: null,
 			snackbar: false,
 			webcamStream: process.env.CB_ENDPOINT + process.env.APIv1 + '/video/stream',
@@ -285,6 +306,7 @@ export default {
 			CBv1: process.env.CB_ENDPOINT + process.env.APIv1,
 			status: null,
 			pressDuration: null,
+			ttsBtnEnabled: true,
 			photoBtnEnabled: true,
 			videoBtn: {
 				'text': 'Registra Video',
@@ -306,4 +328,12 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.controlBtn {
+	color: white;
+	margin: 2px 3px;
+	padding-right: 25px; /* 32 - icon additional margin */
+}
+.controlBtn .v-icon {
+	margin: 7px;
+}
 </style>
