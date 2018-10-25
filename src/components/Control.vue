@@ -28,10 +28,10 @@
 				<div>
 					<v-container grid-list-md text-xs-center>
 						<v-layout row wrap>
-							<v-flex xs12 lg6>
-								<img :src="webcamStream"/>
+							<v-flex xs12 lg8>
+								<v-img :src="webcamStream"/>
 								</v-flex>
-								<v-flex xs12 lg6>
+								<v-flex xs12 lg4>
 									<br>
 									<v-layout row wrap>
 										<v-flex xs12 sm12>
