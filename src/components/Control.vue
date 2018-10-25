@@ -79,7 +79,7 @@
 											</v-btn>
 										</v-flex>
 										<v-flex xs12 sm12>
-											<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="showGallery()">
+											<v-btn large color="blue-grey darken-1" class="controlBtn" to="/gallery">
 												Galleria
 												<v-icon dark>photo_library</v-icon>
 											</v-btn>
@@ -191,7 +191,6 @@ export default {
 					}.bind(this), 1000)
 				}.bind(this))
 		},
-		showGallery() {},
 		pollStatus() {
 			let axios = this.$axios
 			let CB = this.$data.CB
