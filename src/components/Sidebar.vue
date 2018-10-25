@@ -10,6 +10,18 @@
 						<v-list-tile-title class="navEntry">Home</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
+				<v-list-tile to="/help">
+					<v-list-tile-action>
+						<v-icon large>help</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title class="navEntry">Aiuto</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
+				<br>
+				<v-divider>
+				</v-divider>
+				<br>
 				<!--
 				<v-list-tile to="/activity">
 					<v-list-tile-action>
@@ -52,14 +64,22 @@
 						<v-list-tile-title class="navEntry">Impostazioni</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
-				<br><br><br>
+				<v-list-tile to="/gallery">
+					<v-list-tile-action>
+						<v-icon large>photo_library</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title class="navEntry">Galleria</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
+				<br>
 				<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
 					<v-divider></v-divider>
 					<v-btn v-for="el in socials" :key="el.icon" class="mx-3 gray--text" icon :href="el.link" target="_blank">
 						<v-icon size="24px">{{ el.icon }}</v-icon>
 					</v-btn>
 					<br>
-					&copy;2018 — <strong>UNIMIB</strong>
+					&copy;2018 — <strong>UNIMIB</strong> — <router-link to="/credits"><a>Credits</a></router-link>
 				</div>
 			</v-list>
 		</v-navigation-drawer>
@@ -91,5 +111,4 @@ export default {
 
 </script>
 <style scoped>
-
 </style>

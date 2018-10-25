@@ -31,6 +31,9 @@ import control from './components/Control';
 import blockly from './components/Blockly';
 //import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
+import gallery from './components/Gallery'
+import help from './components/Help'
+import credits from './components/Credits'
 
 // Utilities
 import base64 from 'base-64'
@@ -54,6 +57,9 @@ const routes = [
   { path: '/control', component: control, meta: {title: 'CoderBot - Controlla'} },
   { path: '/program', component: blockly, meta: {title: 'CoderBot - Blockly'}},
   { path: '/settings', component: settings , meta: {title: 'CoderBot - Impostazioni'}},
+  { path: '/gallery', component: gallery, meta: {title: 'CoderBot - Galleria'}},
+  { path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
+  { path: '/credits', component: credits, meta: {title: 'CoderBot - Crediti'}},
   //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
   //{ path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
 ];
