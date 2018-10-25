@@ -331,9 +331,12 @@ export default {
 .controlBtn {
 	color: white;
 	margin: 2px 3px;
-	padding-right: 25px; /* 32 - icon additional margin */
+	padding-right: 25px;
+	/* 32 - icon additional margin */
 }
+
 .controlBtn .v-icon {
 	margin: 7px;
 }
+
 </style>
