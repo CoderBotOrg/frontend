@@ -12,30 +12,32 @@
 						<template v-if="photos.length == 0">
 							<br>
 							<h3>Galleria vuota!</h3>
-							</template>
-							<template v-else>
-						<v-card>
-							<v-container grid-list-sm fluid>
-								<v-layout row wrap>
-									<v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
-										<v-card flat tile class="d-flex">
-											<v-layout column>
-												<div class="subheading">{{ photos[n-1].name }} <v-btn v-on:click="deletePhoto(photos[n-1].name)" flat icon color="red lighten-2">
-														<v-icon>delete</v-icon>
-													</v-btn>
-												</div>
+						</template>
+						<template v-else>
+							<v-card>
+								<v-container grid-list-sm fluid>
+									<v-layout row wrap>
+										<v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
+											<v-card flat tile class="d-flex">
+												<v-layout column>
+													<div class="subheading">{{ photos[n-1].name }} <v-btn v-on:click="deletePhoto(photos[n-1].name)" flat icon color="red lighten-2">
+															<v-icon>delete</v-icon>
+														</v-btn>
+													</div>
+													<a :href="CBv1+'/photos/'+photos[n-1].name" target="_blank">
 												<v-img :src="CBv1+'/photos/'+photos[n-1].name" aspect-ratio="1" class="grey lighten-2">
 													<v-layout slot="placeholder" fill-height align-center justify-center ma-0>
 														<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
 													</v-layout>
 												</v-img>
-											</v-layout>
-										</v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-card>
-					</template>
+												</a>
+												</v-layout>
+											</v-card>
+										</v-flex>
+									</v-layout>
+								</v-container>
+							</v-card>
+						</template>
 					</v-flex>
 				</v-layout>
 			</v-content>
@@ -86,11 +88,13 @@ export default {
 
 </script>
 <style scoped>
-.v-card{
+.v-card {
 	margin: 10px;
 }
-.container{
+
+.container {
 	padding-top: 0px;
-	margin-top:0px;
+	margin-top: 0px;
 }
+
 </style>
