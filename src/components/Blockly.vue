@@ -218,8 +218,8 @@ export default {
 		Prism: () =>
 			import('vue-prism-component')
 	},
-	data() {
-		return {
+	data: () => ({
+		
 			settings: null,
 			snackText: null,
 			snackbar: false,
@@ -244,8 +244,8 @@ export default {
 			newProgramName: '',
 			unvalidName: false,
 			del: false,
-		};
-	},
+		
+	}),
 	computed: {
 		statusText: function() {
 			if (this.status) {
@@ -260,11 +260,13 @@ export default {
 		let axios = this.$axios
 		this.status = null
 		this.pollStatus();
+
+		// Start the polling
 		setInterval(function() {
 			this.pollStatus();
 		}.bind(this), 1000)
 
-
+		// Get the legacy configuration and initialize Blockly
 		axios.get(this.CBv1 + '/config')
 			.then(function(response) {
 				var settings = response.data
