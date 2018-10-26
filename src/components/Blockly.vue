@@ -275,18 +275,21 @@ export default {
 	},
 	methods: {
 		initBlockly: function(settings) {
+			// Extend the default blocks set
+			this.blocksExtensions(settings);
+
 			let toolboxLevel = settings.prog_level
-			const blocklyDiv = this.$refs.blocklyDiv
 			var toolbox = require('../assets/toolbox_' + toolboxLevel + '.xml')
 
 			// Clean the base64 encoding of the resource, removing meta infos
 			var b64Toolbox = toolbox.substring(21).toString()
 			// Decode it and get the clean serialized XML as plain string
 			var serializedToolbox = this.$base64.decode(b64Toolbox)
+			
 			// Initialise Blockly Instance
 			this.$data.workspace = Blockly.inject(
 				// Blockly container
-				blocklyDiv,
+				this.$refs.blocklyDiv,
 				// Options
 				{
 					toolbox: serializedToolbox,
@@ -311,7 +314,7 @@ export default {
 			this.resizeWorkspace()
 			Blockly.svgResize(this.$data.workspace);
 
-			this.blocksExtensions(settings);
+			
 		},
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus
