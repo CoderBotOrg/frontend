@@ -195,7 +195,7 @@ export default {
 			this.pollStatus();
 		}.bind(this), 1000)
 		let axios = this.$axios
-		let settings = this.$data.settings
+		let settings = this.settings
 
 		this.getInfoAndStatus();
 		this.prepopulate();
@@ -203,72 +203,72 @@ export default {
 	methods: {
 		shutdown() {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			axios.get(CBv1 + '/bot', { params: { cmd: 'halt' } })
 				.then(function(response) {
 
-					this.$data.snackText = 'Coderbot in spegnimento..'
-					this.$data.snackbar = true
+					this.snackText = 'Coderbot in spegnimento..'
+					this.snackbar = true
 				})
 		},
 		reboot() {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			axios.get(CBv1 + '/bot', { params: { cmd: 'reboot' } })
 				.then(function(response) {
-					this.$data.snackText = 'Riavvio iniziato...'
-					this.$data.snackbar = true
+					this.snackText = 'Riavvio iniziato...'
+					this.snackbar = true
 				})
 		},
 		getInfoAndStatus() {
 			// Get bot info and status
 			let axios = this.$axios
 
-			axios.get(this.$data.CB + '/status')
+			axios.get(this.CB + '/status')
 				.then(function(response) {
-					this.$data.cb.status = response.data
+					this.cb.status = response.data
 				}.bind(this))
-			axios.get(this.$data.CB + '/info')
+			axios.get(this.CB + '/info')
 				.then(function(response) {
-					this.$data.cb.info = response.data
+					this.cb.info = response.data
 				}.bind(this))
 		},
 		pollStatus() {
 			let axios = this.$axios
-			let CB = this.$data.CB
-			let status = this.$data.status
+			let CB = this.CB
+			let status = this.status
 			axios.get(CB + '/status')
 				.then(function(response) {
-					if (this.$data.status == 0 && response.status) {
-						this.$data.snackText = 'CoderBot è tornato online'
-						this.$data.snackbar = true
+					if (this.status == 0 && response.status) {
+						this.snackText = 'CoderBot è tornato online'
+						this.snackbar = true
 						this.getInfoAndStatus();
 						this.prepopulate();
 					}
 
 					//console.log(response)
-					this.$data.statusData = response.data
-					this.$data.status = response.status
+					this.statusData = response.data
+					this.status = response.status
 				}.bind(this))
 				.catch(function(error) {
 					// handle error
 					console.log(error);
 
-					if (this.$data.status) {
-						this.$data.snackText = 'CoderBot irrangiungibile'
-						this.$data.snackbar = true
+					if (this.status) {
+						this.snackText = 'CoderBot irrangiungibile'
+						this.snackbar = true
 					}
-					this.$data.status = 0
+					this.status = 0
 				}.bind(this))
 		},
 		prepopulate: function() {
 			let axios = this.$axios
-			let settings = this.$data.settings
+			let settings = this.settings
 			// Prepopulate settings
-			axios.get(this.$data.CBv1 + '/config')
+			axios.get(this.CBv1 + '/config')
 				.then(function(response) {
 					// handle success
-					let data = this.$data.settings
+					let data = this.settings
 					console.log(response.data);
 					let remoteConfig = response.data
 					/*
@@ -332,23 +332,23 @@ export default {
 		},
 		save: function() {
 			let qs = this.$qs
-			let selectedTab = this.$data.tab
+			let selectedTab = this.tab
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
-			let data = this.$data.settings
+			let CBv1 = this.CBv1
+			let data = this.settings
 
 			if (selectedTab == 1) {
 				var valuesAsString = qs.stringify({
-					'wifi_mode': this.$data.settings.wifiMode,
-					'wifi_ssid': this.$data.settings.wifiSSID,
-					'wifi_psk': this.$data.settings.wifiPsw,
+					'wifi_mode': this.settings.wifiMode,
+					'wifi_ssid': this.settings.wifiSSID,
+					'wifi_psk': this.settings.wifiPsw,
 				})
 				// Send post with URL encoded parameters 
 				axios.post(CBv1 + '/wifi', valuesAsString)
 					.then(function() {
 						console.log("Sent")
-						this.$data.snackText = "Impostazioni di rete aggiornate"
-						this.$data.snackbar = true
+						this.snackText = "Impostazioni di rete aggiornate"
+						this.snackbar = true
 					}.bind(this))
 
 			} else {
@@ -376,8 +376,8 @@ export default {
 					.then(function() {
 						console.log('Updated settings')
 						this.prepopulate();
-						this.$data.snackText = "Impostazioni aggiornate"
-						this.$data.snackbar = true
+						this.snackText = "Impostazioni aggiornate"
+						this.snackbar = true
 					}.bind(this))
 			}
 		},

@@ -54,15 +54,15 @@ export default {
 	methods: {
 		getPhotos: function() {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			axios.get(CBv1 + '/photos')
 				.then(function(response) {
-					this.$data.photos = response.data
+					this.photos = response.data
 				}.bind(this))
 		},
 		deletePhoto: function(name) {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			axios.delete(CBv1 + '/photos/' + name)
 				.then(function(response) {
 					this.getPhotos()

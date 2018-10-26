@@ -202,13 +202,13 @@ export default {
 	components: { Swatches, wsFactory, sidebar },
 	computed: {
 		prefix: function() {
-			if (this.$data.name != null && this.$data.name != '')
+			if (this.name != null && this.name != '')
 				return '-'
 			else
 				return ''
 		},
 		bodyUIstyleObj: function() {
-			let bodyFont = this.$data.bodyFont
+			let bodyFont = this.bodyFont
 			let fontFamily = ''
 			if (bodyFont == 'opensans')
 				fontFamily = 'Open Sans'
@@ -224,7 +224,7 @@ export default {
 			return obj
 		},
 		codeUIstyleObj: function() {
-			let codeFont = this.$data.codeFont
+			let codeFont = this.codeFont
 			let fontFamily = ''
 			if (codeFont == 'iosevka')
 				fontFamily = 'Iosevka'
@@ -315,18 +315,18 @@ export default {
 			this.$store.commit('toggleDrawer', !currentStatus)
 		},
 		addButton: function() {
-			this.$data.buttons.push({
+			this.buttons.push({
 				label: '',
 			})
 		},
 		removeButton: function(index) {
-			this.$data.buttons.splice(index, 1)
+			this.buttons.splice(index, 1)
 		},
 		removeAll: function() {
-			this.$data.buttons = []
+			this.buttons = []
 		},
 		restoreDefaults: function() {
-			this.$data.buttons = [{
+			this.buttons = [{
 					label: 'Esegui Roba',
 					icon: 'play_arrow',
 					colorBtn: 'green',

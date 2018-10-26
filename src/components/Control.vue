@@ -127,94 +127,94 @@ export default {
 	name: 'HelloWorld',
 	methods: {
 		say() {
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			let axios = this.$axios;
-			axios.get(CBv1 + '/bot', { params: { 'cmd': 'say', 'param1': this.$data.ttstext } })
+			axios.get(CBv1 + '/bot', { params: { 'cmd': 'say', 'param1': this.ttstext } })
 				.then(function(response) {
-					this.$data.ttsBtnEnabled = false
-					this.$data.ttsdialog = false
-					this.$data.snackText = 'Sto pronunciando'
-					this.$data.snackbar = true
+					this.ttsBtnEnabled = false
+					this.ttsdialog = false
+					this.snackText = 'Sto pronunciando'
+					this.snackbar = true
 					setTimeout(function() {
-						this.$data.ttsBtnEnabled = true
-					}.bind(this), this.$data.ttstext.length * 200)
+						this.ttsBtnEnabled = true
+					}.bind(this), this.ttstext.length * 200)
 				}.bind(this))
 		},
 		takePhoto() {
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			let axios = this.$axios;
 			axios.get(CBv1 + '/bot', { params: { 'cmd': 'take_photo' } })
 				.then(function(response) {
-					this.$data.snackText = 'Foto scattata'
-					this.$data.snackbar = true
-					this.$data.photoBtnEnabled = false
+					this.snackText = 'Foto scattata'
+					this.snackbar = true
+					this.photoBtnEnabled = false
 					setTimeout(function() {
-						this.$data.photoBtnEnabled = true
+						this.photoBtnEnabled = true
 					}.bind(this), 1000)
 
 				}.bind(this))
 		},
 		videoHandler() {
-			if (this.$data.videoBtn.action == 'record')
+			if (this.videoBtn.action == 'record')
 				this.recordVideo()
 			else
 				this.stopVideoRecording()
 		},
 		recordVideo() {
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			let axios = this.$axios;
 			axios.get(CBv1 + '/bot', { params: { 'cmd': 'video_rec' } })
 				.then(function(response) {
-					this.$data.snackText = 'Registrazione Avviata'
-					this.$data.snackbar = true
-					this.$data.photoBtnEnabled = false
-					this.$data.videoBtn.text = 'Ferma registrazione video'
-					this.$data.videoBtn.icon = 'stop'
+					this.snackText = 'Registrazione Avviata'
+					this.snackbar = true
+					this.photoBtnEnabled = false
+					this.videoBtn.text = 'Ferma registrazione video'
+					this.videoBtn.icon = 'stop'
 					this.videoBtn.action = 'stop'
 
 				}.bind(this))
 		},
 		stopVideoRecording() {
-			let CBv1 = this.$data.CBv1
+			let CBv1 = this.CBv1
 			let axios = this.$axios;
 			axios.get(CBv1 + '/bot', { params: { 'cmd': 'video_stop' } })
 				.then(function(response) {
-					this.$data.snackText = 'Registrazione terminata'
-					this.$data.snackbar = true
-					this.$data.videoBtn.enabled = false
+					this.snackText = 'Registrazione terminata'
+					this.snackbar = true
+					this.videoBtn.enabled = false
 					this.videoBtn.action = 'record'
 					setTimeout(function() {
-						this.$data.videoBtn.enabled = true
-						this.$data.videoBtn.text = 'Registra Video'
-						this.$data.videoBtn.icon = 'videocam'
-						this.$data.photoBtnEnabled = true
+						this.videoBtn.enabled = true
+						this.videoBtn.text = 'Registra Video'
+						this.videoBtn.icon = 'videocam'
+						this.photoBtnEnabled = true
 					}.bind(this), 1000)
 				}.bind(this))
 		},
 		pollStatus() {
 			let axios = this.$axios
-			let CB = this.$data.CB
-			let status = this.$data.status
+			let CB = this.CB
+			let status = this.status
 			axios.get(CB + '/status')
 				.then(function(response) {
-					if (this.$data.status == 0 && response.status) {
-						this.$data.snackText = 'CoderBot è tornato online'
-						this.$data.snackbar = true
+					if (this.status == 0 && response.status) {
+						this.snackText = 'CoderBot è tornato online'
+						this.snackbar = true
 					}
 
 					//console.log(response)
-					this.$data.statusData = response.data
-					this.$data.status = response.status
+					this.statusData = response.data
+					this.status = response.status
 				}.bind(this))
 				.catch(function(error) {
 					// handle error
 					console.log(error);
 
-					if (this.$data.status) {
-						this.$data.snackText = 'CoderBot irrangiungibile'
-						this.$data.snackbar = true
+					if (this.status) {
+						this.snackText = 'CoderBot irrangiungibile'
+						this.snackbar = true
 					}
-					this.$data.status = 0
+					this.status = 0
 				}.bind(this))
 		},
 		toggleSidebar: function() {
@@ -222,9 +222,9 @@ export default {
 			this.$store.commit('toggleDrawer', !currentStatus)
 		},
 		move: function(direction) {
-			this.$data.pressDuration = performance.now()
+			this.pressDuration = performance.now()
 			let axios = this.$axios
-			let CB = this.$data.CB
+			let CB = this.CB
 			if (direction == 0) {
 				// UP, move forward
 				axios.post(CB + '/move', {
@@ -270,9 +270,9 @@ export default {
 		stop: function() {
 			console.log("stopping")
 			let axios = this.$axios
-			let CB = this.$data.CB
-			let pressDuration = this.$data.pressDuration
-			pressDuration = performance.now() - this.$data.pressDuration
+			let CB = this.CB
+			let pressDuration = this.pressDuration
+			pressDuration = performance.now() - this.pressDuration
 			let minTreshold = 500
 			let delay = minTreshold - pressDuration
 			console.log("Pressed for", pressDuration, "ms")

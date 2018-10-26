@@ -248,7 +248,7 @@ export default {
 	},
 	computed: {
 		statusText: function() {
-			if (this.$data.status) {
+			if (this.status) {
 				return 'Coderbot risulta online e funzionante. '
 			} else {
 				return 'Coderbot risulta offline e rotto'
@@ -258,17 +258,17 @@ export default {
 	mounted() {
 
 		let axios = this.$axios
-		this.$data.status = null
+		this.status = null
 		this.pollStatus();
 		setInterval(function() {
 			this.pollStatus();
 		}.bind(this), 1000)
 
 
-		axios.get(this.$data.CBv1 + '/config')
+		axios.get(this.CBv1 + '/config')
 			.then(function(response) {
 				var settings = response.data
-				this.$data.settings = settings
+				this.settings = settings
 				this.initBlockly(settings)
 			}.bind(this))
 
@@ -287,7 +287,7 @@ export default {
 			var serializedToolbox = this.$base64.decode(b64Toolbox)
 			
 			// Initialise Blockly Instance
-			this.$data.workspace = Blockly.inject(
+			this.workspace = Blockly.inject(
 				// Blockly container
 				this.$refs.blocklyDiv,
 				// Options
@@ -312,7 +312,7 @@ export default {
 
 			// Initial resize
 			this.resizeWorkspace()
-			Blockly.svgResize(this.$data.workspace);
+			Blockly.svgResize(this.workspace);
 
 			
 		},
@@ -322,8 +322,8 @@ export default {
 		},
 		getProgramData() {
 			console.log("get")
-			let name = this.$data.programName
-			let workspace = this.$data.workspace
+			let name = this.programName
+			let workspace = this.workspace
 			let xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
 			let dom_code = Blockly.Xml.domToText(xml_code);
 
@@ -339,7 +339,7 @@ export default {
 			const blob = new Blob([data], { type: 'text/json' })
 			const e = document.createEvent('MouseEvents'),
 				a = document.createElement('a');
-			a.download = this.$data.programName + '.json' || 'noname.json'
+			a.download = this.programName + '.json' || 'noname.json'
 			a.href = window.URL.createObjectURL(blob);
 			a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
 			e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -352,7 +352,7 @@ export default {
 		importProgram(e) {
 			// Once the file is selected, read it and populate the Blockly 
 			//  workspace with the contained program
-			let workspace = this.$data.workspace
+			let workspace = this.workspace
 			const files = e.target.files
 			if (files[0] !== undefined) {
 				let fileName = files[0].name
@@ -371,18 +371,18 @@ export default {
 			}
 		},
 		saveProgramAs: function(e) {
-			if (this.$data.newProgramName != '') {
-				this.$data.programName = this.$data.newProgramName
-				this.$data.newProgramName = ''
+			if (this.newProgramName != '') {
+				this.programName = this.newProgramName
+				this.newProgramName = ''
 				this.saveProgram()
 			} else {
-				this.$data.unvalidName = true
+				this.unvalidName = true
 			}
 		},
 		saveProgram() {
-			if (this.$data.programName != '') {
+			if (this.programName != '') {
 				let axios = this.$axios
-				let CB = this.$data.CB
+				let CB = this.CB
 				console.log("save")
 				let data = this.getProgramData()
 				axios.post(CB + '/save', {
@@ -394,25 +394,25 @@ export default {
 						console.log("salvato")
 					})
 			} else {
-				this.$data.unvalidName = true
+				this.unvalidName = true
 			}
 		},
 		loadProgramList() {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
-			//let programList = this.$data.programList
+			let CBv1 = this.CBv1
+			//let programList = this.programList
 			axios.get(CBv1 + '/program/list')
 				.then(function(response) {
-					this.$data.carica = true,
-						this.$data.programList = response.data;
+					this.carica = true,
+						this.programList = response.data;
 				}.bind(this))
 		},
 		loadProgram(program) {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
-			let workspace = this.$data.workspace
-			this.$data.carica = false;
-			this.$data.programName = program
+			let CBv1 = this.CBv1
+			let workspace = this.workspace
+			this.carica = false;
+			this.programName = program
 			axios.get(CBv1 + '/program/load', {
 					params: {
 						name: program,
@@ -425,17 +425,17 @@ export default {
 				}.bind(this))
 		},
 		deleteProgramDlg(program) {
-			this.$data.newProgramName = program
-			this.$data.del = true
+			this.newProgramName = program
+			this.del = true
 		},
 		deleteProgram(program) {
-			if (this.$data.programName == program) {
-				this.$data.programName = ''
-				this.$data.code = ''
-				this.$data.workspace.clear()
+			if (this.programName == program) {
+				this.programName = ''
+				this.code = ''
+				this.workspace.clear()
 			}
 			let axios = this.$axios
-			let CB = this.$data.CB
+			let CB = this.CB
 			console.log("delete")
 			axios.post(CB + '/delete', {
 					name: program
@@ -446,28 +446,28 @@ export default {
 		},
 		pollStatus() {
 			let axios = this.$axios
-			let CB = this.$data.CB
-			let status = this.$data.status
+			let CB = this.CB
+			let status = this.status
 			axios.get(CB + '/status')
 				.then(function(response) {
-					if (this.$data.status == 0 && response.status) {
-						this.$data.snackText = 'CoderBot è tornato online'
-						this.$data.snackbar = true
+					if (this.status == 0 && response.status) {
+						this.snackText = 'CoderBot è tornato online'
+						this.snackbar = true
 					}
 
 					//console.log(response)
-					this.$data.statusData = response.data
-					this.$data.status = response.status
+					this.statusData = response.data
+					this.status = response.status
 				}.bind(this))
 				.catch(function(error) {
 					// handle error
 					console.log(error);
 
-					if (this.$data.status) {
-						this.$data.snackText = 'CoderBot irrangiungibile'
-						this.$data.snackbar = true
+					if (this.status) {
+						this.snackText = 'CoderBot irrangiungibile'
+						this.snackbar = true
 					}
-					this.$data.status = 0
+					this.status = 0
 				}.bind(this))
 		},
 		resizeWorkspace() {
@@ -483,25 +483,25 @@ export default {
 			this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
 		},
 		getProgramCode() {
-			if (this.$data.experimental) {
-				this.$data.experimental = false;
-				this.blocksExtensions(this.$data.settings);
-				this.$data.experimental = true;
+			if (this.experimental) {
+				this.experimental = false;
+				this.blocksExtensions(this.settings);
+				this.experimental = true;
 			}
 
 			Blockly.Python.STATEMENT_PREFIX = null;
 			Blockly.Python.addReservedWords();
 			Blockly.Python.INFINITE_LOOP_TRAP = null;
-			this.$data.code = Blockly.Python.workspaceToCode(this.$data.workspace);
-			console.log(this.$data.code)
-			this.$data.dialogCode = true
+			this.code = Blockly.Python.workspaceToCode(this.workspace);
+			console.log(this.code)
+			this.dialogCode = true
 
-			if (this.$data.experimental) {
-				this.blocksExtensions(this.$data.settings)
+			if (this.experimental) {
+				this.blocksExtensions(this.settings)
 			}
 		},
 		runProgramExperimental() {
-			if (this.$data.status) {
+			if (this.status) {
 				var xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
@@ -514,21 +514,21 @@ export default {
 					name: 'Hello, World',
 					dom_code,
 					code: code_modified,
-					mode: this.$data.execMode
+					mode: this.execMode
 				})
 
 			}
 		},
 		runProgram() {
-			if (this.$data.status) {
+			if (this.status) {
 				let axios = this.$axios
-				let CB = this.$data.CB
+				let CB = this.CB
 				// POST /program/save
-				var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
+				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
 				window.LoopTrap = 1000;
 				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
-				var code = Blockly.Python.workspaceToCode(this.$data.workspace);
+				var code = Blockly.Python.workspaceToCode(this.workspace);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
 				axios.post(CB + '/exec', {
@@ -540,23 +540,23 @@ export default {
 						console.log(response);
 					})
 			} else {
-				this.$data.generalDialog = true;
-				this.$data.generalDialogTitle = 'Errore',
-					this.$data.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
+				this.generalDialog = true;
+				this.generalDialogTitle = 'Errore',
+					this.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
 			}
 		},
 		runProgramLegacy() {
-			if (this.$data.status) {
+			if (this.status) {
 				let axios = this.$axios
-				let CB = this.$data.CB
+				let CB = this.CB
 				let qs = this.$qs
 
 				// POST /program/save
-				var xml_code = Blockly.Xml.workspaceToDom(this.$data.workspace);
+				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
 				window.LoopTrap = 1000;
 				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
-				var code = Blockly.Python.workspaceToCode(this.$data.workspace);
+				var code = Blockly.Python.workspaceToCode(this.workspace);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
 				var valuesAsString = qs.stringify({
@@ -565,7 +565,7 @@ export default {
 					'code': code,
 				})
 
-				axios.post(this.$data.CBv1 + '/program/exec', valuesAsString)
+				axios.post(this.CBv1 + '/program/exec', valuesAsString)
 					.then(function(response) {
 						console.log(response)
 					})
@@ -573,7 +573,7 @@ export default {
 			}
 		},
 		blocksExtensions(settings) {
-			var settings = this.$data.settings
+			var settings = this.settings
 			var cfg = Object();
 
 			// coderbot.cfg data (temp workaround, must be fetched from backend)
@@ -634,7 +634,7 @@ export default {
 
 			var sbsPrefix
 
-			if (this.$data.experimental) {
+			if (this.experimental) {
 				// Append "Command." to enable stepbystep
 				sbsPrefix = "Command."
 			} else {
