@@ -1,6 +1,8 @@
 # vue-app
 
-> Coderbot web app in Vue.js
+Check the [project website](https://www.coderbot.org) for more information.
+
+> The new version of the CoderBot web application, developed in Vue.js.
 
 ## Quickstart
 
