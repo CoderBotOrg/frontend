@@ -81,7 +81,7 @@
 						<v-icon size="24px">{{ el.icon }}</v-icon>
 					</v-btn>
 					<br>
-					&copy;2018 — <strong>UNIMIB</strong> — <router-link to="/credits"><a>Credits</a></router-link>
+					&copy;2018 — <strong>UNIMIB</strong><!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
 				</div>
 			</v-list>
 		</v-navigation-drawer>

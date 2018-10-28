@@ -2,7 +2,7 @@
 	<div>
 		<v-app id="inspire">
 			<sidebar></sidebar>
-						<v-toolbar color="indigo" dark fixed app>
+			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
 				<v-toolbar-title>Crediti</v-toolbar-title>
 			</v-toolbar>
