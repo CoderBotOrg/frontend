@@ -200,7 +200,7 @@ import sidebar from "../components/Sidebar"
 
 export default {
 	components: { sidebar },
-	name: 'HelloWorld',
+	name: 'Settings',
 	mounted() {
 		this.pollStatus();
 		setInterval(function() {

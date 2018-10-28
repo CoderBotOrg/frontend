@@ -49,7 +49,7 @@ import sidebar from "../components/Sidebar"
 
 export default {
 	components: { sidebar },
-	name: 'HelloWorld',
+	name: 'Gallery',
 	mounted() {
 		this.getPhotos()
 	},

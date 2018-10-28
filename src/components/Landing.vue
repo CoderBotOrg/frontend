@@ -55,7 +55,7 @@ import sidebar from "../components/Sidebar"
 
 export default {
 	components: { sidebar },
-	name: 'HelloWorld',
+	name: 'CoderBot',
 	methods: {
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus

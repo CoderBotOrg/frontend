@@ -124,7 +124,7 @@ import sidebar from "../components/Sidebar"
 
 export default {
 	components: { sidebar },
-	name: 'HelloWorld',
+	name: 'Control',
 	methods: {
 		say() {
 			let CBv1 = this.CBv1

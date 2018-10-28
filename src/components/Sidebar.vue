@@ -10,6 +10,7 @@
 						<v-list-tile-title class="navEntry">Home</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
+				<!--
 				<v-list-tile to="/help">
 					<v-list-tile-action>
 						<v-icon large>help</v-icon>
@@ -18,6 +19,7 @@
 						<v-list-tile-title class="navEntry">Aiuto</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
+			-->
 				<br>
 				<v-divider>
 				</v-divider>
