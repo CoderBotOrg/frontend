@@ -60,6 +60,8 @@
 											<div class="cardContent">
 												<v-btn @click="shutdown" color="info"><v-icon>fas fa-power-off</v-icon>  Spegni</v-btn>
 												<v-btn @click="reboot" color="info"><v-icon>fas fa-redo</v-icon> Riavvia</v-btn>
+												<v-btn @click="restoreConfig" color="warning"><v-icon>fas fa-redo</v-icon> Ripristina Impostazioni</v-btn>
+
 												<!--
 												<v-btn color="warning">Aggiorna</v-btn>
 												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>-->
@@ -99,13 +101,23 @@
 								<v-layout row wrap>
 									<!-- Column A -->
 									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Step timing | distance / angle</h3>
+										<h3 class="text-xs-left">In modalità controllo</h3>
 										<v-card>
 											<div class="cardContent">
-												<v-text-field v-model="settings.fwdSpeed" label="Forward speed" />
-												<v-text-field v-model="settings.fwdElapse" label="Forward elapse / distance" />
-												<v-text-field v-model="settings.turnSpeed" label="Turn speed" />
-												<v-text-field v-model="settings.turnElapse" label="Turn elapse / angle" />
+												<v-text-field v-model="settings.ctrlFwdSpeed" label="Forward speed" />
+												<v-text-field v-model="settings.ctrlFwdElapse" label="Forward elapse / distance" />
+												<v-text-field v-model="settings.ctrlTurnSpeed" label="Turn speed" />
+												<v-text-field v-model="settings.ctrlTurnElapse" label="Turn elapse / angle" />
+											</div>
+										</v-card>
+										<br><br>
+										<h3 class="text-xs-left">In modalità programmazione</h3>
+										<v-card>
+											<div class="cardContent">
+												<v-text-field v-model="settings.moveFwdSpeed" label="Forward speed" />
+												<v-text-field v-model="settings.moveFwdElapse" label="Forward elapse / distance" />
+												<v-text-field v-model="settings.moveTurnSpeed" label="Turn speed" />
+												<v-text-field v-model="settings.moveTurnElapse" label="Turn elapse / angle" />
 											</div>
 										</v-card>
 										<br><br>
@@ -201,6 +213,16 @@ export default {
 		this.prepopulate();
 	},
 	methods: {
+		restoreConfig(){
+			let axios = this.$axios
+			let CB = this.CB
+			axios.post(CB + '/restoreSettings')
+				.then(function(response) {
+					this.snackText = 'Impostazioni ripristinate'
+					this.snackbar = true
+					this.prepopulate()
+				}.bind(this))
+		},
 		shutdown() {
 			let axios = this.$axios
 			let CBv1 = this.CBv1
@@ -317,10 +339,6 @@ export default {
 
 					data.wifiSSID = remoteConfig.wifi_ssid
 					data.wifiPsw = remoteConfig.wifi_psk
-					data.fwdElapse = remoteConfig.move_fw_elapse
-					data.fwdSpeed = remoteConfig.move_fw_speed
-					data.turnSpeed = remoteConfig.ctrl_tr_speed
-					data.turnElapse = remoteConfig.ctrl_tr_elapse
 					data.motorMode = remoteConfig.move_motor_mode
 					data.trimFactor = remoteConfig.move_motor_trim
 					data.startSound = remoteConfig.sound_start
@@ -328,6 +346,17 @@ export default {
 					data.shutterSound = remoteConfig.sound_shutter
 					data.startupProgram = remoteConfig.load_at_start
 					data.progLevel = remoteConfig.prog_level
+
+					data.moveFwdElapse = remoteConfig.move_fw_elapse
+					data.moveFwdSpeed = remoteConfig.move_fw_speed
+					data.moveTurnElapse = remoteConfig.move_tr_elapse
+					data.moveTurnSpeed = remoteConfig.move_tr_speed
+
+					data.ctrlFwdElapse = remoteConfig.ctrl_fw_elapse
+					data.ctrlFwdSpeed = remoteConfig.ctrl_fw_speed
+					data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse
+					data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed
+
 				}.bind(this))
 		},
 		save: function() {
@@ -360,17 +389,23 @@ export default {
 					'move_power_angle_2': data.power[1],
 					'move_power_angle_3': data.power[2],
 					'button_func': data.btnFun,
-					'move_fw_elapse': data.fwdElapse,
-					'move_fw_speed': data.fwdSpeed,
-					'ctrl_tr_speed': data.turnSpeed,
-					'ctrl_tr_elapse': data.turnElapse,
 					'move_motor_mode': data.motorMode,
 					'move_motor_trim': data.trimFactor,
 					'sound_start': data.startSound,
 					'sound_stop': data.stopSound,
 					'sound_shutter': data.shutterSound,
 					'load_at_start': data.startupProgram,
-					'prog_level': data.progLevel
+					'prog_level': data.progLevel,
+
+					'move_fw_elapse': data.moveFwdElapse,
+					'move_fw_speed': data.moveFwdSpeed ,
+					'move_tr_elapse': data.moveTurnElapse ,
+					'move_tr_speed': data.moveTurnSpeed ,
+
+					'ctrl_fw_elapse': data.ctrlFwdElapse ,
+					'ctrl_fw_speed': data.ctrlFwdSpeed ,
+					'ctrl_tr_elapse': data.ctrlTurnElapse ,
+					'ctrl_tr_speed': data.ctrlTurnSpeed ,
 				})
 				axios.post(CBv1 + '/config', legacySettings)
 					.then(function() {
@@ -402,10 +437,16 @@ export default {
 				wifiMode: 'ap',
 				wifiSSID: null,
 				wifiPsw: null,
-				fwdSpeed: null,
-				fwdElapse: null,
-				turnSpeed: null,
-				turnElapse: null,
+
+				moveFwdElapse : null,
+				moveFwdSpeed : null,
+				moveTurnElapse : null,
+				moveTurnSpeed : null,
+				ctrlFwdElapse : null,
+				ctrlFwdSpeed : null,
+				ctrlTurnElapse : null,
+				ctrlTurnSpeed : null,
+
 				motorMode: null,
 				trimFactor: null,
 				startSound: null,
