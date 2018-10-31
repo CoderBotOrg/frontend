@@ -70,6 +70,24 @@
 					</div>
 				</div>
 			</v-content>
+			<!-- Runtime modal -->
+			<v-dialog v-model="runtimeDialog" width="500">
+				<v-card>
+					<v-card-title class="headline grey lighten-2" primary-title>
+						Esecuzione
+					</v-card-title>
+					<v-card-text>
+						<v-img :src="webcamStream"/>
+					</v-card-text>
+					<v-divider></v-divider>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="primary" flat @click="runtimeDialog = false">
+							Chiudi
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
 			<!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
 			<input type="file" style="display: none" ref="file" @change="importProgram">
 			<!-- When the selection is completed, the result is then handled by importProgram -->
@@ -219,32 +237,34 @@ export default {
 			import('vue-prism-component')
 	},
 	data: () => ({
-		
-			settings: null,
-			snackText: null,
-			snackbar: false,
-			drawer: false,
-			tabs: null,
-			dialog: false,
-			dialogCode: false,
-			CB: process.env.CB_ENDPOINT + process.env.APIv2,
-			CBv1: process.env.CB_ENDPOINT,
-			status: null,
-			code: '',
-			workspace: null,
-			generalDialog: false,
-			generalDialogText: null,
-			generalDialogTitle: null,
-			experimental: 0,
-			execMode: "fullExec", // can be 'fullExec' or 'stepByStep',
-			carica: false,
-			programList: '',
-			salva: false,
-			programName: '',
-			newProgramName: '',
-			unvalidName: false,
-			del: false,
-		
+
+		settings: null,
+		snackText: null,
+		snackbar: false,
+		drawer: false,
+		tabs: null,
+		dialog: false,
+		dialogCode: false,
+		CB: process.env.CB_ENDPOINT + process.env.APIv2,
+		CBv1: process.env.CB_ENDPOINT,
+		status: null,
+		code: '',
+		workspace: null,
+		generalDialog: false,
+		generalDialogText: null,
+		generalDialogTitle: null,
+		experimental: 0,
+		execMode: "fullExec", // can be 'fullExec' or 'stepByStep',
+		carica: false,
+		programList: '',
+		salva: false,
+		programName: '',
+		newProgramName: '',
+		unvalidName: false,
+		del: false,
+		webcamStream: process.env.CB_ENDPOINT + process.env.APIv1 + '/video/stream',
+		runtimeDialog: false,
+
 	}),
 	computed: {
 		statusText: function() {
@@ -287,7 +307,7 @@ export default {
 			var b64Toolbox = toolbox.substring(21).toString()
 			// Decode it and get the clean serialized XML as plain string
 			var serializedToolbox = this.$base64.decode(b64Toolbox)
-			
+
 			// Initialise Blockly Instance
 			this.workspace = Blockly.inject(
 				// Blockly container
@@ -316,7 +336,7 @@ export default {
 			this.resizeWorkspace()
 			Blockly.svgResize(this.workspace);
 
-			
+
 		},
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus
@@ -570,7 +590,8 @@ export default {
 				axios.post(this.CBv1 + '/program/exec', valuesAsString)
 					.then(function(response) {
 						console.log(response)
-					})
+						this.runtimeDialog = true;
+					}.bind(this))
 
 			}
 		},
