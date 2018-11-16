@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-app id="inspire">
-			<sidebar></sidebar>
+			<sidebar mobileDrawAnim=0></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
 				<v-toolbar-title>
@@ -278,7 +278,6 @@ export default {
 		}
 	},
 	mounted() {
-
 		let axios = this.$axios
 		this.status = null
 		this.pollStatus();
