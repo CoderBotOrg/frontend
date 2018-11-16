@@ -1,8 +1,11 @@
 # vue-app
 
+This is the new CoderBot application in Vue.js.
+
+It exposes settings, a Blockly development environment, persistence and the ability to customise the UI and the _Activities_ proposed to the student.
+
 Check the [project website](https://www.coderbot.org) for more information.
 
-> The new version of the CoderBot web application, developed in Vue.js.
 
 ## Quickstart
 
@@ -34,4 +37,4 @@ Another build value you may want to edit it's `assetsPublicPath` in `config/inde
 
 ## Acknowledgments
 
-I'd like to sincere thank [uki](https://uki.nz/cv), Kael, ivansieder, Lloyd for helping me with vuejs/vuex/vuetify/javascript and providing appreciated insights and context.
+I'd like to sincere thank [uki](https://uki.nz/cv), cb109, Kael, ivansieder, Lloyd for helping me with vuejs/vuex/vuetify/javascript and providing appreciated insights and context.
