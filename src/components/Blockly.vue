@@ -77,12 +77,13 @@
 						Esecuzione
 					</v-card-title>
 					<v-card-text>
-						<v-img :src="webcamStream"/>
+						<v-img :src="webcamStream" />
 					</v-card-text>
 					<v-divider></v-divider>
+					{{ log }}
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="primary" flat @click="runtimeDialog = false">
+						<v-btn color="primary" flat @click="runtimeDialog = false; stopProgram()">
 							Chiudi
 						</v-btn>
 					</v-card-actions>
@@ -238,6 +239,7 @@ export default {
 	},
 	data: () => ({
 
+		log: null,
 		settings: null,
 		snackText: null,
 		snackbar: false,
@@ -372,7 +374,7 @@ export default {
 			this.$refs.file.click()
 		},
 		importProgram(e) {
-			// Once the file is selected, read it and populate the Blockly 
+			// Once the file is selected, read it and populate the Blockly
 			//  workspace with the contained program
 			let workspace = this.workspace
 			const files = e.target.files
@@ -559,6 +561,7 @@ export default {
 						code
 					})
 					.then(function(response) {
+
 						console.log(response);
 					})
 			} else {
@@ -572,7 +575,7 @@ export default {
 				let axios = this.$axios
 				let CB = this.CB
 				let qs = this.$qs
-
+				this.log = ""
 				// POST /program/save
 				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
@@ -591,9 +594,35 @@ export default {
 					.then(function(response) {
 						console.log(response)
 						this.runtimeDialog = true;
+						setTimeout(function() {
+							this.updateExecStatus();
+						}.bind(this), 1000)
 					}.bind(this))
 
 			}
+		},
+		stopProgram(){
+			console.log("Stopping")
+			let axios = this.$axios
+			axios.post(this.CBv1 + '/program/end')
+		},
+		updateExecStatus() {
+			let axios = this.$axios
+			console.log("Updating Execution status")
+			axios.get(this.CBv1 + '/program/status')
+				.then(function(response) {
+					console.log(response.data)
+					if (response.data.running) {
+						// Check again in a second
+						setTimeout(function() {
+							this.updateExecStatus();
+						}.bind(this), 1000)
+						this.log = response.data.log
+					} else {
+						this.log = "Esecuzione conclusa"
+					}
+				}.bind(this))
+
 		},
 		blocksExtensions(settings) {
 			var settings = this.settings
