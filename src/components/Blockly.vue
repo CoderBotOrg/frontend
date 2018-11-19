@@ -5,6 +5,7 @@
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
 				<v-toolbar-title>CoderBot</v-toolbar-title>
+				<v-toolbar-subtitle>{{programName}}</v-toolbar-subtitle>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
@@ -57,10 +58,10 @@
 					</v-card-title>
 					<v-list>
 						<v-list-tile v-for="program in programList" :key="program.el" avatar @click="">
-							<v-list-tile-title ripple @click="loadProgram(program)">
-								{{ program }}
+							<v-list-tile-title ripple @click="loadProgram(program.name)">
+								{{ program.name }}
 							</v-list-tile-title>
-							<v-btn flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program)">
+							<v-btn flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
 								<v-icon>delete</v-icon>
 							</v-btn>
 						</v-list-tile>
@@ -271,9 +272,9 @@ export default {
 		},
 		loadProgramList() {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
+			let CB = this.$data.CB
 			//let programList = this.$data.programList
-			axios.get(CBv1 + '/program/list')
+			axios.get(CB + '/list')
 				.then(function(response) {
 					this.$data.carica = true,
 						this.$data.programList = response.data;
@@ -281,16 +282,17 @@ export default {
 		},
 		loadProgram(program) {
 			let axios = this.$axios
-			let CBv1 = this.$data.CBv1
+			let CB = this.$data.CB
 			let workspace = this.$data.workspace
 			this.$data.carica = false;
 			this.$data.programName = program
-			axios.get(CBv1 + '/program/load', {
+			axios.get(CB + '/load', {
 					params: {
 						name: program,
 					}
 				})
 				.then(function(data) {
+					console.log(data)
 					workspace.clear();
 					var xml = Blockly.Xml.textToDom(data.data.dom_code);
 					Blockly.Xml.domToWorkspace(xml, workspace);
@@ -301,6 +303,7 @@ export default {
 			this.$data.del = true
 		},
 		deleteProgram(program) {
+			console.log(program)
 			if (this.$data.programName == program) {
 				this.$data.programName = ''
 				this.$data.code = ''
