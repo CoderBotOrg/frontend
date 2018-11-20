@@ -100,10 +100,10 @@
 					</v-card-title>
 					<v-list>
 						<v-list-tile v-for="program in programList" :key="program.el" avatar @click="">
-							<v-list-tile-title ripple @click="loadProgram(program)">
-								{{ program }}
+							<v-list-tile-title ripple @click="loadProgram(program.name)">
+								{{ program.name }}
 							</v-list-tile-title>
-							<v-btn flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program)">
+							<v-btn flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
 								<v-icon>delete</v-icon>
 							</v-btn>
 						</v-list-tile>
@@ -430,35 +430,47 @@ export default {
 						this.programList = response.data;
 				}.bind(this))
 		},
+		loadProgramList() {
+			let axios = this.$axios
+			let CB = this.$data.CB
+			//let programList = this.$data.programList
+			axios.get(CB + '/list')
+				.then(function(response) {
+					this.$data.carica = true,
+						this.$data.programList = response.data;
+				}.bind(this))
+		},
 		loadProgram(program) {
 			let axios = this.$axios
-			let CBv1 = this.CBv1
-			let workspace = this.workspace
-			this.carica = false;
-			this.programName = program
-			axios.get(CBv1 + '/program/load', {
+			let CB = this.$data.CB
+			let workspace = this.$data.workspace
+			this.$data.carica = false;
+			this.$data.programName = program
+			axios.get(CB + '/load', {
 					params: {
 						name: program,
 					}
 				})
 				.then(function(data) {
+					console.log(data)
 					workspace.clear();
-					let xml = Blockly.Xml.textToDom(data.data.dom_code);
+					var xml = Blockly.Xml.textToDom(data.data.dom_code);
 					Blockly.Xml.domToWorkspace(xml, workspace);
 				}.bind(this))
 		},
 		deleteProgramDlg(program) {
-			this.newProgramName = program
-			this.del = true
+			this.$data.newProgramName = program
+			this.$data.del = true
 		},
 		deleteProgram(program) {
-			if (this.programName == program) {
-				this.programName = ''
-				this.code = ''
-				this.workspace.clear()
+			console.log(program)
+			if (this.$data.programName == program) {
+				this.$data.programName = ''
+				this.$data.code = ''
+				this.$data.workspace.clear()
 			}
 			let axios = this.$axios
-			let CB = this.CB
+			let CB = this.$data.CB
 			console.log("delete")
 			axios.post(CB + '/delete', {
 					name: program
