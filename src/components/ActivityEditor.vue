@@ -72,8 +72,8 @@
 										<div class="cardContent">
 											<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
 											<v-radio-group v-model="codeFont" column>
-												<v-radio label="Iosevka" value="iosevka"></v-radio>
-												<v-radio label="Inconsolata" value="inconsolata"></v-radio>
+												<v-radio label="Ubuntu Mono" value="ubuntumono"></v-radio>
+												<v-radio label="Roboto Mono" value="robotomono"></v-radio>
 											</v-radio-group>
 										</div>
 									</v-card>
@@ -238,10 +238,10 @@ export default {
 		codeUIstyleObj: function() {
 			let codeFont = this.codeFont
 			let fontFamily = ''
-			if (codeFont == 'iosevka')
-				fontFamily = 'Iosevka'
-			else if (codeFont == 'inconsolata')
-				fontFamily = 'hack'
+			if (codeFont == 'ubuntumono')
+				fontFamily = 'Ubuntu Mono'
+			else if (codeFont == 'robotomono')
+				fontFamily = 'Roboto Mono'
 
 			let obj = {
 				fontSize: '28px',
@@ -292,7 +292,7 @@ export default {
 				'Protanopia'
 			],
 			bodyFont: "Roboto",
-			codeFont: "iosevka",
+			codeFont: "ubuntumono",
 			langs: [
 				'Italiano',
 				'Inglese'
@@ -311,9 +311,10 @@ export default {
 			//drawer: null,
 			source: null,
 			msg: 'Welcome to Your Vue.js App',
+			defaultView: 'blocks',
 			viste: [
-				{ text: 'Esecuzione', value: 'exec', },
 				{ text: 'Blocchi', value: 'blocks' },
+				{ text: 'Esecuzione', value: 'exec', },
 				{ text: 'Python', value: 'python', disabled: true }
 			],
 		};

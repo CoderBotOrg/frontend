@@ -15,10 +15,17 @@ import Vuetify from 'vuetify';
 // Application Style
 import './main.styl'
 
-// Fonts
+//			Fonts
+// UI
 import 'typeface-roboto'
+import 'typeface-open-sans'
+// Monospaced
+import 'typeface-roboto-mono'
+import 'typeface-ubuntu-mono'
+// Icons
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
+// Logos, headers
 import 'typeface-quicksand'
 import 'typeface-overpass'
 import 'typeface-overpass-mono'
