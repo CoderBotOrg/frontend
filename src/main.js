@@ -29,7 +29,7 @@ import landing from './components/Landing';
 //import arexample from './components/ARexample';
 import control from './components/Control';
 import blockly from './components/Blockly';
-//import activityEditor from './components/ActivityEditor'
+import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 import gallery from './components/Gallery'
 //import help from './components/Help'
@@ -61,7 +61,7 @@ const routes = [
   //{ path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
   //{ path: '/credits', component: credits, meta: {title: 'CoderBot - Crediti'}},
   //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
-  //{ path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
+  { path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
 ];
 
 
