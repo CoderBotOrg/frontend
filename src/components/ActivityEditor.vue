@@ -39,6 +39,7 @@
 										<div class="cardContent">
 											<v-select :items="fontSizeLabels" v-model="fontSize" label="Grandezza testo"></v-select>
 											<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
+											<!--
 											<v-layout row wrap>
 												<v-flex>
 													<v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
@@ -47,6 +48,7 @@
 													<v-select v-if="daltonicSwitch" v-model="daltonic" :items="daltonicModes" label="Tipo daltonismo" required></v-select>
 												</v-flex>
 											</v-layout>
+										-->
 										</div>
 									</v-card>
 									<br><br>
@@ -57,8 +59,10 @@
 											<v-radio-group v-model="bodyFont" column>
 												<v-radio label="Roboto" value="Roboto"></v-radio>
 												<v-radio label="Open Sans" value="opensans"></v-radio>
+												<!--
 												<v-radio label="Test Me (Altà leggibilità, indicato per dislessia)" value="testme"></v-radio>
 												<v-radio label="Open-Dyslexic (Altà leggibilità, indicato per dislessia)" value="open-dys"></v-radio>
+											-->
 											</v-radio-group>
 										</div>
 									</v-card>
@@ -74,6 +78,7 @@
 										</div>
 									</v-card>
 									<br><br>
+									<!--
 									<h3 class="text-xs-left">Lingua</h3>
 									<v-card>
 										<div class="cardContent">
@@ -82,10 +87,13 @@
 										</div>
 									</v-card>
 									<br><br>
-									<h3 class="text-xs-left">Viste disponibili</h3>
+								-->
+								<!--
+									<h3 class="text-xs-left">Viste disponibilità</h3>
 									<v-card>
 										<div class="cardContent">
 											<v-layout row wrap>
+
 												<v-flex>
 													<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
 												</v-flex>
@@ -95,11 +103,14 @@
 												<v-flex>
 													<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
 												</v-flex>
+
 												<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
 											</v-layout>
 										</div>
 									</v-card>
+									-->
 									<br><br>
+									<!--
 									<h3 class="text-xs-left">Funzionalità sperimentali</h3>
 									<v-card>
 										<div class="cardContent">
@@ -116,13 +127,14 @@
 											<v-switch disabled v-if="experimental" :label="`Realtà Aumentata`" v-model="ar"></v-switch>
 										</div>
 									</v-card>
+								-->
 								</v-flex>
 							</v-layout>
 						</v-container>
 					</v-tab-item>
 					<v-tab-item>
 						<v-container grid-list-md text-xs-center>
-							<v-flex xs12 md6 offset-md3>
+							<v-flex xs12 md8 offset-md2>
 								<v-flex>
 									<h3> Anteprima Toolbar </h3>
 									<v-toolbar>
