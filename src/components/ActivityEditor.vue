@@ -55,7 +55,7 @@
 									<h3 class="text-xs-left">Carattere tipografico dell'interfaccia</h3>
 									<v-card>
 										<div class="cardContent">
-											<span v-bind:style="bodyUIstyleObj">Lorem Ipsum e robbe varie</span>
+											<span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
 											<v-radio-group v-model="bodyFont" column>
 												<v-radio label="Roboto" value="Roboto"></v-radio>
 												<v-radio label="Open Sans" value="opensans"></v-radio>
@@ -191,9 +191,11 @@
 							</v-flex>
 						</v-container>
 					</v-tab-item>
+					<!--
 					<v-tab-item>
 						<wsFactory />
 					</v-tab-item>
+				-->
 					<v-tab-item>
 						Tab 4
 					</v-tab-item>
@@ -276,7 +278,7 @@ export default {
 			value: 0,
 			name: null,
 			description: null,
-			fontSize: 1,
+			fontSize: 'Medio',
 			fontSizeLabels: [
 				'Piccolo',
 				'Medio',
@@ -306,7 +308,8 @@ export default {
 			stepbystep: false,
 			defaultView: null,
 			tab: null,
-			tabs: ['Generali', 'Barra degli Strumenti', 'Palette Comandi', 'Vista Esecuzione'],
+			tabs: ['Generali', 'Barra degli Strumenti', 'Vista Esecuzione'],
+			//tabs: ['Generali', 'Barra degli Strumenti', 'Palette Comandi', 'Vista Esecuzione'],
 			ar: false,
 			//drawer: null,
 			source: null,
