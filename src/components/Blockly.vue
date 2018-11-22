@@ -4,6 +4,7 @@
 			<sidebar mobileDrawAnim=0></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
+<<<<<<< HEAD
 				<v-toolbar-title>
 					<template v-if="programName">
 						{{ programName }}
@@ -12,6 +13,10 @@
 						(Senza Nome)
 					</template>
 				</v-toolbar-title>
+=======
+				<v-toolbar-title>CoderBot</v-toolbar-title>
+				<v-toolbar-subtitle>{{programName}}</v-toolbar-subtitle>
+>>>>>>> 42763513ee404d535499bb25d84722aaed66110f
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
@@ -93,7 +98,8 @@
 			<input type="file" style="display: none" ref="file" @change="importProgram">
 			<!-- When the selection is completed, the result is then handled by importProgram -->
 			<!-- Dialogs -->
-			<v-dialog v-model="carica" max-width="290">
+			<v-dialog v-model="carica" max-width="290"
+			v-on:keydown.esc="carica = false">
 				<v-card>
 					<v-card-title class="headline">
 						Lista Programmi
@@ -103,14 +109,18 @@
 							<v-list-tile-title ripple @click="loadProgram(program.name)">
 								{{ program.name }}
 							</v-list-tile-title>
+<<<<<<< HEAD
 							<v-btn v-if="program.default != 'True'" flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
+=======
+							<v-btn flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
+>>>>>>> 42763513ee404d535499bb25d84722aaed66110f
 								<v-icon>delete</v-icon>
 							</v-btn>
 						</v-list-tile>
 					</v-list>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="carica = false">
+						<v-btn color="red darken-1" flat @click="carica = false">
 							Annulla
 						</v-btn>
 					</v-card-actions>
@@ -125,26 +135,27 @@
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-card-text>
-							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus></v-text-field>
+							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keydown.enter="saveProgramAs(), salva = false" v-on:keydown.esc="salva = false" autofocus></v-text-field>
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="salva = false">
+						<v-btn color="red darken-1" flat @click="salva = false">
 							Annulla
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="saveProgramAs(), salva = false">
+						<v-btn color="green darken-1" flat @click="saveProgramAs(), salva = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
 			<!-- -->
-			<v-dialog v-model="unvalidName" max-width="290">
+			<v-dialog v-model="unvalidName" max-width="290"
+			v-on:keydown.enter="unvalidName = false, salva = true">
 				<v-card>
 					<v-card-title class="headline">ERRORE</v-card-title>
 					<v-card-text>
 						Il nome del programma non deve essere vuoto
 					</v-card-text>
 					<v-card-actions>
-						<v-btn color="green darken-1" flat="flat" @click="unvalidName = false, salva = true">
+						<v-btn color="green darken-1" flat @click="unvalidName = false, salva = true">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -174,10 +185,10 @@
 						<v-card-text>
 							Sei sicuro di voler cancellare: "{{newProgramName}}"?
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="del = false">
+						<v-btn color="red darken-1" flat @click="del = false">
 							No
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="del = false, carica = false, deleteProgram(newProgramName)">
+						<v-btn color="green darken-1" flat @click="del = false, carica = false, deleteProgram(newProgramName)">
 							Si
 						</v-btn>
 					</v-card-actions>
@@ -193,7 +204,7 @@
 					<v-divider></v-divider>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="dialogCode = false">
+						<v-btn color="green darken-1" flat @click="dialogCode = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -208,7 +219,7 @@
 					</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="dialog = false">
+						<v-btn color="green darken-1" flat @click="dialog = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -223,7 +234,7 @@
 					</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="generalDialog = false">
+						<v-btn color="green darken-1" flat @click="generalDialog = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -456,9 +467,9 @@ export default {
 		},
 		loadProgramList() {
 			let axios = this.$axios
-			let CBv1 = this.CBv1
-			//let programList = this.programList
-			axios.get(CBv1 + '/program/list')
+			let CB = this.$data.CB
+			//let programList = this.$data.programList
+			axios.get(CB + '/list')
 				.then(function(response) {
 					this.carica = true,
 						this.programList = response.data;
