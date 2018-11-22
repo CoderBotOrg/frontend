@@ -4,10 +4,10 @@
 			<sidebar></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>Nuova Attività {{prefix}} {{name}}</v-toolbar-title>
+				<v-toolbar-title>Nuova Attività {{prefix}} {{activity.name}}</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
-					<v-btn flat>
+					<v-btn flat @click="save()">
 						<v-icon>save</v-icon>
 						Salva
 					</v-btn>
@@ -28,8 +28,8 @@
 									<h3 class="text-xs-left">Dati Attività </h3>
 									<v-card>
 										<v-form class="cardContent">
-											<v-text-field v-model="name" label="Nome" required></v-text-field>
-											<v-text-field v-model="description" label="Descrizione"></v-text-field>
+											<v-text-field v-model="activity.name" label="Nome" required></v-text-field>
+											<v-text-field v-model="activity.description" label="Descrizione"></v-text-field>
 											<v-select v-model="defaultView" :items="viste" label="Vista predefinita" required></v-select>
 										</v-form>
 									</v-card>
@@ -37,8 +37,8 @@
 									<h3 class="text-xs-left">Tipografia </h3>
 									<v-card>
 										<div class="cardContent">
-											<v-select :items="fontSizeLabels" v-model="fontSize" label="Grandezza testo"></v-select>
-											<v-switch :label="`Solo maiuscole`" v-model="capsSwitch"></v-switch>
+											<v-select :items="fontSizeLabels" v-model="activity.fontSize" label="Grandezza testo"></v-select>
+											<v-switch :label="`Solo maiuscole`" v-model="activity.capsSwitch"></v-switch>
 											<!--
 											<v-layout row wrap>
 												<v-flex>
@@ -56,7 +56,7 @@
 									<v-card>
 										<div class="cardContent">
 											<span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
-											<v-radio-group v-model="bodyFont" column>
+											<v-radio-group v-model="activity.bodyFont" column>
 												<v-radio label="Roboto" value="Roboto"></v-radio>
 												<v-radio label="Open Sans" value="opensans"></v-radio>
 												<!--
@@ -71,7 +71,7 @@
 									<v-card>
 										<div class="cardContent">
 											<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
-											<v-radio-group v-model="codeFont" column>
+											<v-radio-group v-model="activity.codeFont" column>
 												<v-radio label="Ubuntu Mono" value="ubuntumono"></v-radio>
 												<v-radio label="Roboto Mono" value="robotomono"></v-radio>
 											</v-radio-group>
@@ -88,7 +88,7 @@
 									</v-card>
 									<br><br>
 								-->
-								<!--
+									<!--
 									<h3 class="text-xs-left">Viste disponibilità</h3>
 									<v-card>
 										<div class="cardContent">
@@ -138,11 +138,11 @@
 								<v-flex>
 									<h3> Anteprima Toolbar </h3>
 									<v-toolbar>
-										<v-toolbar-side-icon v-if="drawerEnabled"></v-toolbar-side-icon>
-										<v-toolbar-title v-if="activityName">Attività 1</v-toolbar-title>
+										<v-toolbar-side-icon v-if="activity.drawerEnabled"></v-toolbar-side-icon>
+										<v-toolbar-title v-if="activity.showName">Attività 1</v-toolbar-title>
 										<v-spacer></v-spacer>
 										<v-toolbar-items>
-											<template v-for="button, i in buttons">
+											<template v-for="button, i in activity.buttons">
 												<v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
 													{{ button.label }}
 													<v-icon right dark>{{ button.icon }}</v-icon>
@@ -152,8 +152,8 @@
 										</v-toolbar-items>
 									</v-toolbar>
 									<br>
-									<v-switch label="Icona menù laterale" v-model="drawerEnabled"></v-switch>
-									<v-switch label="Nome Attività" v-model="activityName"></v-switch>
+									<v-switch label="Icona menù laterale" v-model="activity.drawerEnabled"></v-switch>
+									<v-switch label="Nome Attività" v-model="activity.showName"></v-switch>
 									<br>
 									<h3> Modifica Pulsanti </h3>
 									<v-btn @click="addButton()" outline color="green">
@@ -166,7 +166,7 @@
 										<v-icon>clear</v-icon> Rimuovi tutti
 									</v-btn>
 									<br><br>
-									<div v-for="button, i in buttons">
+									<div v-for="button, i in activity.buttons">
 										<h3>Pulsante {{i + 1}} <v-btn @click="removeButton(i)" flat icon>
 													<v-icon>clear</v-icon>
 												</v-btn></h3>
@@ -222,7 +222,7 @@ export default {
 				return ''
 		},
 		bodyUIstyleObj: function() {
-			let bodyFont = this.bodyFont
+			let bodyFont = this.activity.bodyFont
 			let fontFamily = ''
 			if (bodyFont == 'opensans')
 				fontFamily = 'Open Sans'
@@ -238,7 +238,7 @@ export default {
 			return obj
 		},
 		codeUIstyleObj: function() {
-			let codeFont = this.codeFont
+			let codeFont = this.activity.codeFont
 			let fontFamily = ''
 			if (codeFont == 'ubuntumono')
 				fontFamily = 'Ubuntu Mono'
@@ -256,6 +256,18 @@ export default {
 	},
 	data() {
 		return {
+			activity: {
+				name: null,
+				drawerEnabled: true,
+				showName: true,
+				buttons: null,
+				description: null,
+				fontSize: 'Medio',
+				capsSwitch: true,
+				bodyFont: "Roboto",
+				codeFont: "ubuntumono",
+
+			},
 			colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black', 'grey', 'black', 'white'],
 			textColors: [{
 					text: "Bianco",
@@ -272,20 +284,16 @@ export default {
 				{ text: 'Salva con Nome', value: 'saveas' },
 				{ text: 'Mostra Codice', value: 'showcode' },
 			],
-			drawerEnabled: true,
-			activityName: true,
-			buttons: null,
 			value: 0,
-			name: null,
-			description: null,
-			fontSize: 'Medio',
+
+
 			fontSizeLabels: [
 				'Piccolo',
 				'Medio',
 				'Grande',
 				'Molto grande'
 			],
-			capsSwitch: true,
+
 			daltonicSwitch: 0,
 			daltonicType: 1,
 			daltonicModes: [
@@ -293,8 +301,6 @@ export default {
 				'Protanomaly',
 				'Protanopia'
 			],
-			bodyFont: "Roboto",
-			codeFont: "ubuntumono",
 			langs: [
 				'Italiano',
 				'Inglese'
@@ -326,23 +332,26 @@ export default {
 		this.restoreDefaults();
 	},
 	methods: {
+		save: function() {
+			console.log(JSON.stringify(this.activity))
+		},
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus
 			this.$store.commit('toggleDrawer', !currentStatus)
 		},
 		addButton: function() {
-			this.buttons.push({
+			this.activity.buttons.push({
 				label: '',
 			})
 		},
 		removeButton: function(index) {
-			this.buttons.splice(index, 1)
+			this.activity.buttons.splice(index, 1)
 		},
 		removeAll: function() {
-			this.buttons = []
+			this.activity.buttons = []
 		},
 		restoreDefaults: function() {
-			this.buttons = [{
+			this.activity.buttons = [{
 					label: 'Esegui Roba',
 					icon: 'play_arrow',
 					colorBtn: 'green',
