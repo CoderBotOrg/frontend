@@ -16,7 +16,7 @@
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
 					<template v-if="status == 200">
-						<v-btn @click="saveProgram" flat>
+						<v-btn v-if="isDefault != 'True'" @click="saveProgram" flat>
 							<v-icon>save</v-icon>
 							Salva
 						</v-btn>
@@ -103,7 +103,7 @@
 							<v-list-tile-title ripple @click="loadProgram(program.name)">
 								{{ program.name }}
 							</v-list-tile-title>
-							<v-btn flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
+							<v-btn v-if="program.default != 'True'" flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
 								<v-icon>delete</v-icon>
 							</v-btn>
 						</v-list-tile>
@@ -145,6 +145,20 @@
 					</v-card-text>
 					<v-card-actions>
 						<v-btn color="green darken-1" flat="flat" @click="unvalidName = false, salva = true">
+							Ok
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
+			<v-dialog v-model="CannotOverwrite" max-width="290">
+				<v-card>
+					<v-card-title class="headline">ERRORE</v-card-title>
+					<v-card-text>
+						Impossibile sovrascrivere un programma di default, cambiare il nome.
+					</v-card-text>
+					<v-card-actions>
+						<v-btn color="green darken-1" flat="flat" @click="CannotOverwrite = false, salva = true">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -266,6 +280,9 @@ export default {
 		del: false,
 		webcamStream: process.env.CB_ENDPOINT + process.env.APIv1 + '/video/stream',
 		runtimeDialog: false,
+		isDefault: '',
+		CannotOverwrite: false,
+		defaultProgramName: '',
 
 	}),
 	computed: {
@@ -349,13 +366,14 @@ export default {
 			let workspace = this.workspace
 			let xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
 			let dom_code = Blockly.Xml.domToText(xml_code);
+			let isDefault = this.isDefault
 
 			window.LoopTrap = 1000;
 			Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
 			let code = Blockly.Python.workspaceToCode(workspace);
 			Blockly.Python.INFINITE_LOOP_TRAP = null;
 
-			return { name: name, dom_code: dom_code, code: code };
+			return { name: name, dom_code: dom_code, code: code, default: isDefault };
 		},
 		exportProgram() {
 			let data = JSON.stringify(this.getProgramData())
@@ -395,9 +413,15 @@ export default {
 		},
 		saveProgramAs: function(e) {
 			if (this.newProgramName != '') {
-				this.programName = this.newProgramName
-				this.newProgramName = ''
-				this.saveProgram()
+				if(this.isDefault == "True" && this.programName == this.newProgramName){
+					this.CannotOverwrite = true
+					console.log("error")
+				} else{
+					this.defaultProgramName = this.programName
+					this.programName = this.newProgramName
+					this.newProgramName = ''
+					this.saveProgram()
+				}
 			} else {
 				this.unvalidName = true
 			}
@@ -411,12 +435,22 @@ export default {
 				axios.post(CB + '/save', {
 						name: data.name,
 						dom_code: data.dom_code,
-						code: data.code
+						code: data.code,
+						default: data.default
 					})
-					.then(function() {
-						console.log("salvato")
-					})
-			} else {
+					.then(function(data) {
+						if(data.data == "defaultOverwrite"){
+							this.$data.programName = this.$data.defaultProgramName
+							this.$data.deleteProgram = ''
+							this.$data.CannotOverwrite = true
+						}
+						else{
+							this.$data.isDefault = ''
+							console.log("salvato")
+						}
+					}.bind(this))
+			} 
+			else {
 				this.unvalidName = true
 			}
 		},
@@ -444,6 +478,7 @@ export default {
 			let axios = this.$axios
 			let CB = this.$data.CB
 			let workspace = this.$data.workspace
+			let isDefault = this.$data.isDefault
 			this.$data.carica = false;
 			this.$data.programName = program
 			axios.get(CB + '/load', {
@@ -456,6 +491,7 @@ export default {
 					workspace.clear();
 					var xml = Blockly.Xml.textToDom(data.data.dom_code);
 					Blockly.Xml.domToWorkspace(xml, workspace);
+					this.$data.isDefault = data.data.default
 				}.bind(this))
 		},
 		deleteProgramDlg(program) {
