@@ -46,6 +46,14 @@
 					</v-list-tile-content>
 				</v-list-tile>
 				-->
+				<v-list-tile to="/new">
+					<v-list-tile-action>
+						<v-icon>add</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title>Nuova Attività</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
 				<v-list-tile to="/program">
 					<v-list-tile-action>
 						<v-icon large>flip_to_front</v-icon>
@@ -124,6 +132,7 @@
 						<v-list-tile-title>Apri Attività</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
+			-->
 				<v-list-tile to="/new">
 					<v-list-tile-action>
 						<v-icon>add</v-icon>
@@ -132,7 +141,7 @@
 						<v-list-tile-title>Nuova Attività</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
-				-->
+
 				<v-list-tile to="/program">
 					<v-list-tile-action>
 						<v-icon large>flip_to_front</v-icon>

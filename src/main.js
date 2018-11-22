@@ -15,10 +15,17 @@ import Vuetify from 'vuetify';
 // Application Style
 import './main.styl'
 
-// Fonts
+//			Fonts
+// UI
 import 'typeface-roboto'
+import 'typeface-open-sans'
+// Monospaced
+import 'typeface-roboto-mono'
+import 'typeface-ubuntu-mono'
+// Icons
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
+// Logos, headers
 import 'typeface-quicksand'
 import 'typeface-overpass'
 import 'typeface-overpass-mono'
@@ -29,7 +36,7 @@ import landing from './components/Landing';
 //import arexample from './components/ARexample';
 import control from './components/Control';
 import blockly from './components/Blockly';
-//import activityEditor from './components/ActivityEditor'
+import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 import gallery from './components/Gallery'
 //import help from './components/Help'
@@ -61,7 +68,7 @@ const routes = [
   //{ path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
   //{ path: '/credits', component: credits, meta: {title: 'CoderBot - Crediti'}},
   //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
-  //{ path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
+  { path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
 ];
 
 
