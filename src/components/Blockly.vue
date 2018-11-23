@@ -436,7 +436,7 @@ export default {
 						name: data.name,
 						dom_code: data.dom_code,
 						code: data.code,
-						default: data.default
+						default: ''
 					})
 					.then(function(data) {
 						if(data.data == "defaultOverwrite"){
