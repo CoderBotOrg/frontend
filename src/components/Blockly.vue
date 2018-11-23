@@ -432,7 +432,7 @@ export default {
 				let CB = this.CB
 				console.log("save")
 				let data = this.getProgramData()
-				axios.post(CB + '/save', {
+				axios.post(CB + '/saveProgram', {
 						name: data.name,
 						dom_code: data.dom_code,
 						code: data.code,
