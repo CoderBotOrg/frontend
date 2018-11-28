@@ -16,7 +16,7 @@
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
 					<template v-if="status == 200">
-						<v-btn v-if="isDefault != 'True'" @click="saveProgram" flat>
+						<v-btn v-if="isDefault != 'True'" @click="overwrite = 1, saveProgram()" flat>
 							<v-icon>save</v-icon>
 							Salva
 						</v-btn>
@@ -165,6 +165,25 @@
 				</v-card>
 			</v-dialog>
 			<!-- -->
+			<v-dialog v-model="overwriteDialog" max-width="500">
+				<v-card>
+					<v-card-title class="headline">
+						Sovrascrivi
+					</v-card-title>
+					<v-card-actions>
+						<v-card-text>
+							Esiste già un programma con nome : "{{programName}}" vuoi sovrascriverlo?
+						</v-card-text>
+						<v-btn color="red darken-1" flat="flat" @click="overwriteDialog = false, salva = true">
+							No
+						</v-btn>
+						<v-btn color="green darken-1" flat="flat" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
+							Si
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
 			<v-dialog v-model="del" max-width="500">
 				<v-card>
 					<v-card-title class="headline">
@@ -283,7 +302,8 @@ export default {
 		isDefault: '',
 		CannotOverwrite: false,
 		defaultProgramName: '',
-
+		overwrite: 0,
+		overwriteDialog: false,
 	}),
 	computed: {
 		statusText: function() {
@@ -430,22 +450,30 @@ export default {
 			if (this.programName != '') {
 				let axios = this.$axios
 				let CB = this.CB
+				let overwrite = this.$data.overwrite
 				console.log("save")
+				console.log(overwrite)
 				let data = this.getProgramData()
-				axios.post(CB + '/save', {
+				axios.post(CB + '/saveProgram?overwrite=' + overwrite, {
 						name: data.name,
 						dom_code: data.dom_code,
 						code: data.code,
-						default: data.default
+						default: ''
 					})
 					.then(function(data) {
-						if(data.data == "defaultOverwrite"){
-							this.$data.programName = this.$data.defaultProgramName
-							this.$data.deleteProgram = ''
-							this.$data.CannotOverwrite = true
+						if(data.data == "defaultOverwrite" || data.data == "askOverwrite"){
+							if(data.data == "askOverwrite"){
+								this.$data.overwriteDialog = true
+							}
+							else{
+								this.$data.programName = this.$data.defaultProgramName
+								this.$data.defaultProgramName = ''
+								this.$data.CannotOverwrite = true
+							}
 						}
 						else{
 							this.$data.isDefault = ''
+							this.$data.overwrite = 0
 							console.log("salvato")
 						}
 					}.bind(this))
