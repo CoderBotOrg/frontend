@@ -5,12 +5,14 @@
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
 				<v-toolbar-title>
-{{ activity.name }}
+					{{ activity.name }}
 				</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
 					<template v-if="status == 200">
+
+						<!--
 						<v-btn v-if="isDefault != 'True'" @click="overwrite = 1, saveProgram()" flat>
 							<v-icon>save</v-icon>
 							Salva
@@ -44,6 +46,7 @@
 						<v-btn flat>
 							<v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
 						</v-btn>
+					-->
 					</template>
 					<!--
 					<v-btn @click="dialog = true" icon v-if="status == 200">

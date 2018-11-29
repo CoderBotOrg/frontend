@@ -477,7 +477,7 @@ export default {
 							console.log("salvato")
 						}
 					}.bind(this))
-			} 
+			}
 			else {
 				this.unvalidName = true
 			}
