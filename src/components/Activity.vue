@@ -3,14 +3,23 @@
 		<v-app id="inspire">
 			<sidebar mobileDrawAnim=0></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
+				<template v-if="activity.drawerEnabled">
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
+				</template>
+				<template v-if="activity.showName">
 				<v-toolbar-title>
 					{{ activity.name }}
 				</v-toolbar-title>
+			</template>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
 					<template v-if="status == 200">
+
+						<v-btn v-on:click="runProgramLegacy()" flat>
+							<v-icon>play_arrow</v-icon>
+							Esegui
+						</v-btn>
 
 						<!--
 						<v-btn v-if="isDefault != 'True'" @click="overwrite = 1, saveProgram()" flat>
@@ -25,10 +34,7 @@
 							<v-icon>folder_open</v-icon>
 							Carica
 						</v-btn>
-						<v-btn v-on:click="runProgramLegacy()" flat>
-							<v-icon>play_arrow</v-icon>
-							Esegui
-						</v-btn>
+
 						<v-btn v-on:click="getProgramCode()" flat>
 							<v-icon>code</v-icon>
 							Mostra codice
@@ -74,11 +80,16 @@
 					<v-card-title class="headline grey lighten-2" primary-title>
 						Esecuzione
 					</v-card-title>
-					<v-card-text>
-						<v-img :src="webcamStream" />
+					<template v-if="activity.exec.camera">
+					<v-card-text v-if="runtimeDialog">
+						<v-img v-if="runtimeDialog" :src="webcamStream" />
 					</v-card-text>
+				</template>
+
 					<v-divider></v-divider>
+					<template v-if="activity.exec.log">
 					{{ log }}
+				</template>
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="primary" flat @click="runtimeDialog = false; stopProgram()">
