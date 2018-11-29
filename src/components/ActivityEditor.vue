@@ -202,6 +202,9 @@
 				</v-tabs-items>
 			</v-content>
 		</v-app>
+		<v-snackbar v-model="snackbar">
+			{{ snackbarText }}
+		</v-snackbar>
 	</div>
 </template>
 <script>
@@ -256,6 +259,9 @@ export default {
 	},
 	data() {
 		return {
+			CB: process.env.CB_ENDPOINT + process.env.APIv2,
+			snackbar: false,
+			snackbarText: "",
 			activity: {
 				name: null,
 				drawerEnabled: true,
@@ -334,6 +340,20 @@ export default {
 	methods: {
 		save: function() {
 			console.log(JSON.stringify(this.activity))
+			if (this.activity.name) {
+				let axios = this.$axios
+				let CB = this.CB
+				axios.post(CB + '/saveActivity', {
+						activity: this.activity
+					})
+					.then(function(data) {
+						this.snackbarText = "Attività salvata";
+						this.snackbar = true;
+					}.bind(this))
+			} else {
+				this.snackbarText = "Salvataggio non riuscito: inserisci un nome all'attività!";
+				this.snackbar = true;
+			}
 		},
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus

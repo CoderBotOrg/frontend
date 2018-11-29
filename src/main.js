@@ -39,6 +39,7 @@ import blockly from './components/Blockly';
 import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 import gallery from './components/Gallery'
+import activityList from './components/ActivityList'
 //import help from './components/Help'
 //import credits from './components/Credits'
 
@@ -68,7 +69,8 @@ const routes = [
   //{ path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
   //{ path: '/credits', component: credits, meta: {title: 'CoderBot - Crediti'}},
   //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
-  { path: '/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
+  { path: '/activity/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
+  { path: '/activity/open', component: activityList, meta: {title: 'CoderBot - Apri Attività'}},
 ];
 
 

@@ -1,20 +1,17 @@
 <template>
 	<div>
-
-
-
-			<template v-if="mobileDrawAnim == '1'">
-				<v-navigation-drawer fixed v-model="drawer" app>
-					<v-list dense>
-				<v-list-tile to="/">
-					<v-list-tile-action>
-						<v-icon large>home</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Home</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<!--
+		<template v-if="mobileDrawAnim == '1'">
+			<v-navigation-drawer fixed v-model="drawer" app>
+				<v-list dense>
+					<v-list-tile to="/">
+						<v-list-tile-action>
+							<v-icon large>home</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Home</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<!--
 				<v-list-tile to="/help">
 					<v-list-tile-action>
 						<v-icon large>help</v-icon>
@@ -24,11 +21,11 @@
 					</v-list-tile-content>
 				</v-list-tile>
 			-->
-				<br>
-				<v-divider>
-				</v-divider>
-				<br>
-				<!--
+					<br>
+					<v-divider>
+					</v-divider>
+					<br>
+					<!--
 				<v-list-tile to="/activity">
 					<v-list-tile-action>
 						<v-icon>open_in_new</v-icon>
@@ -46,70 +43,91 @@
 					</v-list-tile-content>
 				</v-list-tile>
 				-->
-				<v-list-tile to="/new">
-					<v-list-tile-action>
-						<v-icon>add</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Nuova Attività</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<v-list-tile to="/program">
-					<v-list-tile-action>
-						<v-icon large>flip_to_front</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Programma</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<v-list-tile to="/control">
-					<v-list-tile-action>
-						<v-icon large>games</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Controlla</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<v-list-tile to="/settings">
-					<v-list-tile-action>
-						<v-icon large>settings</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Impostazioni</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<v-list-tile to="/gallery">
-					<v-list-tile-action>
-						<v-icon large>photo_library</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Galleria</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<br>
-				<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
-					<v-divider></v-divider>
-					<v-btn v-for="el in socials" :key="el.icon" class="mx-3 gray--text" icon :href="el.link" target="_blank">
-						<v-icon size="24px">{{ el.icon }}</v-icon>
-					</v-btn>
+					<h3>Attività</h3>
+					<v-list-tile to="/activity/open">
+						<v-list-tile-action>
+							<v-icon>open_in_new</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Apri</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/activity/new">
+						<v-list-tile-action>
+							<v-icon>add</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Nuova</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/actvity/edit">
+						<v-list-tile-action>
+							<v-icon>edit</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Modifica</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
 					<br>
-					&copy;2018 — <strong>UNIMIB</strong><!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
-				</div>
-			</v-list>
-		</v-navigation-drawer>
-			</template>
-			<template v-else>
-				<v-navigation-drawer fixed v-model="drawer" app :mobile-break-point="0">
-					<v-list dense>
-				<v-list-tile to="/">
-					<v-list-tile-action>
-						<v-icon large>home</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Home</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<!--
+					<v-divider>
+					</v-divider>
+					<br>
+					<v-list-tile to="/program">
+						<v-list-tile-action>
+							<v-icon large>flip_to_front</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Programma</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/control">
+						<v-list-tile-action>
+							<v-icon large>games</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Controlla</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/settings">
+						<v-list-tile-action>
+							<v-icon large>settings</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Impostazioni</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/gallery">
+						<v-list-tile-action>
+							<v-icon large>photo_library</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Galleria</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<br>
+					<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
+						<v-divider></v-divider>
+						<v-btn v-for="el in socials" :key="el.icon" class="mx-3 gray--text" icon :href="el.link" target="_blank">
+							<v-icon size="24px">{{ el.icon }}</v-icon>
+						</v-btn>
+						<br>
+						&copy;2018 — <strong>UNIMIB</strong><!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
+					</div>
+				</v-list>
+			</v-navigation-drawer>
+		</template>
+		<template v-else>
+			<v-navigation-drawer fixed v-model="drawer" app :mobile-break-point="0">
+				<v-list dense>
+					<v-list-tile to="/">
+						<v-list-tile-action>
+							<v-icon large>home</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Home</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<!--
 				<v-list-tile to="/help">
 					<v-list-tile-action>
 						<v-icon large>help</v-icon>
@@ -119,11 +137,11 @@
 					</v-list-tile-content>
 				</v-list-tile>
 			-->
-				<br>
-				<v-divider>
-				</v-divider>
-				<br>
-				<!--
+					<br>
+					<v-divider>
+					</v-divider>
+					<br>
+					<!--
 				<v-list-tile to="/activity">
 					<v-list-tile-action>
 						<v-icon>open_in_new</v-icon>
@@ -133,63 +151,104 @@
 					</v-list-tile-content>
 				</v-list-tile>
 			-->
-				<v-list-tile to="/new">
-					<v-list-tile-action>
-						<v-icon>add</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Nuova Attività</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-
-				<v-list-tile to="/program">
-					<v-list-tile-action>
-						<v-icon large>flip_to_front</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Programma</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<v-list-tile to="/control">
-					<v-list-tile-action>
-						<v-icon large>games</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Controlla</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<v-list-tile to="/settings">
-					<v-list-tile-action>
-						<v-icon large>settings</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Impostazioni</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<v-list-tile to="/gallery">
-					<v-list-tile-action>
-						<v-icon large>photo_library</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title class="navEntry">Galleria</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-				<br>
-				<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
-					<v-divider></v-divider>
-					<v-btn v-for="el in socials" :key="el.icon" class="mx-3 gray--text" icon :href="el.link" target="_blank">
-						<v-icon size="24px">{{ el.icon }}</v-icon>
-					</v-btn>
+					<h3>Attività</h3>
+					<v-list-tile to="/activity/open">
+						<v-list-tile-action>
+							<v-icon>open_in_new</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Apri</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/activity/new">
+						<v-list-tile-action>
+							<v-icon>add</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Nuova</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/actvity/edit">
+						<v-list-tile-action>
+							<v-icon>edit</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Modifica</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
 					<br>
-					&copy;2018 — <strong>UNIMIB</strong><!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
-				</div>
-			</v-list>
-		</v-navigation-drawer>
-			</template>
-
-
-
+					<v-divider>
+					</v-divider>
+					<br>
+					<v-list-tile to="/program">
+						<v-list-tile-action>
+							<v-icon large>flip_to_front</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Programma</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/control">
+						<v-list-tile-action>
+							<v-icon large>games</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Controlla</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/settings">
+						<v-list-tile-action>
+							<v-icon large>settings</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Impostazioni</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/gallery">
+						<v-list-tile-action>
+							<v-icon large>photo_library</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Galleria</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<br>
+					<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
+						<v-divider></v-divider>
+						<v-btn v-for="el in socials" :key="el.icon" class="mx-3 gray--text" icon :href="el.link" target="_blank">
+							<v-icon size="24px">{{ el.icon }}</v-icon>
+						</v-btn>
+						<br>
+						&copy;2018 — <strong>UNIMIB</strong><!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
+					</div>
+				</v-list>
+			</v-navigation-drawer>
+							<v-dialog v-model="editModal" max-width="290">
+				<v-card>
+					<v-card-title class="headline">
+						Lista Programmi
+					</v-card-title>
+					<v-list>
+						<v-list-tile v-for="program in activitiesList" :key="program.el" avatar @click="">
+							<v-list-tile-title ripple @click="loadProgram(program.name)">
+								{{ program.name }}
+							</v-list-tile-title>
+							<v-btn v-if="program.default != 'True'" flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
+								<v-icon>delete</v-icon>
+							</v-btn>
+						</v-list-tile>
+					</v-list>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="green darken-1" flat="flat" @click="carica = false">
+							Annulla
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+		</template>
 	</div>
+
 </template>
 <script>
 export default {
@@ -203,6 +262,18 @@ export default {
 				{ icon: 'fab fa-github', link: 'https://www.github.com/coderbotorg' },
 			],
 		}
+	},
+	methods: {
+		editModal() {
+			let axios = this.$axios
+			let CB = this.$data.CB
+			//let programList = this.$data.programList
+			axios.get(CB + '/listActivities')
+				.then(function(response) {
+						this.$data.editModal = true,
+						this.$data.activitiesList = response.data;
+				}.bind(this))
+		},
 	},
 	props: {
 		mobileDrawAnim: {
