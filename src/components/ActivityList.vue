@@ -7,19 +7,31 @@
 				<v-toolbar-title>CoderBot</v-toolbar-title>
 			</v-toolbar>
 			<v-content>
+				<v-container grid-list-md text-xs-center>
+								<v-layout row wrap>
+									<!-- Column A -->
+									<v-flex xs12 md6 offset-md3>
+										<h3 class="text-xs-left">Lista Attività</h3>
+										<v-card>
 				<v-list>
-					<span v-if="activityList == null">
+					<span v-if="activityList == null || activityList == [] || activityList.length == 0">
 						Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
 					</span>
-						<v-list-tile v-for="activity in activityList" :key="activity.el" avatar @click="">
-							<v-list-tile-title ripple @click="loadProgram(activity.name)">
-								{{ activity.name }}
-							</v-list-tile-title>
-							<v-btn flat icon color="grey darken-1" ripple @click="deleteActivityDlg(activity.name)">
-								<v-icon>delete</v-icon>
-							</v-btn>
-						</v-list-tile>
-					</v-list>
+					<v-list-tile v-for="activity in activityList" :key="activity.el" avatar @click="">
+						<v-list-tile-title ripple @click="loadProgram(activity.name)">
+							<b>{{ activity.name }}</b>
+							<small> {{activity.description}} </small>
+						</v-list-tile-title>
+
+						<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
+							<v-icon>delete</v-icon>
+						</v-btn>
+						<v-btn flat icon color="grey darken-1" ripple :href="'/#/activity/edit/'+activity.name">
+							<v-icon>edit</v-icon>
+						</v-btn>
+					</v-list-tile>
+				</v-list>
+			</v-card></v-flex></v-layout></v-container>
 			</v-content>
 		</v-app>
 	</div>
@@ -31,15 +43,31 @@ export default {
 	components: { sidebar },
 	name: 'CoderBot',
 	mounted() {
-		let axios = this.$axios
-		let CB = this.$data.CB
-		//let programList = this.$data.programList
-		axios.get(CB + '/listActivities')
-			.then(function(response) {
-					this.$data.activityList = response.data;
-			}.bind(this))
+		this.getActivities();
 	},
 	methods: {
+		getActivities: function() {
+			let axios = this.$axios
+			let CB = this.$data.CB
+			//let programList = this.$data.programList
+			axios.get(CB + '/listActivities')
+				.then(function(response) {
+					this.$data.activityList = response.data;
+					console.log(this.$data.activityList)
+				}.bind(this))
+		},
+		deleteActivity: function(name) {
+			let axios = this.$axios
+			let CB = this.$data.CB
+			//let programList = this.$data.programList
+			axios.post(CB + '/deleteActivity', {
+					name: name
+				})
+				.then(function(response) {
+					this.getActivities();
+				}.bind(this))
+		},
+
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus
 			this.$store.commit('toggleDrawer', !currentStatus)

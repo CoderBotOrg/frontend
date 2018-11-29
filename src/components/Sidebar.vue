@@ -60,14 +60,6 @@
 							<v-list-tile-title>Nuova</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
-					<v-list-tile to="/actvity/edit">
-						<v-list-tile-action>
-							<v-icon>edit</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Modifica</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
 					<br>
 					<v-divider>
 					</v-divider>
@@ -168,14 +160,6 @@
 							<v-list-tile-title>Nuova</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
-					<v-list-tile to="/actvity/edit">
-						<v-list-tile-action>
-							<v-icon>edit</v-icon>
-						</v-list-tile-action>
-						<v-list-tile-content>
-							<v-list-tile-title>Modifica</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
 					<br>
 					<v-divider>
 					</v-divider>
@@ -223,29 +207,6 @@
 					</div>
 				</v-list>
 			</v-navigation-drawer>
-							<v-dialog v-model="editModal" max-width="290">
-				<v-card>
-					<v-card-title class="headline">
-						Lista Programmi
-					</v-card-title>
-					<v-list>
-						<v-list-tile v-for="program in activitiesList" :key="program.el" avatar @click="">
-							<v-list-tile-title ripple @click="loadProgram(program.name)">
-								{{ program.name }}
-							</v-list-tile-title>
-							<v-btn v-if="program.default != 'True'" flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
-								<v-icon>delete</v-icon>
-							</v-btn>
-						</v-list-tile>
-					</v-list>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="carica = false">
-							Annulla
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
 		</template>
 	</div>
 
