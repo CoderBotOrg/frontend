@@ -20,9 +20,9 @@ npm install
 npm run dev
 ```
 
-By default, the build configuration assumes you have the backend available at `localhost:5000`. Change the `CB_ENDPOINT` value according to your setup (e.g. different location, production, static ip of a real RPi running the backend) in the `config/dev.eng.js` file.
+By default, the (development) build configuration assumes you have the backend available at `localhost:5000`. Change the `CB_ENDPOINT` value according to your setup (e.g. different location, production, static ip of a real RPi running the backend) in the `config/dev.env.js` file.
 
-To serve in production, change `CB_ENDPOINT` to `'""'` and
+While in production environment, it assumes you are serving the vue app from the backend, thus having `CB_ENDPOINT` to a blank string.
 
 ```bash
 # build the web application
@@ -31,7 +31,7 @@ npm run build
 mv dist ../coderbot/
 ```
 
-At this point, the Flask backend serves the built application at `/vue`.
+At this point, run the backend and Flask will serve the built Vue app at `/vue`.
 
 Another build value you may want to edit it's `assetsPublicPath` in `config/index.js`, which allows to serve the application from a subfolder.
 
