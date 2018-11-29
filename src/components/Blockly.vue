@@ -76,8 +76,8 @@
 					<v-card-title class="headline grey lighten-2" primary-title>
 						Esecuzione
 					</v-card-title>
-					<v-card-text>
-						<v-img :src="webcamStream" />
+					<v-card-text v-if="runtimeDialog">
+						<v-img v-if="runtimeDialog" :src="webcamStream" />
 					</v-card-text>
 					<v-divider></v-divider>
 					{{ log }}
@@ -433,10 +433,10 @@ export default {
 		},
 		saveProgramAs: function(e) {
 			if (this.newProgramName != '') {
-				if(this.isDefault == "True" && this.programName == this.newProgramName){
+				if (this.isDefault == "True" && this.programName == this.newProgramName) {
 					this.CannotOverwrite = true
 					console.log("error")
-				} else{
+				} else {
 					this.defaultProgramName = this.programName
 					this.programName = this.newProgramName
 					this.newProgramName = ''
@@ -461,24 +461,21 @@ export default {
 						default: ''
 					})
 					.then(function(data) {
-						if(data.data == "defaultOverwrite" || data.data == "askOverwrite"){
-							if(data.data == "askOverwrite"){
+						if (data.data == "defaultOverwrite" || data.data == "askOverwrite") {
+							if (data.data == "askOverwrite") {
 								this.$data.overwriteDialog = true
-							}
-							else{
+							} else {
 								this.$data.programName = this.$data.defaultProgramName
 								this.$data.defaultProgramName = ''
 								this.$data.CannotOverwrite = true
 							}
-						}
-						else{
+						} else {
 							this.$data.isDefault = ''
 							this.$data.overwrite = 0
 							console.log("salvato")
 						}
 					}.bind(this))
-			}
-			else {
+			} else {
 				this.unvalidName = true
 			}
 		},
@@ -637,6 +634,7 @@ export default {
 		},
 		runProgramLegacy() {
 			if (this.status) {
+				this.runtimeDialog = true;
 				let axios = this.$axios
 				let CB = this.CB
 				let qs = this.$qs
@@ -654,19 +652,22 @@ export default {
 					'dom_code': dom_code,
 					'code': code,
 				})
+				setTimeout(function() {
+					axios.post(this.CBv1 + '/program/exec', valuesAsString)
+						.then(function(response) {
+							console.log(response)
 
-				axios.post(this.CBv1 + '/program/exec', valuesAsString)
-					.then(function(response) {
-						console.log(response)
-						this.runtimeDialog = true;
-						setTimeout(function() {
-							this.updateExecStatus();
-						}.bind(this), 1000)
-					}.bind(this))
+							setTimeout(function() {
+								this.updateExecStatus();
+							}.bind(this), 1000)
+						}.bind(this))
 
+				// Postpone the actual execution by 1 second (allow the popup to open, ..)
+				}.bind(this), 1000)
 			}
+
 		},
-		stopProgram(){
+		stopProgram() {
 			console.log("Stopping")
 			let axios = this.$axios
 			axios.post(this.CBv1 + '/program/end')

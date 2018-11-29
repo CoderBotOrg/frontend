@@ -273,7 +273,7 @@ export default {
 			let CB = this.CB
 			let pressDuration = this.pressDuration
 			pressDuration = performance.now() - this.pressDuration
-			let minTreshold = 500
+			let minTreshold = 250
 			let delay = minTreshold - pressDuration
 			console.log("Pressed for", pressDuration, "ms")
 			if (pressDuration < 500) {
