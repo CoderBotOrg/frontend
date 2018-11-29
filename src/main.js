@@ -40,6 +40,7 @@ import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 import gallery from './components/Gallery'
 import activityList from './components/ActivityList'
+import activity from './components/Activity'
 //import help from './components/Help'
 //import credits from './components/Credits'
 
@@ -71,7 +72,8 @@ const routes = [
   //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
   { path: '/activity/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
   { path: '/activity/open', component: activityList, meta: {title: 'CoderBot - Apri Attività'}},
-  { path: '/activity/edit/:name', component: activityEditor, meta: {title: 'CoderBot - Modifica Attività'}}
+  { path: '/activity/edit/:name', component: activityEditor, meta: {title: 'CoderBot - Modifica Attività'}},
+  { path: '/activity/open/:name', component: activity, meta: {title: 'CoderBot - Programma'}}
 ];
 
 

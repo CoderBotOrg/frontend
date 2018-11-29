@@ -4,7 +4,8 @@
 			<sidebar></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>Nuova Attività {{prefix}} {{activity.name}}</v-toolbar-title>
+				<v-toolbar-title v-if="!saved">Nuova Attività {{prefix}} {{activity.name}}</v-toolbar-title>
+				<v-toolbar-title v-else>Modifica Attività {{prefix}} {{activity.name}}</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<v-btn flat @click="save()">
@@ -197,7 +198,21 @@
 					</v-tab-item>
 				-->
 					<v-tab-item>
-						Tab 4
+						<v-container grid-list-md text-xs-center>
+							<v-layout row wrap>
+								<!-- Column A -->
+								<v-flex xs12 md6 offset-md3>
+									<h3 class="text-xs-left">Viste</h3>
+									<v-card>
+										<v-form class="cardContent">
+											<v-switch label="Camera" v-model="activity.exec.camera"></v-switch>
+											<v-switch label="Log" v-model="activity.exec.log"></v-switch>
+										</v-form>
+									</v-card>
+								</v-flex>
+							</v-layout>
+						</v-container>
+					</v-tab-item>
 					</v-tab-item>
 				</v-tabs-items>
 			</v-content>
@@ -219,7 +234,8 @@ export default {
 	components: { Swatches, wsFactory, sidebar },
 	computed: {
 		prefix: function() {
-			if (this.name != null && this.name != '')
+			console.log(this.name)
+			if (this.activity.name != null && this.activity.name != '')
 				return '-'
 			else
 				return ''
@@ -259,10 +275,15 @@ export default {
 	},
 	data() {
 		return {
+			saved: false,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			snackbar: false,
 			snackbarText: "",
 			activity: {
+				exec: {
+					camera: true,
+					log: true
+				},
 				name: null,
 				drawerEnabled: true,
 				showName: true,
@@ -340,6 +361,7 @@ export default {
 			let axios = this.$axios
 			let CB = this.CB
 			console.log("Loading activity", this.$route.params.name)
+			this.saved = true;
 			axios.get(CB + '/loadActivity', {
 					params: {
 						name: this.$route.params.name
@@ -353,58 +375,59 @@ export default {
 			this.restoreDefaults();
 		}
 
-},
-methods: {
-	save: function() {
-		console.log(JSON.stringify(this.activity))
-		if (this.activity.name) {
-			let axios = this.$axios
-			let CB = this.CB
-			axios.post(CB + '/saveActivity', {
-					activity: this.activity
-				})
-				.then(function(data) {
-					this.snackbarText = "Attività salvata";
-					this.snackbar = true;
-				}.bind(this))
-		} else {
-			this.snackbarText = "Salvataggio non riuscito: inserisci un nome all'attività!";
-			this.snackbar = true;
-		}
 	},
-	toggleSidebar: function() {
-		let currentStatus = this.$store.getters.drawerStatus
-		this.$store.commit('toggleDrawer', !currentStatus)
-	},
-	addButton: function() {
-		this.activity.buttons.push({
-			label: '',
-		})
-	},
-	removeButton: function(index) {
-		this.activity.buttons.splice(index, 1)
-	},
-	removeAll: function() {
-		this.activity.buttons = []
-	},
-	restoreDefaults: function() {
-		this.activity.buttons = [{
-				label: 'Esegui Roba',
-				icon: 'play_arrow',
-				colorBtn: 'green',
-				colorText: 'white--text',
-				action: 'run'
-			},
-			{
-				label: 'Codice',
-				icon: 'code',
-				colorBtn: 'blue',
-				colorText: 'white--text',
-				action: 'showcode'
+	methods: {
+		save: function() {
+			console.log(JSON.stringify(this.activity))
+			if (this.activity.name) {
+				let axios = this.$axios
+				let CB = this.CB
+				axios.post(CB + '/saveActivity', {
+						activity: this.activity
+					})
+					.then(function(data) {
+						this.snackbarText = "Attività salvata";
+						this.snackbar = true;
+						this.saved = true;
+					}.bind(this))
+			} else {
+				this.snackbarText = "Salvataggio non riuscito: inserisci un nome all'attività!";
+				this.snackbar = true;
 			}
-		]
+		},
+		toggleSidebar: function() {
+			let currentStatus = this.$store.getters.drawerStatus
+			this.$store.commit('toggleDrawer', !currentStatus)
+		},
+		addButton: function() {
+			this.activity.buttons.push({
+				label: '',
+			})
+		},
+		removeButton: function(index) {
+			this.activity.buttons.splice(index, 1)
+		},
+		removeAll: function() {
+			this.activity.buttons = []
+		},
+		restoreDefaults: function() {
+			this.activity.buttons = [{
+					label: 'Esegui Roba',
+					icon: 'play_arrow',
+					colorBtn: 'green',
+					colorText: 'white--text',
+					action: 'run'
+				},
+				{
+					label: 'Codice',
+					icon: 'code',
+					colorBtn: 'blue',
+					colorText: 'white--text',
+					action: 'showcode'
+				}
+			]
+		}
 	}
-}
 };
 
 </script>

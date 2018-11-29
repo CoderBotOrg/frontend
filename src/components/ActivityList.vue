@@ -17,8 +17,8 @@
 					<span v-if="activityList == null || activityList == [] || activityList.length == 0">
 						Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
 					</span>
-					<v-list-tile v-for="activity in activityList" :key="activity.el" avatar @click="">
-						<v-list-tile-title ripple @click="loadProgram(activity.name)">
+					<v-list-tile v-for="activity in activityList" :key="activity.el" avatar @click="" :href="'/#/activity/open/'+activity.name">
+						<v-list-tile-title ripple>
 							<b>{{ activity.name }}</b>
 							<small> {{activity.description}} </small>
 						</v-list-tile-title>
