@@ -335,59 +335,76 @@ export default {
 		};
 	},
 	mounted() {
-		this.restoreDefaults();
-	},
-	methods: {
-		save: function() {
-			console.log(JSON.stringify(this.activity))
-			if (this.activity.name) {
-				let axios = this.$axios
-				let CB = this.CB
-				axios.post(CB + '/saveActivity', {
-						activity: this.activity
-					})
-					.then(function(data) {
-						this.snackbarText = "Attività salvata";
-						this.snackbar = true;
-					}.bind(this))
-			} else {
-				this.snackbarText = "Salvataggio non riuscito: inserisci un nome all'attività!";
-				this.snackbar = true;
-			}
-		},
-		toggleSidebar: function() {
-			let currentStatus = this.$store.getters.drawerStatus
-			this.$store.commit('toggleDrawer', !currentStatus)
-		},
-		addButton: function() {
-			this.activity.buttons.push({
-				label: '',
-			})
-		},
-		removeButton: function(index) {
-			this.activity.buttons.splice(index, 1)
-		},
-		removeAll: function() {
-			this.activity.buttons = []
-		},
-		restoreDefaults: function() {
-			this.activity.buttons = [{
-					label: 'Esegui Roba',
-					icon: 'play_arrow',
-					colorBtn: 'green',
-					colorText: 'white--text',
-					action: 'run'
-				},
-				{
-					label: 'Codice',
-					icon: 'code',
-					colorBtn: 'blue',
-					colorText: 'white--text',
-					action: 'showcode'
-				}
-			]
+
+		if (this.$route.params.name) {
+			let axios = this.$axios
+			let CB = this.CB
+			console.log("Loading activity", this.$route.params.name)
+			axios.get(CB + '/loadActivity', {
+					params: {
+						name: this.$route.params.name
+					}
+				})
+				.then(function(response) {
+					console.log(response)
+					this.activity = response.data
+				}.bind(this))
+		} else {
+			this.restoreDefaults();
 		}
+
+},
+methods: {
+	save: function() {
+		console.log(JSON.stringify(this.activity))
+		if (this.activity.name) {
+			let axios = this.$axios
+			let CB = this.CB
+			axios.post(CB + '/saveActivity', {
+					activity: this.activity
+				})
+				.then(function(data) {
+					this.snackbarText = "Attività salvata";
+					this.snackbar = true;
+				}.bind(this))
+		} else {
+			this.snackbarText = "Salvataggio non riuscito: inserisci un nome all'attività!";
+			this.snackbar = true;
+		}
+	},
+	toggleSidebar: function() {
+		let currentStatus = this.$store.getters.drawerStatus
+		this.$store.commit('toggleDrawer', !currentStatus)
+	},
+	addButton: function() {
+		this.activity.buttons.push({
+			label: '',
+		})
+	},
+	removeButton: function(index) {
+		this.activity.buttons.splice(index, 1)
+	},
+	removeAll: function() {
+		this.activity.buttons = []
+	},
+	restoreDefaults: function() {
+		this.activity.buttons = [{
+				label: 'Esegui Roba',
+				icon: 'play_arrow',
+				colorBtn: 'green',
+				colorText: 'white--text',
+				action: 'run'
+			},
+			{
+				label: 'Codice',
+				icon: 'code',
+				colorBtn: 'blue',
+				colorText: 'white--text',
+				action: 'showcode'
+			}
+		]
 	}
+}
 };
 
 </script>

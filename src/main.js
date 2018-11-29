@@ -71,6 +71,7 @@ const routes = [
   //{ path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
   { path: '/activity/new', component: activityEditor, meta: {title: 'CoderBot - Nuova Attività'}},
   { path: '/activity/open', component: activityList, meta: {title: 'CoderBot - Apri Attività'}},
+  { path: '/activity/edit/:name', component: activityEditor, meta: {title: 'CoderBot - Modifica Attività'}}
 ];
 
 
