@@ -350,7 +350,7 @@ export default {
 			defaultView: 'blocks',
 			viste: [
 				{ text: 'Blocchi', value: 'blocks' },
-				{ text: 'Esecuzione', value: 'exec', },
+				{ text: 'Esecuzione', value: 'exec', disabled: true},
 				{ text: 'Python', value: 'python', disabled: true }
 			],
 		};

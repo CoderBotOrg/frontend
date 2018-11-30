@@ -1,26 +1,24 @@
 <template>
-	<div>
+	<div :style="cssProps">
 		<v-app id="inspire">
 			<sidebar mobileDrawAnim=0></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<template v-if="activity.drawerEnabled">
-				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
+					<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
 				</template>
 				<template v-if="activity.showName">
-				<v-toolbar-title>
-					{{ activity.name }}
-				</v-toolbar-title>
-			</template>
+					<v-toolbar-title>
+						{{ activity.name }}
+					</v-toolbar-title>
+				</template>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- template serves as an invisible wrapper to conditional render more than one element -->
 					<template v-if="status == 200">
-
 						<v-btn v-on:click="runProgramLegacy()" flat>
 							<v-icon>play_arrow</v-icon>
 							Esegui
 						</v-btn>
-
 						<!--
 						<v-btn v-if="isDefault != 'True'" @click="overwrite = 1, saveProgram()" flat>
 							<v-icon>save</v-icon>
@@ -65,6 +63,7 @@
 				</v-toolbar-items>
 			</v-toolbar>
 			<v-content>
+
 				<div style="height: 480px; width: 600px;">
 					<div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
 						<div ref="blocklyArea" style="height: 100%; width: 100%;" class="blocklyArea">
@@ -73,6 +72,7 @@
 						</div>
 					</div>
 				</div>
+
 			</v-content>
 			<!-- Runtime modal -->
 			<v-dialog v-model="runtimeDialog" width="500">
@@ -81,15 +81,14 @@
 						Esecuzione
 					</v-card-title>
 					<template v-if="activity.exec.camera">
-					<v-card-text v-if="runtimeDialog">
-						<v-img v-if="runtimeDialog" :src="webcamStream" />
-					</v-card-text>
-				</template>
-
+						<v-card-text v-if="runtimeDialog">
+							<v-img v-if="runtimeDialog" :src="webcamStream" />
+						</v-card-text>
+					</template>
 					<v-divider></v-divider>
 					<template v-if="activity.exec.log">
-					{{ log }}
-				</template>
+						{{ log }}
+					</template>
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="primary" flat @click="runtimeDialog = false; stopProgram()">
@@ -280,6 +279,11 @@ export default {
 			import('vue-prism-component')
 	},
 	data: () => ({
+		cssProps : {
+				'--bodyFont': 'Roboto',
+				'--codeFont': 'Ubuntu Mono',
+			},
+		activityStyle: null,
 		activity: null,
 		log: null,
 		settings: null,
@@ -337,6 +341,7 @@ export default {
 			.then(function(response) {
 				console.log("Activity loaded", response.data)
 				this.activity = response.data
+				this.updateCssProps()
 			}.bind(this))
 
 
@@ -358,6 +363,29 @@ export default {
 
 	},
 	methods: {
+		updateCssProps() {
+			console.log("Updating CSS Props")
+			let bodyFont = this.activity.bodyFont
+			let fontFamilyBody = ''
+			if (bodyFont == 'opensans') {
+				fontFamilyBody = 'Open Sans'
+			} else if (bodyFont == 'roboto') {
+				fontFamilyBody = 'Roboto'
+			}
+			let codeFont = this.activity.codeFont
+			let fontFamilyCode = ''
+			if (codeFont == 'ubuntumono') {
+				fontFamilyCode = 'Ubuntu Mono'
+			} else if (codeFont == 'robotomono') {
+				fontFamilyCode = 'Roboto Mono'
+			}
+
+			this.cssProps = {
+				'--bodyFont': fontFamilyBody,
+				'--codeFont': fontFamilyCode,
+			}
+		},
+
 		initBlockly: function(settings) {
 			// Extend the default blocks set
 			this.blocksExtensions(settings);
@@ -1829,6 +1857,15 @@ export default {
 
 </script>
 <style scoped>
+.application {
+	font-family: var(--bodyFont)
+}
+
+pre,
+code {
+	font-family: var(--codeFont)
+}
+
 .blocklyDiv {
 	position: absolute;
 }
