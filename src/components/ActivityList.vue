@@ -22,7 +22,7 @@
 	<v-flex xs9>
 
 
-					<v-list-tile :key="activity.el" avatar @click="" :href="'/#/activity/open/'+activity.name">
+					<v-list-tile :key="activity.el" avatar @click="" :href="'#/activity/open/'+activity.name">
 						<v-list-tile-title ripple>
 							<b>{{ activity.name }}</b>
 							<small> {{activity.description}} </small>
@@ -37,7 +37,7 @@
 					<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
 							<v-icon>delete</v-icon>
 						</v-btn>
-						<v-btn flat icon color="grey darken-1" ripple :href="'/#/activity/edit/'+activity.name">
+						<v-btn flat icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
 							<v-icon>edit</v-icon>
 						</v-btn>
 						</v-flex>
