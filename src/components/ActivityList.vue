@@ -17,19 +17,33 @@
 					<span v-if="activityList == null || activityList == [] || activityList.length == 0">
 						Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
 					</span>
-					<v-list-tile v-for="activity in activityList" :key="activity.el" avatar @click="" :href="'/#/activity/open/'+activity.name">
+					<template v-for="activity in activityList" >
+<v-layout row>
+	<v-flex xs9>
+
+
+					<v-list-tile :key="activity.el" avatar @click="" :href="'/#/activity/open/'+activity.name">
 						<v-list-tile-title ripple>
 							<b>{{ activity.name }}</b>
 							<small> {{activity.description}} </small>
 						</v-list-tile-title>
 
-						<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
+
+					</v-list-tile>
+					</v-flex>
+					<v-flex xs3>
+
+
+					<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
 							<v-icon>delete</v-icon>
 						</v-btn>
 						<v-btn flat icon color="grey darken-1" ripple :href="'/#/activity/edit/'+activity.name">
 							<v-icon>edit</v-icon>
 						</v-btn>
-					</v-list-tile>
+						</v-flex>
+					</v-layout>
+					</template>
+
 				</v-list>
 			</v-card></v-flex></v-layout></v-container>
 			</v-content>
