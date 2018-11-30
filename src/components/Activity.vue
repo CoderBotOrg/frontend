@@ -13,44 +13,14 @@
 				</template>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
-					<!-- template serves as an invisible wrapper to conditional render more than one element -->
 					<template v-if="status == 200">
-						<v-btn v-on:click="runProgramLegacy()" flat>
-							<v-icon>play_arrow</v-icon>
-							Esegui
-						</v-btn>
-						<!--
-						<v-btn v-if="isDefault != 'True'" @click="overwrite = 1, saveProgram()" flat>
-							<v-icon>save</v-icon>
-							Salva
-						</v-btn>
-						<v-btn @click="salva = true, newProgramName = programName" flat>
-							<v-icon>edit</v-icon>
-							Salva con nome
-						</v-btn>
-						<v-btn @click="loadProgramList" flat>
-							<v-icon>folder_open</v-icon>
-							Carica
-						</v-btn>
-
-						<v-btn v-on:click="getProgramCode()" flat>
-							<v-icon>code</v-icon>
-							Mostra codice
-						</v-btn>
-						<v-btn v-on:click="exportProgram()" flat>
-							<v-icon>fa-file-export</v-icon>
-							&nbsp;&nbsp;Esporta
-						</v-btn>
-						<v-btn v-on:click="pickFile()" flat>
-							<v-icon>fa-file-import</v-icon>
-							&nbsp;&nbsp;Importa
-						</v-btn>
-					</template>
-					<template v-else>
-						<v-btn flat>
-							<v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
-						</v-btn>
-					-->
+						<template v-for="button, i in activity.buttons">
+							<v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn" :class="button.colorText">
+								{{ button.label }}
+								<v-icon right dark>{{ button.icon }}</v-icon>
+							</v-btn>
+							&nbsp;&nbsp;
+						</template>
 					</template>
 					<!--
 					<v-btn @click="dialog = true" icon v-if="status == 200">
@@ -63,7 +33,6 @@
 				</v-toolbar-items>
 			</v-toolbar>
 			<v-content>
-
 				<div style="height: 480px; width: 600px;">
 					<div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
 						<div ref="blocklyArea" style="height: 100%; width: 100%;" class="blocklyArea">
@@ -72,7 +41,6 @@
 						</div>
 					</div>
 				</div>
-
 			</v-content>
 			<!-- Runtime modal -->
 			<v-dialog v-model="runtimeDialog" width="500">
@@ -279,10 +247,10 @@ export default {
 			import('vue-prism-component')
 	},
 	data: () => ({
-		cssProps : {
-				'--bodyFont': 'Roboto',
-				'--codeFont': 'Ubuntu Mono',
-			},
+		cssProps: {
+			'--bodyFont': 'Roboto',
+			'--codeFont': 'Ubuntu Mono',
+		},
 		activityStyle: null,
 		activity: null,
 		log: null,
@@ -382,8 +350,7 @@ export default {
 			let textTransform = ''
 			if (this.activity.capsSwitch) {
 				textTransform = 'uppercase'
-			}
-			else{
+			} else {
 				textTransform = 'none'
 			}
 
