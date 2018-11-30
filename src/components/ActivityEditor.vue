@@ -38,7 +38,9 @@
 									<h3 class="text-xs-left">Tipografia </h3>
 									<v-card>
 										<div class="cardContent">
+											<!--
 											<v-select :items="fontSizeLabels" v-model="activity.fontSize" label="Grandezza testo"></v-select>
+										-->
 											<v-switch :label="`Solo maiuscole`" v-model="activity.capsSwitch"></v-switch>
 											<!--
 											<v-layout row wrap>
