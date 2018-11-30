@@ -306,10 +306,10 @@ export default {
 				}
 			],
 			actions: [
-				{ text: 'Esegui', value: 'run' },
-				{ text: 'Salva', value: 'save' },
-				{ text: 'Salva con Nome', value: 'saveas' },
-				{ text: 'Mostra Codice', value: 'showcode' },
+				{ text: 'Esegui', value: 'runProgramLegacy' },
+				{ text: 'Salva', value: 'saveProgram' },
+				//{ text: 'Salva con Nome', value: 'saveas' },
+				{ text: 'Mostra Codice', value: 'getProgramCode' },
 			],
 			value: 0,
 
@@ -416,14 +416,14 @@ export default {
 					icon: 'play_arrow',
 					colorBtn: 'green',
 					colorText: 'white--text',
-					action: 'run'
+					action: 'runProgramLegacy'
 				},
 				{
 					label: 'Codice',
 					icon: 'code',
 					colorBtn: 'blue',
 					colorText: 'white--text',
-					action: 'showcode'
+					action: 'getProgramCode'
 				}
 			]
 		}
