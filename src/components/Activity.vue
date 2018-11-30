@@ -379,11 +379,20 @@ export default {
 			} else if (codeFont == 'robotomono') {
 				fontFamilyCode = 'Roboto Mono'
 			}
+			let textTransform = ''
+			if (this.activity.capsSwitch) {
+				textTransform = 'uppercase'
+			}
+			else{
+				textTransform = 'none'
+			}
 
 			this.cssProps = {
 				'--bodyFont': fontFamilyBody,
 				'--codeFont': fontFamilyCode,
+				'--transform': textTransform,
 			}
+			console.log(this.cssProps)
 		},
 
 		initBlockly: function(settings) {
@@ -1858,12 +1867,13 @@ export default {
 </script>
 <style scoped>
 .application {
-	font-family: var(--bodyFont)
+	font-family: var(--bodyFont);
+	text-transform: var(--transform);
 }
 
 pre,
 code {
-	font-family: var(--codeFont)
+	font-family: var(--codeFont);
 }
 
 .blocklyDiv {
