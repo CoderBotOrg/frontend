@@ -18,20 +18,14 @@
 						Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
 					</span>
 					<template v-for="activity in activityList" >
-<v-layout row>
-	<v-flex xs9>
 
 
-					<v-list-tile :key="activity.el" avatar @click="" :href="'#/activity/open/'+activity.name">
-						<v-list-tile-title ripple>
+
+					<v-list-tile :key="activity.el" avatar @click="" >
+						<v-list-tile-title ripple @click="goToActivity(activity.name)">
 							<b>{{ activity.name }}</b>
 							<small> {{activity.description}} </small>
 						</v-list-tile-title>
-
-
-					</v-list-tile>
-					</v-flex>
-					<v-flex xs3>
 
 
 					<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
@@ -40,8 +34,11 @@
 						<v-btn flat icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
 							<v-icon>edit</v-icon>
 						</v-btn>
-						</v-flex>
-					</v-layout>
+					</v-list-tile>
+
+
+
+
 					</template>
 
 				</v-list>
@@ -60,6 +57,9 @@ export default {
 		this.getActivities();
 	},
 	methods: {
+		goToActivity: (name) => {
+			window.location = '#/activity/open/' + name
+		},
 		getActivities: function() {
 			let axios = this.$axios
 			let CB = this.$data.CB
