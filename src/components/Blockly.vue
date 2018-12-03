@@ -101,7 +101,7 @@
 					<v-list>
 						<v-list-tile v-for="program in programList" :key="program.el" avatar @click="">
 							<v-list-tile-title ripple @click="
-							tryLoadProgram(program.name)">
+							checkAction(loadProgram, program.name)">
 								{{ program.name }}
 							</v-list-tile-title>
 							<v-btn v-if="program.default != 'True'" flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
@@ -194,10 +194,10 @@
 						<v-card-text>
 							La workspace non è vuota, vuoi salvare il tuo programma?
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="saveWorkspace = false, workspace.clear(), loadProgram(programToLoad)">
+						<v-btn color="red darken-1" flat="flat" @click="saveWorkspace = false, clearWorkspace = true, checkAction(callBack, generalParameter)">
 							No
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="saveWorkspace = false, salva = true, toBeLoaded = true">
+						<v-btn color="green darken-1" flat="flat" @click="saveWorkspace = false, salva = true">
 							Si
 						</v-btn>
 					</v-card-actions>
@@ -325,8 +325,10 @@ export default {
 		overwrite: 0,
 		overwriteDialog: false,
 		saveWorkspace: false,
-		programToLoad: '',
-		toBeLoaded: false,
+		clearWorkspace: false,
+		generalParameter: '',
+		callBack: '',
+		programCode: '',
 	}),
 	computed: {
 		statusText: function() {
@@ -418,13 +420,29 @@ export default {
 
 			return { name: name, dom_code: dom_code, code: code, default: isDefault };
 		},
-		checkAction() {
-				let data = this.getProgramData()
-				let code = data.code
-				if (code == '')
-					return true
-				else
-					return false
+		checkAction(functionToCall, parameter) {
+			if(this.clearWorkspace){
+				let workspace = this.workspace
+				workspace.clear()
+				this.clearWorkspace = false
+			}
+			let data = this.getProgramData()
+			let code = data.code
+			if (code == '' || code == this.programCode){
+				if(parameter != null){
+					console.log("ho il parametro")
+					functionToCall(parameter)
+				}
+				else{
+					console.log("non ho il parametro")
+					functionToCall()
+				}
+			}
+			else{
+				this.callBack = functionToCall
+				this.generalParameter = parameter
+				this.$data.saveWorkspace = true
+			}
 		},
 		exportProgram() {
 			let data = JSON.stringify(this.getProgramData())
@@ -504,15 +522,16 @@ export default {
 							this.$data.isDefault = ''
 							this.$data.overwrite = 0
 							console.log("salvato")
+							this.programCode = data.code
+							if(this.callBack != ''){
+								this.callBack(this.generalParameter)
+								this.callBack = ''
+							}
 						}
 					}.bind(this))
 			} else {
 				this.unvalidName = true
-			}
-			if(this.$data.toBeLoaded)
-				this.loadProgram(this.$data.programToLoad)
-				this.$data.programToLoad = ''
-				this.$data.toBeLoaded = false
+			}	
 		},
 		loadProgramList() {
 			let axios = this.$axios
@@ -524,31 +543,25 @@ export default {
 						this.$data.programList = response.data;
 				}.bind(this))
 		},
-		tryLoadProgram(program){
-			this.$data.programToLoad = program
-			if (this.checkAction())
-				this.loadProgram(program)
-			else
-				this.$data.saveWorkspace = true
-		},
 		loadProgram(program) {
 			let axios = this.$axios
 			let CB = this.$data.CB
 			let workspace = this.$data.workspace
 			let isDefault = this.$data.isDefault
-				this.$data.carica = false;
-				this.$data.programName = program
-				axios.get(CB + '/load', {
-						params: {
-							name: program,
-						}
-					})
-					.then(function(data) {
-						workspace.clear();
-						var xml = Blockly.Xml.textToDom(data.data.dom_code);
-						Blockly.Xml.domToWorkspace(xml, workspace);
-						this.$data.isDefault = data.data.default
-					}.bind(this))
+			this.$data.carica = false;
+			this.$data.programName = program
+			axios.get(CB + '/load', {
+					params: {
+						name: program,
+					}
+				})
+				.then(function(data) {
+					workspace.clear();
+					var xml = Blockly.Xml.textToDom(data.data.dom_code);
+					this.programCode = data.data.code;
+					Blockly.Xml.domToWorkspace(xml, workspace);
+					this.$data.isDefault = data.data.default;
+				}.bind(this))
 		},
 		deleteProgramDlg(program) {
 			this.$data.newProgramName = program
