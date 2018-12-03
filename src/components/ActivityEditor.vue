@@ -414,18 +414,18 @@ export default {
 		},
 		restoreDefaults: function() {
 			this.activity.buttons = [{
-					label: 'Esegui Roba',
+					label: 'Esegui',
 					icon: 'play_arrow',
 					colorBtn: 'green',
 					colorText: 'white--text',
 					action: 'runProgramLegacy'
 				},
 				{
-					label: 'Codice',
-					icon: 'code',
+					label: 'Salva',
+					icon: 'save',
 					colorBtn: 'blue',
 					colorText: 'white--text',
-					action: 'getProgramCode'
+					action: 'saveProgram'
 				}
 			]
 		}
