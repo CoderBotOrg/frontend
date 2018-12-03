@@ -170,13 +170,15 @@
 									</v-btn>
 									<br><br>
 									<div v-for="button, i in activity.buttons">
-										<h3>Pulsante {{i + 1}} <v-btn @click="removeButton(i)" flat icon>
+										<h3>Pulsante {{i + 1}}
+											<v-btn @click="removeButton(i)" flat icon v-if="!button.notErasable">
 													<v-icon>clear</v-icon>
 												</v-btn></h3>
 										<v-card>
 											<div class="cardContent">
+												<span class="grey--text text--darken-2" v-if="button.notErasable"> "Esegui" non può essere eliminato </span>
 												<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
-												<v-select v-model="button.action" :items="actions" label="Azione">
+												<v-select v-model="button.action" :items="actions" label="Azione" :disabled="button.notErasable">
 												</v-select>
 												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
 												Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
@@ -418,7 +420,8 @@ export default {
 					icon: 'play_arrow',
 					colorBtn: 'green',
 					colorText: 'white--text',
-					action: 'runProgramLegacy'
+					action: 'runProgramLegacy',
+					notErasable: true
 				},
 				{
 					label: 'Salva',
