@@ -100,7 +100,8 @@
 					</v-card-title>
 					<v-list>
 						<v-list-tile v-for="program in programList" :key="program.el" avatar @click="">
-							<v-list-tile-title ripple @click="loadProgram(program.name)">
+							<v-list-tile-title ripple @click="
+							tryLoadProgram(program.name)">
 								{{ program.name }}
 							</v-list-tile-title>
 							<v-btn v-if="program.default != 'True'" flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
@@ -178,6 +179,25 @@
 							No
 						</v-btn>
 						<v-btn color="green darken-1" flat="flat" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
+							Si
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<!-- -->
+			<v-dialog v-model="saveWorkspace" max-width="500">
+				<v-card>
+					<v-card-title class="headline">
+						Salvare workspace
+					</v-card-title>
+					<v-card-actions>
+						<v-card-text>
+							La workspace non è vuota, vuoi salvare il tuo programma?
+						</v-card-text>
+						<v-btn color="red darken-1" flat="flat" @click="saveWorkspace = false, workspace.clear(), loadProgram(programToLoad)">
+							No
+						</v-btn>
+						<v-btn color="green darken-1" flat="flat" @click="saveWorkspace = false, salva = true, toBeLoaded = true">
 							Si
 						</v-btn>
 					</v-card-actions>
@@ -304,6 +324,9 @@ export default {
 		defaultProgramName: '',
 		overwrite: 0,
 		overwriteDialog: false,
+		saveWorkspace: false,
+		programToLoad: '',
+		toBeLoaded: false,
 	}),
 	computed: {
 		statusText: function() {
@@ -395,6 +418,14 @@ export default {
 
 			return { name: name, dom_code: dom_code, code: code, default: isDefault };
 		},
+		checkAction() {
+				let data = this.getProgramData()
+				let code = data.code
+				if (code == '')
+					return true
+				else
+					return false
+		},
 		exportProgram() {
 			let data = JSON.stringify(this.getProgramData())
 			const blob = new Blob([data], { type: 'text/json' })
@@ -478,6 +509,10 @@ export default {
 			} else {
 				this.unvalidName = true
 			}
+			if(this.$data.toBeLoaded)
+				this.loadProgram(this.$data.programToLoad)
+				this.$data.programToLoad = ''
+				this.$data.toBeLoaded = false
 		},
 		loadProgramList() {
 			let axios = this.$axios
@@ -489,25 +524,31 @@ export default {
 						this.$data.programList = response.data;
 				}.bind(this))
 		},
+		tryLoadProgram(program){
+			this.$data.programToLoad = program
+			if (this.checkAction())
+				this.loadProgram(program)
+			else
+				this.$data.saveWorkspace = true
+		},
 		loadProgram(program) {
 			let axios = this.$axios
 			let CB = this.$data.CB
 			let workspace = this.$data.workspace
 			let isDefault = this.$data.isDefault
-			this.$data.carica = false;
-			this.$data.programName = program
-			axios.get(CB + '/load', {
-					params: {
-						name: program,
-					}
-				})
-				.then(function(data) {
-					console.log(data)
-					workspace.clear();
-					var xml = Blockly.Xml.textToDom(data.data.dom_code);
-					Blockly.Xml.domToWorkspace(xml, workspace);
-					this.$data.isDefault = data.data.default
-				}.bind(this))
+				this.$data.carica = false;
+				this.$data.programName = program
+				axios.get(CB + '/load', {
+						params: {
+							name: program,
+						}
+					})
+					.then(function(data) {
+						workspace.clear();
+						var xml = Blockly.Xml.textToDom(data.data.dom_code);
+						Blockly.Xml.domToWorkspace(xml, workspace);
+						this.$data.isDefault = data.data.default
+					}.bind(this))
 		},
 		deleteProgramDlg(program) {
 			this.$data.newProgramName = program
