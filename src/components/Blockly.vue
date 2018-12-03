@@ -818,7 +818,7 @@ export default {
 					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
 						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_forward.png', 32, 32, '*'));
 					} else {
-						di.appendField(Blockly.Msg.CODERBOT_MOVE_BACKWARD)
+						di.appendField(Blockly.Msg.CODERBOT_MOVE_FORWARD)
 					}
 					this.setPreviousStatement(true);
 					this.setNextStatement(true);
