@@ -158,6 +158,7 @@
 	</category>
 	<category name="Variabili" custom="VARIABLE" colour="330"></category>
 	<category name="Funzioni" custom="PROCEDURE" colour="290"></category>
+<!--
 	<category name="Eventi" colour="15">
 		<block type="coderbot_event_generator">
 			<value name="generator_statements">
@@ -200,6 +201,7 @@
 			<field name="VAR">event_data</field>
 		</block>
 	</category>
+-->
 	<category name="Movimento" colour="40">
 		<block type="coderbot_moveForward"></block>
 		<block type="coderbot_moveBackward"></block>
@@ -313,6 +315,6 @@
 			</value>
 		</block>
 		<block type="coderbot_audio_listen"></block>
-		<block type="coderbot_conv_get_action"></block>
+		<!--<block type="coderbot_conv_get_action"></block>-->
 	</category>
 </xml>
