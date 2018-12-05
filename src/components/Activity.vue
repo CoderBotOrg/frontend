@@ -385,7 +385,7 @@ export default {
 				// Options
 				{
 					toolbox: serializedToolbox,
-					//path				: '../../', // ? this makes to load audio assets from /media FIXME
+					path				: 'static/js/blockly/',
 					// TODO: Use values from fetched configuration!
 					scrollbars: true,
 					//MaxBlocks		: -1, // -1 as infinite not working FIXME
