@@ -72,6 +72,7 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>
+						<!--
 						<v-tab-item>
 							<v-container grid-list-md text-xs-center>
 								<v-layout row wrap>
@@ -96,6 +97,8 @@
 							<v-card-text>
 							</v-card-text>
 						</v-tab-item>
+
+						-->
 						<v-tab-item>
 							<v-container grid-list-md text-xs-center>
 								<v-layout row wrap>
@@ -335,10 +338,12 @@ export default {
 					data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig.move_power_angle_3]
 					data.btnFun = remoteConfig.button_func
 					// ?
+					/*
 					data.wifiMode = remoteConfig.wifi_mode
 
 					data.wifiSSID = remoteConfig.wifi_ssid
 					data.wifiPsw = remoteConfig.wifi_psk
+					*/
 					data.motorMode = remoteConfig.move_motor_mode
 					data.trimFactor = remoteConfig.move_motor_trim
 					data.startSound = remoteConfig.sound_start
@@ -366,13 +371,13 @@ export default {
 			let CBv1 = this.CBv1
 			let data = this.settings
 
-			if (selectedTab == 1) {
+			if (selectedTab == 10) {
 				var valuesAsString = qs.stringify({
 					'wifi_mode': this.settings.wifiMode,
 					'wifi_ssid': this.settings.wifiSSID,
 					'wifi_psk': this.settings.wifiPsw,
 				})
-				// Send post with URL encoded parameters 
+				// Send post with URL encoded parameters
 				axios.post(CBv1 + '/wifi', valuesAsString)
 					.then(function() {
 						console.log("Sent")
@@ -480,7 +485,8 @@ export default {
 			},
 			drawer: null,
 			tab: null,
-			tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
+			//tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
+			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate'],
 		}
 	}
 }
