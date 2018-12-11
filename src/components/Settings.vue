@@ -79,16 +79,18 @@
 										<v-card>
 											<div class="cardContent">
 												<template v-if="updateStatus==1">
-												{{ counter }} %
+												<h3>{{ counter }} %</h3>
+												<br>
+												{{ updateStatusText }}
 
 											</template>
 											<template v-if="updateStatus==2">
-											{{ updateStatusText }}
+
 										</template>
 												<template v-if="updateStatus==0">
 													<v-text-field label="Seleziona il pacchetto di aggiornamento" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
 													<input type="file" style="display: none" ref="file" @change="onFilePicked">
-													<v-btn @click="upload" color="error">Conferma</v-btn>
+													<v-btn v-if="this.fileObj" @click="upload" color="error">Conferma</v-btn>
 												</template>
 											</div>
 										</v-card>
@@ -270,17 +272,21 @@ export default {
 				headers: { 'Content-Type': 'multipart/form-data' },
 				onUploadProgress: progressEvent => {
 					this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
+					if (this.counter == 100){
+						this.updateStatusText = 'Upload completato. Aggiornamento in corso...'
+					}
 				}
 			}
 			this.updateStatus = 1
-			this.$axios.post(this.CB + '/uploadFile', formdata, config).then(result => {
+
+			this.$axios.post(this.CB + '/uploadFile', formdata, config).then(function(result) {
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
 				console.dir(result.data);
-				this.updateStatus = 2
+
 				this.updateStatusText = 'Upload completato. Aggiornamento in corso...'
 
-			})
+			}.bind(this))
 
 		},
 		restoreConfig() {
