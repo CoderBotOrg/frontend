@@ -36,12 +36,14 @@
 										<h3 class="text-xs-left">Sistema </h3>
 										<v-card>
 											<div class="cardContent">
+
 												<v-select v-model="settings.progLevel" :items="blocklyToolboxItems" label="Livello Toolbox Blockly"></v-select>
 												<!--<v-text-field v-model="settings.cbName" label="Nome CoderBot"></v-text-field>
 												<br>-->
 												<div v-for="(value, key, index) in cb.info">
 													{{ key }}: <code>{{ value }}</code>
 												</div>
+												 Vue app commit build: <code> {{ lastCommit }} </code>
 											</div>
 										</v-card>
 										<br>
@@ -76,8 +78,13 @@
 										<h3 class="text-xs-left"> Aggiornamento </h3>
 										<v-card>
 											<div class="cardContent">
+												<template v-if="updateStatus==1">
 												{{ counter }} %
-												{{ updateStatusText }}
+
+											</template>
+											<template v-if="updateStatus==2">
+											{{ updateStatusText }}
+										</template>
 												<template v-if="updateStatus==0">
 													<v-text-field label="Seleziona il pacchetto di aggiornamento" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
 													<input type="file" style="display: none" ref="file" @change="onFilePicked">
@@ -257,7 +264,6 @@ export default {
 			}
 		},
 		upload() {
-			console.log(this.fileObj)
 			var formdata = new FormData();
 			formdata.append('file_to_upload', this.fileObj)
 			const config = {
@@ -266,12 +272,14 @@ export default {
 					this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
 				}
 			}
+			this.updateStatus = 1
 			this.$axios.post(this.CB + '/uploadFile', formdata, config).then(result => {
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
 				console.dir(result.data);
+				this.updateStatus = 2
 				this.updateStatusText = 'Upload completato. Aggiornamento in corso...'
-				this.updateStatus = 1
+
 			})
 
 		},
@@ -488,6 +496,7 @@ export default {
 	data() {
 		return {
 			status: null,
+			lastCommit: process.env.lastCommit,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			CBv1: process.env.CB_ENDPOINT,
 			snackbar: null,
