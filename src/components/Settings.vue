@@ -58,13 +58,31 @@
 										<h3 class="text-xs-left"> Azioni </h3>
 										<v-card>
 											<div class="cardContent">
-												<v-btn @click="shutdown" color="info"><v-icon>fas fa-power-off</v-icon>  Spegni</v-btn>
-												<v-btn @click="reboot" color="info"><v-icon>fas fa-redo</v-icon> Riavvia</v-btn>
-												<v-btn @click="restoreConfig" color="warning"><v-icon>fas fa-redo</v-icon> Ripristina Impostazioni</v-btn>
-
+												<v-btn @click="shutdown" color="info">
+													<v-icon>fas fa-power-off</v-icon> Spegni
+												</v-btn>
+												<v-btn @click="reboot" color="info">
+													<v-icon>fas fa-redo</v-icon> Riavvia
+												</v-btn>
+												<v-btn @click="restoreConfig" color="warning">
+													<v-icon>fas fa-redo</v-icon> Ripristina Impostazioni
+												</v-btn>
 												<!--
 												<v-btn color="warning">Aggiorna</v-btn>
 												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>-->
+											</div>
+										</v-card>
+										<br>
+										<h3 class="text-xs-left"> Aggiornamento </h3>
+										<v-card>
+											<div class="cardContent">
+												{{ counter }} %
+												{{ updateStatusText }}
+												<template v-if="updateStatus==0">
+													<v-text-field label="Seleziona il pacchetto di aggiornamento" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
+													<input type="file" style="display: none" ref="file" @change="onFilePicked">
+													<v-btn @click="upload" color="error">Conferma</v-btn>
+												</template>
 											</div>
 										</v-card>
 										<br><br>
@@ -216,7 +234,48 @@ export default {
 		this.prepopulate();
 	},
 	methods: {
-		restoreConfig(){
+		pickFile() {
+			this.$refs.file.click()
+		},
+		onFilePicked(e) {
+			const files = e.target.files
+			if (files[0] !== undefined) {
+				this.fileName = files[0].name
+				if (this.fileName.lastIndexOf('.') <= 0) {
+					return
+				}
+				const fr = new FileReader()
+				fr.readAsDataURL(files[0])
+				fr.addEventListener('load', function() {
+					this.fileUrl = fr.result
+					this.fileObj = files[0]
+				}.bind(this))
+			} else {
+				this.fileName = ''
+				this.fileObj = ''
+				this.fileUrl = ''
+			}
+		},
+		upload() {
+			console.log(this.fileObj)
+			var formdata = new FormData();
+			formdata.append('file_to_upload', this.fileObj)
+			const config = {
+				headers: { 'Content-Type': 'multipart/form-data' },
+				onUploadProgress: progressEvent => {
+					this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
+				}
+			}
+			this.$axios.post(this.CB + '/uploadFile', formdata, config).then(result => {
+				this.uploadCompleted = true;
+				this.uploadInProgress = false;
+				console.dir(result.data);
+				this.updateStatusText = 'Upload completato. Aggiornamento in corso...'
+				this.updateStatus = 1
+			})
+
+		},
+		restoreConfig() {
 			let axios = this.$axios
 			let CB = this.CB
 			axios.post(CB + '/restoreSettings')
@@ -403,14 +462,14 @@ export default {
 					'prog_level': data.progLevel,
 
 					'move_fw_elapse': data.moveFwdElapse,
-					'move_fw_speed': data.moveFwdSpeed ,
-					'move_tr_elapse': data.moveTurnElapse ,
-					'move_tr_speed': data.moveTurnSpeed ,
+					'move_fw_speed': data.moveFwdSpeed,
+					'move_tr_elapse': data.moveTurnElapse,
+					'move_tr_speed': data.moveTurnSpeed,
 
-					'ctrl_fw_elapse': data.ctrlFwdElapse ,
-					'ctrl_fw_speed': data.ctrlFwdSpeed ,
-					'ctrl_tr_elapse': data.ctrlTurnElapse ,
-					'ctrl_tr_speed': data.ctrlTurnSpeed ,
+					'ctrl_fw_elapse': data.ctrlFwdElapse,
+					'ctrl_fw_speed': data.ctrlFwdSpeed,
+					'ctrl_tr_elapse': data.ctrlTurnElapse,
+					'ctrl_tr_speed': data.ctrlTurnSpeed,
 				})
 				axios.post(CBv1 + '/config', legacySettings)
 					.then(function() {
@@ -433,6 +492,12 @@ export default {
 			CBv1: process.env.CB_ENDPOINT,
 			snackbar: null,
 			snackText: null,
+			fileName: '',
+			fileObj: '',
+			fileUrl: '',
+			counter: 0,
+			updateStatusText: '',
+			updateStatus: 0,
 			// TODO: Prepopulate this
 			settings: {
 				cbName: 'CoderBot di Antonio',
@@ -443,14 +508,14 @@ export default {
 				wifiSSID: null,
 				wifiPsw: null,
 
-				moveFwdElapse : null,
-				moveFwdSpeed : null,
-				moveTurnElapse : null,
-				moveTurnSpeed : null,
-				ctrlFwdElapse : null,
-				ctrlFwdSpeed : null,
-				ctrlTurnElapse : null,
-				ctrlTurnSpeed : null,
+				moveFwdElapse: null,
+				moveFwdSpeed: null,
+				moveTurnElapse: null,
+				moveTurnSpeed: null,
+				ctrlFwdElapse: null,
+				ctrlFwdSpeed: null,
+				ctrlTurnElapse: null,
+				ctrlTurnSpeed: null,
 
 				motorMode: null,
 				trimFactor: null,
@@ -458,14 +523,14 @@ export default {
 				stopSound: null,
 				shutterSound: null,
 				startupProgram: null,
-				progLevel: null
+				progLevel: null,
 			},
 
 			blocklyToolboxItems: [
-				{text:'Movimento', value:'basic_move'},
-				{text:'Base', value:'basic'},
-				{text:'Standard', value:'std'},
-				{text:'Avanzate', value:'adv'},
+				{ text: 'Movimento', value: 'basic_move' },
+				{ text: 'Base', value: 'basic' },
+				{ text: 'Standard', value: 'std' },
+				{ text: 'Avanzate', value: 'adv' },
 			],
 			cb: {
 				info: {
@@ -499,9 +564,12 @@ export default {
 	padding: 16px;
 }
 
-.fa, .fas, .fab {
+.fa,
+.fas,
+.fab {
 	font-weight: 600;
 	margin-right: 7px;
-	text-size:10px;
+	text-size: 10px;
 }
+
 </style>
