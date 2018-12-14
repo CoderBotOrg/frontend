@@ -79,6 +79,7 @@
 										<v-card>
 											<div class="cardContent">
 												<template v-if="updateStatus==1">
+												Caricamento del file:
 												<h3>{{ counter }} %</h3>
 												<br>
 												{{ updateStatusText }}
@@ -88,8 +89,11 @@
 
 										</template>
 												<template v-if="updateStatus==0">
+
 													<v-text-field label="Seleziona il pacchetto di aggiornamento" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
 													<input type="file" style="display: none" ref="file" @change="onFilePicked">
+													<template v-if="this.fileObj"> Qualsiasi pacchetto di aggiornamento esistente verrà sovrascritto. CoderBot verrà riavviato per applicare l'aggiornamento.<br></template>
+
 													<v-btn v-if="this.fileObj" @click="upload" color="error">Conferma</v-btn>
 												</template>
 											</div>
@@ -272,19 +276,17 @@ export default {
 				headers: { 'Content-Type': 'multipart/form-data' },
 				onUploadProgress: progressEvent => {
 					this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
-					if (this.counter == 100){
-						this.updateStatusText = 'Upload completato. Aggiornamento in corso...'
-					}
+
 				}
 			}
 			this.updateStatus = 1
 
-			this.$axios.post(this.CB + '/uploadFile', formdata, config).then(function(result) {
+			this.$axios.post(this.CB + '/updateFromPackage', formdata, config).then(function(result) {
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
 				console.dir(result.data);
 
-				this.updateStatusText = 'Upload completato. Aggiornamento in corso...'
+				this.updateStatusText = 'Upload completato. Riavvio in corso.'
 
 			}.bind(this))
 
