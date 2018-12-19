@@ -312,7 +312,10 @@ export default {
 			actions: [
 				{ text: 'Esegui', value: 'runProgramLegacy' },
 				{ text: 'Salva', value: 'saveProgram' },
-				//{ text: 'Salva con Nome', value: 'saveas' },
+				{ text: 'Carica Programma', value: 'loadProgramList' },
+				{ text: 'Esporta', value: 'exportProgram' },
+				{ text: 'Importa', value: 'pickFile' },
+				{ text: 'Salva con Nome', value: 'toggleSaveAs' },
 				{ text: 'Mostra Codice', value: 'getProgramCode' },
 			],
 			value: 0,
@@ -354,7 +357,7 @@ export default {
 			defaultView: 'blocks',
 			viste: [
 				{ text: 'Blocchi', value: 'blocks' },
-				{ text: 'Esecuzione', value: 'exec', disabled: true},
+				{ text: 'Esecuzione', value: 'exec', disabled: true },
 				{ text: 'Python', value: 'python', disabled: true }
 			],
 		};
