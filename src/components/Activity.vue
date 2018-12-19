@@ -1,18 +1,17 @@
 <template>
+	<!-- Use computed CSS rules -->
 	<div :style="cssProps">
 		<v-app id="inspire">
+			<!-- the mobile draw animation doesn't play well with how Blockly is draw -->
 			<sidebar mobileDrawAnim=0></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
-				<template v-if="activity.drawerEnabled">
-					<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				</template>
-				<template v-if="activity.showName">
-					<v-toolbar-title>
+				<v-toolbar-side-icon @click.stop="toggleSidebar()" v-if="activity.drawerEnabled"></v-toolbar-side-icon>
+					<v-toolbar-title v-if="activity.showName">
 						{{ activity.name }}
 					</v-toolbar-title>
-				</template>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
+					<!-- If the API is available, show the desired buttons -->
 					<template v-if="status == 200">
 						<template v-for="button, i in activity.buttons">
 							<v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn" :class="button.colorText">
@@ -22,17 +21,15 @@
 							&nbsp;&nbsp;
 						</template>
 					</template>
-					<!--
-					<v-btn @click="dialog = true" icon v-if="status == 200">
-						<v-icon>check_circle</v-icon>
-					</v-btn>
-					-->
+					<!-- If the API is not responding, show an error icon -->
 					<v-btn @click="dialog = true" icon v-if="status != 200">
 						<v-icon>error</v-icon>
 					</v-btn>
 				</v-toolbar-items>
 			</v-toolbar>
+			<!-- Page content -->
 			<v-content>
+				<!-- Blockly -->
 				<div style="height: 480px; width: 600px;">
 					<div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
 						<div ref="blocklyArea" style="height: 100%; width: 100%;" class="blocklyArea">
@@ -42,7 +39,11 @@
 					</div>
 				</div>
 			</v-content>
-			<!-- Runtime modal -->
+			<!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
+			<input type="file" style="display: none" ref="file" @change="importProgram">
+			<!-- When the selection is completed, the result is then handled by importProgram -->
+			<!--   Dialogs   -->
+			<!-- Runtime -->
 			<v-dialog v-model="runtimeDialog" width="500">
 				<v-card>
 					<v-card-title class="headline grey lighten-2" primary-title>
@@ -65,10 +66,7 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
-			<input type="file" style="display: none" ref="file" @change="importProgram">
-			<!-- When the selection is completed, the result is then handled by importProgram -->
-			<!-- Dialogs -->
+			<!-- Load Program -->
 			<v-dialog v-model="carica" max-width="290">
 				<v-card>
 					<v-card-title class="headline">
@@ -92,7 +90,7 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Save Program -->
 			<v-dialog v-model="salva" max-width="430">
 				<v-card>
 					<v-card-title class="headline">
@@ -112,12 +110,12 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Name error -->
 			<v-dialog v-model="unvalidName" max-width="290">
 				<v-card>
-					<v-card-title class="headline">ERRORE</v-card-title>
+					<v-card-title class="headline">Error</v-card-title>
 					<v-card-text>
-						Il nome del programma non deve essere vuoto
+						Il nome del programma non può essere vuoto.
 					</v-card-text>
 					<v-card-actions>
 						<v-btn color="green darken-1" flat="flat" @click="unvalidName = false, salva = true">
@@ -126,10 +124,10 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Overwrite error -->
 			<v-dialog v-model="CannotOverwrite" max-width="290">
 				<v-card>
-					<v-card-title class="headline">ERRORE</v-card-title>
+					<v-card-title class="headline">Error</v-card-title>
 					<v-card-text>
 						Impossibile sovrascrivere un programma di default, cambiare il nome.
 					</v-card-text>
@@ -140,7 +138,7 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Ask for overwrite -->
 			<v-dialog v-model="overwriteDialog" max-width="500">
 				<v-card>
 					<v-card-title class="headline">
@@ -159,7 +157,7 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Delete Program -->
 			<v-dialog v-model="del" max-width="500">
 				<v-card>
 					<v-card-title class="headline">
@@ -178,7 +176,7 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Show Code -->
 			<v-dialog v-model="dialogCode">
 				<v-card>
 					<v-card-title class="headline">Codice</v-card-title>
@@ -194,7 +192,7 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Status -->
 			<v-dialog v-model="dialog" max-width="290">
 				<v-card>
 					<v-card-title class="headline">Stato del Coderbot</v-card-title>
@@ -209,7 +207,7 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-			<!-- -->
+			<!-- Generic dialog -->
 			<v-dialog v-model="generalDialog" max-width="290">
 				<v-card>
 					<v-card-title class="headline">{{ generalDialogTitle }}</v-card-title>
@@ -366,7 +364,7 @@ export default {
 			console.log("Computed CSS props:", this.cssProps)
 		},
 
-		initBlockly(settings){
+		initBlockly(settings) {
 			// Extend the default blocks set
 			this.blocksExtensions(settings);
 
@@ -385,7 +383,7 @@ export default {
 				// Options
 				{
 					toolbox: serializedToolbox,
-					path				: 'static/js/blockly/',
+					path: 'static/js/blockly/',
 					// TODO: Use values from fetched configuration!
 					scrollbars: true,
 					//MaxBlocks		: -1, // -1 as infinite not working FIXME
