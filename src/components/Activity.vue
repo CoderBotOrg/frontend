@@ -6,9 +6,9 @@
 			<sidebar mobileDrawAnim=0></sidebar>
 			<v-toolbar color="indigo" dark fixed app>
 				<v-toolbar-side-icon @click.stop="toggleSidebar()" v-if="activity.drawerEnabled"></v-toolbar-side-icon>
-					<v-toolbar-title v-if="activity.showName">
-						{{ activity.name }}
-					</v-toolbar-title>
+				<v-toolbar-title v-if="activity.showName">
+					{{ activity.name }}
+				</v-toolbar-title>
 				<v-spacer></v-spacer>
 				<v-toolbar-items>
 					<!-- If the API is available, show the desired buttons -->
@@ -1579,6 +1579,11 @@ export default {
 			} else {
 				console.log("Something went wrong importing")
 			}
+		},
+
+		toggleSaveAs() {
+			this.salva = true
+			newProgramName = programName
 		},
 
 		saveProgramAs(e) {
