@@ -10,7 +10,7 @@
 				<br>
 				<div style="font-size: 24px;"> Benvenuto in </div>
 				<div class="logo">CoderBot</div>
-				<v-flex xs11 md8 offset-md2>
+				<v-flex xs12 md8 offset-md2>
 					<v-carousel interval="10000" hide-delimiters>
 						<v-carousel-item  v-for="(item,i) in carouselItems" :key="i" :src="item.src">
 						</v-carousel-item>
