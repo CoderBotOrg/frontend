@@ -319,8 +319,6 @@ export default {
 				{ text: 'Mostra Codice', value: 'getProgramCode' },
 			],
 			value: 0,
-
-
 			fontSizeLabels: [
 				'Piccolo',
 				'Medio',

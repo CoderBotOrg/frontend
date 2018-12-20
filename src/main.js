@@ -35,7 +35,6 @@ import app from './App';
 import landing from './components/Landing';
 //import arexample from './components/ARexample';
 import control from './components/Control';
-import blockly from './components/Blockly';
 import activityEditor from './components/ActivityEditor'
 import settings from './components/Settings'
 import gallery from './components/Gallery'
@@ -64,7 +63,6 @@ Vue.config.productionTip = false;
 const routes = [
   { path: '/', component: landing, meta: {title: 'CoderBot'} },
   { path: '/control', component: control, meta: {title: 'CoderBot - Controlla'} },
-  { path: '/programOld', component: blockly, meta: {title: 'CoderBot - Blockly'}},
   { path: '/program', component: activity, meta: {title: 'CoderBot - Blockly'}},
   { path: '/settings', component: settings , meta: {title: 'CoderBot - Impostazioni'}},
   { path: '/gallery', component: gallery, meta: {title: 'CoderBot - Galleria'}},
