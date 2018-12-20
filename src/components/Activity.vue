@@ -14,10 +14,18 @@
 					<!-- If the API is available, show the desired buttons -->
 					<template v-if="status == 200">
 						<template v-for="button, i in activity.buttons">
-							<v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn" :class="button.colorText">
-								{{ button.label }}
-								<v-icon right dark>{{ button.icon }}</v-icon>
-							</v-btn>
+							<template v-if="button.type == 'flat'">
+								<v-btn @click="_self[button.action]()" flat>
+									<v-icon>{{ button.icon }}</v-icon>
+									{{ button.label }}
+								</v-btn>
+							</template>
+							<template v-else>
+								<v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn" :class="button.colorText">
+									{{ button.label }}
+									<v-icon right dark>{{ button.icon }}</v-icon>
+								</v-btn>
+							</template>
 							&nbsp;&nbsp;
 						</template>
 					</template>
@@ -299,20 +307,80 @@ export default {
 		// Get the activity
 		let axios = this.$axios
 		let CB = this.CB
-		console.log("Loading activity", this.$route.params.name)
-		this.saved = true;
-		axios.get(CB + '/loadActivity', {
-				params: {
-					name: this.$route.params.name
-				}
-			})
-			.then(function(response) {
-				console.log("Activity loaded", response.data)
-				this.activity = response.data
-				this.updateCssProps()
+		if (this.$route.path == '/program') {
+			console.log('Loading the default activity')
+			this.activity = {
+				"bodyFont": "Roboto",
+				"buttons": [{
+						"action": "saveProgram",
+						"icon": "save",
+						"label": "Salva",
+						"type": "flat"
+					},
+					{
+						"action": "toggleSaveAs",
+						"icon": "edit",
+						"label": "Salva con Nome",
+						"type": "flat"
+					},
+					{
+						"action": "loadProgramList",
+						"icon": "folder_open",
+						"label": "Carica",
+						"type": "flat"
+					},
+					{
+						"action": "runProgramLegacy",
+						"icon": "play_arrow",
+						"label": "Esegui",
+						"type": "flat"
+					},
+					{
+						"action": "getProgramCode",
+						"icon": "code",
+						"label": "Mostra codice",
+						"type": "flat"
+					},
+					{
+						"action": "exportProgram",
+						"icon": "fa-file-export",
+						"label": "Esporta",
+						"type": "flat"
+					},
+					{
+						"action": "pickFile",
+						"icon": "fa-file-import",
+						"label": "Importa",
+						"type": "flat"
+					},
 
-			}.bind(this))
-
+				],
+				"capsSwitch": false,
+				"codeFont": "ubuntumono",
+				"description": null,
+				"drawerEnabled": true,
+				"exec": {
+					"camera": true,
+					"log": true
+				},
+				"fontSize": "Medio",
+				"name": "Programma",
+				"showName": true
+			}
+		} else {
+			console.log("Loading activity", this.$route.params.name)
+			this.saved = true;
+			axios.get(CB + '/loadActivity', {
+					params: {
+						name: this.$route.params.name
+					}
+				})
+				.then(function(response) {
+					console.log("Activity loaded", response.data)
+					this.activity = response.data
+					this.updateCssProps()
+				}.bind(this))
+		}
 
 		this.status = null
 		this.pollStatus();

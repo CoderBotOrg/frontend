@@ -64,7 +64,8 @@ Vue.config.productionTip = false;
 const routes = [
   { path: '/', component: landing, meta: {title: 'CoderBot'} },
   { path: '/control', component: control, meta: {title: 'CoderBot - Controlla'} },
-  { path: '/program', component: blockly, meta: {title: 'CoderBot - Blockly'}},
+  { path: '/programOld', component: blockly, meta: {title: 'CoderBot - Blockly'}},
+  { path: '/program', component: activity, meta: {title: 'CoderBot - Blockly'}},
   { path: '/settings', component: settings , meta: {title: 'CoderBot - Impostazioni'}},
   { path: '/gallery', component: gallery, meta: {title: 'CoderBot - Galleria'}},
   //{ path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
