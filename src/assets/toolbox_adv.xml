@@ -1,4 +1,13 @@
 <xml>
+	<category name="Logica" colour="210">
+		<block type="controls_if"></block>
+		<block type="logic_compare"></block>
+		<block type="logic_operation"></block>
+		<block type="logic_negate"></block>
+		<block type="logic_boolean"></block>
+		<block type="logic_null"></block>
+		<block type="logic_ternary"></block>
+	</category>
 	<category name="Cicli" colour="120">
 		<block type="controls_repeat_ext">
 			<value name="TIMES">
@@ -158,7 +167,7 @@
 	</category>
 	<category name="Variabili" custom="VARIABLE" colour="330"></category>
 	<category name="Funzioni" custom="PROCEDURE" colour="290"></category>
-<!--
+	<!--
 	<category name="Eventi" colour="15">
 		<block type="coderbot_event_generator">
 			<value name="generator_statements">
