@@ -1,6 +1,7 @@
 # vue-app
+[![CircleCI](https://circleci.com/gh/CoderBotOrg/vue-app/tree/master.svg?style=svg)](https://circleci.com/gh/CoderBotOrg/vue-app/tree/master)
 
-This is the new CoderBot application in Vue.js.
+The new CoderBot application in Vue.js.
 
 It exposes settings, a Blockly development environment, persistence and the ability to customise the UI and the _Activities_ proposed to the student.
 
