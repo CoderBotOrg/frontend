@@ -36,14 +36,13 @@
 										<h3 class="text-xs-left">Sistema </h3>
 										<v-card>
 											<div class="cardContent">
-
 												<v-select v-model="settings.progLevel" :items="blocklyToolboxItems" label="Livello Toolbox Blockly"></v-select>
 												<!--<v-text-field v-model="settings.cbName" label="Nome CoderBot"></v-text-field>
 												<br>-->
 												<div v-for="(value, key, index) in cb.info">
 													{{ key }}: <code>{{ value }}</code>
 												</div>
-												 Vue app commit build: <code> {{ lastCommit }} </code>
+												Vue app commit build: <code> {{ lastCommit }} </code>
 											</div>
 										</v-card>
 										<br>
@@ -79,21 +78,17 @@
 										<v-card>
 											<div class="cardContent">
 												<template v-if="updateStatus==1">
-												Caricamento del file:
-												<h3>{{ counter }} %</h3>
-												<br>
-												{{ updateStatusText }}
-
-											</template>
-											<template v-if="updateStatus==2">
-
-										</template>
+													Caricamento del file:
+													<h3>{{ counter }} %</h3>
+													<br>
+													{{ updateStatusText }}
+												</template>
+												<template v-if="updateStatus==2">
+												</template>
 												<template v-if="updateStatus==0">
-
 													<v-text-field label="Seleziona il pacchetto di aggiornamento" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
 													<input type="file" style="display: none" ref="file" @change="onFilePicked">
 													<template v-if="this.fileObj"> Qualsiasi pacchetto di aggiornamento esistente verrà sovrascritto. CoderBot verrà riavviato per applicare l'aggiornamento.<br></template>
-
 													<v-btn v-if="this.fileObj" @click="upload" color="error">Conferma</v-btn>
 												</template>
 											</div>
@@ -252,36 +247,21 @@ export default {
 		},
 		onFilePicked(e) {
 			const files = e.target.files
-			if (files[0] !== undefined) {
-				this.fileName = files[0].name
-				if (this.fileName.lastIndexOf('.') <= 0) {
-					return
-				}
-				const fr = new FileReader()
-				fr.readAsDataURL(files[0])
-				fr.addEventListener('load', function() {
-					this.fileUrl = fr.result
-					this.fileObj = files[0]
-				}.bind(this))
-			} else {
-				this.fileName = ''
-				this.fileObj = ''
-				this.fileUrl = ''
-			}
+			this.fileName = files[0].name
+			this.fileObj = files[0]
+			this.formdata = new FormData();
+			this.formdata.append('file_to_upload', files[0], files[0].name);
 		},
 		upload() {
-			var formdata = new FormData();
-			formdata.append('file_to_upload', this.fileObj)
 			const config = {
 				headers: { 'Content-Type': 'multipart/form-data' },
 				onUploadProgress: progressEvent => {
 					this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
-
 				}
 			}
 			this.updateStatus = 1
 
-			this.$axios.post(this.CB + '/updateFromPackage', formdata, config).then(function(result) {
+			this.$axios.post(this.CB + '/updateFromPackage', this.formdata, config).then(function(result) {
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
 				console.dir(result.data);
@@ -503,6 +483,8 @@ export default {
 	},
 	data() {
 		return {
+			formdata: null,
+			files: null,
 			status: null,
 			lastCommit: process.env.lastCommit,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
