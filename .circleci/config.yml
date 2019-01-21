@@ -65,12 +65,24 @@ jobs:
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} *.tgz
 workflows:
   version: 2
+  build_only:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
   build_and_publish:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /^v.*/
       - publish:
           requires:
             - build
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
+
