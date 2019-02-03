@@ -11,6 +11,14 @@
 							<v-list-tile-title class="navEntry">Home</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
+					<v-list-tile href="/docs" target="_blank">
+						<v-list-tile-action>
+							<v-icon large>help</v-icon>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title class="navEntry">Documentazione</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>
 					<!--
 				<v-list-tile to="/help">
 					<v-list-tile-action>

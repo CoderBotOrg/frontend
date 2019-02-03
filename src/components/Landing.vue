@@ -24,6 +24,9 @@
 							<v-btn flat large color="primary" to="program">
 								<v-icon left dark>flip_to_front</v-icon>Programma
 							</v-btn> <br>
+							<v-btn flat large color="primary" target="_blank" href="/docs">
+								<v-icon left dark>help</v-icon>Documentazione
+							</v-btn> <br>
 							<v-btn flat large color="primary" to="control">
 								<v-icon left dark>games</v-icon>Controlla
 							</v-btn> <br>
