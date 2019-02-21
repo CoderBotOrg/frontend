@@ -70,16 +70,53 @@
 												<v-btn @click="restoreConfig" color="warning">
 													<v-icon>fas fa-redo</v-icon> Ripristina Impostazioni
 												</v-btn>
-												<v-btn @click="restore" color="error">
-													<v-icon>fas fa-power-off</v-icon> Ripristina ad impostazioni di fabbrica
-												</v-btn>
+                                                <!-- ** Restore button + dialog box** -->
+                                                <v-dialog
+                                                    v-model="dialog"
+                                                    width="500" >
+                                                    <v-btn 
+                                                           slot="activator" 
+                                                           color="error"dark >
+                                                      <v-icon>fas fa-wrench</v-icon> Ripristina ad impostazioni di fabbrica
+                                                    </v-btn>
+
+                                                    <v-card>
+                                                      <v-card-title
+                                                        class="headline grey lighten-2"
+                                                        primary-title >
+                                                        <h3>CoderBot - Restore</h3>
+                                                      </v-card-title>
+
+                                                      <v-card-text>
+                                                        Are you sure you want to restore the CoderBot?
+                                                          <br>
+                                                        <h3><b>Every saved file will be lost</b></h3>
+                                                      </v-card-text>
+
+                                                      <v-divider></v-divider>
+
+                                                      <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn
+                                                          color="primary"
+                                                          @click="dialog = false" >
+                                                          Cancel
+                                                        </v-btn>
+                                                      <v-btn
+                                                      color="error"
+                                                      @click="restore" >
+                                                      <b>Restore</b>
+                                                    </v-btn>
+                                                      </v-card-actions>
+                                                    </v-card>
+                                                  </v-dialog>
 												<!--
 												<v-btn color="warning">Aggiorna</v-btn>
 												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn> -->
 											</div>
 										</v-card>
 										<br>
-										<h3 class="text-xs-left"> LOGS </h3>
+										<h3 class="text-xs-left"> Reset Logs </h3>
 										<v-card>
 											<div class="cardContent">
                                                 <div v-for="value in cb.logs.log">
@@ -513,6 +550,7 @@ export default {
 			formdata: null,
 			files: null,
 			status: null,
+            dialog: false,
 			lastCommit: process.env.lastCommit,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			CBv1: process.env.CB_ENDPOINT,
