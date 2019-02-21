@@ -50,7 +50,9 @@
 										<v-card>
 											<div class="cardContent">
 												<div v-for="(value, key, index) in cb.status">
-													{{ key }}: <code>{{ value }}</code>
+                                                    <div v-if="key != 'log'">
+													   {{ key }}: <code>{{ value }}</code>
+                                                    </div>
 												</div>
 												<br>
 											</div>
@@ -58,7 +60,7 @@
 										<br>
 										<h3 class="text-xs-left"> Azioni </h3>
 										<v-card>
-											<div class="cardContent">
+											<div class="cardContent text-xs-center">
 												<v-btn @click="shutdown" color="info">
 													<v-icon>fas fa-power-off</v-icon> Spegni
 												</v-btn>
@@ -68,9 +70,21 @@
 												<v-btn @click="restoreConfig" color="warning">
 													<v-icon>fas fa-redo</v-icon> Ripristina Impostazioni
 												</v-btn>
+												<v-btn @click="restore" color="error">
+													<v-icon>fas fa-power-off</v-icon> Ripristina ad impostazioni di fabbrica
+												</v-btn>
 												<!--
 												<v-btn color="warning">Aggiorna</v-btn>
-												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn>-->
+												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn> -->
+											</div>
+										</v-card>
+										<br>
+										<h3 class="text-xs-left"> LOGS </h3>
+										<v-card>
+											<div class="cardContent">
+                                                <div v-for="value in cb.logs.log">
+                                                    {{ value }}
+                                                </div>
 											</div>
 										</v-card>
 										<br>
@@ -281,6 +295,17 @@ export default {
 					this.prepopulate()
 				}.bind(this))
 		},
+        restore() {
+            let axios = this.$axios
+			let CB = this.CB 
+            axios.post(CB + '/reset')
+                .then(function(response) {
+					this.snackText = 'Ripristino ad impostazioni di fabbrica'
+					this.snackbar = true
+					this.prepopulate()
+				}.bind(this))
+        },
+        
 		shutdown() {
 			let axios = this.$axios
 			let CBv1 = this.CBv1
@@ -307,6 +332,7 @@ export default {
 			axios.get(this.CB + '/status')
 				.then(function(response) {
 					this.cb.status = response.data
+                    this.cb.logs.log = response.data.log
 				}.bind(this))
 			axios.get(this.CB + '/info')
 				.then(function(response) {
@@ -329,6 +355,7 @@ export default {
 					//console.log(response)
 					this.statusData = response.data
 					this.status = response.status
+                    this.cb.logs.log = response.data.log
 				}.bind(this))
 				.catch(function(error) {
 					// handle error
@@ -545,7 +572,10 @@ export default {
 					backendVersion: null,
 					vueVersion: null,
 					kernel: null
-				}
+				},
+                logs: {
+                    log: null
+                }
 			},
 			drawer: null,
 			tab: null,

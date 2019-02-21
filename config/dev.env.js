@@ -9,7 +9,7 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   // Backend location. Must point to the exposed Flask instance
   //  By default, if you run the backend locally, it's available at localhost:5000
-  CB_ENDPOINT: '"http://localhost:5000"',
+  CB_ENDPOINT: '"http://coderbot.local"',
   // Legacy APIs
   APIv1: '""',
   // New API, exposed by Connexion
