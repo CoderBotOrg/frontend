@@ -337,9 +337,12 @@ export default {
 			let CB = this.CB 
             axios.post(CB + '/reset')
                 .then(function(response) {
-					this.snackText = 'Ripristino ad impostazioni di fabbrica'
+					this.snackText = 'Ripristino ad impostazioni di fabbrica \
+                                        Reboot in corso...'
 					this.snackbar = true
 					this.prepopulate()
+                    setTimeout(() => $(dialog).close(), 5000)
+                    this.dialog = false
 				}.bind(this))
         },
         
