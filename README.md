@@ -1,7 +1,11 @@
 # vue-app
 [![CircleCI](https://circleci.com/gh/CoderBotOrg/vue-app/tree/master.svg?style=svg)](https://circleci.com/gh/CoderBotOrg/vue-app/tree/master)
 
-The new CoderBot application in Vue.js.
+> CoderBot is a RaspberryPI-based programmable robot for educational purposes. Check the [project website](https://www.coderbot.org) for more information.
+>
+> For further information about development and technical documentation, see the [Wiki](https://github.com/CoderBotOrg/coderbot/wiki).
+
+This is the new CoderBot client application, in Vue.js.
 
 It exposes settings, a Blockly development environment, persistence and the ability to customise the UI and the _Activities_ proposed to the student.
 
