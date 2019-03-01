@@ -29,63 +29,65 @@
 					<v-container grid-list-md text-xs-center>
 						<v-layout row wrap>
 							<v-flex xs12 lg8>
-								<v-img :src="webcamStream"/>
-								</v-flex>
-								<v-flex xs12 lg4>
-									<br>
-									<v-layout row wrap>
-										<v-flex xs12 sm12>
-											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(0)" v-on:mouseup="stop()">
-													<v-icon dark>keyboard_arrow_up</v-icon>
-												</v-btn>
-											</v-btn-toggle>
-										</v-flex>
-										<v-flex xs12 sm12>
-											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(1)" v-on:mouseup="stop()">
-													<v-icon dark>keyboard_arrow_left</v-icon>
-												</v-btn>
-												<span style="background-color: #fafafa;width: 64px" > </span>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(2)" v-on:mouseup="stop()">
-													<v-icon dark>keyboard_arrow_right</v-icon>
-												</v-btn>
-											</v-btn-toggle>
-										</v-flex>
-										<v-flex xs12 sm12>
-											<v-btn-toggle>
-												<v-btn large color="blue-grey darken-4" class="white--text" v-on:mousedown="move(3)" v-on:mouseup="stop()">
-													<v-icon dark>keyboard_arrow_down</v-icon>
-												</v-btn>
-											</v-btn-toggle>
-										</v-flex>
-										<v-flex xs12 sm12>
-											<br><br><br>
-											<v-btn large color="blue-grey darken-1" v-on:click="ttsdialog = true" class="controlBtn" :disabled="!ttsBtnEnabled">
-												Pronuncia
-												<v-icon>chat_bubble_outline</v-icon>
+								<v-img :src="webcamStream" />
+							</v-flex>
+							<v-flex xs12 lg4>
+								<br>
+								<v-layout row wrap>
+									<v-flex xs12 sm12>
+
+											<v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(0)" v-on:mouseup="stop()">
+												<v-icon dark>keyboard_arrow_up</v-icon>
 											</v-btn>
-										</v-flex>
-										<v-flex xs12 sm12>
-											<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="takePhoto()" :disabled="!photoBtnEnabled">
-												Scatta foto
-												<v-icon dark>camera_alt</v-icon>
+
+									</v-flex>
+									<v-flex xs12 sm12>
+
+											<v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(1)" v-on:mouseup="stop()">
+												<v-icon dark>keyboard_arrow_left</v-icon>
 											</v-btn>
-										</v-flex>
-										<v-flex xs12 sm12>
-											<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="videoHandler()" :disabled="!videoBtn.enabled">
-												{{ videoBtn.text }}
-												<v-icon dark>{{ videoBtn.icon }} </v-icon>
+
+
+
+											<v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(2)" v-on:mouseup="stop()">
+												<v-icon dark>keyboard_arrow_right</v-icon>
 											</v-btn>
-										</v-flex>
-										<v-flex xs12 sm12>
-											<v-btn large color="blue-grey darken-1" class="controlBtn" to="/gallery">
-												Galleria
-												<v-icon dark>photo_library</v-icon>
+
+									</v-flex>
+									<v-flex xs12 sm12>
+
+											<v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(3)" v-on:mouseup="stop()">
+												<v-icon dark>keyboard_arrow_down</v-icon>
 											</v-btn>
-										</v-flex>
-									</v-layout>
-								</v-flex>
+
+									</v-flex>
+									<v-flex xs12 sm12>
+										<br><br><br>
+										<v-btn large color="blue-grey darken-1" v-on:click="ttsdialog = true" class="controlBtn" :disabled="!ttsBtnEnabled">
+											Pronuncia
+											<v-icon>chat_bubble_outline</v-icon>
+										</v-btn>
+									</v-flex>
+									<v-flex xs12 sm12>
+										<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="takePhoto()" :disabled="!photoBtnEnabled">
+											Scatta foto
+											<v-icon dark>camera_alt</v-icon>
+										</v-btn>
+									</v-flex>
+									<v-flex xs12 sm12>
+										<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="videoHandler()" :disabled="!videoBtn.enabled">
+											{{ videoBtn.text }}
+											<v-icon dark>{{ videoBtn.icon }} </v-icon>
+										</v-btn>
+									</v-flex>
+									<v-flex xs12 sm12>
+										<v-btn large color="blue-grey darken-1" class="controlBtn" to="/gallery">
+											Galleria
+											<v-icon dark>photo_library</v-icon>
+										</v-btn>
+									</v-flex>
+								</v-layout>
+							</v-flex>
 						</v-layout>
 					</v-container>
 				</div>
@@ -338,4 +340,13 @@ export default {
 	margin: 7px;
 }
 
+.jp-btn{
+	margin:0px;
+	margin-left:28px;
+	margin-right:28px;
+	height: 48px;
+	min-width: 0px;
+	width: 48px;
+	padding: 0 0;
+}
 </style>
