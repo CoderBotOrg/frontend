@@ -50,9 +50,9 @@
 										<v-card>
 											<div class="cardContent">
 												<div v-for="(value, key, index) in cb.status">
-                                                    <div v-if="key != 'log'">
-													   {{ key }}: <code>{{ value }}</code>
-                                                    </div>
+													<div v-if="key != 'log'">
+														{{ key }}: <code>{{ value }}</code>
+													</div>
 												</div>
 												<br>
 											</div>
@@ -70,46 +70,32 @@
 												<v-btn @click="restoreConfig" color="warning">
 													<v-icon>fas fa-redo</v-icon> Ripristina Impostazioni
 												</v-btn>
-                                                <!-- ** Restore button + dialog box** -->
-                                                <v-dialog
-                                                    v-model="dialog"
-                                                    width="500" >
-                                                    <v-btn 
-                                                           slot="activator" 
-                                                           color="error"dark >
-                                                      <v-icon>fas fa-wrench</v-icon> Ripristina ad impostazioni di fabbrica
-                                                    </v-btn>
-
-                                                    <v-card>
-                                                      <v-card-title
-                                                        class="headline grey lighten-2"
-                                                        primary-title >
-                                                        <h3>CoderBot - Restore</h3>
-                                                      </v-card-title>
-
-                                                      <v-card-text>
-                                                        Are you sure you want to restore the CoderBot?
-                                                          <br>
-                                                        <h3><b>Every saved file will be lost</b></h3>
-                                                      </v-card-text>
-
-                                                      <v-divider></v-divider>
-
-                                                      <v-card-actions>
-                                                        <v-spacer></v-spacer>
-                                                        <v-btn
-                                                          color="primary"
-                                                          @click="dialog = false" >
-                                                          Cancel
-                                                        </v-btn>
-                                                      <v-btn
-                                                      color="error"
-                                                      @click="restore" >
-                                                      <b>Restore</b>
-                                                    </v-btn>
-                                                      </v-card-actions>
-                                                    </v-card>
-                                                  </v-dialog>
+												<!-- ** Restore button + dialog box** -->
+												<v-dialog v-model="dialog" width="500">
+													<v-btn slot="activator" color="error" dark>
+														<v-icon>fas fa-wrench</v-icon> Ripristina ad impostazioni di fabbrica
+													</v-btn>
+													<v-card>
+														<v-card-title class="headline grey lighten-2" primary-title>
+															<h3>Ripristina impostazioni</h3>
+														</v-card-title>
+														<v-card-text>
+															Sei sicuro di voler ripristinare alle impostazioni di fabbrica?
+															<br>
+															<h4><b>TUTTI I DATI VERRANNO PERSI</b></h4>
+														</v-card-text>
+														<v-divider></v-divider>
+														<v-card-actions>
+															<v-spacer></v-spacer>
+															<v-btn color="primary" @click="dialog = false">
+																Annulla
+															</v-btn>
+															<v-btn color="error" @click="restore">
+																<b>Ripristina</b>
+															</v-btn>
+														</v-card-actions>
+													</v-card>
+												</v-dialog>
 												<!--
 												<v-btn color="warning">Aggiorna</v-btn>
 												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn> -->
@@ -119,9 +105,9 @@
 										<h3 class="text-xs-left"> Reset Logs </h3>
 										<v-card>
 											<div class="cardContent">
-                                                <div v-for="value in cb.logs.log">
-                                                    {{ value }}
-                                                </div>
+												<div v-for="value in cb.logs.log">
+													{{ value }}
+												</div>
 											</div>
 										</v-card>
 										<br>
@@ -332,20 +318,20 @@ export default {
 					this.prepopulate()
 				}.bind(this))
 		},
-        restore() {
-            let axios = this.$axios
-			let CB = this.CB 
-            axios.post(CB + '/reset')
-                .then(function(response) {
+		restore() {
+			let axios = this.$axios
+			let CB = this.CB
+			axios.post(CB + '/reset')
+				.then(function(response) {
 					this.snackText = 'Ripristino ad impostazioni di fabbrica \
                                         Reboot in corso...'
 					this.snackbar = true
 					this.prepopulate()
-                    setTimeout(() => $(dialog).close(), 5000)
-                    this.dialog = false
+					setTimeout(() => $(dialog).close(), 5000)
+					this.dialog = false
 				}.bind(this))
-        },
-        
+		},
+
 		shutdown() {
 			let axios = this.$axios
 			let CBv1 = this.CBv1
@@ -372,7 +358,7 @@ export default {
 			axios.get(this.CB + '/status')
 				.then(function(response) {
 					this.cb.status = response.data
-                    this.cb.logs.log = response.data.log
+					this.cb.logs.log = response.data.log
 				}.bind(this))
 			axios.get(this.CB + '/info')
 				.then(function(response) {
@@ -394,7 +380,7 @@ export default {
 
 					this.statusData = response.data
 					this.status = response.status
-                    this.cb.logs.log = response.data.log
+					this.cb.logs.log = response.data.log
 				}.bind(this))
 				.catch(function(error) {
 					// handle error
@@ -552,7 +538,7 @@ export default {
 			formdata: null,
 			files: null,
 			status: null,
-            dialog: false,
+			dialog: false,
 			lastCommit: process.env.lastCommit,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			CBv1: process.env.CB_ENDPOINT,
@@ -613,9 +599,9 @@ export default {
 					vueVersion: null,
 					kernel: null
 				},
-                logs: {
-                    log: null
-                }
+				logs: {
+					log: null
+				}
 			},
 			drawer: null,
 			tab: null,
