@@ -105,14 +105,14 @@
 						</v-list-tile-content>
 					</v-list-tile>
 					<br>
-					<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
-						<v-divider></v-divider>
-						<v-btn v-for="el in socials" :key="el.icon" class="mx-3 gray--text" icon :href="el.link" target="_blank">
-							<v-icon size="24px">{{ el.icon }}</v-icon>
-						</v-btn>
-						<br>
-						&copy;2018 — <strong>UNIMIB</strong><!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
-					</div>
+					<v-layout row wrap fill-height>
+						<v-flex xs12 style="position:absolute; bottom: 1%;">
+							<small>
+								&nbsp; &copy;2019 - CoderBot.org, UNIMIB.
+								<!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
+							</small>
+						</v-flex>
+					</v-layout>
 				</v-list>
 			</v-navigation-drawer>
 		</template>
@@ -126,9 +126,8 @@
 						<v-list-tile-content>
 							<v-list-tile-title class="navEntry">Home</v-list-tile-title>
 						</v-list-tile-content>
-
 					</v-list-tile>
-										<v-list-tile href="/docs" target="_blank">
+					<v-list-tile href="/docs" target="_blank">
 						<v-list-tile-action>
 							<v-icon large>help</v-icon>
 						</v-list-tile-action>
@@ -214,19 +213,27 @@
 						</v-list-tile-content>
 					</v-list-tile>
 					<br>
-					<div style="position: absolute; bottom: 1%;" class="gray--text text-xs-center">
-						<v-divider></v-divider>
+					<v-layout row wrap fill-height>
+						<v-flex xs12 style="position:absolute; bottom: 1%;">
+							<small>
+								&nbsp; &copy;2019 - CoderBot.org, UNIMIB.
+								<!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
+							</small>
+						</v-flex>
+					</v-layout>
+					<div>
+						<!--
 						<v-btn v-for="el in socials" :key="el.icon" class="mx-3 gray--text" icon :href="el.link" target="_blank">
 							<v-icon size="24px">{{ el.icon }}</v-icon>
-						</v-btn>
+						</v-btn>-->
 						<br>
-						&copy;2018 — <strong>UNIMIB</strong><!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
+						<center>
+						</center>
 					</div>
 				</v-list>
 			</v-navigation-drawer>
 		</template>
 	</div>
-
 </template>
 <script>
 export default {
@@ -248,7 +255,7 @@ export default {
 			//let programList = this.$data.programList
 			axios.get(CB + '/listActivities')
 				.then(function(response) {
-						this.$data.editModal = true,
+					this.$data.editModal = true,
 						this.$data.activitiesList = response.data;
 				}.bind(this))
 		},
