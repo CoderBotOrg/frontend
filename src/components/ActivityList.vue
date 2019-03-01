@@ -8,48 +8,44 @@
 			</v-toolbar>
 			<v-content>
 				<v-container grid-list-md text-xs-center>
-								<v-layout row wrap>
-									<!-- Column A -->
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Lista Attività</h3>
-										<v-card>
-				<v-list>
-					<span v-if="activityList == null || activityList == [] || activityList.length == 0">
-						Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
-					</span>
-					<template v-for="activity in activityList" >
-
-
-
-					<v-list-tile :key="activity.el" avatar @click="" >
-						<v-list-tile-title ripple @click="goToActivity(activity.name)">
-							<b>{{ activity.name }}</b>
-							<small> {{activity.description}} </small>
-						</v-list-tile-title>
-
-
-					<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
-							<v-icon>delete</v-icon>
-						</v-btn>
-						<v-btn flat icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
-							<v-icon>edit</v-icon>
-						</v-btn>
-					</v-list-tile>
-
-
-
-
-					</template>
-
-				</v-list>
-			</v-card></v-flex></v-layout></v-container>
+					<v-layout row wrap>
+						<!-- Column A -->
+						<v-flex xs12 md6 offset-md3>
+							<h3 class="text-xs-left">Lista Attività</h3>
+							<p style="text-align: left">
+								Qui puoi avviare un'attività salvata, cliccando sul suo nome.<br>
+								L'icona <v-icon>delete</v-icon> ti permette di eliminarla, mentre cliccando su <v-icon>edit</v-icon> puoi modificarla.
+							</p>
+							<v-card>
+								<v-list>
+									<span v-if="activityList == null || activityList == [] || activityList.length == 0">
+										Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
+									</span>
+									<template v-for="activity in activityList">
+										<v-list-tile :key="activity.el" avatar @click="">
+											<v-list-tile-title ripple @click="goToActivity(activity.name)">
+												<b>{{ activity.name }}</b>
+												<small> {{activity.description}} </small>
+											</v-list-tile-title>
+											<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
+												<v-icon>delete</v-icon>
+											</v-btn>
+											<v-btn flat icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
+												<v-icon>edit</v-icon>
+											</v-btn>
+										</v-list-tile>
+									</template>
+								</v-list>
+							</v-card>
+						</v-flex>
+					</v-layout>
+				</v-container>
 			</v-content>
 		</v-app>
 	</div>
 </template>
 <script>
 import sidebar from "../components/Sidebar"
-
 export default {
 	components: { sidebar },
 	name: 'CoderBot',
@@ -81,7 +77,6 @@ export default {
 					this.getActivities();
 				}.bind(this))
 		},
-
 		toggleSidebar: function() {
 			let currentStatus = this.$store.getters.drawerStatus
 			this.$store.commit('toggleDrawer', !currentStatus)
