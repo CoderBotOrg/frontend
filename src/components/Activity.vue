@@ -466,11 +466,11 @@ export default {
 			);
 
 			// Pass the reference to the method to call, don't execute it (`()`)
-			window.addEventListener('resize', this.resizeWorkspace, false);
+			//window.addEventListener('resize', this.resizeWorkspace, false);
 
 			// Initial resize
-			this.resizeWorkspace()
-			Blockly.svgResize(this.workspace);
+			//this.resizeWorkspace()
+			//Blockly.svgResize(this.workspace);
 		},
 
 		blocksExtensions(settings) {
