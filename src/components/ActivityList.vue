@@ -13,8 +13,10 @@
 						<v-flex xs12 md6 offset-md3>
 							<h3 class="text-xs-left">Lista Attività</h3>
 							<p style="text-align: left">
-								Qui puoi avviare un'attività salvata, cliccando sul suo nome.<br>
-								L'icona <v-icon>delete</v-icon> ti permette di eliminarla, mentre cliccando su <v-icon>edit</v-icon> puoi modificarla.
+								<v-alert :value="true" type="info" style="font-size:16px">
+									Qui puoi avviare un'attività salvata, cliccando sul suo nome.<br>
+									L'icona <v-icon class="white--text">delete</v-icon> ti permette di eliminarla, mentre cliccando su <v-icon class="white--text">edit</v-icon> puoi modificarla.
+								</v-alert>
 							</p>
 							<v-card>
 								<v-list>

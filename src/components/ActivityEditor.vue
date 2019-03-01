@@ -26,6 +26,15 @@
 							<v-layout row wrap>
 								<!-- Column A -->
 								<v-flex xs12 md6 offset-md3>
+																<p style="text-align: left">
+								<v-alert
+      :value="true"
+      type="info"
+      style="font-size:16px">
+      Qui puoi creare o modificare una attività, definendo come dovrà apparire allo studente che dovrà utilizzarla per scrivere programmi. Ricorda che l'attività andrà poi <b> avviata </b> (Menù Attività -> Apri) per poterne fare effettivamente uso.
+    </v-alert>
+
+							</p>
 									<h3 class="text-xs-left">Dati Attività </h3>
 									<v-card>
 										<v-form class="cardContent">
