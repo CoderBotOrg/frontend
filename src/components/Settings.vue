@@ -392,7 +392,6 @@ export default {
 						this.prepopulate();
 					}
 
-					//console.log(response)
 					this.statusData = response.data
 					this.status = response.status
                     this.cb.logs.log = response.data.log
