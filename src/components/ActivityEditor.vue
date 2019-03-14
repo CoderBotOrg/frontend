@@ -186,18 +186,22 @@
 												<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
 												<v-select v-model="button.action" :items="actions" label="Azione" :disabled="button.notErasable">
 												</v-select>
+												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
 												<v-layout row wrap>
-													<v-flex xs6>
-														<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
-													</v-flex>
-													<v-flex xs6>
-														Colore Pulsante <div style="display:inline-block">
+													<v-flex xs6 style="text-align: left">
+														<span style="vertical-align: 55%"> Colore Pulsante </span>
+														<div style="display:inline-block">
 															<swatches popover-to="left" v-model="button.colorBtn"></swatches>
 														</div>
 													</v-flex>
+													<v-flex xs6 style="text-align: left">
+														Icona <v-btn large outline @click="b=i; iconPicker=true;" color="black">
+															<v-icon large color="black">{{ button.icon }}</v-icon>
+														</v-btn>
+													</v-flex>
 												</v-layout>
-												<v-text-field v-model="button.icon" label="Icona"></v-text-field>
 												<v-divider></v-divider>
+												<br>
 												<v-btn :color="button.colorBtn" :class="button.colorText">
 													{{ button.label }}
 													<v-icon right dark>{{ button.icon }}</v-icon>
@@ -209,6 +213,23 @@
 								</v-flex>
 							</v-flex>
 						</v-container>
+						<v-dialog v-model="iconPicker" max-width="600px">
+							<v-card>
+								<v-card-title class="headline">Seleziona icona</v-card-title>
+								<v-card-text>
+									<v-container>
+										<v-layout row wrap>
+											<template v-for="icon,i in iconList">
+												<v-flex xs1>
+													<v-icon large @click="activity.buttons[b].icon=icon; iconPicker = false">{{ icon }}</v-icon>
+												</v-flex>
+												<template v-if="i%10==0"> <br> </template>
+											</template>
+										</v-layout>
+									</v-container>
+								</v-card-text>
+							</v-card>
+						</v-dialog>
 					</v-tab-item>
 					<!--
 					<v-tab-item>
@@ -298,7 +319,10 @@ export default {
 			saved: false,
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			snackbar: false,
+			iconPicker: false,
+			iconList: ['3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation'],
 			snackbarText: "",
+			b: 0,
 			activity: {
 				exec: {
 					camera: true,
