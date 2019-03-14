@@ -147,7 +147,7 @@
 									<h3> Anteprima Toolbar </h3>
 									<v-toolbar>
 										<v-toolbar-side-icon v-if="activity.drawerEnabled"></v-toolbar-side-icon>
-										<v-toolbar-title v-if="activity.showName">Attività 1</v-toolbar-title>
+										<v-toolbar-title v-if="activity.showName">{{ activity.name || "Nome Attività"}}</v-toolbar-title>
 										<v-spacer></v-spacer>
 										<v-toolbar-items>
 											<template v-for="button, i in activity.buttons">
@@ -345,7 +345,6 @@ export default {
 														'search',
 														'settings',
 														'stars',
-														'sentiment_satisfied_alt',
 														'games',
 														'loop',
 														'replay',
@@ -488,8 +487,15 @@ export default {
 			this.activity.buttons.splice(index, 1)
 		},
 		removeAll: function() {
-			this.activity.buttons = []
-		},
+			this.activity.buttons = [{
+					label: 'Esegui',
+					icon: 'play_arrow',
+					colorBtn: 'green',
+					colorText: 'white--text',
+					action: 'runProgramLegacy',
+					notErasable: true
+				}
+			]		},
 		restoreDefaults: function() {
 			this.activity.buttons = [{
 					label: 'Esegui',
