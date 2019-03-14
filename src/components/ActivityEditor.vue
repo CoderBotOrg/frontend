@@ -26,15 +26,11 @@
 							<v-layout row wrap>
 								<!-- Column A -->
 								<v-flex xs12 md6 offset-md3>
-																<p style="text-align: left">
-								<v-alert
-      :value="true"
-      type="info"
-      style="font-size:16px">
-      Qui puoi creare o modificare una attività, definendo come dovrà apparire allo studente che dovrà utilizzarla per scrivere programmi. Ricorda che l'attività andrà poi <b> avviata </b> (Menù Attività -> Apri) per poterne fare effettivamente uso.
-    </v-alert>
-
-							</p>
+									<p style="text-align: left">
+										<v-alert :value="true" type="info" style="font-size:16px">
+											Qui puoi creare o modificare una attività, definendo come dovrà apparire allo studente che dovrà utilizzarla per scrivere programmi. Ricorda che l'attività andrà poi <b> avviata </b> (Menù Attività -> Apri) per poterne fare effettivamente uso.
+										</v-alert>
+									</p>
 									<h3 class="text-xs-left">Dati Attività </h3>
 									<v-card>
 										<v-form class="cardContent">
@@ -181,16 +177,25 @@
 									<div v-for="button, i in activity.buttons">
 										<h3>Pulsante {{i + 1}}
 											<v-btn @click="removeButton(i)" flat icon v-if="!button.notErasable">
-													<v-icon>clear</v-icon>
-												</v-btn></h3>
+												<v-icon>clear</v-icon>
+											</v-btn>
+										</h3>
 										<v-card>
 											<div class="cardContent">
 												<span class="grey--text text--darken-2" v-if="button.notErasable"> "Esegui" non può essere eliminato </span>
 												<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
 												<v-select v-model="button.action" :items="actions" label="Azione" :disabled="button.notErasable">
 												</v-select>
-												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
-												Colore Pulsante <swatches v-model="button.colorBtn"></swatches>
+												<v-layout row wrap>
+													<v-flex xs6>
+														<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
+													</v-flex>
+													<v-flex xs6>
+														Colore Pulsante <div style="display:inline-block">
+															<swatches popover-to="left" v-model="button.colorBtn"></swatches>
+														</div>
+													</v-flex>
+												</v-layout>
 												<v-text-field v-model="button.icon" label="Icona"></v-text-field>
 												<v-divider></v-divider>
 												<v-btn :color="button.colorBtn" :class="button.colorText">
@@ -226,6 +231,8 @@
 							</v-layout>
 						</v-container>
 					</v-tab-item>
+					<v-tab-item>
+						<wsFactory />
 					</v-tab-item>
 				</v-tabs-items>
 			</v-content>
