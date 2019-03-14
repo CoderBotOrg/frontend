@@ -188,14 +188,14 @@
 												</v-select>
 												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
 												<v-layout row wrap>
-													<v-flex xs6 style="text-align: left">
-														<span style="vertical-align: 55%"> Colore Pulsante </span>
+													<v-flex xs4 style="text-align: left">
+														<span style="vertical-align: 55%"> Colore Pulsante &nbsp;&nbsp;</span>
 														<div style="display:inline-block">
 															<swatches popover-to="left" v-model="button.colorBtn"></swatches>
 														</div>
 													</v-flex>
-													<v-flex xs6 style="text-align: left">
-														Icona <v-btn large outline @click="b=i; iconPicker=true;" color="black">
+													<v-flex xs4 style="text-align: left">
+														Icona &nbsp;&nbsp; <v-btn style="margin:0"large flat @click="b=i; iconPicker=true;" color="black">
 															<v-icon large color="black">{{ button.icon }}</v-icon>
 														</v-btn>
 													</v-flex>
@@ -320,7 +320,42 @@ export default {
 			CB: process.env.CB_ENDPOINT + process.env.APIv2,
 			snackbar: false,
 			iconPicker: false,
-			iconList: ['3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation', '3d_rotation'],
+			iconList: ['play_arrow',
+														'pause',
+														'stop',
+														'save',
+														'autorenew',
+														'build',
+														'check_circle',
+														'camera',
+														'code',
+														'help',
+														'done',
+														'eject',
+														'extension',
+														'face',
+														'favorite',
+														'help',
+														'home',
+														'hourglass_empty',
+														'info',
+														'language',
+														'query_builder',
+														'question_answer',
+														'search',
+														'settings',
+														'stars',
+														'sentiment_satisfied_alt',
+														'games',
+														'loop',
+														'replay',
+														'volume_down',
+														'volume_mute',
+														'volume_off',
+														'volume_up',
+														'clear',
+														'block',
+														'add'],
 			snackbarText: "",
 			b: 0,
 			activity: {
