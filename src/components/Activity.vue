@@ -756,7 +756,8 @@ export default {
 					Blockly.Python.ORDER_NONE) || '\'\'';
 				return sbsPrefix + 'get_bot().sleep(' + elapse + ')\n';
 			};
-
+            
+            // muovi bot [direzione] a velocità [velcità] per [tempo] 
 			Blockly.Blocks['coderbot_adv_move'] = {
 				// Block for moving forward.
 				init: function() {
@@ -811,6 +812,55 @@ export default {
 				var code = sbsPrefix + "get_bot()." + action + "(speed=" + speed + ", elapse=" + elapse + ")\n";
 				return code;
 			};
+            
+            // muovi bot [direzione] per [distanza] metri
+			Blockly.Blocks['coderbot_adv_move_distance'] = {
+				// Block for moving forward.
+				init: function() {
+					var ACTIONS = [
+						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
+						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD']
+					]
+					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
+					this.setColour(40);
+
+					this.appendDummyInput("ACTION")
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOVE)
+						.appendField(new Blockly.FieldDropdown(ACTIONS), 'ACTION');
+					this.appendValueInput('DISTANCE')
+						.setCheck('Number')
+						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE)
+                        .appendField(Blockly.Msg.MEASURE_UNIT);
+					this.setInputsInline(true);
+					// Assign 'this' to a variable for use in the tooltip closure below.
+					var thisBlock = this;
+					this.setTooltip(function() {
+						var mode = thisBlock.getFieldValue('ACTION');
+						var TOOLTIPS = {
+							FORWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD,
+							BACKWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD
+						};
+						return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL;
+					});
+					this.setPreviousStatement(true);
+					this.setNextStatement(true);
+				}
+			};
+
+			Blockly.Python['coderbot_adv_move_distance'] = function(block) {
+				// Generate Python for moving forward.
+				var OPERATORS = {
+					FORWARD: ['forward'],
+					BACKWARD: ['backward']
+				};
+				var tuple = OPERATORS[block.getFieldValue('ACTION')];
+				var action = tuple[0];
+				var speed = 100;
+				var distance = Blockly.Python.valueToCode(block, 'DISTANCE', Blockly.Python.ORDER_NONE);
+				var code = sbsPrefix + "get_bot()." + action + "(speed=" + speed + ", distance=" + distance + ")\n";
+				return code;
+			};
+
 
 			Blockly.Blocks['coderbot_motion_move'] = {
 				// Block for moving forward.
