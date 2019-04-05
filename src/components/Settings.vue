@@ -612,7 +612,8 @@ export default {
 					cbVersion: null,
 					backendVersion: null,
 					vueVersion: null,
-					kernel: null
+					kernel: null,
+                    motors: null
 				},
 				logs: {
 					log: null
