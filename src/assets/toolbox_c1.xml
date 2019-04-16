@@ -1,0 +1,42 @@
+<xml id="toolbox" style="display: none">
+	<category name="Controllo" colour="120">
+		<block type="controls_if"></block>
+		<block type="controls_whileUntil"></block>
+				<block type="controls_repeat_ext">
+			<value name="TIMES">
+				<block type="math_number">
+					<field name="NUM">10</field>
+				</block>
+			</value>
+		</block>
+	</category>
+	<category name="Logica" colour="210">
+		<block type="logic_compare"></block>
+		<block type="logic_boolean"></block>
+	</category>
+	<category name="Matematica" colour="230">
+		<block type="math_number"></block>
+	</category>
+	<category name="Movimento" colour="40">
+		<block type="coderbot_moveForward"></block>
+		<block type="coderbot_moveBackward"></block>
+		<block type="coderbot_turnLeft"></block>
+		<block type="coderbot_turnRight"></block>
+		<block type="coderbot_adv_move">
+			<value name="SPEED">
+				<block type="math_number">
+					<field name="NUM">100</field>
+				</block>
+			</value>
+			<value name="ELAPSE">
+				<block type="math_number">
+					<field name="NUM">0.2</field>
+				</block>
+			</value>
+		</block>
+	</category>
+	<category name="Sensori" colour="290">
+		<block type="coderbot_sonar_get_distance"></block>
+
+	</category>
+</xml>

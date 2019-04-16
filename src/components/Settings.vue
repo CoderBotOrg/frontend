@@ -598,6 +598,7 @@ export default {
 				{ text: 'Base', value: 'basic' },
 				{ text: 'Standard', value: 'std' },
 				{ text: 'Avanzate', value: 'adv' },
+				{ text: 'Custom 1', value: 'c1'}
 			],
 			cb: {
 				info: {
