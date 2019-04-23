@@ -267,16 +267,18 @@
                                             
 											<div class="cardContent">
 												<div id='test_array'>
-                                                        <v-switch label="Motors" value="motors" v-model="checkedTests"></v-switch>
-                                                        <v-switch label="Sonar" value="sonar" v-model="checkedTests"></v-switch>
-                                                        <v-switch label="Speaker" value="speaker" v-model="checkedTests"></v-switch>
-                                                        <v-switch label="OCR" value="ocr" v-model="checkedTests"></v-switch>
+                                                        <v-switch label="Motors" value="motors" v-model="checkedTests" color="#f45525"></v-switch>
+                                                        <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="#f45525"></v-switch>
+                                                        <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="#f45525"></v-switch>
+                                                        <v-switch label="OCR" value="ocr" v-model="checkedTests" color="#f45525"></v-switch>
                                                     <span>Checked names: {{ checkedTests }}</span>
                                                 </div>
                                                 <br>
+                                                <div class="text-xs-center">
                                                     <v-btn @click="runTests" slot="activator" color="error" dark>
                                                         <v-icon>fas fa-share-square</v-icon> Run tests
                                                     </v-btn>
+                                                </div>
                                             </div>
                                             
                                         </v-card>
