@@ -26,7 +26,7 @@
 				</v-tabs>
 			</v-toolbar>
 			<v-content>
-				<template v-if="status == 200">
+				<!--<template v-if="status == 200">-->
 					<v-tabs-items v-model="tab">
 						<v-tab-item>
 							<v-container grid-list-md text-xs-center>
@@ -257,13 +257,40 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>
+                        <!-- TEST TAB -->
+                        <v-tab-item>
+							<v-container grid-list-md text-xs-center>
+								<v-layout row wrap align-center>
+									<v-flex xs12 md6 offset-md3>
+										<h3 class="text-xs-left">COMPONENTS TESTS</h3>
+										<v-card>
+                                            
+											<div class="cardContent">
+												<div id='test_array'>
+                                                        <v-switch label="Motors" value="motors" v-model="checkedTests"></v-switch>
+                                                        <v-switch label="Sonar" value="sonar" v-model="checkedTests"></v-switch>
+                                                        <v-switch label="Speaker" value="speaker" v-model="checkedTests"></v-switch>
+                                                        <v-switch label="OCR" value="ocr" v-model="checkedTests"></v-switch>
+                                                    <span>Checked names: {{ checkedTests }}</span>
+                                                </div>
+                                                <br>
+                                                    <v-btn @click="runTests" slot="activator" color="error" dark>
+                                                        <v-icon>fas fa-share-square</v-icon> Run tests
+                                                    </v-btn>
+                                            </div>
+                                            
+                                        </v-card>
+									</v-flex>
+								</v-layout>
+							</v-container>
+						</v-tab-item>
 					</v-tabs-items>
-				</template>
+				<!--</template>
 				<template v-else>
 					<br>
 					In attesa che CoderBot torni online...<br>
 					<v-icon large>signal_wifi_off</v-icon>
-				</template>
+				</template>-->
 			</v-content>
 			<!-- Notification Snackbar -->
 			<v-snackbar v-model="snackbar">
@@ -275,6 +302,7 @@
 		</v-app>
 	</div>
 </template>
+
 <script>
 import sidebar from "../components/Sidebar"
 
@@ -328,6 +356,16 @@ export default {
 			axios.post(CB + '/restoreSettings')
 				.then(function(response) {
 					this.snackText = 'Impostazioni ripristinate'
+					this.snackbar = true
+					this.prepopulate()
+				}.bind(this))
+		},
+        runTests() {
+			let axios = this.$axios
+			let CB = this.CB
+			axios.post(CB + '/testCoderbot', { params: { varargin: this.checkedTests } })
+				.then(function(response) {
+					this.snackText = 'Running tests'
 					this.snackbar = true
 					this.prepopulate()
 				}.bind(this))
@@ -564,6 +602,7 @@ export default {
 			fileUrl: '',
 			counter: 0,
 			updateStatusText: '',
+            checkedTests: [], // checked test array
 			updateStatus: 0,
 			// TODO: Prepopulate this
 			settings: {
@@ -622,7 +661,7 @@ export default {
 			drawer: null,
 			tab: null,
 			//tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate'],
+			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test'],
 		}
 	}
 }
