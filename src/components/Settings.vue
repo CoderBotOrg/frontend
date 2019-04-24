@@ -267,17 +267,156 @@
                                             
 											<div class="cardContent">
 												<div id='test_array'>
-                                                        <v-switch label="Motors" value="motors" v-model="checkedTests" color="#f45525"></v-switch>
-                                                        <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="#f45525"></v-switch>
-                                                        <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="#f45525"></v-switch>
-                                                        <v-switch label="OCR" value="ocr" v-model="checkedTests" color="#f45525"></v-switch>
-                                                    <span>Checked names: {{ checkedTests }}</span>
+                                                    <!-- SONAR -->
+                                                    <v-layout row wrap justify-center>
+                                                        <!-- switch -->
+                                                        <v-flex xs12 offset-md2 md5>
+                                                            <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="#f45525"></v-switch>
+                                                        </v-flex>
+                                                        <!-- button state -->
+                                                        <v-flex xs12 md4>
+                                                            <span v-if="cb.logs.test != null && cb.logs.test.sonar != 0"> 
+                                                                <!-- passed -->
+                                                                <span v-if="cb.logs.test.sonar == 1"> 
+                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
+                                                                        <v-icon>fas fa-check</v-icon> Passed
+                                                                    </v-btn>
+                                                                </span>
+                                                                <!-- failed -->
+                                                                <span v-else> 
+                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
+                                                                        <v-icon>fas fa-times</v-icon> Failed
+                                                                    </v-btn>
+                                                                </span>
+                                                            </span>
+                                                            <!-- not tested -->
+                                                            <span v-else> 
+                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                                                    <v-icon>fas fa-question</v-icon> Not tested
+                                                                </v-btn>
+                                                            </span>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                    
+                                                    <!-- MOTORS -->
+                                                    <v-layout row wrap justify-center>
+                                                        <!-- switch -->
+                                                        <v-flex xs12 offset-md2 md5>
+                                                            <v-switch label="Motors" value="motors" v-model="checkedTests" color="#f45525">
+                                                            </v-switch>
+                                                        </v-flex>
+                                                        <!-- button state -->
+                                                        <v-flex xs12 md4>
+                                                            <span v-if="cb.logs.test != null && cb.logs.test.motors != 0"> 
+                                                                <!-- passed -->
+                                                                <span v-if="cb.logs.test.motor== 1"> 
+                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
+                                                                        <v-icon>fas fa-check</v-icon> Passed
+                                                                    </v-btn>
+                                                                </span>
+                                                                <!-- failed -->
+                                                                <span v-else> 
+                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
+                                                                        <v-icon>fas fa-times</v-icon> Failed
+                                                                    </v-btn>
+                                                                </span>
+                                                            </span>
+                                                            <!-- not tested -->
+                                                            <span v-else> 
+                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                                                    <v-icon>fas fa-question</v-icon> Not tested
+                                                                </v-btn>
+                                                            </span>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                    
+                                                    <!-- SPEAKER -->
+                                                    <v-layout row wrap justify-center>
+                                                        <!-- switch -->
+                                                        <v-flex xs12 offset-md2 md5>
+                                                            <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="#f45525">
+                                                            </v-switch>
+                                                        </v-flex>
+                                                        <!-- button state -->
+                                                        <v-flex xs12 md4>
+                                                            <span v-if="cb.logs.test != null && cb.logs.test.speaker != 0"> 
+                                                                <!-- passed -->
+                                                                <span v-if="cb.logs.test.speaker== 1"> 
+                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
+                                                                        <v-icon>fas fa-check</v-icon> Passed
+                                                                    </v-btn>
+                                                                </span>
+                                                                <!-- failed -->
+                                                                <span v-else> 
+                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
+                                                                        <v-icon>fas fa-times</v-icon> Failed
+                                                                    </v-btn>
+                                                                </span>
+                                                            </span>
+                                                            <!-- not tested -->
+                                                            <span v-else> 
+                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                                                    <v-icon>fas fa-question</v-icon> Not tested
+                                                                </v-btn>
+                                                            </span>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                    
+                                                    <!-- OCR -->
+                                                    <v-layout row wrap justify-center>
+                                                        <!-- switch -->
+                                                        <v-flex xs12 offset-md2 md5>
+                                                            <v-switch label="OCR" value="ocr" v-model="checkedTests" color="#f45525">
+                                                            </v-switch>
+                                                        </v-flex>
+                                                        <!-- button state -->
+                                                        <v-flex xs12 md4>
+                                                            <span v-if="cb.logs.test != null && cb.logs.test.ocr != 0"> 
+                                                                <!-- passed -->
+                                                                <span v-if="cb.logs.test.ocr== 1"> 
+                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
+                                                                        <v-icon>fas fa-check</v-icon> Passed
+                                                                    </v-btn>
+                                                                </span>
+                                                                <!-- failed -->
+                                                                <span v-else> 
+                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
+                                                                        <v-icon>fas fa-times</v-icon> Failed
+                                                                    </v-btn>
+                                                                </span>
+                                                            </span>
+                                                            <!-- not tested -->
+                                                            <span v-else> 
+                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                                                    <v-icon>fas fa-question</v-icon> Not tested
+                                                                </v-btn>
+                                                            </span>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                    
+                                                    <!-- DEBUG 
+                                                        <span>Checked names: {{ checkedTests }}</span>
+                                                    -->
                                                 </div>
                                                 <br>
                                                 <div class="text-xs-center">
-                                                    <v-btn @click="runTests" slot="activator" color="error" dark>
+                                                    
+                                                    <v-btn v-if="!cb.logs.runningTest"
+                                                           block
+                                                           @click="runTests"
+                                                           slot="activator" 
+                                                           color="error" 
+                                                           dark>
                                                         <v-icon>fas fa-share-square</v-icon> Run tests
                                                     </v-btn>
+                                                    <v-btn v-else
+                                                           block
+                                                           disabled>
+                                                        <v-icon>fas fa-share-square</v-icon> Running tests...
+                                                    </v-btn>
+                                                    <!-- DEBUG
+                                                       Running test: {{ cb.logs.runningTest }}
+                                                    -->
                                                 </div>
                                             </div>
                                             
@@ -365,11 +504,14 @@ export default {
         runTests() {
 			let axios = this.$axios
 			let CB = this.CB
-			axios.post(CB + '/testCoderbot', { params: { varargin: this.checkedTests } })
+            this.cb.logs.runningTest = true
+			axios.post(CB + '/testCoderbot', { params: this.checkedTests })
 				.then(function(response) {
+                    this.cb.logs.test = response.data
 					this.snackText = 'Running tests'
 					this.snackbar = true
 					this.prepopulate()
+                    this.cb.logs.runningTest = false
 				}.bind(this))
 		},
 		restore() {
@@ -657,13 +799,15 @@ export default {
                     motors: null
 				},
 				logs: {
-					log: null
+					log: null,
+                    test: null,
+                    runningTest: false
 				}
 			},
 			drawer: null,
 			tab: null,
 			//tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test'],
+			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test']
 		}
 	}
 }
@@ -683,5 +827,4 @@ export default {
 	margin-right: 7px;
 	text-size: 10px;
 }
-
 </style>
