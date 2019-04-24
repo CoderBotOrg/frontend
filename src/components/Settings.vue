@@ -271,7 +271,7 @@
                                                     <v-layout row wrap justify-center>
                                                         <!-- switch -->
                                                         <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="#f45525"></v-switch>
+                                                            <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="orange"></v-switch>
                                                         </v-flex>
                                                         <!-- button state -->
                                                         <v-flex xs12 md4>
@@ -302,14 +302,14 @@
                                                     <v-layout row wrap justify-center>
                                                         <!-- switch -->
                                                         <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="Motors" value="motors" v-model="checkedTests" color="#f45525">
+                                                            <v-switch label="Motors" value="motors" v-model="checkedTests" color="orange">
                                                             </v-switch>
                                                         </v-flex>
                                                         <!-- button state -->
                                                         <v-flex xs12 md4>
                                                             <span v-if="cb.logs.test != null && cb.logs.test.motors != 0"> 
                                                                 <!-- passed -->
-                                                                <span v-if="cb.logs.test.motor== 1"> 
+                                                                <span v-if="cb.logs.test.motors== 1"> 
                                                                     <v-btn @click="runTests" slot="activator" color="green" dark>
                                                                         <v-icon>fas fa-check</v-icon> Passed
                                                                     </v-btn>
@@ -334,7 +334,7 @@
                                                     <v-layout row wrap justify-center>
                                                         <!-- switch -->
                                                         <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="#f45525">
+                                                            <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="orange">
                                                             </v-switch>
                                                         </v-flex>
                                                         <!-- button state -->
@@ -366,7 +366,7 @@
                                                     <v-layout row wrap justify-center>
                                                         <!-- switch -->
                                                         <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="OCR" value="ocr" v-model="checkedTests" color="#f45525">
+                                                            <v-switch label="OCR" value="ocr" v-model="checkedTests" color="orange">
                                                             </v-switch>
                                                         </v-flex>
                                                         <!-- button state -->
@@ -405,14 +405,14 @@
                                                            block
                                                            @click="runTests"
                                                            slot="activator" 
-                                                           color="error" 
+                                                           color="orange" 
                                                            dark>
-                                                        <v-icon>fas fa-share-square</v-icon> Run tests
+                                                        <v-icon>fas fa-running</v-icon> Run tests
                                                     </v-btn>
                                                     <v-btn v-else
                                                            block
                                                            disabled>
-                                                        <v-icon>fas fa-share-square</v-icon> Running tests...
+                                                        <v-icon>fas fa-ellipsis-h</v-icon> Running tests...
                                                     </v-btn>
                                                     <!-- DEBUG
                                                        Running test: {{ cb.logs.runningTest }}
