@@ -10,6 +10,7 @@
       </block>
     </value>
   </block>
+  <block type="coderbot_music_note_sol"></block>
   <block type="coderbot_camera_photoTake"></block>
   <block type="coderbot_camera_videoRec"></block>
   <block type="coderbot_camera_videoStop"></block>
