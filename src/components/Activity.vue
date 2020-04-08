@@ -1665,6 +1665,23 @@ export default {
 				}
 			};
 
+            
+            Blockly.Blocks['coderbot_music_note_sol'] = {
+                init: function() {
+                   this.appendDummyInput()
+                         .appendField(new Blockly.FieldImage("https://www.gstatic.com/codesite/ph/images/s     tar_on.gif", 30, 30, "25"));
+                   this.appendDummyInput()
+                       .setAlign(Blockly.ALIGN_CENTRE)
+                       .appendField("SOL");
+                   this.setPreviousStatement(true, null);
+                   this.setNextStatement(true, null);
+                   this.setColour(230);
+                   this.setTooltip("nota SOL");
+                   this.setHelpUrl("");
+                }
+            };
+ 
+
 			Blockly.Python['coderbot_audio_listen'] = function(block) {
 				// Boolean values true and false.
 				var model = block.getFieldValue('MODEL');
