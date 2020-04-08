@@ -1681,6 +1681,13 @@ export default {
                 }
             };
  
+            
+            Blockly.Python['coderbot_music_note_sol'] = {
+                // TODO: Assemble Python into code variable.
+                var code = 'get_music().play_note("A2")\n';
+                return code;
+
+            };
 
 			Blockly.Python['coderbot_audio_listen'] = function(block) {
 				// Boolean values true and false.
