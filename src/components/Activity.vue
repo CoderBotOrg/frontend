@@ -1689,6 +1689,18 @@ export default {
 
             };
 
+            Blockly.Blocks['coderbot_animal_verse'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldImage("https://upload.wikimedia.org/wikipedia/commons/7/71/Paw_%28Animal_Rights_symbol%29.svg", 15, 15, { alt: "*", flipRtl: "FALSE" }))
+                        .appendField("Verso del")
+                        .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"]]), "Verso del");
+                    this.setColour(345);
+                    this.setTooltip("Verso animale");
+                    this.setHelpUrl("");
+                } 
+            };
+
 			Blockly.Python['coderbot_audio_listen'] = function(block) {
 				// Boolean values true and false.
 				var model = block.getFieldValue('MODEL');
