@@ -1666,39 +1666,45 @@ export default {
 			};
 
             
-            Blockly.Blocks['coderbot_music_note_sol'] = {
+            Blockly.Blocks['coderbot_music_note_basic'] = {
                 init: function() {
                    this.appendDummyInput()
-                         .appendField(new Blockly.FieldImage("https://www.gstatic.com/codesite/ph/images/s     tar_on.gif", 30, 30, "25"));
-                   this.appendDummyInput()
-                       .setAlign(Blockly.ALIGN_CENTRE)
-                       .appendField("SOL");
+                       .appendField(new Blockly.FieldImage("https://svgsilh.com/svg/1314943.svg", 30, 30, "25"));
+                       .appendField(" DO ");
                    this.setPreviousStatement(true, null);
                    this.setNextStatement(true, null);
-                   this.setColour(230);
-                   this.setTooltip("nota SOL");
+                   this.setColour(345);
+                   this.setTooltip("nota DO");
                    this.setHelpUrl("");
                 }
             };
  
+                       //.setAlign(Blockly.ALIGN_CENTRE)
             
-            Blockly.Python['coderbot_music_note_sol'] = {
+            Blockly.Python['coderbot_music_note_sol'] = function(block) {
                 // TODO: Assemble Python into code variable.
-                var code = 'get_music().play_note("A2")\n';
+                var code = 'get_music().play_note(A2)\n';
                 return code;
 
             };
 
-            Blockly.Blocks['coderbot_animal_verse'] = {
+            Blockly.Blocks['coderbot_animal_verse_basic'] = {
                 init: function() {
                     this.appendDummyInput()
                         .appendField(new Blockly.FieldImage("https://upload.wikimedia.org/wikipedia/commons/7/71/Paw_%28Animal_Rights_symbol%29.svg", 15, 15, { alt: "*", flipRtl: "FALSE" }))
                         .appendField("Verso del")
                         .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"]]), "Verso del");
-                    this.setColour(345);
+                    this.setColour(290);
                     this.setTooltip("Verso animale");
                     this.setHelpUrl("");
                 } 
+            };
+    
+            Blockly.Python['coderbot_animal_verse_basic'] = function(block) {
+                var dropdown_verso_del = block.getFieldValue('Verso del');
+                // TODO: Assemble Python into code variable.
+                var code = '...\n';
+                return code;
             };
 
 			Blockly.Python['coderbot_audio_listen'] = function(block) {
