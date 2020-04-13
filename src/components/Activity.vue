@@ -1668,30 +1668,33 @@ export default {
             
             Blockly.Blocks['coderbot_music_note_basic'] = {
                 init: function() {
-                   this.appendDummyInput()
-                       .appendField(new Blockly.FieldImage("https://svgsilh.com/svg/1314943.svg", 30, 30, "25"));
-                       .appendField(" DO ");
-                   this.setPreviousStatement(true, null);
-                   this.setNextStatement(true, null);
-                   this.setColour(345);
-                   this.setTooltip("nota DO");
-                   this.setHelpUrl("");
+                    this.appendDummyInput()
+                        .setAlign(Blockly.ALIGN_CENTRE)
+                        .appendField(new Blockly.FieldImage("/static/images/blocks/musical_note.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
+                        .appendField("NOTA ")
+                        .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["SOL    ","G2"], ["LA       ","A3"], ["SI        ","B3"], ["DO+    ","C3"], ["RE+     ","D3"], ["PAUSA","PAUSE"]]), "NAME");
+                    this.setInputsInlin(true);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(345);
+                    this.setTooltip("");
+                    this.setHelpUrl("");
                 }
             };
  
-                       //.setAlign(Blockly.ALIGN_CENTRE)
-            
-            Blockly.Python['coderbot_music_note_sol'] = function(block) {
-                // TODO: Assemble Python into code variable.
-                var code = 'get_music().play_note(A2)\n';
-                return code;
 
+            Blockly.Python['coderbot_music_note_basic'] = function(block) {
+                 var dropdown_name = block.getFieldValue('NAME');
+                // TODO: Assemble Python into code variable.
+                var code = 'get_music().play_note()\n';
+                return code;
             };
+
 
             Blockly.Blocks['coderbot_animal_verse_basic'] = {
                 init: function() {
                     this.appendDummyInput()
-                        .appendField(new Blockly.FieldImage("https://upload.wikimedia.org/wikipedia/commons/7/71/Paw_%28Animal_Rights_symbol%29.svg", 15, 15, { alt: "*", flipRtl: "FALSE" }))
+                        .appendField(new Blockly.FieldImage("/static/images/blocks/animal.png", 15, 15, { alt: "*", flipRtl: "FALSE" }))
                         .appendField("Verso del")
                         .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"]]), "Verso del");
                     this.setColour(290);
@@ -1701,9 +1704,9 @@ export default {
             };
     
             Blockly.Python['coderbot_animal_verse_basic'] = function(block) {
-                var dropdown_verso_del = block.getFieldValue('Verso del');
+                var dropdown_animal = block.getFieldValue('Verso del');
                 // TODO: Assemble Python into code variable.
-                var code = '...\n';
+                var code = 'get_music().play_animal(dropdown_animal)\n';
                 return code;
             };
 
