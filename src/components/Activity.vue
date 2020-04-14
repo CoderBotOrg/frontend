@@ -1740,9 +1740,12 @@ export default {
 				var dropdown_note = block.getFieldValue('note');
 				var dropdown_alteration = block.getFieldValue('alteration');
 				var value_instrument = Blockly.Python.valueToCode(block, 'instrument', Blockly.Python.ORDER_ATOMIC);
-				var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
-							
-				var code = 'get_music().play_note(note="'+dropdown_note+'", alteration="'+dropdown_alteration+'" ,instrument='+value_instrument+' ,duration="'+value_duration+'")';
+				
+				var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.NONE);
+
+				
+
+				var code = 'get_music().play_note(note="'+dropdown_note+'", alteration="'+dropdown_alteration+'" ,instrument='+value_instrument+' ,duration='+value_duration+')';
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
 
