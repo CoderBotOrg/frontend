@@ -1771,6 +1771,15 @@ export default {
             };
 
 
+            Blockly.Python['coderbot_animal_verse_std'] = function(block) {
+                var dropdown_note = block.getFieldValue('note');
+                var dropdown_instrument = block.getFieldValue('instrument');
+                var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
+                var alteration = "none";
+                var code = 'get_music().play_animal(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration="'+value_duration+'")\n';
+                return code;
+            };
+
 
     
 			Blockly.Python['coderbot_audio_listen'] = function(block) {
