@@ -425,6 +425,25 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>
+
+
+						<!-- AUDIO TAB -->
+                        <v-tab-item>
+							<v-container grid-list-md text-xs-center>
+								<v-layout row wrap align-center>
+									<v-flex xs12 md6 offset-md3>
+										<h3 class="text-xs-left">Audio settings</h3>
+										<v-card>
+											<div class="cardContent">
+												Volume:  
+												
+												<v-text-field v-model="settings.audioLevel" label="Volume" />
+											</div>
+										</v-card>
+									</v-flex>
+								</v-layout>
+							</v-container>
+						</v-tab-item>	
 					</v-tabs-items>
 				<!--</template>
 				<template v-else>
@@ -448,6 +467,7 @@
 import sidebar from "../components/Sidebar"
 
 export default {
+
 	components: { sidebar },
 	name: 'Settings',
 	mounted() {
@@ -471,6 +491,7 @@ export default {
 			this.fileObj = files[0]
 			this.formdata = new FormData();
 			this.formdata.append('file_to_upload', files[0], files[0].name);
+			
 		},
 		upload() {
 			const config = {
@@ -665,6 +686,7 @@ export default {
 					data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse
 					data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed
 
+					data.audioLevel = remoteConfig.audio_volume_level
 				}.bind(this))
 		},
 		save: function() {
@@ -714,6 +736,8 @@ export default {
 					'ctrl_fw_speed': data.ctrlFwdSpeed,
 					'ctrl_tr_elapse': data.ctrlTurnElapse,
 					'ctrl_tr_speed': data.ctrlTurnSpeed,
+
+					'audio_volume_level': data.audioLevel,
 				})
 				axios.post(CBv1 + '/config', legacySettings)
 					.then(function() {
@@ -750,6 +774,7 @@ export default {
 			updateStatus: 0,
 			// TODO: Prepopulate this
 			settings: {
+				
 				cbName: 'CoderBot di Antonio',
 				power: [null, null, null],
 				startupProgram: null,
@@ -757,6 +782,8 @@ export default {
 				wifiMode: 'ap',
 				wifiSSID: null,
 				wifiPsw: null,
+				
+				audioLevel: null,
 
 				moveFwdElapse: null,
 				moveFwdSpeed: null,
@@ -807,7 +834,7 @@ export default {
 			drawer: null,
 			tab: null,
 			//tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test']
+			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test','Audio']
 		}
 	}
 }
