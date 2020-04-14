@@ -1673,7 +1673,7 @@ export default {
                         .appendField(new Blockly.FieldImage("/static/images/blocks/musical_note.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
                         .appendField("NOTA ")
                         .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["SOL    ","G2"], ["LA       ","A3"], ["SI        ","B3"], ["DO+    ","C3"], ["RE+     ","D3"], ["PAUSA","PAUSE"]]), "NAME");
-                    this.setInputsInlin(true);
+                    this.setInputsInline(true);
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
                     this.setColour(345);
@@ -1685,8 +1685,7 @@ export default {
 
             Blockly.Python['coderbot_music_note_basic'] = function(block) {
                  var dropdown_name = block.getFieldValue('NAME');
-                // TODO: Assemble Python into code variable.
-                var code = 'get_music().play_note()\n';
+                 var code = 'get_music().play_note("'+dropdown_name+'")\n'; 
                 return code;
             };
 
@@ -1694,19 +1693,21 @@ export default {
             Blockly.Blocks['coderbot_animal_verse_basic'] = {
                 init: function() {
                     this.appendDummyInput()
-                        .appendField(new Blockly.FieldImage("/static/images/blocks/animal.png", 15, 15, { alt: "*", flipRtl: "FALSE" }))
+                        .appendField(new Blockly.FieldImage("/static/images/blocks/animal.png", 30, 30, { alt: "*", flipRtl: "FALSE" }))
                         .appendField("Verso del")
                         .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"]]), "Verso del");
+                    this.setInputsInline(true); 
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);   
                     this.setColour(290);
                     this.setTooltip("Verso animale");
                     this.setHelpUrl("");
                 } 
             };
     
-            Blockly.Python['coderbot_animal_verse_basic'] = function(block) {
+           Blockly.Python['coderbot_animal_verse_basic'] = function(block) {
                 var dropdown_animal = block.getFieldValue('Verso del');
-                // TODO: Assemble Python into code variable.
-                var code = 'get_music().play_animal(dropdown_animal)\n';
+                var code = 'get_music().play_animal("'+dropdown_animal+'")\n';
                 return code;
             };
 
