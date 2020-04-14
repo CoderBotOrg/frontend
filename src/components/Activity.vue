@@ -1801,6 +1801,12 @@ export default {
                  }
             };
      
+           Blockly.Python['coderbot_music_pause'] = function(block) {
+               var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
+               var code = 'get_music().play_pause("'+value_duration+'")\n';
+               return code;
+           };
+    
      
 			Blockly.Python['coderbot_audio_listen'] = function(block) {
 				// Boolean values true and false.
