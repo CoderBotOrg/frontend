@@ -68,6 +68,9 @@ export default {
 	data() {
 		return {
 			carouselItems: [{
+					src: 'static/images/coderbot_wide4.jpg'
+				},
+				{
 					src: 'static/images/coderbot_wide1.jpg'
 				},
 				{
