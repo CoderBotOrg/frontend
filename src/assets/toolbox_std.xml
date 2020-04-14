@@ -74,9 +74,8 @@
 		<block type="coderbot_audio_say"></block>
 	</category>
     <category name="Musica" colour="345">
-    <!--    <block type="coderbot_note_std"></block>
-        <block type="coderbot_anima_std"></block>
-        -->
-        <block type="coderbot_note_basic"></block>
+        <block type="coderbot_music_note_std"></block>
+        <block type="coderbot_animal_verse_std"></block>
+        <block type="coderbot_music_pause_std"></block>
     </category>
 </xml>
