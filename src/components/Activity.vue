@@ -1741,7 +1741,7 @@ export default {
                 var dropdown_instrument = block.getFieldValue('instrument');
                 var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
                 var alteration = "none"
-                var code = 'get_music().play_note("'+dropdown_note+'","'+dropdown_instrument+'","'+alteration+'","'+value_duration+'")\n';
+                var code = 'get_music().play_note(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration="'+value_duration+'")\n';
                 return code;
             }
 
