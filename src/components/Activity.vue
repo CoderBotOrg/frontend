@@ -1741,12 +1741,12 @@ export default {
 				var dropdown_alteration = block.getFieldValue('alteration');
 				var value_instrument = Blockly.Python.valueToCode(block, 'instrument', Blockly.Python.ORDER_ATOMIC);
 				
-				var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.NONE);
+				var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
 
 				
 
-				var code = 'get_music().play_note(note="'+dropdown_note+'", alteration="'+dropdown_alteration+'" ,instrument='+value_instrument+' ,duration='+value_duration+')';
-				return [code, Blockly.Python.ORDER_ATOMIC];
+				var code = 'get_music().play_note(note="'+dropdown_note+'", alteration="'+dropdown_alteration+'" ,instrument='+value_instrument+' ,duration='+value_duration+')\n';
+				return code;
 			};
 
 			Blockly.Blocks['coderbot_music_instrument_adv'] = {
@@ -1784,6 +1784,32 @@ export default {
 				var code = '"'+dropdown_instrument+'"';
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
+
+            Blockly.Blocks['coderbot_music_pause_adv'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField("pausa");
+                    this.appendValueInput("duration")
+                        .setCheck("Number")
+                        .setAlign(Blockly.ALIGN_CENTRE)
+                        .appendField("durata");
+                    this.appendDummyInput()
+                        .appendField("secondi");
+                    this.setInputsInline(true);
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(345);
+                    this.setTooltip("");
+                    this.setHelpUrl("");
+                 }
+            };
+     
+           Blockly.Python['coderbot_music_pause_adv'] = function(block) {
+               var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
+               var code = 'get_music().play_pause('+value_duration+')\n';
+               return code;
+           };
+
 
 
 		},

@@ -349,5 +349,6 @@
 		<block type="coderbot_music_note_adv"></block>
 		<block type="coderbot_music_instrument_adv"></block>
 		<block type="coderbot_music_animal_adv"></block>
+		<block type="coderbot_music_pause_adv"></block>
 	</category>
 </xml>
