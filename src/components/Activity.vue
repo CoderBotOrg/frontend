@@ -1711,6 +1711,25 @@ export default {
                 return code;
             };
 
+           Blockly.Blocks['coderbot_music_pause_std'] = {
+                init: function() {
+                    this.appendDummyInput()
+                        .appendField(new Blockly.FieldImage("/static/images/blocks/pause_symbol.png", 30, 30, { alt: "*", flipRtl: "FALSE" }))
+                        .appendField("Pausa");
+                    this.setPreviousStatement(true, null);
+                    this.setNextStatement(true, null);
+                    this.setColour(345);
+                    this.setTooltip("");
+                    this.setHelpUrl("");
+                 }
+            };
+     
+           Blockly.Python['coderbot_music_pause_std'] = function(block) {
+               var value_duration = 1
+               var code = 'get_music().play_pause('+value_duration+')\n';
+               return code;
+           };
+
 			Blockly.Python['coderbot_audio_listen'] = function(block) {
 				// Boolean values true and false.
 				var model = block.getFieldValue('MODEL');
