@@ -73,4 +73,10 @@
 	<category name="Souno" colour="290">
 		<block type="coderbot_audio_say"></block>
 	</category>
+    <category name="Musica" colour="345">
+    <!--    <block type="coderbot_note_std"></block>
+        <block type="coderbot_anima_std"></block>
+        -->
+        <block type="coderbot_note_basic"></block>
+    </category>
 </xml>
