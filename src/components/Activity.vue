@@ -1672,7 +1672,7 @@ export default {
                         .setAlign(Blockly.ALIGN_CENTRE)
                         .appendField(new Blockly.FieldImage("/static/images/blocks/musical_note.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
                         .appendField("NOTA ")
-                        .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["SOL    ","G2"], ["LA       ","A3"], ["SI        ","B3"], ["DO+    ","C3"], ["RE+     ","D3"], ["PAUSA","PAUSE"]]), "NAME");
+                        .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["SOL    ","G2"], ["LA       ","A3"], ["SI        ","B3"], ["DO+    ","C3"], ["RE+     ","D3"]] ), "NAME");
                     this.setInputsInline(true);
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);
@@ -1716,7 +1716,7 @@ export default {
                     this.appendDummyInput()
                         .appendField(new Blockly.FieldImage("/static/images/blocks/musical_note.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
                         .appendField("nota")
-                        .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"], ["PAUSA","PAUSE"]]), "note");
+                        .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"]]), "note");
                     this.appendDummyInput()
                         .appendField("strumento")
                         .appendField(new Blockly.FieldDropdown([["piano","piano"], ["chitarra","guitar"], ["flauto","flute"]]), "instrument");
@@ -1741,7 +1741,7 @@ export default {
                 var dropdown_instrument = block.getFieldValue('instrument');
                 var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
                 var alteration = "none"
-                var code = 'get_music().play_note(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration="'+value_duration+'")\n';
+                var code = 'get_music().play_note(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration='+value_duration+')\n';
                 return code;
             }
 
@@ -1751,10 +1751,10 @@ export default {
                     this.appendDummyInput()
                         .appendField(new Blockly.FieldImage("/static/images/blocks/animal.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
                         .appendField("nota")
-                        .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"], ["PAUSA","PAUSE"]]), "note");
+                        .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"] ]), "note");
                     this.appendDummyInput()
                         .appendField("animale")
-                        .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"], ["Dinosaur","dinonsaur"]]), "instrument");
+                        .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"], ["Dinosaur","dinosaur"]]), "instrument");
                     this.appendValueInput("duration")
                         .setCheck("Number")
                         .setAlign(Blockly.ALIGN_CENTRE)
@@ -1776,7 +1776,7 @@ export default {
                 var dropdown_instrument = block.getFieldValue('instrument');
                 var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
                 var alteration = "none";
-                var code = 'get_music().play_animal(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration="'+value_duration+'")\n';
+                var code = 'get_music().play_animal(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration='+value_duration+')\n';
                 return code;
             };
 
@@ -1803,7 +1803,7 @@ export default {
      
            Blockly.Python['coderbot_music_pause_std'] = function(block) {
                var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
-               var code = 'get_music().play_pause("'+value_duration+'")\n';
+               var code = 'get_music().play_pause('+value_duration+')\n';
                return code;
            };
     
