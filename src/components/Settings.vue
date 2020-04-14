@@ -425,6 +425,26 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>
+
+
+
+
+						<!-- AUDIO TAB -->
+                        <v-tab-item>
+							<v-container grid-list-md text-xs-center>
+								<v-layout row wrap align-center>
+									<v-flex xs12 md6 offset-md3>
+										<h3 class="text-xs-left">Audio settings</h3>
+										<v-card>
+
+
+												
+										</v-card>
+									</v-flex>
+								</v-layout>
+							</v-container>
+						</v-tab-item>	
+					</v-tabs-items>
 					</v-tabs-items>
 				<!--</template>
 				<template v-else>
@@ -807,7 +827,7 @@ export default {
 			drawer: null,
 			tab: null,
 			//tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test']
+			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test','Audio']
 		}
 	}
 }
