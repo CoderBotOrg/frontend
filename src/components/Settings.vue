@@ -434,13 +434,10 @@
 									<v-flex xs12 md6 offset-md3>
 										<h3 class="text-xs-left">Audio settings</h3>
 										<v-card>
-
-
-												<div class="cardContent">
+											<div class="cardContent">
 												Volume:  
+												
 												<v-text-field v-model="settings.audioLevel" label="Volume" />
-												
-												
 											</div>
 										</v-card>
 									</v-flex>
@@ -740,7 +737,7 @@ export default {
 					'ctrl_tr_elapse': data.ctrlTurnElapse,
 					'ctrl_tr_speed': data.ctrlTurnSpeed,
 
-					'audio_volume_level': data.audiaudioLeveloLevel,
+					'audio_volume_level': data.audioLevel,
 				})
 				axios.post(CBv1 + '/config', legacySettings)
 					.then(function() {
