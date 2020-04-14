@@ -1781,7 +1781,7 @@ export default {
             };
 
 
-            Blockly.Blocks['coderbot_music_pause'] = {
+            Blockly.Blocks['coderbot_music_pause_std'] = {
                 init: function() {
                     this.appendDummyInput()
                         .appendField(new Blockly.FieldImage("/static/images/blocks/pause_symbol.png", 30, 30, { alt: "*", flipRtl: "FALSE" }))
@@ -1801,7 +1801,7 @@ export default {
                  }
             };
      
-           Blockly.Python['coderbot_music_pause'] = function(block) {
+           Blockly.Python['coderbot_music_pause_std'] = function(block) {
                var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
                var code = 'get_music().play_pause("'+value_duration+'")\n';
                return code;
