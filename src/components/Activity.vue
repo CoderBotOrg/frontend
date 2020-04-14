@@ -1818,6 +1818,7 @@ export default {
                     this.setTooltip("");
                     this.setHelpUrl("");
                  }
+           };
 
            Blockly.Python['coderbot_music_pause_std'] = function(block) {
                var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
