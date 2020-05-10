@@ -244,6 +244,18 @@
 import 'prismjs'
 import 'prismjs/components/prism-python.js'
 import sidebar from '../components/Sidebar'
+import musicpkg from '/home/n0rthw1nd/magisInfo/Progettazione/directories/backend/sounds/notes/music_package.json'
+var data = JSON.parse(musicpkg);
+
+var instrumentlist = [];
+
+for (p in data) {
+    var pkg = data['packages'][p];  // cat
+    var names = [pkg['name_IT'] , pkg['name_EN']];
+    instrumentlist[instrumentlist.length] = names;
+
+}
+var instrumentlist = [["piano","piano"], ["chitarra","guitar"], ["flauto","flute"]];
 
 export default {
 	name: 'Blockly',
@@ -1738,7 +1750,7 @@ export default {
                         .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"]]), "note");
                     this.appendDummyInput()
                         .appendField("strumento")
-                        .appendField(new Blockly.FieldDropdown([["piano","piano"], ["chitarra","guitar"], ["flauto","flute"]]), "instrument");
+                        .appendField(new Blockly.FieldDropdown(instrumentlist), "instrument");
                     this.appendValueInput("duration")
                         .setCheck("Number")
                         .setAlign(Blockly.ALIGN_CENTRE)
