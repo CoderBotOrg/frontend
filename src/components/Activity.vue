@@ -244,17 +244,58 @@
 import 'prismjs'
 import 'prismjs/components/prism-python.js'
 import sidebar from '../components/Sidebar'
-import musicpkg from '/home/n0rthw1nd/magisInfo/Progettazione/directories/backend/sounds/notes/music_package.json'
-var data = JSON.parse(musicpkg);
+import musicpkg from '/home/n0rthw1nd/magisInfo/Progettazione/directories/vue-app/sounds/notes/music_package.json' 
 
-var instrumentlist = [];
+var prova = '{"userName": "Jaydeep Gondaliya"}' ;
+//var data = JSON.parse(musicpkg);
 
-for (p in data) {
-    var pkg = data['packages'][p];  // cat
-    var names = [pkg['name_IT'] , pkg['name_EN']];
-    instrumentlist[instrumentlist.length] = names;
 
-}
+new Vue ({
+    el: '#liveapp',
+    data: {
+       json: null
+    },
+    created: function () {
+        fetch("/home/n0rthw1nd/magisInfo/Progettazione/directories/vue-app/sounds/notes/music_package.json")
+            .then(r => r.json())
+            .then(json => {
+            this.json=json;
+   });
+   },
+});
+//var instrumentlist = [];
+
+
+//new Vue jsondata: {
+
+//}
+//new Vue ({
+//    el: '#liveapp',
+//    data: {
+ //       json: musicpkg
+//    },
+//    created: function () {
+ //     fetch("/data.json")
+  //      .then(r => r.json())
+   //     .then(json => {
+    //      this.json=json;
+     //   });
+//    }
+ //   methods: {
+//      readFromJson(input) {
+//        console.log("inside readfromjson")
+//        var json = JSON.parse(input)
+//        console.log("parsed city.value is: " + json.city.value)
+//        this.parsedJson = json
+ //     }
+//});
+
+//for (p in data) {
+//    var pkg = data['packages'][p];  // cat
+//    var names = [pkg['name_IT'] , pkg['name_EN']];
+ //   instrumentlist[instrumentlist.length] = names;
+
+//}
 var instrumentlist = [["piano","piano"], ["chitarra","guitar"], ["flauto","flute"]];
 
 export default {
