@@ -257,23 +257,21 @@ function readTextFile(file, callback) {
     }
     rawFile.send(null);
 }
-
+var instrumentlist = [];//["pianoooo","pianoo"], ["chitarra","guiitar"], ["flauto","fluute"]];
 //usage:
 var data = readTextFile( "./static/music_package.json" , function(text){
     var datas = JSON.parse(text);
-    console.log(datas)
-    return datas;
+
+
+	Object.keys(datas['packages']).forEach(function(key) {
+  		console.table('Key : ' + key + ', Value : ' + datas['packages'][key])
+		console.table('Key : name_IT, Value : ' + datas['packages'][key]['name_IT'])
+		
+		var names = [datas['packages'][key]['name_IT'], key];
+    	instrumentlist[instrumentlist.length] = names;
+	})
+	return datas;
 });
-
-var instrumentlist = [];
-
-for (p in data) {
-    var pkg = data['packages'][p];  // cat
-    var names = [pkg['name_IT'] , pkg['name_EN']];
-    instrumentlist[instrumentlist.length] = names;
-
-}
-var instrumentlist = [["pianoooo","piano"], ["chitarra","guitar"], ["flauto","flute"]];
 
 export default {
 	name: 'Blockly',
