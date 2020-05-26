@@ -258,6 +258,7 @@ function readTextFile(file, callback) {
     rawFile.send(null);
 }
 var instrumentlist = [];//["pianoooo","pianoo"], ["chitarra","guiitar"], ["flauto","fluute"]];
+var animalist = [];//["pianoooo","pianoo"], ["chitarra","guiitar"], ["flauto","fluute"]];
 //usage:
 var data = readTextFile( "./static/music_package.json" , function(text){
     var datas = JSON.parse(text);
@@ -266,9 +267,14 @@ var data = readTextFile( "./static/music_package.json" , function(text){
 	Object.keys(datas['packages']).forEach(function(key) {
   		console.table('Key : ' + key + ', Value : ' + datas['packages'][key])
 		console.table('Key : name_IT, Value : ' + datas['packages'][key]['name_IT'])
-		
 		var names = [datas['packages'][key]['name_IT'], key];
-    	instrumentlist[instrumentlist.length] = names;
+
+        if (datas['packages'][key]['category'] == 'instrument'){
+    	    instrumentlist[instrumentlist.length] = names;
+        }
+        else if (datas['packages'][key]['category'] == 'animal'){
+    	    animalist[animalist.length] = names;
+        }
 	})
 	return datas;
 });
@@ -1723,7 +1729,7 @@ export default {
                     this.appendDummyInput()
                         .appendField(new Blockly.FieldImage("/static/images/blocks/animal.png", 30, 30, { alt: "*", flipRtl: "FALSE" }))
                         .appendField("Verso del")
-                        .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"]]), "Verso del");
+                        .appendField(new Blockly.FieldDropdown(animalist), "Verso del");
                     this.setInputsInline(true); 
                     this.setPreviousStatement(true, null);
                     this.setNextStatement(true, null);   
@@ -1801,7 +1807,7 @@ export default {
                         .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"] ]), "note");
                     this.appendDummyInput()
                         .appendField("animale")
-                        .appendField(new Blockly.FieldDropdown([["Gatto","cat"], ["Cane","dog"], ["Dinosaur","dinosaur"]]), "instrument");
+                        .appendField(new Blockly.FieldDropdown(animalist), "instrument");
                     this.appendValueInput("duration")
                         .setCheck("Number")
                         .setAlign(Blockly.ALIGN_CENTRE)
@@ -1907,7 +1913,7 @@ export default {
 			Blockly.Blocks['coderbot_music_instrument_adv'] = {
 				init: function() {
 					this.appendDummyInput()
-						.appendField(new Blockly.FieldDropdown([["guitar","guitar"], ["piano","piano"], ["flauto","flute"]]), "instrument");
+						.appendField(new Blockly.FieldDropdown(instrumentlist), "instrument");
 					this.setInputsInline(true);
 					this.setOutput(true, 'String');
 					this.setColour(345);
@@ -1925,7 +1931,7 @@ export default {
 			Blockly.Blocks['coderbot_music_animal_adv'] = {
 				init: function() {
 					this.appendDummyInput()
-						.appendField(new Blockly.FieldDropdown([["cane","dog"], ["gatto","cat"]]), "instrument");
+						.appendField(new Blockly.FieldDropdown(animalist), "instrument");
 					this.setInputsInline(true);
 					this.setOutput(true, 'String');
 					this.setColour(345);
