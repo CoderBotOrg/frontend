@@ -458,24 +458,25 @@
 
                                                 <div v-for="pkgnames in settings.packagesInstalled">
                                               <ul> 
-                                             <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span align="right"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                                             <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
                                                         <v-icon>fas fa-trash</v-icon> Rimuovi
                                             </v-btn></span>
                                             </li>
                                             </ul>
                                             </div>
-
+                                        <br>
                                     </v-card>
-										<h3 class="text-xs-left"> Aggiungi Pacchetto ssh with python</h3>
+										<h3 class="text-xs-left"> Aggiungi Pacchetto </h3>
 										<v-card>
 											<div class="cardContent">
 												<template v-if="updateStatus==1">
-													Caricamento del file:
-													<h3>{{ counter }} %</h3>
+													<h3>File Caricato</h3>
 													<br>
 													{{ updateStatusText }}
+													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
 												</template>
 												<template v-if="updateStatus==2">
+                                                    Errore, pacchetto non installato.
 												</template>
 												<template v-if="updateStatus==0">
 													<v-text-field label="Seleziona il pacchetto da installare" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
@@ -576,20 +577,15 @@ export default {
 					'nameID': this.fileName,
 				})
 
-			const config = {
-				headers: { 'Content-Type': 'multipart/form-data' },
-				onUploadProgress: progressEvent => {
-					this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
-				}
-			}
+			this.$axios.post(this.CB + '/updatePackages', this.formdata).then(function(result) {
+
 			this.updateStatus = 1
 
-			this.$axios.post(this.CB + '/updatePackages', this.formdata).then(function(result) {
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
 				console.dir(result.data);
 
-				this.updateStatusText = 'Upload completato. Riavvio in corso.'
+				this.updateStatusText = 'Pacchetto installato. Clicca "AGGIORNA" per visualizzare le modifiche.'
 
 			}.bind(this))
 
