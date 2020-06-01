@@ -444,6 +444,52 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>	
+
+                <!-- PACKAGE MANAGER -->
+                    <v-tab-item>
+                        <v-container grid-list-md text-xs-center>
+                            <v-layout row wrap align-center>
+                                <v-flex xs12 md6 offset-md3>
+                                    <h3 class="text-xs-left">Gestione Pacchetti</h3>
+										<br>
+                                    <v-card>
+                                        <div class="cardContent">
+                                            <h3 class="text-xs-left"> Pacchetti installati:</h3>
+
+                                                <div v-for="pkgnames in settings.packagesInstalled">
+                                              <ul> 
+                                             <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span align="right"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                                                        <v-icon>fas fa-trash</v-icon> Rimuovi
+                                            </v-btn></span>
+                                            </li>
+                                            </ul>
+                                            </div>
+
+                                    </v-card>
+										<h3 class="text-xs-left"> Aggiungi Pacchetto ssh with python</h3>
+										<v-card>
+											<div class="cardContent">
+												<template v-if="updateStatus==1">
+													Caricamento del file:
+													<h3>{{ counter }} %</h3>
+													<br>
+													{{ updateStatusText }}
+												</template>
+												<template v-if="updateStatus==2">
+												</template>
+												<template v-if="updateStatus==0">
+													<v-text-field label="Seleziona il pacchetto da installare" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
+													<input type="file" style="display: none" ref="file" @change="onFilePicked">
+													<template v-if="this.fileObj">Clicca "CONFERMA" per installare il pacchetto<br></template>
+													<v-btn v-if="this.fileObj" @click="uploadPackage" color="error">Conferma</v-btn>
+												</template>
+											</div>
+                                        </v-card>
+                                    </v-flex>
+                                    </v-layout>
+                                    </v-container>
+                                    </v-tab-item>
+
 					</v-tabs-items>
 				<!--</template>
 				<template v-else>
@@ -465,6 +511,36 @@
 
 <script>
 import sidebar from "../components/Sidebar"
+
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+       if (rawFile.readyState === 4 && rawFile.status == "200") {
+           callback(rawFile.responseText);
+       }
+   }
+   rawFile.send(null);
+}
+var packageList = [];//["pianoooo","pianoo"], ["chitarra","guiitar"], ["flauto","fluute"]];
+var datapkg = readTextFile( "./static/music_package.json" , function(text){
+   var datas = JSON.parse(text);
+ 
+ 
+    Object.keys(datas['packages']).forEach(function(key) {
+    console.table('Key : ' + key + ', Value : ' + datas['packages'][key])
+    console.table('Key : name_IT, Value : ' + datas['packages'][key]['name_IT'])
+    var names = [datas['packages'][key]['name_IT'], key];
+   if (datas['packages'][key]['category'] == 'instrument'){
+       packageList[packageList.length] = [names, 'instrument'];
+    }
+    else if (datas['packages'][key]['category'] == 'animal'){
+       packageList[packageList.length] = [names, 'animal'];
+    }
+ })
+  return packageList;
+});
 
 export default {
 
@@ -493,6 +569,32 @@ export default {
 			this.formdata.append('file_to_upload', files[0], files[0].name);
 			
 		},
+
+        uploadPackage() {
+            let qs = this.$qs
+            var pkgName = qs.stringify({
+					'nameID': this.fileName,
+				})
+
+			const config = {
+				headers: { 'Content-Type': 'multipart/form-data' },
+				onUploadProgress: progressEvent => {
+					this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
+				}
+			}
+			this.updateStatus = 1
+
+			this.$axios.post(this.CB + '/updatePackages', this.formdata).then(function(result) {
+				this.uploadCompleted = true;
+				this.uploadInProgress = false;
+				console.dir(result.data);
+
+				this.updateStatusText = 'Upload completato. Riavvio in corso.'
+
+			}.bind(this))
+
+		},
+
 		upload() {
 			const config = {
 				headers: { 'Content-Type': 'multipart/form-data' },
@@ -512,6 +614,20 @@ export default {
 			}.bind(this))
 
 		},
+
+ /*       readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    callback(rawFile.responseText);
+                }
+            }
+
+            rawFile.send(null);
+        },
+*/
 		restoreConfig() {
 			let axios = this.$axios
 			let CB = this.CB
@@ -577,7 +693,7 @@ export default {
 					this.cb.status = response.data
 					this.cb.logs.log = response.data.log
 				}.bind(this))
-			axios.get(this.CB + '/info')
+			axioks.get(this.CB + '/info')
 				.then(function(response) {
 					this.cb.info = response.data
 				}.bind(this))
@@ -586,7 +702,7 @@ export default {
 			let axios = this.$axios
 			let CB = this.CB
 			let status = this.status
-			axios.get(CB + '/status')
+			axios.kkget(CB + '/status')
 				.then(function(response) {
 					if (this.status == 0 && response.status) {
 						this.snackText = 'CoderBot è tornato online'
@@ -610,6 +726,22 @@ export default {
 					this.status = 0
 				}.bind(this))
 		},
+
+        deletePkg(pkgNameID){
+            let CBv1 = this.CBv1
+            let axios = this.$axios
+            let qs = this.$qs
+            var pkgName = qs.stringify({
+					'nameID': pkgNameID,
+				})
+            axios.post(CBv1 + '/deletepkg', pkgName)
+                 .then(function() {
+                     console.log('Pacchetto rimosso')
+                     this.snackText = "Pacchetto rimosso"
+                     this.snackbar = true
+                 }.bind(this))
+        },
+
 		prepopulate: function() {
 			let axios = this.$axios
 			let settings = this.settings
@@ -687,8 +819,28 @@ export default {
 					data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed
 
 					data.audioLevel = remoteConfig.audio_volume_level
+                   // data.packagesInstalled = remoteConfig.packageList
+                    data.packagesInstalled = remoteConfig.packages_installed
+                    /*this.readTextFile( "./static/music_package.json" , function(text){
+                        var datas = JSON.parse(text);
+                        Object.keys(datas['packages']).forEach(function(key) {
+                            console.table('Key : ' + key + ', Value : ' + datas['packages'][key])
+                            console.table('Key : name_IT, Value : ' + datas['packages'][key]['name_IT'])
+                            var names = [datas['packages'][key]['name_IT'], key];
+ 
+                           if (datas['packages'][key]['category'] == 'instrument'){
+                              instrumentlist[instrumentlist.length] = names;
+                            }
+                           else if (datas['packages'][key]['category'] == 'animal'){
+                                animalist[animalist.length] = names;
+                            }
+                            })
+                            return instrumentlist;
+                            })
+                  */
 				}.bind(this))
 		},
+
 		save: function() {
 			let qs = this.$qs
 			let selectedTab = this.tab
@@ -738,6 +890,7 @@ export default {
 					'ctrl_tr_speed': data.ctrlTurnSpeed,
 
 					'audio_volume_level': data.audioLevel,
+                    'packages_installed' : data.packagesInstalled
 				})
 				axios.post(CBv1 + '/config', legacySettings)
 					.then(function() {
@@ -784,7 +937,7 @@ export default {
 				wifiPsw: null,
 				
 				audioLevel: null,
-
+                packagesInstalled: packageList,
 				moveFwdElapse: null,
 				moveFwdSpeed: null,
 				moveTurnElapse: null,
@@ -834,7 +987,7 @@ export default {
 			drawer: null,
 			tab: null,
 			//tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test','Audio']
+			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test','Audio', 'Gestione Pacchetti']
 		}
 	}
 }
