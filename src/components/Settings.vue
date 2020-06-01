@@ -819,25 +819,7 @@ export default {
 					data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed
 
 					data.audioLevel = remoteConfig.audio_volume_level
-                   // data.packagesInstalled = remoteConfig.packageList
                     data.packagesInstalled = remoteConfig.packages_installed
-                    /*this.readTextFile( "./static/music_package.json" , function(text){
-                        var datas = JSON.parse(text);
-                        Object.keys(datas['packages']).forEach(function(key) {
-                            console.table('Key : ' + key + ', Value : ' + datas['packages'][key])
-                            console.table('Key : name_IT, Value : ' + datas['packages'][key]['name_IT'])
-                            var names = [datas['packages'][key]['name_IT'], key];
- 
-                           if (datas['packages'][key]['category'] == 'instrument'){
-                              instrumentlist[instrumentlist.length] = names;
-                            }
-                           else if (datas['packages'][key]['category'] == 'animal'){
-                                animalist[animalist.length] = names;
-                            }
-                            })
-                            return instrumentlist;
-                            })
-                  */
 				}.bind(this))
 		},
 
