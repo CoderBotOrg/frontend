@@ -452,10 +452,14 @@
                                 <v-flex xs12 md6 offset-md3>
                                     <h3 class="text-xs-left">Gestione Pacchetti</h3>
 										<br>
-                                    <v-card>
+                                        <h3 class="text-xs-left"> Pacchetti installati:</h3>
+                                    <v-card v-for="pkgnames in settings.packagesInstalled">
                                         <div class="cardContent">
-                                            <h3 class="text-xs-left"> Pacchetti installati:</h3>
 
+                                    <li>   nome: <b>{{pkgnames[0][0]}}</b>  tipo: <b>{{pkgnames[1]}} </b><span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                                                        <v-icon>fas fa-trash</v-icon> Rimuovi </v-btn></span>
+                                            </li>
+<!--
                                                 <div v-for="pkgnames in settings.packagesInstalled">
                                               <ul> 
                                              <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
@@ -464,19 +468,20 @@
                                             </li>
                                             </ul>
                                             </div>
-                                        <br>
+-->
+                                            </div>
                                     </v-card>
+                                        <br>
 										<h3 class="text-xs-left"> Aggiungi Pacchetto </h3>
 										<v-card>
 											<div class="cardContent">
 												<template v-if="updateStatus==1">
-													<h3>File Caricato</h3>
+													<b>Pacchetto installato</b>
 													<br>
 													{{ updateStatusText }}
 													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
 												</template>
 												<template v-if="updateStatus==2">
-                                                    Errore, pacchetto non installato.
 												</template>
 												<template v-if="updateStatus==0">
 													<v-text-field label="Seleziona il pacchetto da installare" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
@@ -504,7 +509,7 @@
 				{{ snackText }}
 				<v-btn color="pink" flat @click="snackbar = false">
 					Chiudi
-				</v-btn>
+				</v-btn
 			</v-snackbar>
 		</v-app>
 	</div>
@@ -571,6 +576,7 @@ export default {
 			
 		},
 
+        
         uploadPackage() {
             let qs = this.$qs
             var pkgName = qs.stringify({
@@ -585,7 +591,7 @@ export default {
 				this.uploadInProgress = false;
 				console.dir(result.data);
 
-				this.updateStatusText = 'Pacchetto installato. Clicca "AGGIORNA" per visualizzare le modifiche.'
+				this.updateStatusText = 'Clicca "AGGIORNA" per visualizzare le modifiche.'
 
 			}.bind(this))
 
@@ -610,6 +616,19 @@ export default {
 			}.bind(this))
 
 		},
+        
+        refresh(){
+            window.location.reload();
+        /*    readTextFile
+            this.packagesInstalled = packageList 
+            this.$http.get('vue/index.html#/settings').then((results) => {
+                  console.log(results.data.data);
+                  }, (results) => {
+                      console.log('ERROR');
+                      console.log(results);
+                    });
+*/
+        },
 
  /*       readTextFile(file, callback) {
             var rawFile = new XMLHttpRequest();
@@ -735,6 +754,8 @@ export default {
                      console.log('Pacchetto rimosso')
                      this.snackText = "Pacchetto rimosso"
                      this.snackbar = true
+                     this.packagesInstalled = 
+                     window.location.reload();
                  }.bind(this))
         },
 
