@@ -174,7 +174,6 @@
 							<v-card-text>
 							</v-card-text>
 						</v-tab-item>
-
 						-->
 						<v-tab-item>
 							<v-container grid-list-md text-xs-center>
@@ -481,7 +480,11 @@
 													{{ updateStatusText }}
 													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
 												</template>
-												<template v-if="updateStatus==2">
+												<template v-if="updateStatus==2 || updateStatus==3">
+													<b>Installazione fallita</b>
+													<br>
+													{{ updateStatusText }}
+													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
 												</template>
 												<template v-if="updateStatus==0">
 													<v-text-field label="Seleziona il pacchetto da installare" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
@@ -517,7 +520,6 @@
 
 <script>
 import sidebar from "../components/Sidebar"
-
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
     rawFile.overrideMimeType("application/json");
@@ -547,9 +549,7 @@ var datapkg = readTextFile( "./static/music_package.json" , function(text){
  })
   return packageList;
 });
-
 export default {
-
 	components: { sidebar },
 	name: 'Settings',
 	mounted() {
@@ -559,7 +559,6 @@ export default {
 		}.bind(this), 1000)
 		let axios = this.$axios
 		let settings = this.settings
-
 		this.getInfoAndStatus();
 		this.prepopulate();
 	},
@@ -575,27 +574,27 @@ export default {
 			this.formdata.append('file_to_upload', files[0], files[0].name);
 			
 		},
-
         
         uploadPackage() {
             let qs = this.$qs
             var pkgName = qs.stringify({
 					'nameID': this.fileName,
-				})
-
+			})
 			this.$axios.post(this.CB + '/updatePackages', this.formdata).then(function(result) {
-
-			this.updateStatus = 1
-
+			    this.updateStatus = result.data;
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
+				this.updateStatusText = 'Clicca "AGGIORNA" per visualizzare le modifiche.';
 				console.dir(result.data);
-
-				this.updateStatusText = 'Clicca "AGGIORNA" per visualizzare le modifiche.'
-
+                if(this.updateStatus == 2){
+                    this.updateStatusText = 'Aggiornamento non avvenuto, il pacchetto è già presente con una versione successiva a quella che vuoi installare.';
+                }
+                if(this.updateStatus == 3){
+                    this.updateStatusText = 'Aggiornamento non avvenuto, pacchetto già presente con stessa versione.';
+                    }
 			}.bind(this))
-
-		},
+          },
+            
 
 		upload() {
 			const config = {
@@ -605,16 +604,12 @@ export default {
 				}
 			}
 			this.updateStatus = 1
-
 			this.$axios.post(this.CB + '/updateFromPackage', this.formdata, config).then(function(result) {
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
 				console.dir(result.data);
-
 				this.updateStatusText = 'Upload completato. Riavvio in corso.'
-
 			}.bind(this))
-
 		},
         
         refresh(){
@@ -629,7 +624,6 @@ export default {
                     });
 */
         },
-
  /*       readTextFile(file, callback) {
             var rawFile = new XMLHttpRequest();
             rawFile.overrideMimeType("application/json");
@@ -639,7 +633,6 @@ export default {
                     callback(rawFile.responseText);
                 }
             }
-
             rawFile.send(null);
         },
 */
@@ -679,13 +672,11 @@ export default {
 					this.dialog = false
 				}.bind(this))
 		},
-
 		shutdown() {
 			let axios = this.$axios
 			let CBv1 = this.CBv1
 			axios.get(CBv1 + '/bot', { params: { cmd: 'halt' } })
 				.then(function(response) {
-
 					this.snackText = 'Coderbot in spegnimento..'
 					this.snackbar = true
 				})
@@ -702,7 +693,6 @@ export default {
 		getInfoAndStatus() {
 			// Get bot info and status
 			let axios = this.$axios
-
 			axios.get(this.CB + '/status')
 				.then(function(response) {
 					this.cb.status = response.data
@@ -725,7 +715,6 @@ export default {
 						this.getInfoAndStatus();
 						this.prepopulate();
 					}
-
 					this.statusData = response.data
 					this.status = response.status
 					this.cb.logs.log = response.data.log
@@ -733,7 +722,6 @@ export default {
 				.catch(function(error) {
 					// handle error
 					console.log(error);
-
 					if (this.status) {
 						this.snackText = 'CoderBot irrangiungibile'
 						this.snackbar = true
@@ -741,7 +729,6 @@ export default {
 					this.status = 0
 				}.bind(this))
 		},
-
         deletePkg(pkgNameID){
             let CBv1 = this.CBv1
             let axios = this.$axios
@@ -758,7 +745,6 @@ export default {
                      window.location.reload();
                  }.bind(this))
         },
-
 		prepopulate: function() {
 			let axios = this.$axios
 			let settings = this.settings
@@ -807,13 +793,11 @@ export default {
 					sound_start: "$startup.mp3"
 					sound_stop: "$shutdown.mp3"
 					*/
-
 					data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig.move_power_angle_3]
 					data.btnFun = remoteConfig.button_func
 					// ?
 					/*
 					data.wifiMode = remoteConfig.wifi_mode
-
 					data.wifiSSID = remoteConfig.wifi_ssid
 					data.wifiPsw = remoteConfig.wifi_psk
 					*/
@@ -824,29 +808,24 @@ export default {
 					data.shutterSound = remoteConfig.sound_shutter
 					data.startupProgram = remoteConfig.load_at_start
 					data.progLevel = remoteConfig.prog_level
-
 					data.moveFwdElapse = remoteConfig.move_fw_elapse
 					data.moveFwdSpeed = remoteConfig.move_fw_speed
 					data.moveTurnElapse = remoteConfig.move_tr_elapse
 					data.moveTurnSpeed = remoteConfig.move_tr_speed
-
 					data.ctrlFwdElapse = remoteConfig.ctrl_fw_elapse
 					data.ctrlFwdSpeed = remoteConfig.ctrl_fw_speed
 					data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse
 					data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed
-
 					data.audioLevel = remoteConfig.audio_volume_level
                     data.packagesInstalled = remoteConfig.packages_installed
 				}.bind(this))
 		},
-
 		save: function() {
 			let qs = this.$qs
 			let selectedTab = this.tab
 			let axios = this.$axios
 			let CBv1 = this.CBv1
 			let data = this.settings
-
 			if (selectedTab == 10) {
 				var valuesAsString = qs.stringify({
 					'wifi_mode': this.settings.wifiMode,
@@ -860,7 +839,6 @@ export default {
 						this.snackText = "Impostazioni di rete aggiornate"
 						this.snackbar = true
 					}.bind(this))
-
 			} else {
 				let legacySettings = qs.stringify({
 					'wifi_mode': data.wifiMode,
@@ -877,17 +855,14 @@ export default {
 					'sound_shutter': data.shutterSound,
 					'load_at_start': data.startupProgram,
 					'prog_level': data.progLevel,
-
 					'move_fw_elapse': data.moveFwdElapse,
 					'move_fw_speed': data.moveFwdSpeed,
 					'move_tr_elapse': data.moveTurnElapse,
 					'move_tr_speed': data.moveTurnSpeed,
-
 					'ctrl_fw_elapse': data.ctrlFwdElapse,
 					'ctrl_fw_speed': data.ctrlFwdSpeed,
 					'ctrl_tr_elapse': data.ctrlTurnElapse,
 					'ctrl_tr_speed': data.ctrlTurnSpeed,
-
 					'audio_volume_level': data.audioLevel,
                     'packages_installed' : data.packagesInstalled
 				})
@@ -945,7 +920,6 @@ export default {
 				ctrlFwdSpeed: null,
 				ctrlTurnElapse: null,
 				ctrlTurnSpeed: null,
-
 				motorMode: null,
 				trimFactor: null,
 				startSound: null,
@@ -954,7 +928,6 @@ export default {
 				startupProgram: null,
 				progLevel: null,
 			},
-
 			blocklyToolboxItems: [
 				{ text: 'Movimento', value: 'basic_move' },
 				{ text: 'Base', value: 'basic' },
@@ -990,7 +963,6 @@ export default {
 		}
 	}
 }
-
 </script>
 <style scoped>
 .cardContent {
@@ -998,7 +970,6 @@ export default {
 	font-size: 16px;
 	padding: 16px;
 }
-
 .fa,
 .fas,
 .fab {
