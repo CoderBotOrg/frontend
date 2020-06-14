@@ -167,7 +167,6 @@
 	</category>
 	<category name="Variabili" custom="VARIABLE" colour="330"></category>
 	<category name="Funzioni" custom="PROCEDURE" colour="290"></category>
-	<!--
 	<category name="Eventi" colour="15">
 		<block type="coderbot_event_generator">
 			<value name="generator_statements">
@@ -210,7 +209,6 @@
 			<field name="VAR">event_data</field>
 		</block>
 	</category>
--->
 	<category name="Movimento" colour="40">
 		<block type="coderbot_moveForward"></block>
 		<block type="coderbot_moveBackward"></block>
@@ -242,14 +240,14 @@
 				</block>
 			</value>
 		</block>
-        <block type="coderbot_adv_move_distance">
+   <block type="coderbot_adv_move_distance">
 			<value name="DISTANCE">
 				<block type="math_number">
 					<field name="NUM">1000</field>
 				</block>
 			</value>
 		</block>
-        <block type="coderbot_adv_move_speed_distance">
+  <block type="coderbot_adv_move_speed_distance">
 			<value name="SPEED">
 				<block type="math_number">
 					<field name="NUM">100</field>
@@ -258,33 +256,6 @@
 			<value name="DISTANCE">
 				<block type="math_number">
 					<field name="NUM">1000</field>
-				</block>
-			</value>
-		</block>
-		<block type="coderbot_adv_motor">
-			<value name="SPEED_LEFT">
-				<block type="math_number">
-					<field name="NUM">100</field>
-				</block>
-			</value>
-			<value name="SPEED_RIGHT">
-				<block type="math_number">
-					<field name="NUM">100</field>
-				</block>
-			</value>
-			<value name="ELAPSE">
-				<block type="math_number">
-					<field name="NUM">1.0</field>
-				</block>
-			</value>
-			<value name="STEPS_LEFT">
-				<block type="math_number">
-					<field name="NUM">-1</field>
-				</block>
-			</value>
-			<value name="STEPS_RIGHT">
-				<block type="math_number">
-					<field name="NUM">-1</field>
 				</block>
 			</value>
 		</block>
@@ -302,7 +273,7 @@
 		<block type="coderbot_camera_videoRec"></block>
 		<block type="coderbot_camera_videoStop"></block>
 	</category>
-	<category name="Sensori" colour="250">
+	<category name="Visione" colour="250">
 		<block type="coderbot_cam_average"></block>
 		<block type="coderbot_adv_pathAhead"></block>
 		<block type="coderbot_adv_findLine"></block>
@@ -322,9 +293,15 @@
 		</block>
 		<block type="coderbot_adv_findQRCode"></block>
 		<block type="coderbot_adv_findARCode"></block>
-		<block type="coderbot_adv_find_class"></block>
-		<!--<block type="coderbot_adv_cnn_classify"></block>-->
+		<block type="coderbot_adv_cnn_classify"></block>
+		<block type="coderbot_adv_cnn_detect_objects"></block>
+	</category>
+	<category name="Sensori" colour="240">
 		<block type="coderbot_sonar_get_distance"></block>
+		<block type="coderbot_mpu_get_gyro"></block>
+		<block type="coderbot_mpu_get_accel"></block>
+		<block type="coderbot_mpu_get_heading"></block>
+		<block type="coderbot_mpu_get_temp"></block>
 	</category>
 	<category name="Suoni" colour="220">
 		<block type="coderbot_audio_say"></block>
@@ -343,6 +320,5 @@
 			</value>
 		</block>
 		<block type="coderbot_audio_listen"></block>
-		<!--<block type="coderbot_conv_get_action"></block>-->
 	</category>
 </xml>

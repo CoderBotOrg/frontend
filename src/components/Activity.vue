@@ -446,7 +446,8 @@ export default {
 			var serializedToolbox = this.$base64.decode(b64Toolbox)
 
 			// Initialise Blockly Instance
-			this.workspace = Blockly.inject(
+			//Blockly.Generator.prototype.INDENT = '    ';
+                        this.workspace = Blockly.inject(
 				// Blockly container
 				this.$refs.blocklyDiv,
 				// Options
@@ -498,7 +499,10 @@ export default {
 			var CODERBOT_CTRL_COUNTER = true; // to check, never used
 			var CODERBOT_CTRL_MOVE_MOTION = false; //t o check
 			var CODERBOT_CTRL_MOVE_MPU = false; // to check
-			var CODERBOT_CNN_MODEL_LIST = ""
+			var CODERBOT_CNN_MODEL_LIST = [['base_high_slow', 'base_high_slow'],
+						       ['base_low_fast', 'base_low_fast'],
+						       ['object_detect', 'object_detect'],
+						       ['object_detect_mobile', 'object_detect_mobile']];
 
 			var BotMessages = Object();
 			BotMessages.Input = "Say what:";
@@ -1342,72 +1346,73 @@ export default {
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
 
-			Blockly.Blocks['coderbot_adv_findLogo'] = {
-				/**
-				 * Block for findLogo function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDLOGO);
-					this.setOutput(true, 'Number');
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
+            Blockly.Blocks['coderbot_adv_find_class'] = {
+            /**
+            * Block for find_class function.
+            * @this Blockly.Block
+            */
+            init: function() {
+                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
+                this.setColour(250);
+                this.appendDummyInput()
+                    .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS);
+                this.setOutput(true, 'String');
+                this.setInputsInline(true);
+                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+            }
+            };
 
-			Blockly.Python['coderbot_adv_findLogo'] = function(block) {
-				// Boolean values true and false.
-				var code = 'get_cam().find_logo()';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
+            Blockly.Python['coderbot_adv_find_class'] = function(block) {
+            // Boolean values true and false.
+            var name = 'get_cam().find_class()';
+            return [name, Blockly.Python.ORDER_ATOMIC];
+            };
 
-			Blockly.Blocks['coderbot_adv_find_class'] = {
-				/**
-				 * Block for find_class function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS);
-					this.setOutput(true, 'String');
-					this.setInputsInline(true);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
+            Blockly.Blocks['coderbot_adv_cnn_classify'] = {
+            /**
+            * Block for find_class function.
+            * @this Blockly.Block
+            */
+            init: function() {
+                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
+                this.setColour(250);
+                this.appendDummyInput()
+                    .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS)
+                    .appendField(new Blockly.FieldDropdown(CODERBOT_CNN_MODEL_LIST), 'MODEL');
+                this.setInputsInline(true);
+                this.setOutput(true, ['Array']);
+                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+            }
+            };
 
-			Blockly.Python['coderbot_adv_find_class'] = function(block) {
-				// Boolean values true and false.
-				var name = 'get_cam().find_class()';
-				return [name, Blockly.Python.ORDER_ATOMIC];
-			};
+            Blockly.Python['coderbot_adv_cnn_classify'] = function(block) {
+            var model = block.getFieldValue('MODEL');
+            var class_scores = 'get_cam().cnn_classify("'+ model +'")';
+            return [class_scores, Blockly.Python.ORDER_ATOMIC];
+            };
 
-			Blockly.Blocks['coderbot_adv_cnn_classify'] = {
-				/**
-				 * Block for find_class function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS)
-						.appendField(new Blockly.FieldDropdown(CODERBOT_CNN_MODEL_LIST), 'MODEL');
-					this.setInputsInline(true);
-					this.setOutput(true, ['Array']);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
+            Blockly.Blocks['coderbot_adv_cnn_detect_objects'] = {
+            /**
+            * Block for find_class function.
+            * @this Blockly.Block
+            */
+            init: function() {
+                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
+                this.setColour(250);
+                this.appendDummyInput()
+                    .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDOBJECTS)
+                    .appendField(new Blockly.FieldDropdown(CODERBOT_CNN_MODEL_LIST), 'MODEL');
+                this.setInputsInline(true);
+                this.setOutput(true, ['Array']);
+                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+            }
+            };
 
-			Blockly.Python['coderbot_adv_cnn_classify'] = function(block) {
-				var model = block.getFieldValue('MODEL');
-				var class_scores = 'get_cam().cnn_classify("' + model + '")';
-				return [class_scores, Blockly.Python.ORDER_ATOMIC];
-			};
-
+            Blockly.Python['coderbot_adv_cnn_detect_objects'] = function(block) {
+            var model = block.getFieldValue('MODEL');
+            var class_scores = 'get_cam().cnn_detect_objects("'+ model +'")';
+            return [class_scores, Blockly.Python.ORDER_ATOMIC];
+            };
 			Blockly.Blocks['coderbot_event_generator'] = {
 				init: function() {
 					this.appendDummyInput()
@@ -1422,12 +1427,13 @@ export default {
 
 			var coderbot_generator_id = 1;
 			Blockly.Python['coderbot_event_generator'] = function(block) {
-				Blockly.Generator.prototype.INDENT = '    ';
+			        var INDENT_saved = Blockly.Generator.prototype.INDENT;
+				Blockly.Generator.prototype.INDENT = Blockly.Generator.prototype.INDENT + Blockly.Generator.prototype.INDENT;
 				var statements_event_generator = Blockly.Python.statementToCode(block, 'generator_statements');
-				Blockly.Generator.prototype.INDENT = '  ';
+				Blockly.Generator.prototype.INDENT = INDENT_saved;
 				var code = 'def event_generator_' + coderbot_generator_id + '():\n' +
-					'  while True:\n' +
-					'    get_prog_eng().check_end()\n' +
+					INDENT_saved + 'while True:\n' +
+					INDENT_saved + INDENT_saved + 'get_prog_eng().check_end()\n' +
 					statements_event_generator + '\n' +
 					'get_event().register_event_generator(event_generator_' + coderbot_generator_id + ')'
 				coderbot_generator_id++;
@@ -1698,6 +1704,98 @@ export default {
 				var code = sbsPrefix + 'get_bot().get_sonar_distance(' + sonar + ')';
 				return [code, Blockly.Python.ORDER_ATOMIC];
 			};
+
+            Blockly.Blocks['coderbot_mpu_get_accel'] = {
+            /**
+            * Block for get_distance function.
+            * @this Blockly.Block
+            */
+            init: function() {
+                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
+                this.setColour(240);
+                this.appendDummyInput()
+                    .appendField(Blockly.Msg.CODERBOT_MPU_GET_ACCEL)
+                    .appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_MPU_AXIS_X, "0"],
+                                                            [Blockly.Msg.CODERBOT_MPU_AXIS_Y, "1"],
+                                                            [Blockly.Msg.CODERBOT_MPU_AXIS_Z, "2"]]), 'AXIS');
+                this.setOutput(true, 'Number');
+                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+            }
+            };
+
+            Blockly.Python['coderbot_mpu_get_accel'] = function(block) {
+            // Boolean values true and false.
+            var axis = block.getFieldValue('AXIS');
+            var code = 'get_bot().get_mpu_accel(' + axis + ')';
+            return [code, Blockly.Python.ORDER_ATOMIC];
+            };
+
+            Blockly.Blocks['coderbot_mpu_get_gyro'] = {
+            /**
+            * Block for get_distance function.
+            * @this Blockly.Block
+            */
+            init: function() {
+                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
+                this.setColour(240);
+                this.appendDummyInput()
+                    .appendField(Blockly.Msg.CODERBOT_MPU_GET_GYRO)
+                    .appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_MPU_AXIS_X, "0"],
+                                                            [Blockly.Msg.CODERBOT_MPU_AXIS_Y, "1"],
+                                                            [Blockly.Msg.CODERBOT_MPU_AXIS_Z, "2"]]), 'AXIS');
+                this.setOutput(true, 'Number');
+                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+            }
+            };
+
+            Blockly.Python['coderbot_mpu_get_gyro'] = function(block) {
+            // Boolean values true and false.
+            var axis = block.getFieldValue('AXIS');
+            var code = 'get_bot().get_mpu_gyro(' + axis + ')';
+            return [code, Blockly.Python.ORDER_ATOMIC];
+            };
+
+            Blockly.Blocks['coderbot_mpu_get_heading'] = {
+            /**
+            * Block for get_distance function.
+            * @this Blockly.Block
+            */
+            init: function() {
+                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
+                this.setColour(240);
+                this.appendDummyInput()
+                    .appendField(Blockly.Msg.CODERBOT_MPU_GET_HEADING);
+                this.setOutput(true, 'Number');
+                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+            }
+            };
+
+            Blockly.Python['coderbot_mpu_get_heading'] = function(block) {
+            // Boolean values true and false.
+            var code = 'get_bot().get_mpu_heading()';
+            return [code, Blockly.Python.ORDER_ATOMIC];
+            };
+
+            Blockly.Blocks['coderbot_mpu_get_temp'] = {
+            /**
+            * Block for get_distance function.
+            * @this Blockly.Block
+            */
+            init: function() {
+                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
+                this.setColour(240);
+                this.appendDummyInput()
+                    .appendField(Blockly.Msg.CODERBOT_MPU_GET_TEMP);
+                this.setOutput(true, 'Number');
+                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
+            }
+            };
+
+            Blockly.Python['coderbot_mpu_get_temp'] = function(block) {
+            // Boolean values true and false.
+            var code = 'get_bot().get_mpu_temp()';
+            return [code, Blockly.Python.ORDER_ATOMIC];
+            };
 		},
 
 		toggleSidebar() {
@@ -1714,7 +1812,7 @@ export default {
 			let isDefault = this.isDefault
 
 			window.LoopTrap = 1000;
-			Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+			Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
 			let code = Blockly.Python.workspaceToCode(workspace);
 			Blockly.Python.INFINITE_LOOP_TRAP = null;
 
@@ -1962,7 +2060,7 @@ export default {
 				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
 				window.LoopTrap = 1000;
-				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+				Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
 				var code = Blockly.Python.workspaceToCode(this.workspace);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
@@ -1992,7 +2090,7 @@ export default {
 				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
 				window.LoopTrap = 1000;
-				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+				Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
 				var code = Blockly.Python.workspaceToCode(this.workspace);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
