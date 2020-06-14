@@ -446,7 +446,8 @@ export default {
 			var serializedToolbox = this.$base64.decode(b64Toolbox)
 
 			// Initialise Blockly Instance
-			this.workspace = Blockly.inject(
+			//Blockly.Generator.prototype.INDENT = '    ';
+                        this.workspace = Blockly.inject(
 				// Blockly container
 				this.$refs.blocklyDiv,
 				// Options
@@ -498,7 +499,10 @@ export default {
 			var CODERBOT_CTRL_COUNTER = true; // to check, never used
 			var CODERBOT_CTRL_MOVE_MOTION = false; //t o check
 			var CODERBOT_CTRL_MOVE_MPU = false; // to check
-			var CODERBOT_CNN_MODEL_LIST = ""
+			var CODERBOT_CNN_MODEL_LIST = [['base_high_slow', 'base_high_slow'],
+						       ['base_low_fast', 'base_low_fast'],
+						       ['object_detect', 'object_detect'],
+						       ['object_detect_mobile', 'object_detect_mobile']];
 
 			var BotMessages = Object();
 			BotMessages.Input = "Say what:";
@@ -1423,12 +1427,13 @@ export default {
 
 			var coderbot_generator_id = 1;
 			Blockly.Python['coderbot_event_generator'] = function(block) {
-				Blockly.Generator.prototype.INDENT = '    ';
+			        var INDENT_saved = Blockly.Generator.prototype.INDENT;
+				Blockly.Generator.prototype.INDENT = Blockly.Generator.prototype.INDENT + Blockly.Generator.prototype.INDENT;
 				var statements_event_generator = Blockly.Python.statementToCode(block, 'generator_statements');
-				Blockly.Generator.prototype.INDENT = '  ';
+				Blockly.Generator.prototype.INDENT = INDENT_saved;
 				var code = 'def event_generator_' + coderbot_generator_id + '():\n' +
-					'  while True:\n' +
-					'    get_prog_eng().check_end()\n' +
+					INDENT_saved + 'while True:\n' +
+					INDENT_saved + INDENT_saved + 'get_prog_eng().check_end()\n' +
 					statements_event_generator + '\n' +
 					'get_event().register_event_generator(event_generator_' + coderbot_generator_id + ')'
 				coderbot_generator_id++;
@@ -1807,7 +1812,7 @@ export default {
 			let isDefault = this.isDefault
 
 			window.LoopTrap = 1000;
-			Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+			Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
 			let code = Blockly.Python.workspaceToCode(workspace);
 			Blockly.Python.INFINITE_LOOP_TRAP = null;
 
@@ -2055,7 +2060,7 @@ export default {
 				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
 				window.LoopTrap = 1000;
-				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+				Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
 				var code = Blockly.Python.workspaceToCode(this.workspace);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
@@ -2085,7 +2090,7 @@ export default {
 				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
 				var dom_code = Blockly.Xml.domToText(xml_code);
 				window.LoopTrap = 1000;
-				Blockly.Python.INFINITE_LOOP_TRAP = '  get_prog_eng().check_end()\n';
+				Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
 				var code = Blockly.Python.workspaceToCode(this.workspace);
 				Blockly.Python.INFINITE_LOOP_TRAP = null;
 
