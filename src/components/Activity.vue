@@ -499,10 +499,9 @@ export default {
 			var CODERBOT_CTRL_COUNTER = true; // to check, never used
 			var CODERBOT_CTRL_MOVE_MOTION = false; //t o check
 			var CODERBOT_CTRL_MOVE_MPU = false; // to check
-			var CODERBOT_CNN_MODEL_LIST = [['base_high_slow', 'base_high_slow'],
-						       ['base_low_fast', 'base_low_fast'],
-						       ['object_detect', 'object_detect'],
-						       ['object_detect_mobile', 'object_detect_mobile']];
+			var CODERBOT_CNN_MODEL_LIST = [['generic_fast_low', 'generic_fast_low'],
+						       ['generic_slow_high', 'generic_slow_high'],
+						       ['generic_object_detect', 'generic_object_detect']];
 
 			var BotMessages = Object();
 			BotMessages.Input = "Say what:";
