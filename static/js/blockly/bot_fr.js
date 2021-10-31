@@ -1,9 +1,5 @@
 'use strict';
 
-goog.provide('Blockly.Msg.en');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg.CODERBOT_MOVE_FORWARD = "avancer";
 Blockly.Msg.CODERBOT_MOVE_BACKWARD = "reculer";
 Blockly.Msg.CODERBOT_MOVE_LEFT = "tourner à gauche";
@@ -57,7 +53,7 @@ Blockly.Msg.CODERBOT_SENSOR_AVERAGE_VALUE = "Value (brightness)";
 Blockly.Msg.CODERBOT_SENSOR_AVERAGE_ALL = "HSV (as list)";
 Blockly.Msg.CODERBOT_SENSOR_FINDLOGO = "trouve le logo";
 Blockly.Msg.CODERBOT_SENSOR_FINDCLASS = "trouve le class";
-Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND = "find text of kind";
+Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND = "trouve le text";
 Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA = "Alpha (A..Z)";
 Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_NUM = "Numeric (0..9)";
 Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHANUM = "Alphanumeric (A..Z;0..9)";

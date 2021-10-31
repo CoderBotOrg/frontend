@@ -1,9 +1,5 @@
 'use strict';
 
-goog.provide('Blockly.Msg.en');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg.CODERBOT_MOVE_FORWARD = "move forward";
 Blockly.Msg.CODERBOT_MOVE_BACKWARD = "move backward";
 Blockly.Msg.CODERBOT_MOVE_LEFT = "turn left";
@@ -17,6 +13,8 @@ Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_LEFT = "speed left"
 Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_RIGHT = "speed right"
 Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_LEFT = "steps left"
 Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_RIGHT = "steps right"
+Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED = "at speed"
+Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_DISTANCE = "distance"
 Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE = "for"
 Blockly.Msg.CODERBOT_MOVE_MOTION_DIST = "distance"
 Blockly.Msg.CODERBOT_MOVE_MOTION_ANGLE = "angle"
@@ -52,12 +50,13 @@ Blockly.Msg.CODERBOT_SENSOR_FINDFACE_SIZE = "size";
 Blockly.Msg.CODERBOT_SENSOR_FINDFACE_ALL = "x, y, size (as list)";
 Blockly.Msg.CODERBOT_SENSOR_FINDLOGO = "find logo";
 Blockly.Msg.CODERBOT_SENSOR_FINDCLASS = "find class";
+Blockly.Msg.CODERBOT_SENSOR_FINDOBJECTS = "find objects";
 Blockly.Msg.CODERBOT_SENSOR_AVERAGE = "get image average";
 Blockly.Msg.CODERBOT_SENSOR_AVERAGE_HUE = "Hue";
 Blockly.Msg.CODERBOT_SENSOR_AVERAGE_SATURATION = "Saturation";
 Blockly.Msg.CODERBOT_SENSOR_AVERAGE_VALUE = "Value (brightness)";
 Blockly.Msg.CODERBOT_SENSOR_AVERAGE_ALL = "HSV (as list)";
-Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND = "find text of kind";
+Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND = "find text";
 Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA = "Alpha (A..Z)";
 Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_NUM = "Numeric (0..9)";
 Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHANUM = "Alphanumeric (A..Z;0..9)";
@@ -79,6 +78,14 @@ Blockly.Msg.CODERBOT_SONAR_GET_DISTANCE = "get distance with sonar";
 Blockly.Msg.CODERBOT_SONAR_SENSOR_1 = "1";
 Blockly.Msg.CODERBOT_SONAR_SENSOR_2 = "2";
 Blockly.Msg.CODERBOT_SONAR_SENSOR_3 = "3";
+Blockly.Msg.CODERBOT_SONAR_SENSOR_4 = "4";
+Blockly.Msg.CODERBOT_MPU_GET_GYRO = "gyroscope axis";
+Blockly.Msg.CODERBOT_MPU_GET_ACCEL = "accelerometer axis";
+Blockly.Msg.CODERBOT_MPU_GET_HEADING = "heading";
+Blockly.Msg.CODERBOT_MPU_GET_TEMP = "temperature";
+Blockly.Msg.CODERBOT_MPU_AXIS_X = "x";
+Blockly.Msg.CODERBOT_MPU_AXIS_Y = "y";
+Blockly.Msg.CODERBOT_MPU_AXIS_Z = "z";
 Blockly.Msg.CODERBOT_EVENT_WHEN = "when";
 Blockly.Msg.CODERBOT_EVENT_WITH = "with";
 Blockly.Msg.CODERBOT_EVENT_PUBLISH = "publish";
