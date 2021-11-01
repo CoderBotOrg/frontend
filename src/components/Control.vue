@@ -156,6 +156,21 @@ export default {
 
 				}.bind(this))
 		},
+        play_note(){
+            let CBv1 = this.CBv1
+            let axios = this.$axios;
+            axios.get(CBv1 + '/bot', { params: { 'cmd' : 'play_note'}})
+                .then(function(response){ 
+                    this.ttsBtnEnabled = false
+			        this.ttsdialog = false
+                    this.snackText = 'Nota in riproduzione'
+                    this.snackbar = true
+                    setTimeout(function() {
+                        this.ttsBtnEnabled = true
+                    }.bind(this), 800)
+               }.bind(this))
+         },
+
 		videoHandler() {
 			if (this.videoBtn.action == 'record')
 				this.recordVideo()

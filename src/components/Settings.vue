@@ -174,7 +174,6 @@
 							<v-card-text>
 							</v-card-text>
 						</v-tab-item>
-
 						-->
 						<v-tab-item>
 							<v-container grid-list-md text-xs-center>
@@ -425,6 +424,81 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>
+
+
+						<!-- AUDIO TAB -->
+                        <v-tab-item>
+							<v-container grid-list-md text-xs-center>
+								<v-layout row wrap align-center>
+									<v-flex xs12 md6 offset-md3>
+										<h3 class="text-xs-left">Audio settings</h3>
+										<v-card>
+											<div class="cardContent">
+												Volume:  
+												
+												<v-text-field v-model="settings.audioLevel" label="Volume" />
+											</div>
+										</v-card>
+									</v-flex>
+								</v-layout>
+							</v-container>
+						</v-tab-item>	
+
+                <!-- PACKAGE MANAGER -->
+                    <v-tab-item>
+                        <v-container grid-list-md text-xs-center>
+                            <v-layout row wrap align-center>
+                                <v-flex xs12 md6 offset-md3>
+                                    <h3 class="text-xs-left">Gestione Pacchetti</h3>
+										<br>
+                                        <h3 class="text-xs-left"> Pacchetti installati:</h3>
+                                    <v-card v-for="pkgnames in settings.packagesInstalled">
+                                        <div class="cardContent">
+
+                                    <li>   nome: <b>{{pkgnames[0][0]}}</b>  tipo: <b>{{pkgnames[1]}} </b><span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                                                        <v-icon>fas fa-trash</v-icon> Rimuovi </v-btn></span>
+                                            </li>
+<!--
+                                                <div v-for="pkgnames in settings.packagesInstalled">
+                                              <ul> 
+                                             <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                                                        <v-icon>fas fa-trash</v-icon> Rimuovi
+                                            </v-btn></span>
+                                            </li>
+                                            </ul>
+                                            </div>
+-->
+                                            </div>
+                                    </v-card>
+                                        <br>
+										<h3 class="text-xs-left"> Aggiungi Pacchetto </h3>
+										<v-card>
+											<div class="cardContent">
+												<template v-if="updateStatus==1">
+													<b>Pacchetto installato</b>
+													<br>
+													{{ updateStatusText }}
+													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
+												</template>
+												<template v-if="updateStatus==2 || updateStatus==3">
+													<b>Installazione fallita</b>
+													<br>
+													{{ updateStatusText }}
+													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
+												</template>
+												<template v-if="updateStatus==0">
+													<v-text-field label="Seleziona il pacchetto da installare" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
+													<input type="file" style="display: none" ref="file" @change="onFilePicked">
+													<template v-if="this.fileObj">Clicca "CONFERMA" per installare il pacchetto<br></template>
+													<v-btn v-if="this.fileObj" @click="uploadPackage" color="error">Conferma</v-btn>
+												</template>
+											</div>
+                                        </v-card>
+                                    </v-flex>
+                                    </v-layout>
+                                    </v-container>
+                                    </v-tab-item>
+
 					</v-tabs-items>
 				<!--</template>
 				<template v-else>
@@ -438,7 +512,7 @@
 				{{ snackText }}
 				<v-btn color="pink" flat @click="snackbar = false">
 					Chiudi
-				</v-btn>
+				</v-btn
 			</v-snackbar>
 		</v-app>
 	</div>
@@ -446,7 +520,35 @@
 
 <script>
 import sidebar from "../components/Sidebar"
-
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+       if (rawFile.readyState === 4 && rawFile.status == "200") {
+           callback(rawFile.responseText);
+       }
+   }
+   rawFile.send(null);
+}
+var packageList = [];//["pianoooo","pianoo"], ["chitarra","guiitar"], ["flauto","fluute"]];
+var datapkg = readTextFile( "./static/music_package.json" , function(text){
+   var datas = JSON.parse(text);
+ 
+ 
+    Object.keys(datas['packages']).forEach(function(key) {
+    console.table('Key : ' + key + ', Value : ' + datas['packages'][key])
+    console.table('Key : name_IT, Value : ' + datas['packages'][key]['name_IT'])
+    var names = [datas['packages'][key]['name_IT'], key];
+   if (datas['packages'][key]['category'] == 'instrument'){
+       packageList[packageList.length] = [names, 'instrument'];
+    }
+    else if (datas['packages'][key]['category'] == 'animal'){
+       packageList[packageList.length] = [names, 'animal'];
+    }
+ })
+  return packageList;
+});
 export default {
 	components: { sidebar },
 	name: 'Settings',
@@ -457,7 +559,6 @@ export default {
 		}.bind(this), 1000)
 		let axios = this.$axios
 		let settings = this.settings
-
 		this.getInfoAndStatus();
 		this.prepopulate();
 	},
@@ -471,7 +572,30 @@ export default {
 			this.fileObj = files[0]
 			this.formdata = new FormData();
 			this.formdata.append('file_to_upload', files[0], files[0].name);
+			
 		},
+        
+        uploadPackage() {
+            let qs = this.$qs
+            var pkgName = qs.stringify({
+					'nameID': this.fileName,
+			})
+			this.$axios.post(this.CB + '/updatePackages', this.formdata).then(function(result) {
+			    this.updateStatus = result.data;
+				this.uploadCompleted = true;
+				this.uploadInProgress = false;
+				this.updateStatusText = 'Clicca "AGGIORNA" per visualizzare le modifiche.';
+				console.dir(result.data);
+                if(this.updateStatus == 2){
+                    this.updateStatusText = 'Aggiornamento non avvenuto, il pacchetto è già presente con una versione successiva a quella che vuoi installare.';
+                }
+                if(this.updateStatus == 3){
+                    this.updateStatusText = 'Aggiornamento non avvenuto, pacchetto già presente con stessa versione.';
+                    }
+			}.bind(this))
+          },
+            
+
 		upload() {
 			const config = {
 				headers: { 'Content-Type': 'multipart/form-data' },
@@ -480,17 +604,38 @@ export default {
 				}
 			}
 			this.updateStatus = 1
-
 			this.$axios.post(this.CB + '/updateFromPackage', this.formdata, config).then(function(result) {
 				this.uploadCompleted = true;
 				this.uploadInProgress = false;
 				console.dir(result.data);
-
 				this.updateStatusText = 'Upload completato. Riavvio in corso.'
-
 			}.bind(this))
-
 		},
+        
+        refresh(){
+            window.location.reload();
+        /*    readTextFile
+            this.packagesInstalled = packageList 
+            this.$http.get('vue/index.html#/settings').then((results) => {
+                  console.log(results.data.data);
+                  }, (results) => {
+                      console.log('ERROR');
+                      console.log(results);
+                    });
+*/
+        },
+ /*       readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    callback(rawFile.responseText);
+                }
+            }
+            rawFile.send(null);
+        },
+*/
 		restoreConfig() {
 			let axios = this.$axios
 			let CB = this.CB
@@ -527,13 +672,11 @@ export default {
 					this.dialog = false
 				}.bind(this))
 		},
-
 		shutdown() {
 			let axios = this.$axios
 			let CBv1 = this.CBv1
 			axios.get(CBv1 + '/bot', { params: { cmd: 'halt' } })
 				.then(function(response) {
-
 					this.snackText = 'Coderbot in spegnimento..'
 					this.snackbar = true
 				})
@@ -550,13 +693,12 @@ export default {
 		getInfoAndStatus() {
 			// Get bot info and status
 			let axios = this.$axios
-
 			axios.get(this.CB + '/status')
 				.then(function(response) {
 					this.cb.status = response.data
 					this.cb.logs.log = response.data.log
 				}.bind(this))
-			axios.get(this.CB + '/info')
+			axioks.get(this.CB + '/info')
 				.then(function(response) {
 					this.cb.info = response.data
 				}.bind(this))
@@ -565,7 +707,7 @@ export default {
 			let axios = this.$axios
 			let CB = this.CB
 			let status = this.status
-			axios.get(CB + '/status')
+			axios.kkget(CB + '/status')
 				.then(function(response) {
 					if (this.status == 0 && response.status) {
 						this.snackText = 'CoderBot è tornato online'
@@ -573,7 +715,6 @@ export default {
 						this.getInfoAndStatus();
 						this.prepopulate();
 					}
-
 					this.statusData = response.data
 					this.status = response.status
 					this.cb.logs.log = response.data.log
@@ -581,7 +722,6 @@ export default {
 				.catch(function(error) {
 					// handle error
 					console.log(error);
-
 					if (this.status) {
 						this.snackText = 'CoderBot irrangiungibile'
 						this.snackbar = true
@@ -589,6 +729,22 @@ export default {
 					this.status = 0
 				}.bind(this))
 		},
+        deletePkg(pkgNameID){
+            let CBv1 = this.CBv1
+            let axios = this.$axios
+            let qs = this.$qs
+            var pkgName = qs.stringify({
+					'nameID': pkgNameID,
+				})
+            axios.post(CBv1 + '/deletepkg', pkgName)
+                 .then(function() {
+                     console.log('Pacchetto rimosso')
+                     this.snackText = "Pacchetto rimosso"
+                     this.snackbar = true
+                     this.packagesInstalled = 
+                     window.location.reload();
+                 }.bind(this))
+        },
 		prepopulate: function() {
 			let axios = this.$axios
 			let settings = this.settings
@@ -637,13 +793,11 @@ export default {
 					sound_start: "$startup.mp3"
 					sound_stop: "$shutdown.mp3"
 					*/
-
 					data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig.move_power_angle_3]
 					data.btnFun = remoteConfig.button_func
 					// ?
 					/*
 					data.wifiMode = remoteConfig.wifi_mode
-
 					data.wifiSSID = remoteConfig.wifi_ssid
 					data.wifiPsw = remoteConfig.wifi_psk
 					*/
@@ -654,17 +808,16 @@ export default {
 					data.shutterSound = remoteConfig.sound_shutter
 					data.startupProgram = remoteConfig.load_at_start
 					data.progLevel = remoteConfig.prog_level
-
 					data.moveFwdElapse = remoteConfig.move_fw_elapse
 					data.moveFwdSpeed = remoteConfig.move_fw_speed
 					data.moveTurnElapse = remoteConfig.move_tr_elapse
 					data.moveTurnSpeed = remoteConfig.move_tr_speed
-
 					data.ctrlFwdElapse = remoteConfig.ctrl_fw_elapse
 					data.ctrlFwdSpeed = remoteConfig.ctrl_fw_speed
 					data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse
 					data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed
-
+					data.audioLevel = remoteConfig.audio_volume_level
+                    data.packagesInstalled = remoteConfig.packages_installed
 				}.bind(this))
 		},
 		save: function() {
@@ -673,7 +826,6 @@ export default {
 			let axios = this.$axios
 			let CBv1 = this.CBv1
 			let data = this.settings
-
 			if (selectedTab == 10) {
 				var valuesAsString = qs.stringify({
 					'wifi_mode': this.settings.wifiMode,
@@ -687,7 +839,6 @@ export default {
 						this.snackText = "Impostazioni di rete aggiornate"
 						this.snackbar = true
 					}.bind(this))
-
 			} else {
 				let legacySettings = qs.stringify({
 					'wifi_mode': data.wifiMode,
@@ -704,16 +855,16 @@ export default {
 					'sound_shutter': data.shutterSound,
 					'load_at_start': data.startupProgram,
 					'prog_level': data.progLevel,
-
 					'move_fw_elapse': data.moveFwdElapse,
 					'move_fw_speed': data.moveFwdSpeed,
 					'move_tr_elapse': data.moveTurnElapse,
 					'move_tr_speed': data.moveTurnSpeed,
-
 					'ctrl_fw_elapse': data.ctrlFwdElapse,
 					'ctrl_fw_speed': data.ctrlFwdSpeed,
 					'ctrl_tr_elapse': data.ctrlTurnElapse,
 					'ctrl_tr_speed': data.ctrlTurnSpeed,
+					'audio_volume_level': data.audioLevel,
+                    'packages_installed' : data.packagesInstalled
 				})
 				axios.post(CBv1 + '/config', legacySettings)
 					.then(function() {
@@ -750,6 +901,7 @@ export default {
 			updateStatus: 0,
 			// TODO: Prepopulate this
 			settings: {
+				
 				cbName: 'CoderBot di Antonio',
 				power: [null, null, null],
 				startupProgram: null,
@@ -757,7 +909,9 @@ export default {
 				wifiMode: 'ap',
 				wifiSSID: null,
 				wifiPsw: null,
-
+				
+				audioLevel: null,
+                packagesInstalled: packageList,
 				moveFwdElapse: null,
 				moveFwdSpeed: null,
 				moveTurnElapse: null,
@@ -766,7 +920,6 @@ export default {
 				ctrlFwdSpeed: null,
 				ctrlTurnElapse: null,
 				ctrlTurnSpeed: null,
-
 				motorMode: null,
 				trimFactor: null,
 				startSound: null,
@@ -775,7 +928,6 @@ export default {
 				startupProgram: null,
 				progLevel: null,
 			},
-
 			blocklyToolboxItems: [
 				{ text: 'Movimento', value: 'basic_move' },
 				{ text: 'Base', value: 'basic' },
@@ -807,11 +959,10 @@ export default {
 			drawer: null,
 			tab: null,
 			//tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test']
+			tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test','Audio', 'Gestione Pacchetti']
 		}
 	}
 }
-
 </script>
 <style scoped>
 .cardContent {
@@ -819,7 +970,6 @@ export default {
 	font-size: 16px;
 	padding: 16px;
 }
-
 .fa,
 .fas,
 .fab {
