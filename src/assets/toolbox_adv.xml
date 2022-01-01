@@ -321,6 +321,10 @@
 		</block>
 		<block type="coderbot_audio_listen"></block>
 	</category>
+	<category name="Estensioni I/O" colour="240">
+		<block type="coderbot_atmega_get_input"></block>
+		<block type="coderbot_atmega_set_output"></block>
+	</category>
 	<category name="Music" colour="345">
 		<block type="coderbot_music_note_adv"></block>
 		<block type="coderbot_music_instrument_adv"></block>
