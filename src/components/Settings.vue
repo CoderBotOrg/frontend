@@ -450,13 +450,12 @@
                             <v-layout row wrap align-center>
                                 <v-flex xs12 md6 offset-md3>
                                     <h3 class="text-xs-left">Gestione Pacchetti</h3>
-										<br>
-                                        <h3 class="text-xs-left"> Pacchetti installati:</h3>
+									<br>
+                                    <h3 class="text-xs-left"> Pacchetti installati:</h3>
                                     <v-card v-for="pkgnames in settings.packagesInstalled">
                                         <div class="cardContent">
-
                                     <li>   nome: <b>{{pkgnames[0][0]}}</b>  tipo: <b>{{pkgnames[1]}} </b><span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
-                                                        <v-icon>fas fa-trash</v-icon> Rimuovi </v-btn></span>
+                                            <v-icon>fas fa-trash</v-icon> Rimuovi </v-btn></span>
                                             </li>
 <!--
                                                 <div v-for="pkgnames in settings.packagesInstalled">
@@ -512,7 +511,7 @@
 				{{ snackText }}
 				<v-btn color="pink" flat @click="snackbar = false">
 					Chiudi
-				</v-btn
+				</v-btn>
 			</v-snackbar>
 		</v-app>
 	</div>
@@ -698,7 +697,7 @@ export default {
 					this.cb.status = response.data
 					this.cb.logs.log = response.data.log
 				}.bind(this))
-			axioks.get(this.CB + '/info')
+			axios.get(this.CB + '/info')
 				.then(function(response) {
 					this.cb.info = response.data
 				}.bind(this))
@@ -707,7 +706,7 @@ export default {
 			let axios = this.$axios
 			let CB = this.CB
 			let status = this.status
-			axios.kkget(CB + '/status')
+			axios.get(CB + '/status')
 				.then(function(response) {
 					if (this.status == 0 && response.status) {
 						this.snackText = 'CoderBot è tornato online'
