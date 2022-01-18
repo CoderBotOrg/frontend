@@ -1,19 +1,24 @@
 // https://eslint.org/docs/user-guide/configuring
 module.exports = {
   "root": true,
+
   "env": {
     "node": true
   },
+
   "ignorePatterns": ["src/assets/js/**/*.js"],
+
   "extends": [
     "plugin:vue/base",
     "plugin:vue/essential",
     "eslint:recommended",
     'airbnb-base',
   ],
+
   "parserOptions": {
     "parser": "babel-eslint"
   },
+
   "rules": {
     "no-tabs": "off",
     "no-console": "off",
@@ -30,9 +35,31 @@ module.exports = {
     "global-require": "off",
     "import/no-dynamic-require": "off"
   },
+
   plugins: [
     'vue'
   ],
+
+  overrides: [
+    {
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+      ],
+      env: {
+        jest: true
+      }
+    },
+    {
+      files: [
+        '**/__tests__/*.{j,t}s?(x)',
+        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+      ],
+      env: {
+        jest: true
+      }
+    }
+  ]
 }
 /*
 module.exports = {

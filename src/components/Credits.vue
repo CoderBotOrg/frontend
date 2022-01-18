@@ -15,7 +15,7 @@ import sidebar from '../components/Sidebar';
 
 export default {
   components: { sidebar },
-  name: 'HelloWorld',
+  name: 'Credits',
   methods: {
     toggleSidebar() {
       const currentStatus = this.$store.getters.drawerStatus;
