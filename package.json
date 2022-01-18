@@ -63,6 +63,7 @@
     "postcss-url": "^7.0.0",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
+    "stylus": "^0.56.0",
     "vue-cli-plugin-vuetify": "~2.4.5",
     "vue-jest": "^3.0.7",
     "vue-style-loader": "^4.1.3",
