@@ -2,11 +2,11 @@
 	<div>
 		<v-app id="inspire">
 			<sidebar></sidebar>
-			<v-toolbar color="indigo" dark fixed app>
-				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>CoderBot</v-toolbar-title>
-			</v-toolbar>
-			<v-content>
+			<v-app-bar color="indigo" dark fixed app>
+				<v-app-bar-side-icon @click.stop="toggleSidebar()"></v-app-bar-side-icon>
+				<v-app-bar-title>CoderBot</v-app-bar-title>
+			</v-app-bar>
+			<v-main>
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
 						<!-- Column A -->
@@ -24,74 +24,75 @@
 										Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
 									</span>
 									<template v-for="activity in activityList">
-										<v-list-tile :key="activity.el" avatar @click="">
-											<v-list-tile-title ripple @click="goToActivity(activity.name)">
+										<v-list-item :key="activity.el">
+											<v-list-item-title ripple @click="goToActivity(activity.name)">
 												<b>{{ activity.name }}</b>
 												<small> {{activity.description}} </small>
-											</v-list-tile-title>
+											</v-list-item-title>
 											<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
 												<v-icon>delete</v-icon>
 											</v-btn>
 											<v-btn flat icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
 												<v-icon>edit</v-icon>
 											</v-btn>
-										</v-list-tile>
+										</v-list-item>
 									</template>
 								</v-list>
 							</v-card>
 						</v-flex>
 					</v-layout>
 				</v-container>
-			</v-content>
+			</v-main>
 		</v-app>
 	</div>
 </template>
 <script>
-import sidebar from "../components/Sidebar"
+import sidebar from '../components/Sidebar';
+
 export default {
-	components: { sidebar },
-	name: 'CoderBot',
-	mounted() {
-		this.getActivities();
-	},
-	methods: {
-		goToActivity: (name) => {
-			window.location = '#/activity/open/' + name
-		},
-		getActivities: function() {
-			let axios = this.$axios
-			let CB = this.$data.CB
-			//let programList = this.$data.programList
-			axios.get(CB + '/listActivities')
-				.then(function(response) {
-					this.$data.activityList = response.data;
-					console.log(this.$data.activityList)
-				}.bind(this))
-		},
-		deleteActivity: function(name) {
-			let axios = this.$axios
-			let CB = this.$data.CB
-			//let programList = this.$data.programList
-			axios.post(CB + '/deleteActivity', {
-					name: name
-				})
-				.then(function(response) {
-					this.getActivities();
-				}.bind(this))
-		},
-		toggleSidebar: function() {
-			let currentStatus = this.$store.getters.drawerStatus
-			this.$store.commit('toggleDrawer', !currentStatus)
-		}
-	},
-	data() {
-		return {
-			CB: process.env.CB_ENDPOINT + process.env.APIv2,
-			activityList: null,
-			drawer: null,
-			source: null,
-		};
-	},
+  components: { sidebar },
+  name: 'CoderBot',
+  mounted() {
+    this.getActivities();
+  },
+  methods: {
+    goToActivity: (name) => {
+      window.location = `#/activity/open/${name}`;
+    },
+    getActivities() {
+      const axios = this.$axios;
+      const { CB } = this.$data;
+      // let programList = this.$data.programList
+      axios.get(`${CB}/listActivities`)
+        .then((response) => {
+          this.$data.activityList = response.data;
+          console.log(this.$data.activityList);
+        });
+    },
+    deleteActivity(name) {
+      const axios = this.$axios;
+      const { CB } = this.$data;
+      // let programList = this.$data.programList
+      axios.post(`${CB}/deleteActivity`, {
+        name,
+      })
+        .then(() => {
+          this.getActivities();
+        });
+    },
+    toggleSidebar() {
+      const currentStatus = this.$store.getters.drawerStatus;
+      this.$store.commit('toggleDrawer', !currentStatus);
+    },
+  },
+  data() {
+    return {
+      CB: process.env.CB_ENDPOINT + process.env.APIv2,
+      activityList: null,
+      drawer: null,
+      source: null,
+    };
+  },
 };
 
 </script>

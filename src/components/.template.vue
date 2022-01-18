@@ -2,13 +2,13 @@
 	<div>
 		<v-app id="inspire">
 			<sidebar></sidebar>
-			<v-toolbar color="indigo" dark fixed app>
-				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>CoderBot</v-toolbar-title>
-			</v-toolbar>
-			<v-content>
+			<v-app-bar color="indigo" dark fixed app>
+				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
+				<v-app-bar-title>CoderBot</v-app-bar-title>
+			</v-app-bar>
+			<v-main>
 				<!-- Content -->
-			</v-content>
+			</v-main>
 		</v-app>
 	</div>
 </template>

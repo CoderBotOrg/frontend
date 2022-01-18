@@ -1,5 +1,40 @@
 // https://eslint.org/docs/user-guide/configuring
-
+module.exports = {
+  "root": true,
+  "env": {
+    "node": true
+  },
+  "ignorePatterns": ["src/assets/js/**/*.js"],
+  "extends": [
+    "plugin:vue/base",
+    "plugin:vue/essential",
+    "eslint:recommended",
+    'airbnb-base',
+  ],
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "rules": {
+    "no-tabs": "off",
+    "no-console": "off",
+    "max-len": "off",
+    "import/no-unresolved": "off",
+    "eqeqeq": "off",
+    "import/extensions": "off",
+    "camelcase": "off",
+    "no-mixed-spaces-and-tabs": "off",
+    "no-multi-str": "off",
+    "prefer-destructuring": "off",
+    "vue/valid-v-for": "off",
+    "no-plusplus": "off",
+    "global-require": "off",
+    "import/no-dynamic-require": "off"
+  },
+  plugins: [
+    'vue'
+  ],
+}
+/*
 module.exports = {
   root: true,
   parserOptions: {
@@ -48,3 +83,4 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }
+*/

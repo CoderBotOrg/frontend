@@ -2,11 +2,11 @@
 	<div>
 		<v-app id="inspire">
 			<sidebar></sidebar>
-			<v-toolbar color="indigo" dark fixed app>
-				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>CoderBot</v-toolbar-title>
-			</v-toolbar>
-			<v-content>
+			<v-app-bar color="indigo" dark fixed app>
+				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
+				<v-app-bar-title>CoderBot</v-app-bar-title>
+			</v-app-bar>
+			<v-main>
 				<br>
 				<div style="font-size: 24px;"> Benvenuto in </div>
 				<div class="logo">CoderBot</div>
@@ -21,68 +21,71 @@
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
 						<v-flex xs12 md6 offset-md3>
-							<v-btn flat large color="primary" to="program">
+							<v-btn text large color="primary" to="program">
 								<v-icon left dark>flip_to_front</v-icon>Programma
 							</v-btn> <br>
-							<v-btn flat large color="primary" target="_blank" href="/docs">
+							<v-btn text large color="primary" target="_blank" href="/docs">
 								<v-icon left dark>help</v-icon>Documentazione
 							</v-btn> <br>
-							<v-btn flat large color="primary" to="control">
+							<v-btn text large color="primary" to="control">
 								<v-icon left dark>games</v-icon>Controlla
 							</v-btn> <br>
 							<!--
-							<v-btn flat large color="primary">
+							<v-btn text large color="primary">
 								<v-icon left dark>open_in_new</v-icon>Apri Attività
 							</v-btn> <br>
-							<v-btn flat large color="primary" to="new">
+							<v-btn text large color="primary" to="new">
 								<v-icon left dark>add</v-icon>Nuova Attività
 							</v-btn> <br>
 							-->
-							<v-btn flat large color="primary" to="settings">
+							<v-btn text large color="primary" to="settings">
 								<v-icon left dark>settings</v-icon>Impostazioni
 							</v-btn> <br>
 							<!--
-							<v-btn flat large color="primary">
+							<v-btn text large color="primary">
 								<v-icon left dark>help</v-icon>Aiuto
 							</v-btn> <br>
 							-->
 						</v-flex>
 					</v-layout>
 				</v-container>
-			</v-content>
+			</v-main>
 		</v-app>
 	</div>
 </template>
 <script>
-import sidebar from "../components/Sidebar"
+import sidebar from '../components/Sidebar';
+import image_1 from '../assets/images/coderbot_wide1.jpg';
+import image_2 from '../assets/images/coderbot_wide3.jpg';
+import image_3 from '../assets/images/coderbot_wide4.jpg';
 
 export default {
-	components: { sidebar },
-	name: 'CoderBot',
-	methods: {
-		toggleSidebar: function() {
-			let currentStatus = this.$store.getters.drawerStatus
-			this.$store.commit('toggleDrawer', !currentStatus)
-		}
-	},
-	data() {
-		return {
-			carouselItems: [{
-					src: 'static/images/coderbot_wide4.jpg'
-				},
-				{
-					src: 'static/images/coderbot_wide1.jpg'
-				},
-				{
-					src: 'static/images/coderbot_wide3.jpg'
-				},
+  components: { sidebar },
+  name: 'CoderBot',
+  methods: {
+    toggleSidebar() {
+      const currentStatus = this.$store.getters.drawerStatus;
+      this.$store.commit('toggleDrawer', !currentStatus);
+    },
+  },
+  data() {
+    return {
+      carouselItems: [{
+        src: image_3,
+      },
+      {
+        src: image_1,
+      },
+      {
+        src: image_2,
+      },
 
-			],
-			drawer: null,
-			source: null,
-			msg: 'Welcome to Your Vue.js App',
-		};
-	},
+      ],
+      drawer: null,
+      source: null,
+      msg: 'Welcome to Your Vue.js App',
+    };
+  },
 };
 
 </script>

@@ -4,39 +4,37 @@
 		<v-app id="inspire">
 			<!-- the mobile draw animation doesn't play well with how Blockly is draw -->
 			<sidebar mobileDrawAnim=0></sidebar>
-			<v-toolbar color="indigo" dark fixed app>
-				<v-toolbar-side-icon @click.stop="toggleSidebar()" v-if="activity.drawerEnabled"></v-toolbar-side-icon>
-				<v-toolbar-title v-if="activity.showName">
+			<v-app-bar color="indigo" dark fixed app>
+				<v-app-bar-nav-icon @click.stop="toggleSidebar()" v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
+				<v-app-bar-title v-if="activity.showName">
 					{{ activity.name }}
-				</v-toolbar-title>
+				</v-app-bar-title>
 				<v-spacer></v-spacer>
-				<v-toolbar-items>
-					<!-- If the API is available, show the desired buttons -->
-					<template v-if="status == 200">
-						<template v-for="button, i in activity.buttons">
-							<template v-if="button.type == 'flat'">
-								<v-btn @click="_self[button.action]()" flat>
-									<v-icon>{{ button.icon }}</v-icon>
-									{{ button.label }}
-								</v-btn>
-							</template>
-							<template v-else>
-								<v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn" :class="button.colorText">
-									{{ button.label }}
-									<v-icon right dark>{{ button.icon }}</v-icon>
-								</v-btn>
-							</template>
-							&nbsp;&nbsp;
-						</template>
-					</template>
-					<!-- If the API is not responding, show an error icon -->
-					<v-btn @click="dialog = true" icon v-if="status != 200">
-						<v-icon>error</v-icon>
-					</v-btn>
-				</v-toolbar-items>
-			</v-toolbar>
+        <!-- If the API is available, show the desired buttons -->
+        <template v-if="status == 200">
+          <template v-for="button in activity.buttons">
+            <template v-if="button.type == 'text'">
+              <v-btn @click="_self[button.action]()" text>
+                <v-icon>{{ button.icon }}</v-icon>
+                {{ button.label }}
+              </v-btn>
+            </template>
+            <template v-else>
+              <v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn" :class="button.colorText">
+                {{ button.label }}
+                <v-icon right dark>{{ button.icon }}</v-icon>
+              </v-btn>
+            </template>
+            &nbsp;&nbsp;
+          </template>
+        </template>
+        <!-- If the API is not responding, show an error icon -->
+        <v-btn @click="dialog = true" icon v-if="status != 200">
+          <v-icon>error</v-icon>
+        </v-btn>
+			</v-app-bar>
 			<!-- Page content -->
-			<v-content>
+			<v-main>
 				<!-- Blockly -->
 				<div style="height: 480px; width: 600px;">
 					<div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
@@ -46,7 +44,7 @@
 						</div>
 					</div>
 				</div>
-			</v-content>
+			</v-main>
 			<!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
 			<input type="file" style="display: none" ref="file" @change="importProgram">
 			<!-- When the selection is completed, the result is then handled by importProgram -->
@@ -68,7 +66,7 @@
 					</template>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="primary" flat @click="runtimeDialog = false; stopProgram()">
+						<v-btn color="primary" text @click="runtimeDialog = false; stopProgram()">
 							Chiudi
 						</v-btn>
 					</v-card-actions>
@@ -81,18 +79,18 @@
 						Lista Programmi
 					</v-card-title>
 					<v-list>
-						<v-list-tile v-for="program in programList" :key="program.el" avatar @click="">
-							<v-list-tile-title ripple @click="loadProgram(program.name)">
+						<v-list-item v-for="program in programList" :key="program.el" @click="{}">
+							<v-list-item-title ripple @click="loadProgram(program.name)">
 								{{ program.name }}
-							</v-list-tile-title>
-							<v-btn v-if="program.default != 'True'" flat icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
+							</v-list-item-title>
+							<v-btn v-if="program.default != 'True'" text icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
 								<v-icon>delete</v-icon>
 							</v-btn>
-						</v-list-tile>
+						</v-list-item>
 					</v-list>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="carica = false">
+						<v-btn color="green darken-1" text="text" @click="carica = false">
 							Annulla
 						</v-btn>
 					</v-card-actions>
@@ -109,10 +107,10 @@
 						<v-card-text>
 							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus></v-text-field>
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="salva = false">
+						<v-btn color="red darken-1" text="text" @click="salva = false">
 							Annulla
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="saveProgramAs(), salva = false">
+						<v-btn color="green darken-1" text="text" @click="saveProgramAs(), salva = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -126,7 +124,7 @@
 						Il nome del programma non può essere vuoto.
 					</v-card-text>
 					<v-card-actions>
-						<v-btn color="green darken-1" flat="flat" @click="unvalidName = false, salva = true">
+						<v-btn color="green darken-1" text="text" @click="unvalidName = false, salva = true">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -140,7 +138,7 @@
 						Impossibile sovrascrivere un programma di default, cambiare il nome.
 					</v-card-text>
 					<v-card-actions>
-						<v-btn color="green darken-1" flat="flat" @click="CannotOverwrite = false, salva = true">
+						<v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, salva = true">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -156,10 +154,10 @@
 						<v-card-text>
 							Esiste già un programma con nome : "{{programName}}" vuoi sovrascriverlo?
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="overwriteDialog = false, salva = true">
+						<v-btn color="red darken-1" text="text" @click="overwriteDialog = false, salva = true">
 							No
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
+						<v-btn color="green darken-1" text="text" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
 							Si
 						</v-btn>
 					</v-card-actions>
@@ -175,10 +173,10 @@
 						<v-card-text>
 							Sei sicuro di voler cancellare: "{{newProgramName}}"?
 						</v-card-text>
-						<v-btn color="red darken-1" flat="flat" @click="del = false">
+						<v-btn color="red darken-1" text="text" @click="del = false">
 							No
 						</v-btn>
-						<v-btn color="green darken-1" flat="flat" @click="del = false, carica = false, deleteProgram(newProgramName)">
+						<v-btn color="green darken-1" text="text" @click="del = false, carica = false, deleteProgram(newProgramName)">
 							Si
 						</v-btn>
 					</v-card-actions>
@@ -194,7 +192,7 @@
 					<v-divider></v-divider>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="dialogCode = false">
+						<v-btn color="green darken-1" text="text" @click="dialogCode = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -209,7 +207,7 @@
 					</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="dialog = false">
+						<v-btn color="green darken-1" text="text" @click="dialog = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -224,7 +222,7 @@
 					</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" flat="flat" @click="generalDialog = false">
+						<v-btn color="green darken-1" text="text" @click="generalDialog = false">
 							Ok
 						</v-btn>
 					</v-card-actions>
@@ -233,7 +231,7 @@
 			<!-- Notification Snackbar -->
 			<v-snackbar v-model="snackbar">
 				{{ snackText }}
-				<v-btn color="pink" flat @click="snackbar = false">
+				<v-btn color="pink" text @click="snackbar = false">
 					Chiudi
 				</v-btn>
 			</v-snackbar>
@@ -241,2270 +239,629 @@
 	</div>
 </template>
 <script>
-import 'prismjs'
-import 'prismjs/components/prism-python.js'
-import sidebar from '../components/Sidebar'
+import * as Blockly from 'blockly/core';
+import 'blockly/blocks';
+import 'blockly/python';
+import * as It from 'blockly/msg/it';
+import '../assets/js/blockly/blocks';
+import '../assets/js/blockly/bot_it';
+import * as music_package from '../assets/music_package.json';
 
+import 'prismjs';
+import 'prismjs/components/prism-python.js';
+import sidebar from '../components/Sidebar';
 
-function readTextFile(file, callback) {
-    var rawFile = new XMLHttpRequest();
-    rawFile.overrideMimeType("application/json");
-    rawFile.open("GET", file, true);
-    rawFile.onreadystatechange = function() {
-        if (rawFile.readyState === 4 && rawFile.status == "200") {
-            callback(rawFile.responseText);
-        }
-    }
-    rawFile.send(null);
-}
-var instrumentlist = [];//["pianoooo","pianoo"], ["chitarra","guiitar"], ["flauto","fluute"]];
-var animalist = [];//["pianoooo","pianoo"], ["chitarra","guiitar"], ["flauto","fluute"]];
-//usage:
-var data = readTextFile( "./static/music_package.json" , function(text){
-    var datas = JSON.parse(text);
+Blockly.setLocale(It);
 
+Blockly.Blocks.CoderBotSettings.instrumentlist = [];
+Blockly.Blocks.CoderBotSettings.animalist = [];
 
-	Object.keys(datas['packages']).forEach(function(key) {
-  		console.table('Key : ' + key + ', Value : ' + datas['packages'][key])
-		console.table('Key : name_IT, Value : ' + datas['packages'][key]['name_IT'])
-		var names = [datas['packages'][key]['name_IT'], key];
-
-        if (datas['packages'][key]['category'] == 'instrument'){
-    	    instrumentlist[instrumentlist.length] = names;
-        }
-        else if (datas['packages'][key]['category'] == 'animal'){
-    	    animalist[animalist.length] = names;
-        }
-	})
-	return datas;
+// load music packages
+Object.keys(music_package.packages).forEach((key) => {
+  const names = [music_package.packages[key].name_IT, key];
+  if (music_package.packages[key].category == 'instrument') {
+    Blockly.Blocks.CoderBotSettings.instrumentlist[Blockly.Blocks.CoderBotSettings.instrumentlist.length] = names;
+  } else if (music_package.packages[key].category == 'animal') {
+    Blockly.Blocks.CoderBotSettings.animalist[Blockly.Blocks.CoderBotSettings.animalist.length] = names;
+  }
 });
 
 export default {
-	name: 'Blockly',
-	components: {
-		sidebar,
-		Prism: () =>
-			import('vue-prism-component')
-	},
-	data: () => ({
-		cssProps: {
-			'--bodyFont': 'Roboto',
-			'--codeFont': 'Ubuntu Mono',
-		},
-		activityStyle: null,
-		activity: {
-			exec: {},
-		},
-		log: null,
-		settings: null,
-		snackText: null,
-		snackbar: false,
-		drawer: false,
-		tabs: null,
-		dialog: false,
-		dialogCode: false,
-		CB: process.env.CB_ENDPOINT + process.env.APIv2,
-		CBv1: process.env.CB_ENDPOINT,
-		status: null,
-        info: null,
-		code: '',
-		workspace: null,
-		generalDialog: false,
-		generalDialogText: null,
-		generalDialogTitle: null,
-		experimental: 0,
-		execMode: "fullExec", // can be 'fullExec' or 'stepByStep',
-		carica: false,
-		programList: '',
-		salva: false,
-		programName: '',
-		newProgramName: '',
-		unvalidName: false,
-		del: false,
-		webcamStream: process.env.CB_ENDPOINT + process.env.APIv1 + '/video/stream',
-		runtimeDialog: false,
-		isDefault: '',
-		CannotOverwrite: false,
-		defaultProgramName: '',
-		overwrite: 0,
-		overwriteDialog: false,
-	}),
-	computed: {
-		statusText: function() {
-			if (this.status) {
-				return 'Coderbot risulta online e funzionante. '
-			} else {
-				return 'Coderbot risulta offline e rotto'
-			}
-		}
-	},
-	mounted() {
-		// Get the activity
-		let axios = this.$axios
-		let CB = this.CB
-		if (this.$route.path == '/program') {
-			console.log('Loading the default activity')
-			this.activity = {
-				"bodyFont": "Roboto",
-				"buttons": [{
-						"action": "saveProgram",
-						"icon": "save",
-						"label": "Salva",
-						"type": "flat"
-					},
-					{
-						"action": "toggleSaveAs",
-						"icon": "edit",
-						"label": "Salva con Nome",
-						"type": "flat"
-					},
-					{
-						"action": "loadProgramList",
-						"icon": "folder_open",
-						"label": "Carica",
-						"type": "flat"
-					},
-					{
-						"action": "runProgramLegacy",
-						"icon": "play_arrow",
-						"label": "Esegui",
-						"type": "flat"
-					},
-					{
-						"action": "getProgramCode",
-						"icon": "code",
-						"label": "Mostra codice",
-						"type": "flat"
-					},
-					{
-						"action": "exportProgram",
-						"icon": "fa-file-export",
-						"label": "Esporta",
-						"type": "flat"
-					},
-					{
-						"action": "pickFile",
-						"icon": "fa-file-import",
-						"label": "Importa",
-						"type": "flat"
-					},
-
-				],
-				"capsSwitch": false,
-				"codeFont": "ubuntumono",
-				"description": null,
-				"drawerEnabled": true,
-				"exec": {
-					"camera": true,
-					"log": true
-				},
-				"fontSize": "Medio",
-				"name": "Programma",
-				"showName": true
-			}
-		} else {
-			console.log("Loading activity", this.$route.params.name)
-			this.saved = true;
-			axios.get(CB + '/loadActivity', {
-					params: {
-						name: this.$route.params.name
-					}
-				})
-				.then(function(response) {
-					console.log("Activity loaded", response.data)
-					this.activity = response.data
-					this.updateCssProps()
-				}.bind(this))
-		}
-
-		this.status = null
-		this.pollStatus();
-
-		// Start the polling
-		setInterval(function() {
-			this.pollStatus();
-		}.bind(this), 1000)
-
-		// Get the legacy configuration and initialize Blockly
-		axios.get(this.CBv1 + '/config')
-			.then(function(response) {
-				var settings = response.data
-				this.settings = settings
-				this.initBlockly(settings)
-			}.bind(this))
-
-	},
-	methods: {
-		updateCssProps() {
-			// (Re)Compute the CSS variables from the activity definition, then update them
-			console.log("Computing CSS Props")
-			let bodyFont = this.activity.bodyFont
-			let fontFamilyBody = ''
-			if (bodyFont == 'opensans') {
-				fontFamilyBody = 'Open Sans'
-			} else if (bodyFont == 'roboto') {
-				fontFamilyBody = 'Roboto'
-			}
-			let codeFont = this.activity.codeFont
-			let fontFamilyCode = ''
-			if (codeFont == 'ubuntumono') {
-				fontFamilyCode = 'Ubuntu Mono'
-			} else if (codeFont == 'robotomono') {
-				fontFamilyCode = 'Roboto Mono'
-			}
-			let textTransform = ''
-			if (this.activity.capsSwitch) {
-				textTransform = 'uppercase'
-			} else {
-				textTransform = 'none'
-			}
-
-			this.cssProps = {
-				'--bodyFont': fontFamilyBody,
-				'--codeFont': fontFamilyCode,
-				'--transform': textTransform,
-			}
-			console.log("Computed CSS props:", this.cssProps)
-		},
-
-		initBlockly(settings) {
-			// Extend the default blocks set
-			this.blocksExtensions(settings);
-
-			let toolboxLevel = settings.prog_level
-			var toolbox = require('../assets/toolbox_' + toolboxLevel + '.xml')
-
-			// Clean the base64 encoding of the resource, removing meta infos
-			var b64Toolbox = toolbox.substring(21).toString()
-			// Decode it and get the clean serialized XML as plain string
-			var serializedToolbox = this.$base64.decode(b64Toolbox)
-
-			// Initialise Blockly Instance
-			//Blockly.Generator.prototype.INDENT = '    ';
-                        this.workspace = Blockly.inject(
-				// Blockly container
-				this.$refs.blocklyDiv,
-				// Options
-				{
-					toolbox: serializedToolbox,
-					path: 'static/js/blockly/',
-					// TODO: Use values from fetched configuration!
-					scrollbars: true,
-					//MaxBlocks		: -1, // -1 as infinite not working FIXME
-					zoom: {
-						controls: true,
-						wheel: false,
-						startScale: 1.0,
-						maxScale: 1.5,
-						minScale: 0.2
-					}
-				}
-			);
-
-			// Pass the reference to the method to call, don't execute it (`()`)
-			//window.addEventListener('resize', this.resizeWorkspace, false);
-
-			// Initial resize
-			//this.resizeWorkspace()
-			//Blockly.svgResize(this.workspace);
-		},
-
-		blocksExtensions(settings) {
-			var settings = this.settings
-			var cfg = Object();
-
-			// coderbot.cfg data (temp workaround, must be fetched from backend)
-			var CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_speed;
-			var CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_elapse; // to check
-			var CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
-			var CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
-			var CODERBOT_PROG_MOVE_MOTION = false; // to check
-			var CODERBOT_PROG_MOVE_MPU = false; // to check
-
-			var CODERBOT_PROG_LEVEL = settings.prog_level;
-
-			var CODERBOT_PROG_SCROLLBARS = true; // to check
-			var CODERBOT_PROG_MAXBLOCKS = -1;
-			var CODERBOT_PROG_SAVEONRUN = true; // to check
-			var CODERBOT_CTRL_FW_SPEED = settings.ctrl_fw_speed;
-			var CODERBOT_CTRL_FW_ELAPSE = settings.ctrl_fw_elapse;
-			var CODERBOT_CTRL_TR_SPEED = settings.ctrl_tr_speed;
-			var CODERBOT_CTRL_TR_ELAPSE = settings.ctrl_tr_elapse; // to check
-			var CODERBOT_CTRL_COUNTER = true; // to check, never used
-			var CODERBOT_CTRL_MOVE_MOTION = false; //t o check
-			var CODERBOT_CTRL_MOVE_MPU = false; // to check
-			var CODERBOT_CNN_MODEL_LIST = [['generic_fast_low', 'generic_fast_low'],
-						       ['generic_slow_high', 'generic_slow_high'],
-						       ['generic_object_detect', 'generic_object_detect']];
-
-			var BotMessages = Object();
-			BotMessages.Input = "Say what:";
-			BotMessages.Saved = "Saved";
-			BotMessages.ProgramSaved = "Program saved";
-			BotMessages.ProgramExists = "Program name already in use, overwrite?";
-			BotMessages.DeletePhoto = "Delete";
-			BotMessages.DeletePhotoConfirm = "Delete photo ";
-			BotMessages.CounterReset = "Reset move counter?"
-			BotMessages.ProgramStatusRunning = "is running";
-			BotMessages.ProgramStatusStop = "stopped";
-			BotMessages.ProgramDialogStop = "Stop";
-			BotMessages.ProgramDialogClose = "Close";
-			BotMessages.UpdateSystem = "Update System? (this requires that CoderBot is connected to the internet (via wifi or lan cable, the operation will take a few minutes)."
-			BotMessages.TagAlreadyExists = "Tag already exists.";
-			BotMessages.ColorAtPoint = "Color at point: ";
-			BotMessages.ModelTraining = "Model is training, check model lists to monitor training status.";
-
-
-			// blocks.js
-			//  Extensions to Blockly's language and Python generator.
-
-			/*
-			This is here because it needs to reach the configurations from
-			the part above, which will be fetched from remote.
-			*/
-
-
-
-
-			Blockly.HSV_SATURATION = .99;
-			Blockly.HSV_VALUE = .99;
-
-			const self = this
-
-			var sbsPrefix
-
-			if (this.experimental) {
-				// Append "Command." to enable stepbystep
-				sbsPrefix = "Command."
-			} else {
-				sbsPrefix = ""
-			}
-
-			Blockly.Blocks['coderbot_repeat'] = {
-				/**
-				 * Block for repeat n times (internal number).
-				 * @this Blockly.Block
-				 */
-				init: function(self) {
-
-					this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
-					this.setColour(120);
-					var di = this.appendDummyInput();
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/loop_repeat.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT)
-					}
-					di.appendField(new Blockly.FieldTextInput('10',
-						Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") < 0) {
-						di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES);
-					}
-					var si = this.appendStatementInput('DO');
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") < 0) {
-						si.appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_repeat'] = function(block) {
-				// Repeat n times (internal number).
-				var repeats = parseInt(block.getFieldValue('TIMES'), 10);
-				var branch = Blockly.Python.statementToCode(block, 'DO');
-				branch = Blockly.Python.addLoopTrap(branch, block.id) ||
-					Blockly.Python.LOOP_PASS;
-				var loopVar = Blockly.Python.variableDB_.getDistinctName(
-					'count', Blockly.Variables.NAME_TYPE);
-				var code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
-				return code;
-			};
-
-			Blockly.Python['text_print'] = function(block) {
-				// Print statement.
-				var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
-					Blockly.Python.ORDER_NONE) || '\'\'';
-				return sbsPrefix + 'get_cam().set_text(' + argument0 + ')\n';
-			};
-
-
-			Blockly.Blocks['coderbot_moveForward'] = {
-				// Block for moving forward.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
-					this.setColour(40);
-					var di = this.appendDummyInput()
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_forward.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CODERBOT_MOVE_FORWARD)
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip('CoderBot_moveForwardTooltip');
-				}
-			};
-
-
-			Blockly.Python['coderbot_moveForward'] = function(block) {
-				// Generate Python for moving forward.
-				if (CODERBOT_PROG_MOVE_MOTION) {
-					return sbsPrefix + 'get_motion().move(dist=' + CODERBOT_MOV_FW_DEF_ELAPSE + ')\n';
-
-				} else {
-					return sbsPrefix + 'get_bot().forward(speed=' + CODERBOT_MOV_FW_DEF_SPEED + ', elapse=' + CODERBOT_MOV_FW_DEF_ELAPSE + ')\n';
-				}
-			};
-
-			Blockly.Blocks['coderbot_moveBackward'] = {
-				// Block for moving forward.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
-					this.setColour(40);
-					var di = this.appendDummyInput()
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_backward.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CODERBOT_MOVE_BACKWARD)
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip('CoderBot_moveBackwardTooltip');
-				}
-			};
-
-			Blockly.Python['coderbot_moveBackward'] = function(block) {
-				// Generate Python for moving forward.
-				if (CODERBOT_PROG_MOVE_MOTION) {
-					return sbsPrefix + 'get_motion().move(dist=' + (-CODERBOT_MOV_FW_DEF_ELAPSE) + ')\n';
-
-				} else {
-					return sbsPrefix + 'get_bot().backward(speed=' + CODERBOT_MOV_FW_DEF_SPEED + ', elapse=' + CODERBOT_MOV_FW_DEF_ELAPSE + ')\n';
-				}
-			};
-
-			Blockly.Blocks['coderbot_turnLeft'] = {
-				// Block for turning left.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
-					this.setColour(40);
-					var di = this.appendDummyInput()
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_left.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CODERBOT_MOVE_LEFT);
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_turnTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_turnLeft'] = function(block) {
-				// Generate Python for turning left.
-				if (CODERBOT_PROG_MOVE_MOTION) {
-					return sbsPrefix + 'get_motion().turn(angle=' + (-CODERBOT_MOV_TR_DEF_ELAPSE) + ')\n';
-				} else if (CODERBOT_PROG_MOVE_MPU) {
-					return sbsPrefix + 'get_bot().turn_angle(speed=' + (-CODERBOT_MOV_TR_DEF_SPEED) + ', angle=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
-				} else {
-					return sbsPrefix + 'get_bot().left(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', elapse=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
-				}
-			};
-
-			Blockly.Blocks['coderbot_turnRight'] = {
-				// Block for turning right.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
-					this.setColour(40);
-					var di = this.appendDummyInput()
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/move_right.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CODERBOT_MOVE_RIGHT)
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_turnTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_turnRight'] = function(block) {
-				// Generate Python for turning left or right.
-				if (CODERBOT_PROG_MOVE_MOTION) {
-					return sbsPrefix + 'get_motion().turn(angle=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
-				} else if (CODERBOT_PROG_MOVE_MPU) {
-					return sbsPrefix + 'get_bot().turn_angle(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', angle=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
-				} else {
-					return sbsPrefix + 'get_bot().right(speed=' + CODERBOT_MOV_TR_DEF_SPEED + ', elapse=' + CODERBOT_MOV_TR_DEF_ELAPSE + ')\n';
-				}
-			};
-
-			Blockly.Blocks['coderbot_audio_say'] = {
-				// Block for text to speech.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Say');
-					this.setColour(220);
-					var vi = this.appendValueInput('TEXT');
-					vi.setCheck(["String", "Number", "Date"]);
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						vi.appendField(new Blockly.FieldImage('/static/images/blocks/say.png', 32, 32, '*'));
-					} else {
-						vi.appendField(Blockly.Msg.CODERBOT_SAY);
-					}
-					vi.appendField(new Blockly.FieldDropdown([
-						[Blockly.Msg.CODERBOT_LOCALE_EN, 'en'],
-						[Blockly.Msg.CODERBOT_LOCALE_IT, 'it'],
-						[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr'],
-						[Blockly.Msg.CODERBOT_LOCALE_ES, 'es']
-					]), 'LOCALE')
-
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_sayTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_audio_say'] = function(block) {
-				// Generate Python for turning left or right.
-				var text = Blockly.Python.valueToCode(block, 'TEXT',
-					Blockly.Python.ORDER_NONE) || '\'\'';
-				var locale = block.getFieldValue('LOCALE');
-				return sbsPrefix + 'get_audio().say(' + text + ', locale="' + locale + '")\n';
-			};
-
-			Blockly.Blocks['coderbot_sleep'] = {
-				// Block for text to sleep.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Sleep');
-					this.setColour(290);
-					this.appendValueInput('ELAPSE')
-						.setCheck(["Number"])
-						.appendField(Blockly.Msg.CODERBOT_SLEEP);
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_sleepTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_sleep'] = function(block) {
-				// Generate Python for sleeping.
-				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE',
-					Blockly.Python.ORDER_NONE) || '\'\'';
-				return sbsPrefix + 'get_bot().sleep(' + elapse + ')\n';
-			};
-            
-            /** ENCODER METHODS **/
-            // muovi bot [direzione] a velocità [velcità] per [tempo] 
-			Blockly.Blocks['coderbot_adv_move'] = {
-				// Block for moving forward.
-				init: function() {
-					var ACTIONS = [
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD'],
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT, 'LEFT'],
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT, 'RIGHT']
-					]
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
-					this.setColour(40);
-
-					this.appendDummyInput("ACTION")
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOVE)
-						.appendField(new Blockly.FieldDropdown(ACTIONS), 'ACTION');
-					this.appendValueInput('SPEED')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_SPEED);
-					this.appendValueInput('ELAPSE')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE);
-					this.setInputsInline(true);
-					// Assign 'this' to a variable for use in the tooltip closure below.
-					var thisBlock = this;
-					this.setTooltip(function() {
-						var mode = thisBlock.getFieldValue('ACTION');
-						var TOOLTIPS = {
-							FORWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD,
-							BACKWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD,
-							LEFT: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT,
-							RIGHT: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT,
-						};
-						return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL;
-					});
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-                    if(self.info.motors !== "DC encoder motors")
-                    {
-                       this.setDisabled(true);
-                    }
-				}
-			};
-
-			Blockly.Python['coderbot_adv_move'] = function(block) {
-				// Generate Python for moving forward.
-				var OPERATORS = {
-					FORWARD: ['forward'],
-					BACKWARD: ['backward'],
-					LEFT: ['left'],
-					RIGHT: ['right']
-				};
-				var tuple = OPERATORS[block.getFieldValue('ACTION')];
-				var action = tuple[0];
-				var speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
-				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE);
-				var code = sbsPrefix + "get_bot()." + action + "(speed=" + speed + ", elapse=" + elapse + ")\n";
-				return code;
-			};
-            
-            // muovi bot [direzione] per [distanza] metri
-			Blockly.Blocks['coderbot_adv_move_distance'] = {
-				// Block for moving forward.
-				init: function() {
-					var ACTIONS = [
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD']
-					]
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
-					this.setColour(40);
-
-					this.appendDummyInput("ACTION")
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOVE)
-						.appendField(new Blockly.FieldDropdown(ACTIONS), 'ACTION');
-					this.appendValueInput('DISTANCE')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE)
-                        .appendField(Blockly.Msg.MEASURE_UNIT);
-					this.setInputsInline(true);
-					// Assign 'this' to a variable for use in the tooltip closure below.
-					var thisBlock = this;
-					this.setTooltip(function() {
-						var mode = thisBlock.getFieldValue('ACTION');
-						var TOOLTIPS = {
-							FORWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD,
-							BACKWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD
-						};
-						return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL;
-					});
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-                    if(self.info.motors !== "DC encoder motors")
-                    {
-                       this.setDisabled(true);
-                    }
-				}
-			};
-
-			Blockly.Python['coderbot_adv_move_distance'] = function(block) {
-				// Generate Python for moving forward.
-				var OPERATORS = {
-					FORWARD: ['forward'],
-					BACKWARD: ['backward']
-				};
-				var tuple = OPERATORS[block.getFieldValue('ACTION')];
-				var action = tuple[0];
-				var speed = 100;
-				var distance = Blockly.Python.valueToCode(block, 'DISTANCE', Blockly.Python.ORDER_NONE);
-				var code = sbsPrefix + "get_bot()." + action + "(speed=" + speed + ", distance=" + distance + ")\n";
-				return code;
-			};
-            
-            // muovi bot [direzione] a velocità [velocità] per [distanza] metri
-			Blockly.Blocks['coderbot_adv_move_speed_distance'] = {
-				// Block for moving forward.
-				init: function() {
-					var ACTIONS = [
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
-						[Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD']
-					]
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
-					this.setColour(40);
-
-					this.appendDummyInput("ACTION")
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOVE)
-						.appendField(new Blockly.FieldDropdown(ACTIONS), 'ACTION');
-                    this.appendValueInput('SPEED')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_SPEED);
-					this.appendValueInput('DISTANCE')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE)
-                        .appendField(Blockly.Msg.MEASURE_UNIT);
-					this.setInputsInline(true);
-					// Assign 'this' to a variable for use in the tooltip closure below.
-					var thisBlock = this;
-					this.setTooltip(function() {
-						var mode = thisBlock.getFieldValue('ACTION');
-						var TOOLTIPS = {
-							FORWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD,
-							BACKWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD
-						};
-						return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL;
-					});
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_move_speed_distance'] = function(block) {
-				// Generate Python for moving forward.
-				var OPERATORS = {
-					FORWARD: ['forward'],
-					BACKWARD: ['backward']
-				};
-				var tuple = OPERATORS[block.getFieldValue('ACTION')];
-				var action = tuple[0];
-				var speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
-				var distance = Blockly.Python.valueToCode(block, 'DISTANCE', Blockly.Python.ORDER_NONE);
-				var code = sbsPrefix + "get_bot()." + action + "(speed=" + speed + ", distance=" + distance + ")\n";
-				return code;
-			};
-
-            /** end of ENCODER METHODS **/
-
-			Blockly.Blocks['coderbot_motion_move'] = {
-				// Block for moving forward.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
-					this.setColour(40);
-
-					this.appendValueInput('DIST')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_MOTION_MOVE + " " + Blockly.Msg.CODERBOT_MOVE_MOTION_DIST);
-					this.setInputsInline(true);
-					// Assign 'this' to a variable for use in the tooltip closure below.
-					var thisBlock = this;
-					this.setTooltip(function() {
-						return Blockly.Msg.CODERBOT_MOVE_MOTION_MOVE_TIP;
-					});
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-				}
-			};
-
-			Blockly.Python['coderbot_motion_move'] = function(block) {
-				// Generate Python for moving forward.
-				var dist = Blockly.Python.valueToCode(block, 'DIST', Blockly.Python.ORDER_NONE);
-				var code = sbsPrefix + "get_motion().move(dist=" + dist + ")\n";
-				return code;
-			};
-
-			Blockly.Blocks['coderbot_motion_turn'] = {
-				// Block for moving forward.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
-					this.setColour(40);
-
-					this.appendValueInput('ANGLE')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_MOTION_TURN + " " + Blockly.Msg.CODERBOT_MOVE_MOTION_ANGLE);
-					this.setInputsInline(true);
-					// Assign 'this' to a variable for use in the tooltip closure below.
-					var thisBlock = this;
-					this.setTooltip(function() {
-						return Blockly.Msg.CODERBOT_MOVE_MOTION_TURN_TIP;
-					});
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-				}
-			};
-
-			Blockly.Python['coderbot_motion_turn'] = function(block) {
-				// Generate Python for moving forward.
-				var angle = Blockly.Python.valueToCode(block, 'ANGLE', Blockly.Python.ORDER_NONE);
-				var code = sbsPrefix + "get_motion().turn(angle=" + angle + ")\n";
-				return code;
-			};
-
-			Blockly.Blocks['coderbot_adv_motor'] = {
-				// Block for moving forward.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Motor');
-					this.setColour(40);
-
-					this.appendValueInput('SPEED_LEFT')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR + " " + Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_LEFT);
-					this.appendValueInput('SPEED_RIGHT')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED_RIGHT);
-					this.appendValueInput('ELAPSE')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_ELAPSE);
-					this.appendValueInput('STEPS_LEFT')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_LEFT);
-					this.appendValueInput('STEPS_RIGHT')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_STEPS_RIGHT);
-					this.setInputsInline(true);
-					// Assign 'this' to a variable for use in the tooltip closure below.
-					var thisBlock = this;
-					this.setTooltip(function() {
-						var mode = thisBlock.getFieldValue('ACTION');
-						return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL;
-					});
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_motor'] = function(block) {
-				// Generate Python for moving forward.
-				var speed_left = Blockly.Python.valueToCode(block, 'SPEED_LEFT', Blockly.Python.ORDER_NONE);
-				var speed_right = Blockly.Python.valueToCode(block, 'SPEED_RIGHT', Blockly.Python.ORDER_NONE);
-				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE);
-				var steps_left = Blockly.Python.valueToCode(block, 'STEPS_LEFT', Blockly.Python.ORDER_NONE);
-				var steps_right = Blockly.Python.valueToCode(block, 'STEPS_RIGHT', Blockly.Python.ORDER_NONE);
-				var code = sbsPrefix + "get_bot().motor_control(speed_left=" + speed_left + ", speed_right=" + speed_right + ", elapse=" + elapse + ", steps_left=" + steps_left + ", steps_right=" + steps_right + ")\n";
-				return code;
-			};
-
-			Blockly.Blocks['coderbot_adv_stop'] = {
-				// Block to stop the get_bot().
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Stop');
-					this.setColour(40);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_MOVE_STOP);
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_stopTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_adv_stop'] = function(block) {
-				// Generate Python to stop the get_bot().
-				return sbsPrefix + 'get_bot().stop()\n';
-			};
-
-
-			Blockly.Blocks['coderbot_camera_photoTake'] = {
-				// Block for taking a picture.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
-					this.setColour(120);
-					var di = this.appendDummyInput()
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/photo_take.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CODERBOT_PHOTO_TAKE)
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_PhotoTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_camera_photoTake'] = function(block) {
-				// Generate Python for turning left or right.
-				return sbsPrefix + 'get_cam().photo_take()\n';
-			};
-
-			Blockly.Blocks['coderbot_camera_videoRec'] = {
-				// Block for recording a video (start).
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
-					this.setColour(120);
-
-					var di = this.appendDummyInput()
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/video_rec.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CODERBOT_VIDEO_REC)
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_VideoTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_camera_videoRec'] = function(block) {
-				// Generate Python for turning left or right.
-				return sbsPrefix + 'get_cam().video_rec()\n';
-			};
-
-			Blockly.Blocks['coderbot_camera_videoStop'] = {
-				// Block for recording a video (stop).
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
-					this.setColour(120);
-
-					var di = this.appendDummyInput()
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						di.appendField(new Blockly.FieldImage('/static/images/blocks/video_stop.png', 32, 32, '*'));
-					} else {
-						di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP)
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_VideoTooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_camera_videoStop'] = function(block) {
-				// Generate Python for turning left or right.
-				return sbsPrefix + 'get_cam().video_stop()\n';
-			};
-
-			Blockly.Blocks['coderbot_adv_pathAhead'] = {
-				/**
-				 * Block for pathAhead function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_PATHAHEAD);
-					this.setOutput(true, 'Number');
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_pathAhead'] = function(block) {
-				// Boolean values true and false.
-				var code = sbsPrefix + 'get_cam().path_ahead()';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_adv_findLine'] = {
-				/**
-				 * Block for pathAhead function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDLINE);
-					this.setOutput(true, 'Array');
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_findLine'] = function(block) {
-				// Boolean values true and false.
-				var code = sbsPrefix + 'get_cam().find_line()';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_adv_findSignal'] = {
-				/**
-				 * Block for findSignal function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDSIGNAL);
-					this.setOutput(true, 'Number');
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_findSignal'] = function(block) {
-				// Boolean values true and false.
-				var code = sbsPrefix + 'get_cam().find_signal()';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_adv_findFace'] = {
-				/**
-				 * Block for findSignal function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDFACE)
-						.appendField(new Blockly.FieldDropdown([
-							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_X, 'X'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_Y, 'Y'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_SIZE, 'SIZE'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDFACE_ALL, 'ALL']
-						]), 'RETVAL')
-					this.setInputsInline(true);
-					this.setOutput(true, ['Number', 'Array']);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_findFace'] = function(block) {
-				// Boolean values true and false.
-				var retval = block.getFieldValue('RETVAL');
-				var ret_code = { 'X': '[0]', 'Y': '[1]', 'SIZE': '[2]', 'ALL': '' } [retval];
-				var code = 'get_cam().find_face()' + ret_code;
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_adv_findColor'] = {
-				/**
-				 * Block for findSignal function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_FIND)
-						.appendField(new Blockly.FieldDropdown([
-							[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_DIST, 'DIST'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_ANGLE, 'ANGLE'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_BOTH, 'BOTH']
-						]), 'RETVAL')
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCOLOR_COLOR);
-					this.appendValueInput('COLOR')
-						.setCheck(['Colour', 'String']);
-					this.setInputsInline(true);
-					this.setOutput(true, ['Number', 'Array']);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_findColor'] = function(block) {
-				// Boolean values true and false.
-				var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_NONE);
-				var retval = block.getFieldValue('RETVAL');
-				var ret_code = { 'DIST': '[0]', 'ANGLE': '[1]', 'BOTH': '' } [retval];
-				var code = 'get_cam().find_color(' + color + ')' + ret_code;
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_cam_average'] = {
-				/**
-				 * Block for image.get_average() function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_AVERAGE)
-						.appendField(new Blockly.FieldDropdown([
-							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_HUE, 'H'],
-							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_SATURATION, 'S'],
-							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_VALUE, 'V'],
-							[Blockly.Msg.CODERBOT_SENSOR_AVERAGE_ALL, 'ALL']
-						]), 'RETVAL')
-					this.setInputsInline(true);
-					this.setOutput(true, ['Number', 'Array']);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_cam_average'] = function(block) {
-				// Boolean values true and false.
-				var retval = block.getFieldValue('RETVAL');
-				var ret_code = { 'H': '[0]', 'S': '[1]', 'V': '[2]', 'ALL': '' } [retval];
-				var code = 'get_cam().get_average()' + ret_code;
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_adv_findText'] = {
-				/**
-				 * Block for findText function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND)
-						.appendField(new Blockly.FieldDropdown([
-							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA, 'alpha'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_NUM, 'num'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHANUM, 'alphanum'],
-							[Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_UNSPEC, 'unspec']
-						]), 'ACCEPT')
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_COLOR);
-					this.appendValueInput('COLOR')
-						.setCheck(['Colour', 'String']);
-					this.setInputsInline(true);
-					this.setOutput(true, ['Number', 'Array']);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_findText'] = function(block) {
-				// Boolean values true and false.
-				var accept = block.getFieldValue('ACCEPT');
-				var color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_NONE);
-				var code = 'get_cam().find_text(accept="' + accept + '", back_color=' + color + ')';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_adv_findQRCode'] = {
-				/**
-				 * Block for findText function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDQRCODE);
-					this.setOutput(true, 'String');
-					this.setInputsInline(true);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_findQRCode'] = function(block) {
-				// Boolean values true and false.
-				var code = 'get_cam().find_qr_code()';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_adv_findARCode'] = {
-				/**
-				 * Block for findText function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SENSOR_FINDARCODE);
-					this.setOutput(true, 'HashMap');
-					this.setInputsInline(true);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_adv_findARCode'] = function(block) {
-				// Boolean values true and false.
-				var code = 'get_cam().find_ar_code()';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-            Blockly.Blocks['coderbot_adv_find_class'] = {
-            /**
-            * Block for find_class function.
-            * @this Blockly.Block
-            */
-            init: function() {
-                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-                this.setColour(250);
-                this.appendDummyInput()
-                    .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS);
-                this.setOutput(true, 'String');
-                this.setInputsInline(true);
-                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-            }
-            };
-
-            Blockly.Python['coderbot_adv_find_class'] = function(block) {
-            // Boolean values true and false.
-            var name = 'get_cam().find_class()';
-            return [name, Blockly.Python.ORDER_ATOMIC];
-            };
-
-            Blockly.Blocks['coderbot_adv_cnn_classify'] = {
-            /**
-            * Block for find_class function.
-            * @this Blockly.Block
-            */
-            init: function() {
-                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-                this.setColour(250);
-                this.appendDummyInput()
-                    .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDCLASS)
-                    .appendField(new Blockly.FieldDropdown(CODERBOT_CNN_MODEL_LIST), 'MODEL');
-                this.setInputsInline(true);
-                this.setOutput(true, ['Array']);
-                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-            }
-            };
-
-            Blockly.Python['coderbot_adv_cnn_classify'] = function(block) {
-            var model = block.getFieldValue('MODEL');
-            var class_scores = 'get_cam().cnn_classify("'+ model +'")';
-            return [class_scores, Blockly.Python.ORDER_ATOMIC];
-            };
-
-            Blockly.Blocks['coderbot_adv_cnn_detect_objects'] = {
-            /**
-            * Block for find_class function.
-            * @this Blockly.Block
-            */
-            init: function() {
-                this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-                this.setColour(250);
-                this.appendDummyInput()
-                    .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDOBJECTS)
-                    .appendField(new Blockly.FieldDropdown(CODERBOT_CNN_MODEL_LIST), 'MODEL');
-                this.setInputsInline(true);
-                this.setOutput(true, ['Array']);
-                this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-            }
-            };
-
-            Blockly.Python['coderbot_adv_cnn_detect_objects'] = function(block) {
-            var model = block.getFieldValue('MODEL');
-            var class_scores = 'get_cam().cnn_detect_objects("'+ model +'")';
-            return [class_scores, Blockly.Python.ORDER_ATOMIC];
-            };
-			Blockly.Blocks['coderbot_event_generator'] = {
-				init: function() {
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_EVENT_GENERATOR);
-					this.appendStatementInput("generator_statements")
-						.setCheck(null);
-					this.setColour(15);
-					this.setTooltip("event generator");
-					this.setHelpUrl("");
-				}
-			};
-
-			var coderbot_generator_id = 1;
-			Blockly.Python['coderbot_event_generator'] = function(block) {
-			        var INDENT_saved = Blockly.Generator.prototype.INDENT;
-				Blockly.Generator.prototype.INDENT = Blockly.Generator.prototype.INDENT + Blockly.Generator.prototype.INDENT;
-				var statements_event_generator = Blockly.Python.statementToCode(block, 'generator_statements');
-				Blockly.Generator.prototype.INDENT = INDENT_saved;
-				var code = 'def event_generator_' + coderbot_generator_id + '():\n' +
-					INDENT_saved + 'while True:\n' +
-					INDENT_saved + INDENT_saved + 'get_prog_eng().check_end()\n' +
-					statements_event_generator + '\n' +
-					'get_event().register_event_generator(event_generator_' + coderbot_generator_id + ')'
-				coderbot_generator_id++;
-				return code;
-			};
-
-			Blockly.Blocks['coderbot_event_listener'] = {
-				init: function() {
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_EVENT_WHEN)
-						.appendField(new Blockly.FieldTextInput("event_topic"), "event_topic")
-						.appendField(Blockly.Msg.CODERBOT_EVENT_WITH + " event_data");
-					this.appendStatementInput("event_statements")
-						.setCheck(null);
-					this.setInputsInline(true);
-					this.setColour(15);
-					this.setTooltip("");
-					this.setHelpUrl("");
-				}
-			};
-
-			var coderbot_listener_id = 1;
-			Blockly.Python['coderbot_event_listener'] = function(block) {
-				var event_topic = block.getFieldValue('event_topic');
-				var event_statements = Blockly.Python.statementToCode(block, 'event_statements');
-				var code = 'def event_listener_' + coderbot_listener_id + '(message):\n' +
-					Blockly.Generator.prototype.INDENT + 'event_data = json.loads(message)\n' +
-					event_statements + '\n' +
-					'get_event().register_event_listener(\'' + event_topic + '\', event_listener_' + coderbot_listener_id + ')'
-				coderbot_listener_id++;
-				return code;
-			};
-
-			Blockly.Blocks['coderbot_event_publisher'] = {
-				init: function() {
-					this.appendValueInput("event_data")
-						.appendField(Blockly.Msg.CODERBOT_EVENT_PUBLISH)
-						.setCheck(null);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_EVENT_ON_TOPIC)
-						.appendField(new Blockly.FieldTextInput("event_topic"), "event_topic");
-					this.setInputsInline(true);
-					this.setPreviousStatement(true, null);
-					this.setNextStatement(true, null);
-					this.setColour(15);
-					this.setTooltip("event publisher");
-					this.setHelpUrl("");
-				}
-			};
-
-			Blockly.Python['coderbot_event_publisher'] = function(block) {
-				var event_topic = block.getFieldValue('event_topic');
-				var event_data = Blockly.Python.valueToCode(block, 'event_data', Blockly.Python.ORDER_ATOMIC);
-				var code = 'get_event().publish(\'' + event_topic + '\', json.dumps(' + event_data + '))\n';
-				return code;
-			};
-
-			Blockly.Blocks['hashmap_get_value'] = {
-				init: function() {
-					this.appendValueInput("key")
-						.setCheck("String")
-						.appendField("get");
-					this.appendValueInput("map")
-						.setCheck("HashMap")
-						.appendField("from ");
-					this.setInputsInline(true);
-					this.setOutput(true, null);
-					this.setColour(230);
-					this.setTooltip("get an item from an hashmap");
-					this.setHelpUrl("");
-				}
-			};
-
-			Blockly.Python['hashmap_get_value'] = function(block) {
-				var value_key = Blockly.Python.valueToCode(block, 'key', Blockly.Python.ORDER_ATOMIC);
-				var value_map = Blockly.Python.valueToCode(block, 'map', Blockly.Python.ORDER_ATOMIC);
-				var code = value_map + '.get(' + value_key + ')';
-				return [code, Blockly.Python.ORDER_NONE];
-			};
-
-			Blockly.Blocks['hashmap_get_keys'] = {
-				init: function() {
-					this.appendDummyInput()
-						.appendField("get keys");
-					this.appendValueInput("map")
-						.setCheck("HashMap")
-						.appendField("from ");
-					this.setInputsInline(true);
-					this.setOutput(true, "Array");
-					this.setColour(230);
-					this.setTooltip("get keys from an hashmap");
-					this.setHelpUrl("");
-				}
-			};
-
-			Blockly.Python['hashmap_get_keys'] = function(block) {
-				var value_map = Blockly.Python.valueToCode(block, 'map', Blockly.Python.ORDER_ATOMIC);
-				var code = value_map + '.keys()';
-				return [code, Blockly.Python.ORDER_NONE];
-			};
-
-
-			Blockly.Blocks['coderbot_conv_get_action'] = {
-				init: function() {
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_CONVERSATION_PARSE);
-					this.appendValueInput("query")
-						.setCheck("String");
-					this.appendDummyInput()
-						.appendField("in")
-						.appendField(new Blockly.FieldDropdown([
-							[Blockly.Msg.CODERBOT_LOCALE_EN, 'en'],
-							[Blockly.Msg.CODERBOT_LOCALE_IT, 'it'],
-							[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr'],
-							[Blockly.Msg.CODERBOT_LOCALE_ES, 'es']
-						]), "locale");
-					this.setInputsInline(true);
-					this.setOutput(true, "HashMap");
-					this.setColour(230);
-					this.setTooltip("");
-					this.setHelpUrl("");
-				}
-			};
-
-			Blockly.Python['coderbot_conv_get_action'] = function(block) {
-				var value_query = Blockly.Python.valueToCode(block, 'query', Blockly.Python.ORDER_ATOMIC);
-				var dropdown_locale = block.getFieldValue('locale');
-				var code = 'get_conv().get_action(query=' + value_query + ', locale=\'' + dropdown_locale + '\')';
-				return [code, Blockly.Python.ORDER_NONE];
-			};
-
-			Blockly.Blocks['coderbot_audio_record'] = {
-				/**
-				 * Block for findLogo function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(220);
-					this.appendValueInput('FILENAME')
-						.setCheck('String')
-						.appendField(Blockly.Msg.CODERBOT_AUDIO_RECORD_FILE_NAME);
-					this.appendValueInput('ELAPSE')
-						.setCheck('Number')
-						.appendField(Blockly.Msg.CODERBOT_AUDIO_RECORD_FILE_ELAPSE);
-					this.setInputsInline(true);
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_audio_record_Tooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_audio_record'] = function(block) {
-
-				var filename = Blockly.Python.valueToCode(block, 'FILENAME',
-					Blockly.Python.ORDER_NONE) || '\'\'';
-				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE',
-					Blockly.Python.ORDER_NONE) || '\'\'';
-				var code = 'get_audio().record_to_file(filename=' + filename + ', elapse=' + elapse + ')\n';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_audio_play'] = {
-				// Block for text to speech.
-				init: function() {
-					this.setHelpUrl('http://code.google.com/p/blockly/wiki/Play');
-					this.setColour(220);
-					var vi = this.appendValueInput('FILENAME');
-					vi.setCheck("String");
-					if (CODERBOT_PROG_LEVEL.indexOf("basic") >= 0) {
-						vi.appendField(new Blockly.FieldImage('/static/images/blocks/play.png', 32, 32, '*'));
-					} else {
-						vi.appendField(Blockly.Msg.CODERBOT_AUDIO_PLAY_FILE);
-					}
-					this.setPreviousStatement(true);
-					this.setNextStatement(true);
-					this.setTooltip(('CoderBot_audio_play_Tooltip'));
-				}
-			};
-
-			Blockly.Python['coderbot_audio_play'] = function(block) {
-				// Generate Python for turning left or right.
-				var filename = Blockly.Python.valueToCode(block, 'FILENAME',
-					Blockly.Python.ORDER_NONE) || '\'\'';
-				return 'get_audio().play(' + filename + ')\n';
-			};
-
-			Blockly.Blocks['coderbot_audio_hear'] = {
-				/**
-				 * Block for audio hear function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(220);
-					this.appendValueInput('LEVEL')
-						.setCheck(["Number"])
-						.appendField(Blockly.Msg.CODERBOT_AUDIO_HEAR + Blockly.Msg.CODERBOT_AUDIO_HEAR_LEVEL);
-					this.appendValueInput('ELAPSE')
-						.setCheck(["Number"])
-						.appendField(Blockly.Msg.CODERBOT_AUDIO_HEAR_ELAPSE);
-					this.setInputsInline(true);
-					this.setOutput(true, ['Number']);
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_audio_hear'] = function(block) {
-				// Boolean values true and false.
-				var level = Blockly.Python.valueToCode(block, 'LEVEL', Blockly.Python.ORDER_NONE) || '\'\'';
-				var elapse = Blockly.Python.valueToCode(block, 'ELAPSE', Blockly.Python.ORDER_NONE) || '\'\'';
-				var code = 'get_audio().hear(level=' + level + ', elapse=' + elapse + ')';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_audio_listen'] = {
-				/**
-				 * Block for findText function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(220);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_AUDIO_LISTEN)
-						.appendField(new Blockly.FieldDropdown([
-							[Blockly.Msg.CODERBOT_LOCALE_EN, 'en-US'],
-							[Blockly.Msg.CODERBOT_LOCALE_IT, 'it-IT'],
-							[Blockly.Msg.CODERBOT_LOCALE_FR, 'fr-FR'],
-							[Blockly.Msg.CODERBOT_LOCALE_ES, 'es-ES']
-						]), 'MODEL');
-					this.setInputsInline(true);
-					this.setOutput(true, 'String');
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-            
-      Blockly.Blocks['coderbot_music_note_basic'] = {
-          init: function() {
-              this.appendDummyInput()
-                  .setAlign(Blockly.ALIGN_CENTRE)
-                  .appendField(new Blockly.FieldImage("/static/images/blocks/musical_note.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
-                  .appendField("NOTA ")
-                  .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["SOL    ","G2"], ["LA       ","A3"], ["SI        ","B3"], ["DO+    ","C3"], ["RE+     ","D3"]] ), "NAME");
-              this.setInputsInline(true);
-              this.setPreviousStatement(true, null);
-              this.setNextStatement(true, null);
-              this.setColour(345);
-              this.setTooltip("");
-              this.setHelpUrl("");
-          }
+  name: 'Blockly',
+  components: {
+    sidebar,
+    Prism: () => import('vue-prism-component'),
+  },
+  data: () => ({
+    cssProps: {
+      '--bodyFont': 'Roboto',
+      '--codeFont': 'Ubuntu Mono',
+    },
+    activityStyle: null,
+    activity: {
+      exec: {},
+    },
+    log: null,
+    settings: null,
+    snackText: null,
+    snackbar: false,
+    drawer: false,
+    tabs: null,
+    dialog: false,
+    dialogCode: false,
+    CB: process.env.CB_ENDPOINT + process.env.APIv2,
+    CBv1: process.env.CB_ENDPOINT,
+    status: null,
+    info: null,
+    code: '',
+    workspace: null,
+    generalDialog: false,
+    generalDialogText: null,
+    generalDialogTitle: null,
+    experimental: 0,
+    execMode: 'fullExec', // can be 'fullExec' or 'stepByStep',
+    carica: false,
+    programList: '',
+    salva: false,
+    programName: '',
+    newProgramName: '',
+    unvalidName: false,
+    del: false,
+    webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
+    runtimeDialog: false,
+    isDefault: '',
+    CannotOverwrite: false,
+    defaultProgramName: '',
+    overwrite: 0,
+    overwriteDialog: false,
+  }),
+  computed: {
+    statusText() {
+      if (this.status) {
+        return 'Coderbot risulta online e funzionante. ';
+      }
+      return 'Coderbot risulta offline e rotto';
+    },
+  },
+  mounted() {
+    // Get the activity
+    const axios = this.$axios;
+    const { CB } = this;
+    if (this.$route.path == '/program') {
+      console.log('Loading the default activity');
+      this.activity = {
+        bodyFont: 'Roboto',
+        buttons: [{
+          action: 'saveProgram',
+          icon: 'save',
+          label: 'Salva',
+          type: 'text',
+        },
+        {
+          action: 'toggleSaveAs',
+          icon: 'edit',
+          label: 'Salva con Nome',
+          type: 'text',
+        },
+        {
+          action: 'loadProgramList',
+          icon: 'folder_open',
+          label: 'Carica',
+          type: 'text',
+        },
+        {
+          action: 'runProgramLegacy',
+          icon: 'play_arrow',
+          label: 'Esegui',
+          type: 'text',
+        },
+        {
+          action: 'getProgramCode',
+          icon: 'code',
+          label: 'Mostra codice',
+          type: 'text',
+        },
+        {
+          action: 'exportProgram',
+          icon: 'fa-file-export',
+          label: 'Esporta',
+          type: 'text',
+        },
+        {
+          action: 'pickFile',
+          icon: 'fa-file-import',
+          label: 'Importa',
+          type: 'text',
+        },
+
+        ],
+        capsSwitch: false,
+        codeFont: 'ubuntumono',
+        description: null,
+        drawerEnabled: true,
+        exec: {
+          camera: true,
+          log: true,
+        },
+        fontSize: 'Medio',
+        name: 'Programma',
+        showName: true,
       };
- 
+    } else {
+      console.log('Loading activity', this.$route.params.name);
+      this.saved = true;
+      axios.get(`${CB}/loadActivity`, {
+        params: {
+          name: this.$route.params.name,
+        },
+      })
+        .then((response) => {
+          console.log('Activity loaded', response.data);
+          this.activity = response.data;
+          this.updateCssProps();
+        });
+    }
 
-      Blockly.Python['coderbot_music_note_basic'] = function(block) {
-           var dropdown_name = block.getFieldValue('NAME');
-           var code = 'get_music().play_note("'+dropdown_name+'")\n'; 
-          return code;
-      };
+    this.status = null;
+    this.pollStatus();
 
+    // Start the polling
+    setInterval(() => {
+      this.pollStatus();
+    }, 1000);
 
-      Blockly.Blocks['coderbot_animal_verse_basic'] = {
-          init: function() {
-              this.appendDummyInput()
-                  .appendField(new Blockly.FieldImage("/static/images/blocks/animal.png", 30, 30, { alt: "*", flipRtl: "FALSE" }))
-                  .appendField("Verso del")
-                  .appendField(new Blockly.FieldDropdown(animalist), "Verso del");
-              this.setInputsInline(true); 
-              this.setPreviousStatement(true, null);
-              this.setNextStatement(true, null);   
-              this.setColour(290);
-              this.setTooltip("Verso animale");
-              this.setHelpUrl("");
-          } 
-      };
-    
-      Blockly.Python['coderbot_animal_verse_basic'] = function(block) {
-          var dropdown_animal = block.getFieldValue('Verso del');
-          var code = 'get_music().play_animal("'+dropdown_animal+'")\n';
-          return code;
-      };
-
-      Blockly.Blocks['coderbot_music_pause_basic'] = {
-          init: function() {
-              this.appendDummyInput()
-                  .appendField(new Blockly.FieldImage("/static/images/blocks/pause_symbol.png", 30, 30, { alt: "*", flipRtl: "FALSE" }))
-                  .appendField("Pausa");
-              this.setPreviousStatement(true, null);
-              this.setNextStatement(true, null);
-              this.setColour(345);
-              this.setTooltip("");
-              this.setHelpUrl("");
-           }
-      };
-     
-      Blockly.Python['coderbot_music_pause_basic'] = function(block) {
-         var value_duration = 1
-         var code = 'get_music().play_pause('+value_duration+')\n';
-         return code;
-      };
-
-      Blockly.Blocks['coderbot_music_note_std'] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField(new Blockly.FieldImage("/static/images/blocks/musical_note.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
-                .appendField("nota")
-                .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"]]), "note");
-            this.appendDummyInput()
-                .appendField("strumento")
-                .appendField(new Blockly.FieldDropdown(instrumentlist), "instrument");
-            this.appendValueInput("duration")
-                .setCheck("Number")
-                .setAlign(Blockly.ALIGN_CENTRE)
-                .appendField("durata");
-            this.appendDummyInput()
-                .appendField("secondi");
-            this.setInputsInline(true);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(345);
-            this.setTooltip("");
-            this.setHelpUrl("");
-        }
-      };
-
-
-      Blockly.Python['coderbot_music_note_std'] = function(block) {
-        var dropdown_note = block.getFieldValue('note');
-        var dropdown_instrument = block.getFieldValue('instrument');
-        var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
-        var alteration = "none"
-        var code = 'get_music().play_note(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration='+value_duration+')\n';
-        return code;
+    // Get the legacy configuration and initialize Blockly
+    axios.get(`${this.CBv1}/config`)
+      .then((response) => {
+        const settings = response.data;
+        this.settings = settings;
+        this.initBlockly(settings);
+      });
+  },
+  methods: {
+    updateCssProps() {
+      // (Re)Compute the CSS variables from the activity definition, then update them
+      console.log('Computing CSS Props');
+      const { bodyFont } = this.activity;
+      let fontFamilyBody = '';
+      if (bodyFont == 'opensans') {
+        fontFamilyBody = 'Open Sans';
+      } else if (bodyFont == 'roboto') {
+        fontFamilyBody = 'Roboto';
+      }
+      const { codeFont } = this.activity;
+      let fontFamilyCode = '';
+      if (codeFont == 'ubuntumono') {
+        fontFamilyCode = 'Ubuntu Mono';
+      } else if (codeFont == 'robotomono') {
+        fontFamilyCode = 'Roboto Mono';
+      }
+      let textTransform = '';
+      if (this.activity.capsSwitch) {
+        textTransform = 'uppercase';
+      } else {
+        textTransform = 'none';
       }
 
+      this.cssProps = {
+        '--bodyFont': fontFamilyBody,
+        '--codeFont': fontFamilyCode,
+        '--transform': textTransform,
+      };
+      console.log('Computed CSS props:', this.cssProps);
+    },
 
-      Blockly.Blocks['coderbot_animal_verse_std'] = {
-          init: function() {
-              this.appendDummyInput()
-                  .appendField(new Blockly.FieldImage("/static/images/blocks/animal.png", 30, 30, { alt: "note", flipRtl: "FALSE" }))
-                  .appendField("nota")
-                  .appendField(new Blockly.FieldDropdown([["DO      ","C2"], ["RE      ","D2"], ["MI       ","E2"], ["FA       ","F2"], ["FA #   ","F#2"], ["SOL    ","G2"], ["LA       ","A2"], ["SI b      ","Bb2"], ["SI        ","B2"], ["DO+    ","C3"], ["RE+     ","D3"] ]), "note");
-              this.appendDummyInput()
-                  .appendField("animale")
-                  .appendField(new Blockly.FieldDropdown(animalist), "instrument");
-              this.appendValueInput("duration")
-                  .setCheck("Number")
-                  .setAlign(Blockly.ALIGN_CENTRE)
-                  .appendField("durata");
-              this.appendDummyInput()
-                  .appendField("secondi");
-              this.setInputsInline(true);
-              this.setPreviousStatement(true, null);
-              this.setNextStatement(true, null);
-              this.setColour(345);
-              this.setTooltip("");
-              this.setHelpUrl("");
+    initBlockly(settings) {
+      // Extend the default blocks set
+      this.blocksExtensions(settings);
+
+      const toolboxLevel = settings.prog_level;
+      const toolbox = require(`../assets/toolbox_${toolboxLevel}.xml`);
+
+      // Clean the base64 encoding of the resource, removing meta infos
+      const b64Toolbox = toolbox.substring(toolbox.indexOf(',') + 1).toString();
+
+      // Decode it and get the clean serialized XML as plain string
+      const serializedToolbox = this.$base64.decode(b64Toolbox);
+
+      // Initialise Blockly Instance
+      // Blockly.Generator.prototype.INDENT = '    ';
+      this.workspace = Blockly.inject(
+        // Blockly container
+        this.$refs.blocklyDiv,
+        // Options
+        {
+          toolbox: serializedToolbox,
+          // path: 'static/js/blockly/',
+          // TODO: Use values from fetched configuration!
+          scrollbars: true,
+          // MaxBlocks		: -1, // -1 as infinite not working FIXME
+          zoom: {
+            controls: true,
+            wheel: false,
+            startScale: 1.0,
+            maxScale: 1.5,
+            minScale: 0.2,
+          },
+        },
+      );
+
+      // Pass the reference to the method to call, don't execute it (`()`)
+      // window.addEventListener('resize', this.resizeWorkspace, false);
+
+      // Initial resize
+      // this.resizeWorkspace()
+      // Blockly.svgResize(this.workspace);
+    },
+
+    blocksExtensions() {
+      const { settings } = this;
+
+      // coderbot.cfg data (temp workaround, must be fetched from backend)
+
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_speed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_elapse; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MOTION = false; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MPU = false; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_ENCODER_AVAILABLE = true; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL = settings.prog_level;
+
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SCROLLBARS = true; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MAXBLOCKS = -1;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SAVEONRUN = true; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_SPEED = settings.ctrl_fw_speed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_ELAPSE = settings.ctrl_fw_elapse;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_SPEED = settings.ctrl_tr_speed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_ELAPSE = settings.ctrl_tr_elapse; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_COUNTER = true; // to check, never used
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MOTION = false; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MPU = false; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CNN_MODEL_LIST = [['generic_fast_low', 'generic_fast_low'],
+						       ['generic_slow_high', 'generic_slow_high'],
+						       ['generic_object_detect', 'generic_object_detect']];
+    },
+
+    toggleSidebar() {
+      const currentStatus = this.$store.getters.drawerStatus;
+      this.$store.commit('toggleDrawer', !currentStatus);
+    },
+
+    getProgramData() {
+      // Build the program object
+      const name = this.programName;
+      const { workspace } = this;
+      const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      const dom_code = Blockly.Xml.domToText(xml_code);
+      const { isDefault } = this;
+
+      window.LoopTrap = 1000;
+      Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
+      const code = Blockly.Python.workspaceToCode(workspace);
+      Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+      return {
+        name, dom_code, code, default: isDefault,
+      };
+    },
+
+    exportProgram() {
+      // Create a blob object and simulate a click event starting the download
+      const data = JSON.stringify(this.getProgramData());
+      const blob = new Blob([data], { type: 'text/json' });
+      const e = document.createEvent('MouseEvents');
+      const a = document.createElement('a');
+      a.download = `${this.programName}.json` || 'noname.json';
+      a.href = window.URL.createObjectURL(blob);
+      a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+      e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      a.dispatchEvent(e);
+    },
+
+    pickFile() {
+      // Manually trigger the file dialog for the hidden file input form
+      this.$refs.file.click();
+    },
+
+    importProgram(e) {
+      // Once the file is selected, read it and populate the Blockly
+      //  workspace with the contained program
+      const { workspace } = this;
+      const { files } = e.target;
+      if (files[0] !== undefined) {
+        const fileName = files[0].name;
+        if (fileName.lastIndexOf('.') <= 0) {
+          return;
+        }
+        const fr = new FileReader();
+        fr.readAsText(files[0]);
+        fr.addEventListener('load', () => {
+          const importedProgram = JSON.parse(fr.result);
+          const xml = Blockly.Xml.textToDom(importedProgram.dom_code);
+          Blockly.Xml.domToWorkspace(xml, workspace);
+        });
+      } else {
+        console.log('Something went wrong importing');
+      }
+    },
+
+    toggleSaveAs() {
+      this.salva = true;
+      this.newProgramName = this.programName;
+    },
+
+    saveProgramAs() {
+      if (this.newProgramName != '') {
+        if (this.isDefault == 'True' && this.programName == this.newProgramName) {
+          this.CannotOverwrite = true;
+          console.log('error');
+        } else {
+          this.defaultProgramName = this.programName;
+          this.programName = this.newProgramName;
+          this.newProgramName = '';
+          this.saveProgram();
+        }
+      } else {
+        this.unvalidName = true;
+      }
+    },
+
+    saveProgram() {
+      if (this.programName != '') {
+        const axios = this.$axios;
+        const { CB } = this;
+        const { overwrite } = this.$data;
+        console.log('save');
+        console.log(overwrite);
+        const data = this.getProgramData();
+        axios.post(`${CB}/saveProgram?overwrite=${overwrite}`, {
+          name: data.name,
+          dom_code: data.dom_code,
+          code: data.code,
+          default: '',
+        })
+          .then((prog_data) => {
+            if (prog_data.data == 'defaultOverwrite' || prog_data.data == 'askOverwrite') {
+              if (prog_data.data == 'askOverwrite') {
+                this.$data.overwriteDialog = true;
+              } else {
+                this.$data.programName = this.$data.defaultProgramName;
+                this.$data.defaultProgramName = '';
+                this.$data.CannotOverwrite = true;
+              }
+            } else {
+              this.$data.isDefault = '';
+              this.$data.overwrite = 0;
+              console.log('salvato');
+            }
+          });
+      } else {
+        this.unvalidName = true;
+      }
+    },
+
+    loadProgramList() {
+      // Get the list of available programs and populate the popup
+      const axios = this.$axios;
+      const { CB } = this.$data;
+      axios.get(`${CB}/list`)
+        .then((response) => {
+          this.$data.carica = true;
+          this.$data.programList = response.data;
+        });
+    },
+
+    loadProgram(program) {
+      const axios = this.$axios;
+      const { CB } = this.$data;
+      const { workspace } = this.$data;
+      this.$data.carica = false;
+      this.$data.programName = program;
+      axios.get(`${CB}/load`, {
+        params: {
+          name: program,
+        },
+      })
+        .then((data) => {
+          workspace.clear();
+          const xml = Blockly.Xml.textToDom(data.data.dom_code);
+          Blockly.Xml.domToWorkspace(xml, workspace);
+          this.$data.isDefault = data.data.default;
+        });
+    },
+
+    deleteProgramDlg(program) {
+      this.$data.newProgramName = program;
+      this.$data.del = true;
+    },
+
+    deleteProgram(program) {
+      console.log(program);
+      if (this.$data.programName == program) {
+        this.$data.programName = '';
+        this.$data.code = '';
+        this.$data.workspace.clear();
+      }
+      const axios = this.$axios;
+      const { CB } = this.$data;
+      console.log('delete');
+      axios.post(`${CB}/delete`, {
+        name: program,
+      })
+        .then(() => {
+          console.log('deleted');
+        });
+    },
+
+    pollStatus() {
+      const axios = this.$axios;
+      const { CB } = this;
+      axios.get(`${CB}/status`)
+        .then((response) => {
+          // If the reconnection happened while in this component, send a notification
+          if (this.status == 0 && response.status) {
+            this.snackText = 'CoderBot è tornato online';
+            this.snackbar = true;
           }
-      };
-
-
-      Blockly.Python['coderbot_animal_verse_std'] = function(block) {
-          var dropdown_note = block.getFieldValue('note');
-          var dropdown_instrument = block.getFieldValue('instrument');
-          var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
-          var alteration = "none";
-          var code = 'get_music().play_animal(note="'+dropdown_note+'", instrument="'+dropdown_instrument+'", alteration="'+alteration+'", duration='+value_duration+')\n';
-          return code;
-      };
-
-
-      Blockly.Blocks['coderbot_music_pause_std'] = {
-          init: function() {
-              this.appendDummyInput()
-                  .appendField(new Blockly.FieldImage("/static/images/blocks/pause_symbol.png", 30, 30, { alt: "*", flipRtl: "FALSE" }))
-                  .appendField("pausa");
-              this.appendValueInput("duration")
-                  .setCheck("Number")
-                  .setAlign(Blockly.ALIGN_CENTRE)
-                  .appendField("durata");
-              this.appendDummyInput()
-                  .appendField("secondi");
-              this.setInputsInline(true);
-              this.setColour(345);
-              this.setPreviousStatement(true, null);
-              this.setNextStatement(true, null);
-              this.setTooltip("");
-              this.setHelpUrl("");
-           }
-     };
-
-     Blockly.Python['coderbot_music_pause_std'] = function(block) {
-         var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
-         var code = 'get_music().play_pause('+value_duration+')\n';
-         return code;
-     };
-    
-      Blockly.Blocks['coderbot_music_note_adv'] = {
-        init: function() {
-        this.appendDummyInput()
-          .appendField("nota")
-          .appendField(new Blockly.FieldDropdown([["DO","C2"], ["RE","D2"], ["MI","E2"], ["FA","F2"], ["SOL","G2"], ["LA","A2"], ["SI","B2"], ["DO+","C3"], ["RE+","D3"]]), "note")
-          .appendField(new Blockly.FieldDropdown([["nessuna alterazione","none"], ["b","bmolle"], ["#","diesis"]]), "alteration");
-        this.appendValueInput("instrument")
-          .setCheck("String")
-          .appendField("strumento");
-        this.appendValueInput("duration")
-          .setCheck("Number")
-          .setAlign(Blockly.ALIGN_CENTRE)
-          .appendField("durata");
-        this.appendDummyInput()
-          .appendField("secondi");
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(345);
-        this.setTooltip("");
-        this.setHelpUrl("");
-        }
-      };
-
-      Blockly.Python['coderbot_music_note_adv'] = function(block) {
-        var dropdown_note = block.getFieldValue('note');
-        var dropdown_alteration = block.getFieldValue('alteration');
-        var value_instrument = Blockly.Python.valueToCode(block, 'instrument', Blockly.Python.ORDER_ATOMIC);
-
-        var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
-
-
-
-        var code = 'get_music().play_note(note="'+dropdown_note+'", alteration="'+dropdown_alteration+'" ,instrument='+value_instrument+' ,duration='+value_duration+')\n';
-        return code;
-      };
-
-			Blockly.Blocks['coderbot_music_instrument_adv'] = {
-				init: function() {
-					this.appendDummyInput()
-						.appendField(new Blockly.FieldDropdown(instrumentlist), "instrument");
-					this.setInputsInline(true);
-					this.setOutput(true, 'String');
-					this.setColour(345);
-				this.setTooltip("");
-				this.setHelpUrl("");
-				}
-			};
-
-			Blockly.Python['coderbot_music_instrument_adv'] = function(block) {
-				var dropdown_instrument = block.getFieldValue('instrument');
-				var code = '"'+dropdown_instrument+'"';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-			Blockly.Blocks['coderbot_music_animal_adv'] = {
-				init: function() {
-					this.appendDummyInput()
-						.appendField(new Blockly.FieldDropdown(animalist), "instrument");
-					this.setInputsInline(true);
-					this.setOutput(true, 'String');
-					this.setColour(345);
-				this.setTooltip("");
-				this.setHelpUrl("");
-				}
-			};
-
-			Blockly.Python['coderbot_music_animal_adv'] = function(block) {
-				var dropdown_instrument = block.getFieldValue('instrument');
-				var code = '"'+dropdown_instrument+'"';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-      Blockly.Blocks['coderbot_music_pause_adv'] = {
-          init: function() {
-              this.appendDummyInput()
-                  .appendField("pausa");
-              this.appendValueInput("duration")
-                  .setCheck("Number")
-                  .setAlign(Blockly.ALIGN_CENTRE)
-                  .appendField("durata");
-              this.appendDummyInput()
-                  .appendField("secondi");
-              this.setInputsInline(true);
-              this.setPreviousStatement(true, null);
-              this.setNextStatement(true, null);
-              this.setColour(345);
-              this.setTooltip("");
-              this.setHelpUrl("");
-           }
-      };
-
-    Blockly.Python['coderbot_music_pause_adv'] = function(block) {
-       var value_duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
-       var code = 'get_music().play_pause('+value_duration+')\n';
-       return code;
-    };
-
-
-    Blockly.Python['coderbot_audio_listen'] = function(block) {
-    // Boolean values true and false.
-    var model = block.getFieldValue('MODEL');
-    var code = sbsPrefix + 'get_audio().speech_recog_google(locale=\'' + model + '\')';
-    return [code, Blockly.Python.ORDER_ATOMIC];
-    };
-
-			Blockly.Blocks['coderbot_sonar_get_distance'] = {
-				/**
-				 * Block for get_distance function.
-				 * @this Blockly.Block
-				 */
-				init: function() {
-					this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-					this.setColour(250);
-					this.appendDummyInput()
-						.appendField(Blockly.Msg.CODERBOT_SONAR_GET_DISTANCE)
-						.appendField(new Blockly.FieldDropdown([
-							[Blockly.Msg.CODERBOT_SONAR_SENSOR_1, "0"],
-							[Blockly.Msg.CODERBOT_SONAR_SENSOR_2, "1"],
-							[Blockly.Msg.CODERBOT_SONAR_SENSOR_3, "2"]
-						]), 'SONAR');
-					this.setOutput(true, 'Number');
-					this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-				}
-			};
-
-			Blockly.Python['coderbot_sonar_get_distance'] = function(block) {
-				// Boolean values true and false.
-				var sonar = block.getFieldValue('SONAR');
-				var code = sbsPrefix + 'get_bot().get_sonar_distance(' + sonar + ')';
-				return [code, Blockly.Python.ORDER_ATOMIC];
-			};
-
-      Blockly.Blocks['coderbot_mpu_get_accel'] = {
-        /**
-        * Block for get_distance function.
-        * @this Blockly.Block
-        */
-        init: function() {
-            this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-            this.setColour(240);
-            this.appendDummyInput()
-                .appendField(Blockly.Msg.CODERBOT_MPU_GET_ACCEL)
-                .appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_MPU_AXIS_X, "0"],
-                                                        [Blockly.Msg.CODERBOT_MPU_AXIS_Y, "1"],
-                                                        [Blockly.Msg.CODERBOT_MPU_AXIS_Z, "2"]]), 'AXIS');
-            this.setOutput(true, 'Number');
-            this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-        }
-      };
-
-      Blockly.Python['coderbot_mpu_get_accel'] = function(block) {
-        // Boolean values true and false.
-        var axis = block.getFieldValue('AXIS');
-        var code = 'get_bot().get_mpu_accel(' + axis + ')';
-        return [code, Blockly.Python.ORDER_ATOMIC];
-        };
-
-      Blockly.Blocks['coderbot_mpu_get_gyro'] = {
-        /**
-        * Block for get_distance function.
-        * @this Blockly.Block
-        */
-        init: function() {
-            this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-            this.setColour(240);
-            this.appendDummyInput()
-                .appendField(Blockly.Msg.CODERBOT_MPU_GET_GYRO)
-                .appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_MPU_AXIS_X, "0"],
-                                                        [Blockly.Msg.CODERBOT_MPU_AXIS_Y, "1"],
-                                                        [Blockly.Msg.CODERBOT_MPU_AXIS_Z, "2"]]), 'AXIS');
-            this.setOutput(true, 'Number');
-            this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-        }
-      };
-
-      Blockly.Python['coderbot_mpu_get_gyro'] = function(block) {
-        // Boolean values true and false.
-        var axis = block.getFieldValue('AXIS');
-        var code = 'get_bot().get_mpu_gyro(' + axis + ')';
-        return [code, Blockly.Python.ORDER_ATOMIC];
-      };
-
-      Blockly.Blocks['coderbot_mpu_get_heading'] = {
-        /**
-        * Block for get_distance function.
-        * @this Blockly.Block
-        */
-        init: function() {
-            this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-            this.setColour(240);
-            this.appendDummyInput()
-                .appendField(Blockly.Msg.CODERBOT_MPU_GET_HEADING);
-            this.setOutput(true, 'Number');
-            this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-        }
-      };
-
-      Blockly.Python['coderbot_mpu_get_heading'] = function(block) {
-        // Boolean values true and false.
-        var code = 'get_bot().get_mpu_heading()';
-        return [code, Blockly.Python.ORDER_ATOMIC];
-      };
-
-      Blockly.Blocks['coderbot_mpu_get_temp'] = {
-        /**
-        * Block for get_distance function.
-        * @this Blockly.Block
-        */
-        init: function() {
-            this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-            this.setColour(240);
-            this.appendDummyInput()
-                .appendField(Blockly.Msg.CODERBOT_MPU_GET_TEMP);
-            this.setOutput(true, 'Number');
-            this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-        }
-      };
-
-      Blockly.Python['coderbot_mpu_get_temp'] = function(block) {
-        // Boolean values true and false.
-        var code = 'get_bot().get_mpu_temp()';
-        return [code, Blockly.Python.ORDER_ATOMIC];
-      };
-
-      Blockly.Blocks['coderbot_atmega_get_input'] = {
-        /**
-         * Block for get_input function.
-         * @this Blockly.Block
-         */
-        init: function() {
-          this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-          this.setColour(240);
-          this.appendDummyInput()
-            .appendField(Blockly.Msg.CODERBOT_ATMEGA_READ)
-            .appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_ATMEGA_AI_1, "0"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_AI_2, "1"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DI_3, "2"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DI_4, "3"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DI_5, "4"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DI_6, "5"],]), 'INPUT');
-          this.setOutput(true, 'Number');
-          this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-        }
-      };
-
-      Blockly.Python['coderbot_atmega_get_input'] = function(block) {
-        // input index: 0, 1 are Analogs, 2..5 are Digital
-        var input = block.getFieldValue('INPUT');
-        var code = 'get_atmega().get_input(' + input + ')';
-        return [code, Blockly.Python.ORDER_ATOMIC];
-      };
-
-      Blockly.Blocks['coderbot_atmega_set_output'] = {
-        /**
-         * Block for set_output function.
-         * @this Blockly.Block
-         */
-        init: function() {
-          this.setHelpUrl(Blockly.Msg.LOGIC_BOOLEAN_HELPURL);
-          this.setColour(240);
-          this.appendDummyInput()
-            .appendField(Blockly.Msg.CODERBOT_ATMEGA_WRITE)
-            .appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_ATMEGA_DO_1, "0"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_2, "1"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_3, "2"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_4, "3"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_5, "4"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_6, "5"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_7, "6"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_8, "7"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_9, "8"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_10, "9"],
-                                                    [Blockly.Msg.CODERBOT_ATMEGA_DO_11, "10"],]), 'OUTPUT');
-          this.appendValueInput('VALUE')
-            .setCheck('Boolean')
-            .appendField(Blockly.Msg.CODERBOT_ATMEGA_VALUE);
-          this.setInputsInline(true);
-          this.setPreviousStatement(true);
-          this.setNextStatement(true);
-          this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
-        }
-      };
-
-      Blockly.Python['coderbot_atmega_set_output'] = function(block) {
-        // input index: 0, 10 are Digital
-        var output = block.getFieldValue('OUTPUT');
-        var value = Blockly.Python.valueToCode(block, 'VALUE',
-          Blockly.Python.ORDER_NONE) || '\'\'';
-        var code = 'get_atmega().set_output(' + output + ', ' + value + ')\n';
-        return code;
-      };
-		},
-
-		toggleSidebar() {
-			let currentStatus = this.$store.getters.drawerStatus
-			this.$store.commit('toggleDrawer', !currentStatus)
-		},
-
-		getProgramData() {
-			// Build the program object
-			let name = this.programName
-			let workspace = this.workspace
-			let xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-			let dom_code = Blockly.Xml.domToText(xml_code);
-			let isDefault = this.isDefault
-
-			window.LoopTrap = 1000;
-			Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
-			let code = Blockly.Python.workspaceToCode(workspace);
-			Blockly.Python.INFINITE_LOOP_TRAP = null;
-
-			return { name: name, dom_code: dom_code, code: code, default: isDefault };
-		},
-
-		exportProgram() {
-			// Create a blob object and simulate a click event starting the download
-			let data = JSON.stringify(this.getProgramData())
-			const blob = new Blob([data], { type: 'text/json' })
-			const e = document.createEvent('MouseEvents')
-			const a = document.createElement('a');
-			a.download = this.programName + '.json' || 'noname.json'
-			a.href = window.URL.createObjectURL(blob);
-			a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
-			e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-			a.dispatchEvent(e);
-		},
-
-		pickFile() {
-			// Manually trigger the file dialog for the hidden file input form
-			this.$refs.file.click()
-		},
-
-		importProgram(e) {
-			// Once the file is selected, read it and populate the Blockly
-			//  workspace with the contained program
-			let workspace = this.workspace
-			const files = e.target.files
-			if (files[0] !== undefined) {
-				let fileName = files[0].name
-				if (fileName.lastIndexOf('.') <= 0) {
-					return
-				}
-				const fr = new FileReader()
-				fr.readAsText(files[0])
-				fr.addEventListener('load', () => {
-					let importedProgram = JSON.parse(fr.result)
-					let xml = Blockly.Xml.textToDom(importedProgram["dom_code"]);
-					Blockly.Xml.domToWorkspace(xml, workspace);
-				})
-			} else {
-				console.log("Something went wrong importing")
-			}
-		},
-
-		toggleSaveAs() {
-			this.salva = true
-			newProgramName = programName
-		},
-
-		saveProgramAs(e) {
-			if (this.newProgramName != '') {
-				if (this.isDefault == "True" && this.programName == this.newProgramName) {
-					this.CannotOverwrite = true
-					console.log("error")
-				} else {
-					this.defaultProgramName = this.programName
-					this.programName = this.newProgramName
-					this.newProgramName = ''
-					this.saveProgram()
-				}
-			} else {
-				this.unvalidName = true
-			}
-		},
-
-		saveProgram() {
-			if (this.programName != '') {
-				let axios = this.$axios
-				let CB = this.CB
-				let overwrite = this.$data.overwrite
-				console.log("save")
-				console.log(overwrite)
-				let data = this.getProgramData()
-				axios.post(CB + '/saveProgram?overwrite=' + overwrite, {
-						name: data.name,
-						dom_code: data.dom_code,
-						code: data.code,
-						default: ''
-					})
-					.then(function(data) {
-						if (data.data == "defaultOverwrite" || data.data == "askOverwrite") {
-							if (data.data == "askOverwrite") {
-								this.$data.overwriteDialog = true
-							} else {
-								this.$data.programName = this.$data.defaultProgramName
-								this.$data.defaultProgramName = ''
-								this.$data.CannotOverwrite = true
-							}
-						} else {
-							this.$data.isDefault = ''
-							this.$data.overwrite = 0
-							console.log("salvato")
-						}
-					}.bind(this))
-			} else {
-				this.unvalidName = true
-			}
-		},
-
-		loadProgramList() {
-			// Get the list of available programs and populate the popup
-			let axios = this.$axios
-			let CB = this.$data.CB
-			axios.get(CB + '/list')
-				.then(function(response) {
-					this.$data.carica = true,
-						this.$data.programList = response.data;
-				}.bind(this))
-		},
-
-		loadProgram(program) {
-			let axios = this.$axios
-			let CB = this.$data.CB
-			let workspace = this.$data.workspace
-			let isDefault = this.$data.isDefault
-			this.$data.carica = false;
-			this.$data.programName = program
-			axios.get(CB + '/load', {
-					params: {
-						name: program,
-					}
-				})
-				.then(function(data) {
-					console.log(data)
-					workspace.clear();
-					var xml = Blockly.Xml.textToDom(data.data.dom_code);
-					Blockly.Xml.domToWorkspace(xml, workspace);
-					this.$data.isDefault = data.data.default
-				}.bind(this))
-		},
-
-		deleteProgramDlg(program) {
-			this.$data.newProgramName = program
-			this.$data.del = true
-		},
-
-		deleteProgram(program) {
-			console.log(program)
-			if (this.$data.programName == program) {
-				this.$data.programName = ''
-				this.$data.code = ''
-				this.$data.workspace.clear()
-			}
-			let axios = this.$axios
-			let CB = this.$data.CB
-			console.log("delete")
-			axios.post(CB + '/delete', {
-					name: program
-				})
-				.then(function() {
-					console.log("deletato")
-				})
-		},
-
-		pollStatus() {
-			let axios = this.$axios
-			let CB = this.CB
-			let status = this.status
-			axios.get(CB + '/status')
-				.then(function(response) {
-					// If the reconnection happened while in this component, send a notification
-					if (this.status == 0 && response.status) {
-						this.snackText = 'CoderBot è tornato online'
-						this.snackbar = true
-					}
-					this.statusData = response.data
-					this.status = response.status
-				}.bind(this))
-                axios.get(this.CB + '/info')
-                    .then(function(response) {
-                        this.info = response.data
-                        console.log(this.info)
-				}.bind(this))
-				.catch(function(error) {
-					console.log(error);
-					// If the disconnection happened while in this component, send a notification
-					if (this.status) {
-						this.snackText = 'CoderBot irrangiungibile'
-						this.snackbar = true
-					}
-					this.status = 0
-				}.bind(this))
-		},
-
-		resizeWorkspace() {
-			// Compute the absolute coordinates and dimensions of blocklyArea.
-			let element = this.$refs.blocklyArea;
-			do {
-				element = element.offsetParent;
-			} while (element);
-
-			const offsetWidth = this.$refs.blocklyArea.offsetWidth;
-			this.$refs.blocklyDiv.style.width = `${offsetWidth}px`;
-			const offsetHeight = this.$refs.blocklyArea.offsetHeight;
-			this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
-		},
-
-		getProgramCode() {
-			// Expose the program, as generated by Blockly
-			if (this.experimental) {
-				this.experimental = false;
-				this.blocksExtensions(this.settings);
-				this.experimental = true;
-			}
-
-			Blockly.Python.STATEMENT_PREFIX = null;
-			Blockly.Python.addReservedWords();
-			Blockly.Python.INFINITE_LOOP_TRAP = null;
-			this.code = Blockly.Python.workspaceToCode(this.workspace);
-			console.log(this.code)
-			this.dialogCode = true
-
-			if (this.experimental) {
-				this.blocksExtensions(this.settings)
-			}
-		},
-
-		runProgramExperimental() {
-			if (this.status) {
-				var xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-				var dom_code = Blockly.Xml.domToText(xml_code);
-				Blockly.Python.INFINITE_LOOP_TRAP = null;
-				//Injecting custom code
-				Blockly.Python.STATEMENT_PREFIX = 'if not is_execFull:\n data_coderbotStatus["prog_gen"]["status"] = "pause"\n saveStatus()\n signal.pause()\ndata_coderbotStatus["prog_gen"]["currentBlockId"] = str(%1)\nsaveStatus()\n';
-				Blockly.Python.addReservedWords('#highlightBlock');
-				var code_modified = Blockly.Python.workspaceToCode();
-
-				axios.post(CB + '/exec2', {
-					name: 'Hello, World',
-					dom_code,
-					code: code_modified,
-					mode: this.execMode
-				})
-
-			}
-		},
-
-		runProgram() {
-			if (this.status) {
-				let axios = this.$axios
-				let CB = this.CB
-				// POST /program/save
-				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
-				var dom_code = Blockly.Xml.domToText(xml_code);
-				window.LoopTrap = 1000;
-				Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
-				var code = Blockly.Python.workspaceToCode(this.workspace);
-				Blockly.Python.INFINITE_LOOP_TRAP = null;
-
-				axios.post(CB + '/exec', {
-						name: 'Hello, World!',
-						dom_code,
-						code
-					})
-					.then(function(response) {
-
-						console.log(response);
-					})
-			} else {
-				this.generalDialog = true;
-				this.generalDialogTitle = 'Errore',
-					this.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.'
-			}
-		},
-
-		runProgramLegacy() {
-			if (this.status) {
-				let axios = this.$axios
-				let CB = this.CB
-				let qs = this.$qs
-				this.log = ""
-				// POST /program/save
-				var xml_code = Blockly.Xml.workspaceToDom(this.workspace);
-				var dom_code = Blockly.Xml.domToText(xml_code);
-				window.LoopTrap = 1000;
-				Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
-				var code = Blockly.Python.workspaceToCode(this.workspace);
-				Blockly.Python.INFINITE_LOOP_TRAP = null;
-
-				var valuesAsString = qs.stringify({
-					'name': 'Hello, World!',
-					'dom_code': dom_code,
-					'code': code,
-				})
-
-				axios.post(this.CBv1 + '/program/exec', valuesAsString)
-					.then(function(response) {
-						console.log(response)
-						this.runtimeDialog = true;
-						setTimeout(function() {
-							this.updateExecStatus();
-						}.bind(this), 1000)
-					}.bind(this))
-
-			}
-		},
-
-		run() {
-			// Run program handler
-
-			// Some decision logic here
-			this.runProgramLegacy()
-		},
-
-		stopProgram() {
-			console.log("Stopping")
-			let axios = this.$axios
-			axios.post(this.CBv1 + '/program/end')
-		},
-
-		updateExecStatus() {
-			let axios = this.$axios
-			console.log("Updating Execution status")
-			axios.get(this.CBv1 + '/program/status')
-				.then(function(response) {
-					console.log(response.data)
-					if (response.data.running) {
-						// Check again in a second
-						setTimeout(function() {
-							this.updateExecStatus();
-						}.bind(this), 1000)
-						this.log = response.data.log
-					} else {
-						this.log = "Esecuzione conclusa"
-					}
-				}.bind(this))
-		},
-
-	},
+          this.statusData = response.data;
+          this.status = response.status;
+        });
+      axios.get(`${this.CB}/info`)
+        .then((response) => {
+          this.info = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          // If the disconnection happened while in this component, send a notification
+          if (this.status) {
+            this.snackText = 'CoderBot irrangiungibile';
+            this.snackbar = true;
+          }
+          this.status = 0;
+        });
+    },
+
+    resizeWorkspace() {
+      // Compute the absolute coordinates and dimensions of blocklyArea.
+      let element = this.$refs.blocklyArea;
+      do {
+        element = element.offsetParent;
+      } while (element);
+
+      const { offsetWidth } = this.$refs.blocklyArea;
+      this.$refs.blocklyDiv.style.width = `${offsetWidth}px`;
+      const { offsetHeight } = this.$refs.blocklyArea;
+      this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
+    },
+
+    getProgramCode() {
+      // Expose the program, as generated by Blockly
+      if (this.experimental) {
+        this.experimental = false;
+        this.blocksExtensions();
+        this.experimental = true;
+      }
+
+      Blockly.Python.STATEMENT_PREFIX = null;
+      Blockly.Python.addReservedWords();
+      Blockly.Python.INFINITE_LOOP_TRAP = null;
+      this.code = Blockly.Python.workspaceToCode(this.workspace);
+      this.dialogCode = true;
+
+      if (this.experimental) {
+        this.blocksExtensions();
+      }
+    },
+
+    runProgramExperimental() {
+      if (this.status) {
+        const axios = this.$axios;
+        const { CB } = this;
+        const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        const dom_code = Blockly.Xml.domToText(xml_code);
+        Blockly.Python.INFINITE_LOOP_TRAP = null;
+        // Injecting custom code
+        Blockly.Python.STATEMENT_PREFIX = 'if not is_execFull:\n data_coderbotStatus["prog_gen"]["status"] = "pause"\n saveStatus()\n signal.pause()\ndata_coderbotStatus["prog_gen"]["currentBlockId"] = str(%1)\nsaveStatus()\n';
+        Blockly.Python.addReservedWords('#highlightBlock');
+        const code_modified = Blockly.Python.workspaceToCode();
+
+        axios.post(`${CB}/exec2`, {
+          name: 'Hello, World',
+          dom_code,
+          code: code_modified,
+          mode: this.execMode,
+        });
+      }
+    },
+
+    runProgram() {
+      if (this.status) {
+        const axios = this.$axios;
+        const { CB } = this;
+        // POST /program/save
+        const xml_code = Blockly.Xml.workspaceToDom(this.workspace);
+        const dom_code = Blockly.Xml.domToText(xml_code);
+        window.LoopTrap = 1000;
+        Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
+        const code = Blockly.Python.workspaceToCode(this.workspace);
+        Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+        axios.post(`${CB}/exec`, {
+          name: 'Hello, World!',
+          dom_code,
+          code,
+        })
+          .then((response) => {
+            console.log(response);
+          });
+      } else {
+        this.generalDialog = true;
+        this.generalDialogTitle = 'Errore';
+        this.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.';
+      }
+    },
+
+    runProgramLegacy() {
+      if (this.status) {
+        const axios = this.$axios;
+        const qs = this.$qs;
+        this.log = '';
+        // POST /program/save
+        const xml_code = Blockly.Xml.workspaceToDom(this.workspace);
+        const dom_code = Blockly.Xml.domToText(xml_code);
+        window.LoopTrap = 1000;
+        Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
+        const code = Blockly.Python.workspaceToCode(this.workspace);
+        Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+        const valuesAsString = qs.stringify({
+          name: 'Hello, World!',
+          dom_code,
+          code,
+        });
+
+        axios.post(`${this.CBv1}/program/exec`, valuesAsString)
+          .then(() => {
+            this.runtimeDialog = true;
+            setTimeout(() => {
+              this.updateExecStatus();
+            }, 1000);
+          });
+      }
+    },
+
+    run() {
+      // Run program handler
+
+      // Some decision logic here
+      this.runProgramLegacy();
+    },
+
+    stopProgram() {
+      console.log('Stopping');
+      const axios = this.$axios;
+      axios.post(`${this.CBv1}/program/end`);
+    },
+
+    updateExecStatus() {
+      const axios = this.$axios;
+      console.log('Updating Execution status');
+      axios.get(`${this.CBv1}/program/status`)
+        .then((response) => {
+          if (response.data.running) {
+            // Check again in a second
+            setTimeout(() => {
+              this.updateExecStatus();
+            }, 1000);
+            this.log = response.data.log;
+          } else {
+            this.log = 'Esecuzione conclusa';
+          }
+        });
+    },
+
+  },
 
 };
 

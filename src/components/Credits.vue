@@ -2,31 +2,31 @@
 	<div>
 		<v-app id="inspire">
 			<sidebar></sidebar>
-			<v-toolbar color="indigo" dark fixed app>
-				<v-toolbar-side-icon @click.stop="toggleSidebar()"></v-toolbar-side-icon>
-				<v-toolbar-title>Crediti</v-toolbar-title>
-			</v-toolbar>
-			<v-content>Placeholder content</v-content>
+			<v-app-bar color="indigo" dark fixed app>
+				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
+				<v-app-bar-title>Crediti</v-app-bar-title>
+			</v-app-bar>
+			<v-main>Placeholder content</v-main>
 		</v-app>
 	</div>
 </template>
 <script>
-import sidebar from "../components/Sidebar"
+import sidebar from '../components/Sidebar';
 
 export default {
-	components: { sidebar },
-	name: 'HelloWorld',
-	methods: {
-		toggleSidebar: function() {
-			let currentStatus = this.$store.getters.drawerStatus
-			this.$store.commit('toggleDrawer', !currentStatus)
-		}
-	},
-	data() {
-		return {
-			drawer: null,
-		};
-	},
+  components: { sidebar },
+  name: 'HelloWorld',
+  methods: {
+    toggleSidebar() {
+      const currentStatus = this.$store.getters.drawerStatus;
+      this.$store.commit('toggleDrawer', !currentStatus);
+    },
+  },
+  data() {
+    return {
+      drawer: null,
+    };
+  },
 };
 
 </script>
