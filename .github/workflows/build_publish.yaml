@@ -1,0 +1,86 @@
+name: CoderBot Frontend Build and Publish as Release
+on:
+  push:
+    tags:
+      - v*.**    
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: ${{ github.ref_name }}
+        draft: ${{ contains( github.ref_name, 'rc' }}
+        prerelease: false
+    - name: Create artifact files
+      run: |
+        mkdir info
+        echo "${{ steps.create_release.outputs.id }}" > info/release_id
+        echo "${{ steps.create_release.outputs.upload_url }}" > info/upload_url
+    - uses: actions/upload-artifact@v1
+      with:
+        name: info
+        path: info
+
+  build:
+    needs: [release]
+    strategy:
+      matrix:
+        node-version: [16.x]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - name: Set upload_url
+      id: upload_info
+      run: |
+        upload_url=$(cat info/upload_url)
+        echo "::set-output name=upload_url::$upload_url"
+
+    - name: Create archive
+      run: tar czf frontend.tar.gz dist
+
+    - name: Upload Built Ruby
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.upload_info.outputs.upload_url }}
+        asset_path: frontend.tar.gz
+        asset_name: frontend.tar.gz
+        asset_content_type: application/gzip
+
+  metadata:
+    name: Publish Release
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v1
+      with:
+        name: info
+    - name: Set publish_info
+      id: publish_info
+      run: |
+        release_id=$(cat info/release_id)
+        echo "::set-output name=release_id::$release_id"
+    - uses: eregon/publish-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_id: ${{ steps.publish_info.outputs.release_id }}
