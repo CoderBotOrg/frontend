@@ -11,7 +11,7 @@
 					<v-icon>save</v-icon>
 					Salva
 				</v-btn>
-				<v-tabs slot="extension" v-model="tab" centered color="transparent" slider-color="white">
+				<v-tabs slot="extension" v-model="tab" centered slider-color="white">
 					<v-tab v-for="item in tabs" :key="item">
 						{{ item }}
 					</v-tab>
@@ -160,13 +160,13 @@
 									<v-switch label="Nome Attività" v-model="activity.showName"></v-switch>
 									<br>
 									<h3> Modifica Pulsanti </h3>
-									<v-btn @click="addButton()" outline color="green">
+									<v-btn @click="addButton()" outlined color="green">
 										<v-icon>add</v-icon> Aggiungi
 									</v-btn>
-									<v-btn @click="restoreDefaults()" outline color="blue">
+									<v-btn @click="restoreDefaults()" outlined color="blue">
 										<v-icon>undo</v-icon> Predefiniti
 									</v-btn>
-									<v-btn @click="removeAll()" outline color="red">
+									<v-btn @click="removeAll()" outlined color="red">
 										<v-icon>clear</v-icon> Rimuovi tutti
 									</v-btn>
 									<br><br>

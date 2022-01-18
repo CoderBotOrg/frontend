@@ -17,7 +17,7 @@
             <v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
           </v-btn>
         </template>
-				<v-tabs slot="extension" v-model="tab" centered color="transparent" slider-color="white">
+				<v-tabs slot="extension" v-model="tab" centered slider-color="white">
 					<v-tab v-for="item in tabs" :key="item">
 						{{ item }}
 					</v-tab>
@@ -883,7 +883,7 @@ export default {
       // TODO: Prepopulate this
       settings: {
 
-        cbName: 'CoderBot di Antonio',
+        cbName: 'CoderBot',
         power: [null, null, null],
         btnFun: null,
         wifiMode: 'ap',

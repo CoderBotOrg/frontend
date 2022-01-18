@@ -3,7 +3,7 @@
 		<v-app id="inspire">
 			<sidebar></sidebar>
 			<v-app-bar color="indigo" dark fixed app>
-				<v-app-bar-side-icon @click.stop="toggleSidebar()"></v-app-bar-side-icon>
+				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
 				<v-app-bar-title>CoderBot</v-app-bar-title>
 			</v-app-bar>
 			<v-main>
@@ -29,10 +29,10 @@
 												<b>{{ activity.name }}</b>
 												<small> {{activity.description}} </small>
 											</v-list-item-title>
-											<v-btn flat icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
+											<v-btn text icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
 												<v-icon>delete</v-icon>
 											</v-btn>
-											<v-btn flat icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
+											<v-btn text icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
 												<v-icon>edit</v-icon>
 											</v-btn>
 										</v-list-item>
