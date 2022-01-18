@@ -20,7 +20,7 @@ jobs:
       with:
         tag_name: ${{ github.ref_name }}
         release_name: ${{ github.ref_name }}
-        draft: ${{ contains( github.ref_name, 'rc' }}
+        draft: ${{ contains( github.ref_name, 'rc') }}
         prerelease: false
     - name: Create artifact files
       run: |
