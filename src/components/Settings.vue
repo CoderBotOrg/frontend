@@ -153,32 +153,6 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>
-						<!--
-						<v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap>
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Configurazione di Rete</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-radio-group v-model="settings.wifiMode" column>
-													<v-radio label="Connetti ad una rete WiFi già esistente (client)" value="client"></v-radio>
-													<v-radio label="Lascia che CoderBot configuri la propria rete WiFi locale (ad-hoc)" value="ap"></v-radio>
-													<div v-if="settings.wifiMode == 'client'">
-														<v-text-field v-model="settings.wifiSSID" label="SSID"></v-text-field>
-														<v-text-field v-model="settings.wifiPsw" label="Password"></v-text-field>
-													</div>
-													<div v-if="settings.wifiMode =='ap'"> SSID: <code> coderbot </code> Password: <code>coderb0t01 </code> </div>
-												</v-radio-group>
-											</div>
-										</v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-							<v-card-text>
-							</v-card-text>
-						</v-tab-item>
-						-->
 						<v-tab-item>
 							<v-container grid-list-md text-xs-center>
 								<v-layout row wrap>
@@ -260,8 +234,57 @@
 								</v-layout>
 							</v-container>
 						</v-tab-item>
-                        <!-- TEST TAB -->
-                        <v-tab-item>
+						<v-tab-item>
+							<v-container grid-list-md text-xs-center>
+								<v-layout row wrap>
+									<v-flex xs12 md6 offset-md3>
+										<h3 class="text-xs-left">Configurazione di Rete</h3>
+										<v-card>
+											<div class="cardContent">
+												<v-radio-group v-model="settings.wifiMode" column>
+													<v-radio label="Connetti ad una rete WiFi già esistente (client)" value="client"></v-radio>
+													<v-radio label="Lascia che CoderBot configuri la propria rete WiFi locale (ad-hoc)" value="ap"></v-radio>
+                          <v-text-field v-model="settings.wifiSSID" label="SSID"></v-text-field>
+                          <v-text-field v-model="settings.wifiPsw" label="Password"></v-text-field>
+												</v-radio-group>
+                        <v-card-actions>
+                          <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
+                              <v-dialog v-model="dialog" max-width="290">
+                                <v-card>
+                                  <v-card-title class="text-h5">
+                                    Attenzione!
+                                  </v-card-title>
+                                  <v-card-text>
+                                    Questa operazione cambierà la configurazione di CoderBot che sarà poi riavviato.
+                                  </v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                      color="secondary"
+                                      @click="dialog = false"
+                                    >
+                                      Annulla
+                                    </v-btn>
+                                    <v-btn
+                                      color="primary"
+                                      @click="dialog = false; saveWifi"
+                                    >
+                                      Ok
+                                    </v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+                        </v-card-actions>
+											</div>
+										</v-card>
+									</v-flex>
+								</v-layout>
+							</v-container>
+							<v-card-text>
+							</v-card-text>
+						</v-tab-item>
+            <!-- TEST TAB -->
+            <v-tab-item>
 							<v-container grid-list-md text-xs-center>
 								<v-layout row wrap align-center>
 									<v-flex xs12 md6 offset-md3>
@@ -270,160 +293,158 @@
 
 											<div class="cardContent">
 												<div id='test_array'>
-                                                    <!-- SONAR -->
-                                                    <v-layout row wrap justify-center>
-                                                        <!-- switch -->
-                                                        <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="orange"></v-switch>
-                                                        </v-flex>
-                                                        <!-- button state -->
-                                                        <v-flex xs12 md4>
-                                                            <span v-if="cb.logs.test != null && cb.logs.test.sonar != 0">
-                                                                <!-- passed -->
-                                                                <span v-if="cb.logs.test.sonar == 1">
-                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
-                                                                        <v-icon>fas fa-check</v-icon> Passed
-                                                                    </v-btn>
-                                                                </span>
-                                                                <!-- failed -->
-                                                                <span v-else>
-                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
-                                                                        <v-icon>fas fa-times</v-icon> Failed
-                                                                    </v-btn>
-                                                                </span>
-                                                            </span>
-                                                            <!-- not tested -->
-                                                            <span v-else>
-                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                                                    <v-icon>fas fa-question</v-icon> Not tested
-                                                                </v-btn>
-                                                            </span>
-                                                        </v-flex>
-                                                    </v-layout>
+                          <!-- SONAR -->
+                          <v-layout row wrap justify-center>
+                              <!-- switch -->
+                              <v-flex xs12 offset-md2 md5>
+                                  <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="orange"></v-switch>
+                              </v-flex>
+                              <!-- button state -->
+                              <v-flex xs12 md4>
+                                  <span v-if="cb.logs.test != null && cb.logs.test.sonar != 0">
+                                      <!-- passed -->
+                                      <span v-if="cb.logs.test.sonar == 1">
+                                          <v-btn @click="runTests" slot="activator" color="green" dark>
+                                              <v-icon>fas fa-check</v-icon> Passed
+                                          </v-btn>
+                                      </span>
+                                      <!-- failed -->
+                                      <span v-else>
+                                          <v-btn @click="runTests" slot="activator" color="red" dark>
+                                              <v-icon>fas fa-times</v-icon> Failed
+                                          </v-btn>
+                                      </span>
+                                  </span>
+                                  <!-- not tested -->
+                                  <span v-else>
+                                      <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                          <v-icon>fas fa-question</v-icon> Not tested
+                                      </v-btn>
+                                  </span>
+                              </v-flex>
+                          </v-layout>
+                                <!-- MOTORS -->
+                                <v-layout row wrap justify-center>
+                                    <!-- switch -->
+                                    <v-flex xs12 offset-md2 md5>
+                                        <v-switch label="Motors" value="motors" v-model="checkedTests" color="orange">
+                                        </v-switch>
+                                    </v-flex>
+                                    <!-- button state -->
+                                    <v-flex xs12 md4>
+                                        <span v-if="cb.logs.test != null && cb.logs.test.motors != 0">
+                                            <!-- passed -->
+                                            <span v-if="cb.logs.test.motors== 1">
+                                                <v-btn @click="runTests" slot="activator" color="green" dark>
+                                                    <v-icon>fas fa-check</v-icon> Passed
+                                                </v-btn>
+                                            </span>
+                                            <!-- failed -->
+                                            <span v-else>
+                                                <v-btn @click="runTests" slot="activator" color="red" dark>
+                                                    <v-icon>fas fa-times</v-icon> Failed
+                                                </v-btn>
+                                            </span>
+                                        </span>
+                                        <!-- not tested -->
+                                        <span v-else>
+                                            <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                                <v-icon>fas fa-question</v-icon> Not tested
+                                            </v-btn>
+                                        </span>
+                                    </v-flex>
+                                </v-layout>
 
-                                                    <!-- MOTORS -->
-                                                    <v-layout row wrap justify-center>
-                                                        <!-- switch -->
-                                                        <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="Motors" value="motors" v-model="checkedTests" color="orange">
-                                                            </v-switch>
-                                                        </v-flex>
-                                                        <!-- button state -->
-                                                        <v-flex xs12 md4>
-                                                            <span v-if="cb.logs.test != null && cb.logs.test.motors != 0">
-                                                                <!-- passed -->
-                                                                <span v-if="cb.logs.test.motors== 1">
-                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
-                                                                        <v-icon>fas fa-check</v-icon> Passed
-                                                                    </v-btn>
-                                                                </span>
-                                                                <!-- failed -->
-                                                                <span v-else>
-                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
-                                                                        <v-icon>fas fa-times</v-icon> Failed
-                                                                    </v-btn>
-                                                                </span>
-                                                            </span>
-                                                            <!-- not tested -->
-                                                            <span v-else>
-                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                                                    <v-icon>fas fa-question</v-icon> Not tested
-                                                                </v-btn>
-                                                            </span>
-                                                        </v-flex>
-                                                    </v-layout>
+                                <!-- SPEAKER -->
+                                <v-layout row wrap justify-center>
+                                    <!-- switch -->
+                                    <v-flex xs12 offset-md2 md5>
+                                        <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="orange">
+                                        </v-switch>
+                                    </v-flex>
+                                    <!-- button state -->
+                                    <v-flex xs12 md4>
+                                        <span v-if="cb.logs.test != null && cb.logs.test.speaker != 0">
+                                            <!-- passed -->
+                                            <span v-if="cb.logs.test.speaker== 1">
+                                                <v-btn @click="runTests" slot="activator" color="green" dark>
+                                                    <v-icon>fas fa-check</v-icon> Passed
+                                                </v-btn>
+                                            </span>
+                                            <!-- failed -->
+                                            <span v-else>
+                                                <v-btn @click="runTests" slot="activator" color="red" dark>
+                                                    <v-icon>fas fa-times</v-icon> Failed
+                                                </v-btn>
+                                            </span>
+                                        </span>
+                                        <!-- not tested -->
+                                        <span v-else>
+                                            <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                                <v-icon>fas fa-question</v-icon> Not tested
+                                            </v-btn>
+                                        </span>
+                                    </v-flex>
+                                </v-layout>
 
-                                                    <!-- SPEAKER -->
-                                                    <v-layout row wrap justify-center>
-                                                        <!-- switch -->
-                                                        <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="orange">
-                                                            </v-switch>
-                                                        </v-flex>
-                                                        <!-- button state -->
-                                                        <v-flex xs12 md4>
-                                                            <span v-if="cb.logs.test != null && cb.logs.test.speaker != 0">
-                                                                <!-- passed -->
-                                                                <span v-if="cb.logs.test.speaker== 1">
-                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
-                                                                        <v-icon>fas fa-check</v-icon> Passed
-                                                                    </v-btn>
-                                                                </span>
-                                                                <!-- failed -->
-                                                                <span v-else>
-                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
-                                                                        <v-icon>fas fa-times</v-icon> Failed
-                                                                    </v-btn>
-                                                                </span>
-                                                            </span>
-                                                            <!-- not tested -->
-                                                            <span v-else>
-                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                                                    <v-icon>fas fa-question</v-icon> Not tested
-                                                                </v-btn>
-                                                            </span>
-                                                        </v-flex>
-                                                    </v-layout>
+                                <!-- OCR -->
+                                <v-layout row wrap justify-center>
+                                    <!-- switch -->
+                                    <v-flex xs12 offset-md2 md5>
+                                        <v-switch label="OCR" value="ocr" v-model="checkedTests" color="orange">
+                                        </v-switch>
+                                    </v-flex>
+                                    <!-- button state -->
+                                    <v-flex xs12 md4>
+                                        <span v-if="cb.logs.test != null && cb.logs.test.ocr != 0">
+                                            <!-- passed -->
+                                            <span v-if="cb.logs.test.ocr== 1">
+                                                <v-btn @click="runTests" slot="activator" color="green" dark>
+                                                    <v-icon>fas fa-check</v-icon> Passed
+                                                </v-btn>
+                                            </span>
+                                            <!-- failed -->
+                                            <span v-else>
+                                                <v-btn @click="runTests" slot="activator" color="red" dark>
+                                                    <v-icon>fas fa-times</v-icon> Failed
+                                                </v-btn>
+                                            </span>
+                                        </span>
+                                        <!-- not tested -->
+                                        <span v-else>
+                                            <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                                <v-icon>fas fa-question</v-icon> Not tested
+                                            </v-btn>
+                                        </span>
+                                    </v-flex>
+                                </v-layout>
 
-                                                    <!-- OCR -->
-                                                    <v-layout row wrap justify-center>
-                                                        <!-- switch -->
-                                                        <v-flex xs12 offset-md2 md5>
-                                                            <v-switch label="OCR" value="ocr" v-model="checkedTests" color="orange">
-                                                            </v-switch>
-                                                        </v-flex>
-                                                        <!-- button state -->
-                                                        <v-flex xs12 md4>
-                                                            <span v-if="cb.logs.test != null && cb.logs.test.ocr != 0">
-                                                                <!-- passed -->
-                                                                <span v-if="cb.logs.test.ocr== 1">
-                                                                    <v-btn @click="runTests" slot="activator" color="green" dark>
-                                                                        <v-icon>fas fa-check</v-icon> Passed
-                                                                    </v-btn>
-                                                                </span>
-                                                                <!-- failed -->
-                                                                <span v-else>
-                                                                    <v-btn @click="runTests" slot="activator" color="red" dark>
-                                                                        <v-icon>fas fa-times</v-icon> Failed
-                                                                    </v-btn>
-                                                                </span>
-                                                            </span>
-                                                            <!-- not tested -->
-                                                            <span v-else>
-                                                                <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                                                    <v-icon>fas fa-question</v-icon> Not tested
-                                                                </v-btn>
-                                                            </span>
-                                                        </v-flex>
-                                                    </v-layout>
+                                <!-- DEBUG
+                                    <span>Checked names: {{ checkedTests }}</span>
+                                -->
+                            </div>
+                            <br>
+                            <v-card-actions>
 
-                                                    <!-- DEBUG
-                                                        <span>Checked names: {{ checkedTests }}</span>
-                                                    -->
-                                                </div>
-                                                <br>
-                                                <div class="text-xs-center">
-
-                                                    <v-btn v-if="!cb.logs.runningTest"
-                                                           block
-                                                           @click="runTests"
-                                                           slot="activator"
-                                                           color="orange"
-                                                           dark>
-                                                        <v-icon>fas fa-running</v-icon> Run tests
-                                                    </v-btn>
-                                                    <v-btn v-else
-                                                           block
-                                                           disabled>
-                                                        <v-icon>fas fa-ellipsis-h</v-icon> Running tests...
-                                                    </v-btn>
-                                                    <!-- DEBUG
-                                                       Running test: {{ cb.logs.runningTest }}
-                                                    -->
-                                                </div>
-                                            </div>
-
-                                        </v-card>
+                                <v-btn v-if="!cb.logs.runningTest"
+                                        block
+                                        @click="runTests"
+                                        slot="activator"
+                                        color="orange"
+                                        dark>
+                                    <v-icon>fas fa-running</v-icon> Run tests
+                                </v-btn>
+                                <v-btn v-else
+                                        block
+                                        disabled>
+                                    <v-icon>fas fa-ellipsis-h</v-icon> Running tests...
+                                </v-btn>
+                                <!-- DEBUG
+                                    Running test: {{ cb.logs.runningTest }}
+                                -->
+                            </v-card-actions>
+                        </div>
+                    </v-card>
 									</v-flex>
 								</v-layout>
 							</v-container>
@@ -776,12 +797,9 @@ export default {
 					*/
           data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig.move_power_angle_3];
           data.btnFun = remoteConfig.button_func;
-          // ?
-          /*
-					data.wifiMode = remoteConfig.wifi_mode
-					data.wifiSSID = remoteConfig.wifi_ssid
-					data.wifiPsw = remoteConfig.wifi_psk
-					*/
+          data.wifiMode = remoteConfig.wifi_mode;
+          data.wifiSSID = remoteConfig.wifi_ssid;
+          data.wifiPsw = remoteConfig.wifi_psk;
           data.motorMode = remoteConfig.move_motor_mode;
           data.trimFactor = remoteConfig.move_motor_trim;
           data.startSound = remoteConfig.sound_start;
@@ -807,20 +825,7 @@ export default {
       const axios = this.$axios;
       const { CBv1 } = this;
       const data = this.settings;
-      if (selectedTab == 10) {
-        const valuesAsString = qs.stringify({
-          wifi_mode: this.settings.wifiMode,
-          wifi_ssid: this.settings.wifiSSID,
-          wifi_psk: this.settings.wifiPsw,
-        });
-        // Send post with URL encoded parameters
-        axios.post(`${CBv1}/wifi`, valuesAsString)
-          .then(() => {
-            console.log('Sent');
-            this.snackText = 'Impostazioni di rete aggiornate';
-            this.snackbar = true;
-          });
-      } else {
+      if (selectedTab != 4) {
         const legacySettings = qs.stringify({
           wifi_mode: data.wifiMode,
           wifi_ssid: data.wifiSSID,
@@ -855,6 +860,24 @@ export default {
             this.snackbar = true;
           });
       }
+    },
+    saveWifi() {
+      const qs = this.$qs;
+      const axios = this.$axios;
+      const { CBv1 } = this;
+      const valuesAsString = qs.stringify({
+        wifi_mode: this.settings.wifiMode,
+        wifi_ssid: this.settings.wifiSSID,
+        wifi_psk: this.settings.wifiPsw,
+      });
+      // Send post with URL encoded parameters
+      axios.post(`${CBv1}/wifi`, valuesAsString)
+        .then(() => {
+          console.log('Sent');
+          this.snackText = 'Impostazioni di rete aggiornate';
+          this.snackbar = true;
+        });
+      console.log(`save wifi config - ssid: ${this.settings.wifiSSID}  pwd: ${this.settings.wifiPsw}`);
     },
     toggleSidebar() {
       const currentStatus = this.$store.getters.drawerStatus;
@@ -939,7 +962,7 @@ export default {
       drawer: null,
       tab: null,
       // tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-      tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Test', 'Audio', 'Gestione Pacchetti'],
+      tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Wifi', 'Test', 'Audio', 'Gestione Pacchetti'],
     };
   },
 };

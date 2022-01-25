@@ -108,7 +108,7 @@
 					<v-layout row wrap fill-height>
 						<v-flex xs12 style="position:absolute; bottom: 1%;">
 							<small>
-								&nbsp; &copy;2019 - CoderBot.org, UNIMIB.
+								&nbsp; &copy;2019-2022 - CoderBot.org, UNIMIB.
 								<!-- — <router-link to="/credits"><a>Credits</a></router-link>-->
 							</small>
 						</v-flex>

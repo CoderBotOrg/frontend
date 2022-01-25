@@ -4,6 +4,7 @@
 // Vue base
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import VueI18n from 'vue-i18n';
 
 // Vuex
 import axios from 'axios';
@@ -43,13 +44,17 @@ import activity from './components/Activity';
 // import help from './components/Help'
 // import credits from './components/Credits'
 
+import * as it_messages from './locale/it/messages.json';
+import * as en_messages from './locale/en/messages.json';
+import * as fr_messages from './locale/fr/messages.json';
+
 // Utilities
 // This is to serialize parameters to send them as URLencoded
 // https://github.com/axios/axios/issues/350#issuecomment-227270046
 
 // Configuration
 Vue.use(VueRouter);
-// Vue.use(Vuetify);
+Vue.use(VueI18n);
 
 Vue.prototype.$axios = axios.create();
 Vue.prototype.$base64 = base64;
@@ -93,11 +98,30 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
+const messages = {
+  it: {
+    message: it_messages.default,
+  },
+  en: {
+    message: en_messages.default,
+  },
+  fr: {
+    message: fr_messages.default,
+  },
+};
+
+// Create VueI18n instance with options
+const i18n = new VueI18n({
+  // locale: 'en', // set locale
+  messages, // set locale messages
+});
+
 /* eslint-disable no-new */
 new Vue({
   router,
   store,
   vuetify,
+  i18n,
   el: '#app',
   render: (h) => h(app),
 });

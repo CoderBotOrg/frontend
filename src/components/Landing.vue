@@ -8,7 +8,7 @@
 			</v-app-bar>
 			<v-main>
 				<br>
-				<div style="font-size: 24px;"> Benvenuto in </div>
+				<div style="font-size: 24px;"> {{ $t("message.welcome") }} </div>
 				<div class="logo">CoderBot</div>
 				<v-flex xs12 md8 offset-md2>
 					<v-carousel interval="10000" hide-delimiters>
@@ -17,18 +17,18 @@
 					</v-carousel>
 				</v-flex>
 				<br>
-				<div style="font-size: 18px;"> Scegli un'azione per iniziare! </div>
+				<div style="font-size: 18px;"> {{ $t("message.choose_action") }} </div>
 				<v-container grid-list-md text-xs-center>
 					<v-layout row wrap>
 						<v-flex xs12 md6 offset-md3>
 							<v-btn text large color="primary" to="program">
-								<v-icon left dark>flip_to_front</v-icon>Programma
+								<v-icon left dark>flip_to_front</v-icon>{{ $t("message.program") }}
 							</v-btn> <br>
 							<v-btn text large color="primary" target="_blank" href="/docs">
-								<v-icon left dark>help</v-icon>Documentazione
+								<v-icon left dark>help</v-icon>{{ $t("message.docs") }}
 							</v-btn> <br>
 							<v-btn text large color="primary" to="control">
-								<v-icon left dark>games</v-icon>Controlla
+								<v-icon left dark>games</v-icon>{{ $t("message.control") }}
 							</v-btn> <br>
 							<!--
 							<v-btn text large color="primary">
@@ -39,7 +39,7 @@
 							</v-btn> <br>
 							-->
 							<v-btn text large color="primary" to="settings">
-								<v-icon left dark>settings</v-icon>Impostazioni
+								<v-icon left dark>settings</v-icon>{{ $t("message.settings") }}
 							</v-btn> <br>
 							<!--
 							<v-btn text large color="primary">

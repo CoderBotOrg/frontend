@@ -20,6 +20,8 @@ Blockly = require('blockly');
 Blockly.HSV_SATURATION = 0.99;
 Blockly.HSV_VALUE = 0.99;
 
+const sbsPrefix = '';
+
 // Extensions to Blockly's language and Python generator.
 
 Blockly.Blocks.CoderBotSettings = {};

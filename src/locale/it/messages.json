@@ -1,0 +1,23 @@
+{
+    "welcome": "Benvenuto in",
+    "choose_action": "Scegli un'azione per iniziare!",
+    "program": "Programma",
+    "docs": "Documentazione",
+    "control": "Controlla",
+    "settings": "Impostazioni",
+    "running": "Esecuzione",
+    "close": "chiudi",
+    "program_list": "Lista Programmi",
+    "cancel": "Annulla",
+    "save_as": "Salva con nome",
+    "ok": "Ok",
+    "no": "No",
+    "yes": "Yes",
+    "program_name_must_be_filled": "Il nome del programma non può essere vuoto.",
+    "cannot_overwrite_default_program": "Impossibile sovrascrivere un programma di default, cambiare il nome.",
+    "overwrite": "Sovrascrivi",
+    "program_exists_overwrite": "Esiste già un programma con nome : \"{programName}\" vuoi sovrascriverlo?",
+    "delete": "Cancella",
+    "delete_sure": "Sei sicuro di voler cancellare: \"{newProgramName}\"?",
+    "coderbot_state": "Stato del CoderBot"
+}    

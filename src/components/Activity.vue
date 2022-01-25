@@ -53,7 +53,7 @@
 			<v-dialog v-model="runtimeDialog" width="500">
 				<v-card>
 					<v-card-title class="headline grey lighten-2" primary-title>
-						Esecuzione
+						{{ $t("message.running") }}
 					</v-card-title>
 					<template v-if="activity.exec.camera">
 						<v-card-text v-if="runtimeDialog">
@@ -67,7 +67,7 @@
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="primary" text @click="runtimeDialog = false; stopProgram()">
-							Chiudi
+							{{ $t("message.close") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -76,7 +76,7 @@
 			<v-dialog v-model="carica" max-width="290">
 				<v-card>
 					<v-card-title class="headline">
-						Lista Programmi
+						{{ $t("message.program_list") }}
 					</v-card-title>
 					<v-list>
 						<v-list-item v-for="program in programList" :key="program.el" @click="{}">
@@ -91,7 +91,7 @@
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="green darken-1" text="text" @click="carica = false">
-							Annulla
+							{{ $t("message.cancel") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -100,7 +100,7 @@
 			<v-dialog v-model="salva" max-width="430">
 				<v-card>
 					<v-card-title class="headline">
-						Salva con nome
+						{{ $t("message.save_as") }}
 					</v-card-title>
 					<v-card-actions>
 						<v-spacer></v-spacer>
@@ -108,10 +108,10 @@
 							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus></v-text-field>
 						</v-card-text>
 						<v-btn color="red darken-1" text="text" @click="salva = false">
-							Annulla
+							{{ $t("message.cancel") }}
 						</v-btn>
 						<v-btn color="green darken-1" text="text" @click="saveProgramAs(), salva = false">
-							Ok
+							{{ $t("message.ok") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -121,7 +121,7 @@
 				<v-card>
 					<v-card-title class="headline">Error</v-card-title>
 					<v-card-text>
-						Il nome del programma non può essere vuoto.
+						{{ $t("message.program_name_must_be_filled") }}
 					</v-card-text>
 					<v-card-actions>
 						<v-btn color="green darken-1" text="text" @click="unvalidName = false, salva = true">
@@ -135,11 +135,11 @@
 				<v-card>
 					<v-card-title class="headline">Error</v-card-title>
 					<v-card-text>
-						Impossibile sovrascrivere un programma di default, cambiare il nome.
+						{{ $t("message.cannot_overwrite_default_program") }}
 					</v-card-text>
 					<v-card-actions>
 						<v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, salva = true">
-							Ok
+							{{ $t("message.ok") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -148,17 +148,17 @@
 			<v-dialog v-model="overwriteDialog" max-width="500">
 				<v-card>
 					<v-card-title class="headline">
-						Sovrascrivi
+						{{ $t("message.overwrite") }}
 					</v-card-title>
 					<v-card-actions>
 						<v-card-text>
-							Esiste già un programma con nome : "{{programName}}" vuoi sovrascriverlo?
+							{{ $t('message.program_exists_overwrite', { programName: programName }) }}
 						</v-card-text>
 						<v-btn color="red darken-1" text="text" @click="overwriteDialog = false, salva = true">
-							No
+							{{ $t("message.no") }}
 						</v-btn>
 						<v-btn color="green darken-1" text="text" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
-							Si
+							{{ $t("message.yes") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -167,17 +167,17 @@
 			<v-dialog v-model="del" max-width="500">
 				<v-card>
 					<v-card-title class="headline">
-						Cancella
+						{{ $t("message.delete") }}
 					</v-card-title>
 					<v-card-actions>
 						<v-card-text>
-							Sei sicuro di voler cancellare: "{{newProgramName}}"?
+							{{ $t('message.delete_sure', { programName: programName }) }}
 						</v-card-text>
 						<v-btn color="red darken-1" text="text" @click="del = false">
-							No
+							{{ $t("message.no") }}
 						</v-btn>
 						<v-btn color="green darken-1" text="text" @click="del = false, carica = false, deleteProgram(newProgramName)">
-							Si
+							{{ $t("message.yes") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -193,7 +193,7 @@
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="green darken-1" text="text" @click="dialogCode = false">
-							Ok
+							{{ $t("message.ok") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -201,14 +201,14 @@
 			<!-- Status -->
 			<v-dialog v-model="dialog" max-width="290">
 				<v-card>
-					<v-card-title class="headline">Stato del Coderbot</v-card-title>
+					<v-card-title class="headline">{{ $t("message.coderbot_state") }}</v-card-title>
 					<v-card-text>
 						{{ statusText }}
 					</v-card-text>
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="green darken-1" text="text" @click="dialog = false">
-							Ok
+							{{ $t("message.ok") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -223,7 +223,7 @@
 					<v-card-actions>
 						<v-spacer></v-spacer>
 						<v-btn color="green darken-1" text="text" @click="generalDialog = false">
-							Ok
+							{{ $t("message.ok") }}
 						</v-btn>
 					</v-card-actions>
 				</v-card>
@@ -232,7 +232,7 @@
 			<v-snackbar v-model="snackbar">
 				{{ snackText }}
 				<v-btn color="pink" text @click="snackbar = false">
-					Chiudi
+					{{ $t("message.close") }}
 				</v-btn>
 			</v-snackbar>
 		</v-app>
