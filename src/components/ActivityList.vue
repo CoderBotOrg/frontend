@@ -11,10 +11,10 @@
 					<v-layout row wrap>
 						<!-- Column A -->
 						<v-flex xs12 md6 offset-md3>
-							<h3 class="text-xs-left">Lista Attività</h3>
+							<h3 class="text-xs-left">{{ $t("message.activity_list") }}</h3>
 							<p style="text-align: left">
 								<v-alert :value="true" type="info" style="font-size:16px">
-									Qui puoi avviare un'attività salvata, cliccando sul suo nome.<br>
+									{{ $t("message.activity_tip_1") }}<br>
 									L'icona <v-icon class="white--text">delete</v-icon> ti permette di eliminarla, mentre cliccando su <v-icon class="white--text">edit</v-icon> puoi modificarla.
 								</v-alert>
 							</p>

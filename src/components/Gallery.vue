@@ -4,14 +4,14 @@
 			<sidebar></sidebar>
 			<v-app-bar color="indigo" dark fixed app>
 				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-				<v-app-bar-title>Galleria</v-app-bar-title>
+				<v-app-bar-title>{{ $t("message.gallery_title") }}</v-app-bar-title>
 			</v-app-bar>
 			<v-main>
 				<v-layout>
 					<v-flex xs12 sm8 offset-sm2>
 						<template v-if="photos.length == 0">
 							<br>
-							<h3>Galleria vuota!</h3>
+							<h3>{{ $t("message.gallery_empty") }}</h3>
 						</template>
 						<template v-else>
 							<v-card>

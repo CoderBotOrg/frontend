@@ -8,7 +8,7 @@
 							<v-icon large>home</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Home</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.home") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item href="/docs" target="_blank">
@@ -16,7 +16,7 @@
 							<v-icon large>help</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Documentazione</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.docs") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<!--
@@ -51,13 +51,13 @@
 					</v-list-item-content>
 				</v-list-item>
 				-->
-					<h3>Attività</h3>
+					<h3>{{ $t("message.activities") }}</h3>
 					<v-list-item to="/activity/open">
 						<v-list-item-action>
 							<v-icon>open_in_new</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title>Apri</v-list-item-title>
+							<v-list-item-title>{{ $t("message.activity_open") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/activity/new">
@@ -65,7 +65,7 @@
 							<v-icon>add</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title>Nuova</v-list-item-title>
+							<v-list-item-title>{{ $t("message.activity_new") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<br>
@@ -77,7 +77,7 @@
 							<v-icon large>flip_to_front</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Programma</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.program") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/control">
@@ -85,7 +85,7 @@
 							<v-icon large>games</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Controlla</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.control") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/settings">
@@ -93,7 +93,7 @@
 							<v-icon large>settings</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Impostazioni</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.settings") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/gallery">
@@ -101,7 +101,7 @@
 							<v-icon large>photo_library</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Galleria</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.gallery") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<br>
@@ -124,7 +124,7 @@
 							<v-icon large>home</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Home</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.home") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item href="/docs" target="_blank">
@@ -132,7 +132,7 @@
 							<v-icon large>help</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Documentazione</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.docs") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<!--
@@ -165,7 +165,7 @@
 							<v-icon>open_in_new</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title>Apri</v-list-item-title>
+							<v-list-item-title>{{ $t("message.activity_open") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/activity/new">
@@ -173,7 +173,7 @@
 							<v-icon>add</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title>Nuova</v-list-item-title>
+							<v-list-item-title>{{ $t("message.activity_new") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<br>
@@ -185,7 +185,7 @@
 							<v-icon large>flip_to_front</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Programma</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.program") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/control">
@@ -193,7 +193,7 @@
 							<v-icon large>games</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Controlla</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.control") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/settings">
@@ -201,7 +201,7 @@
 							<v-icon large>settings</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Impostazioni</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.settings") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<v-list-item to="/gallery">
@@ -209,7 +209,7 @@
 							<v-icon large>photo_library</v-icon>
 						</v-list-item-action>
 						<v-list-item-content>
-							<v-list-item-title class="navEntry">Galleria</v-list-item-title>
+							<v-list-item-title class="navEntry">{{ $t("message.gallery") }}</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 					<br>

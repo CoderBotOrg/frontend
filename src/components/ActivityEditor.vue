@@ -4,12 +4,12 @@
 			<sidebar></sidebar>
 			<v-app-bar color="indigo" dark fixed app>
 				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-				<v-app-bar-title v-if="!saved">Nuova Attività {{prefix}} {{activity.name}}</v-app-bar-title>
-				<v-app-bar-title v-else>Modifica Attività {{prefix}} {{activity.name}}</v-app-bar-title>
+				<v-app-bar-title v-if="!saved">{{ $t("message.activity_new") }} {{prefix}} {{activity.name}}</v-app-bar-title>
+				<v-app-bar-title v-else>{{ $t("message.activity_modify") }} {{prefix}} {{activity.name}}</v-app-bar-title>
 				<v-spacer></v-spacer>
 				<v-btn text @click="save()">
 					<v-icon>save</v-icon>
-					Salva
+					{{ $t("message.save") }}
 				</v-btn>
 				<v-tabs slot="extension" v-model="tab" centered slider-color="white">
 					<v-tab v-for="item in tabs" :key="item">
@@ -26,10 +26,10 @@
 								<v-flex xs12 md6 offset-md3>
 									<p style="text-align: left">
 										<v-alert :value="true" type="info" style="font-size:16px">
-											Qui puoi creare o modificare una attività, definendo come dovrà apparire allo studente che dovrà utilizzarla per scrivere programmi. Ricorda che l'attività andrà poi <b> avviata </b> (Menù Attività -> Apri) per poterne fare effettivamente uso.
+											{{ $t("message.activity_tip_1") }}
 										</v-alert>
 									</p>
-									<h3 class="text-xs-left">Dati Attività </h3>
+									<h3 class="text-xs-left">{{ $t("message.activity_data") }} </h3>
 									<v-card>
 										<v-form class="cardContent">
 											<v-text-field v-model="activity.name" label="Nome" required></v-text-field>
@@ -38,7 +38,7 @@
 										</v-form>
 									</v-card>
 									<br><br>
-									<h3 class="text-xs-left">Tipografia </h3>
+									<h3 class="text-xs-left">{{ $t("message.activity_typography") }} </h3>
 									<v-card>
 										<div class="cardContent">
 											<!--
@@ -58,7 +58,7 @@
 										</div>
 									</v-card>
 									<br><br>
-									<h3 class="text-xs-left">Carattere tipografico dell'interfaccia</h3>
+									<h3 class="text-xs-left">{{ $t("message.activity_typography_font_ui") }} </h3>
 									<v-card>
 										<div class="cardContent">
 											<span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
@@ -73,7 +73,7 @@
 										</div>
 									</v-card>
 									<br><br>
-									<h3 class="text-xs-left">Carattere tipografico del codice (valori, editor di codice)</h3>
+									<h3 class="text-xs-left">{{ $t("message.activity_typography_font_editor") }}</h3>
 									<v-card>
 										<div class="cardContent">
 											<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
@@ -99,7 +99,6 @@
 									<v-card>
 										<div class="cardContent">
 											<v-layout row wrap>
-
 												<v-flex>
 													<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
 												</v-flex>
@@ -109,7 +108,6 @@
 												<v-flex>
 													<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
 												</v-flex>
-
 												<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
 											</v-layout>
 										</div>
@@ -142,7 +140,7 @@
 						<v-container grid-list-md text-xs-center>
 							<v-flex xs12 md8 offset-md2>
 								<v-flex>
-									<h3> Anteprima Toolbar </h3>
+									<h3> {{ $t("message.activity_toolbar_preview") }} </h3>
 									<v-app-bar>
 										<v-app-bar-nav-icon v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
 										<v-app-bar-title v-if="activity.showName">{{ activity.name || "Nome Attività"}}</v-app-bar-title>
@@ -159,15 +157,15 @@
 									<v-switch label="Icona menù laterale" v-model="activity.drawerEnabled"></v-switch>
 									<v-switch label="Nome Attività" v-model="activity.showName"></v-switch>
 									<br>
-									<h3> Modifica Pulsanti </h3>
+									<h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
 									<v-btn @click="addButton()" outlined color="green">
-										<v-icon>add</v-icon> Aggiungi
+										<v-icon>add</v-icon> {{ $t("message.activity_toolbar_buttons_add") }}
 									</v-btn>
 									<v-btn @click="restoreDefaults()" outlined color="blue">
-										<v-icon>undo</v-icon> Predefiniti
+										<v-icon>undo</v-icon> {{ $t("message.activity_toolbar_buttons_predefined") }}
 									</v-btn>
 									<v-btn @click="removeAll()" outlined color="red">
-										<v-icon>clear</v-icon> Rimuovi tutti
+										<v-icon>clear</v-icon> {{ $t("message.activity_toolbar_buttons_remove_all") }}
 									</v-btn>
 									<br><br>
 									<div v-for="button, i in activity.buttons" :key="button.id">
@@ -178,20 +176,20 @@
 										</h3>
 										<v-card>
 											<div class="cardContent">
-												<span class="grey--text text--darken-2" v-if="button.notErasable"> "Esegui" non può essere eliminato </span>
+												<span class="grey--text text--darken-2" v-if="button.notErasable"> {{ $t("message.activity_toolbar_buttons_cannot_remove_run") }} </span>
 												<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
 												<v-select v-model="button.action" :items="actions" label="Azione" :disabled="button.notErasable">
 												</v-select>
 												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
 												<v-layout row wrap>
 													<v-flex xs4 style="text-align: left">
-														<span style="vertical-align: 55%"> Colore Pulsante &nbsp;&nbsp;</span>
+														<span style="vertical-align: 55%"> {{ $t("message.activity_toolbar_buttons_color") }} &nbsp;&nbsp;</span>
 														<div style="display:inline-block">
 															<swatches popover-to="left" v-model="button.colorBtn"></swatches>
 														</div>
 													</v-flex>
 													<v-flex xs4 style="text-align: left">
-														Icona &nbsp;&nbsp; <v-btn style="margin:0" large text @click="b=i; iconPicker=true;" color="black">
+														{{ $t("message.activity_toolbar_buttons_icon") }} <v-btn style="margin:0" large text @click="b=i; iconPicker=true;" color="black">
 															<v-icon large color="black">{{ button.icon }}</v-icon>
 														</v-btn>
 													</v-flex>
@@ -211,7 +209,7 @@
 						</v-container>
 						<v-dialog v-model="iconPicker" max-width="600px">
 							<v-card>
-								<v-card-title class="headline">Seleziona icona</v-card-title>
+								<v-card-title class="headline">{{ $t("message.activity_toolbar_buttons_icon_select") }}</v-card-title>
 								<v-card-text>
 									<v-container>
 										<v-layout row wrap>
@@ -239,7 +237,7 @@
 							<v-layout row wrap>
 								<!-- Column A -->
 								<v-flex xs12 md6 offset-md3>
-									<h3 class="text-xs-left">Viste</h3>
+									<h3 class="text-xs-left">{{ $t("message.activity_views") }}</h3>
 									<v-card>
 										<v-form class="cardContent">
 											<v-switch label="Camera" v-model="activity.exec.camera"></v-switch>

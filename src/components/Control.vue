@@ -60,13 +60,13 @@
 									<v-flex xs12 sm12>
 										<br><br><br>
 										<v-btn large color="blue-grey darken-1" v-on:click="ttsdialog = true" class="controlBtn" :disabled="!ttsBtnEnabled">
-											Pronuncia
+											{{ $t("message.control_speak") }}
 											<v-icon>chat_bubble_outline</v-icon>
 										</v-btn>
 									</v-flex>
 									<v-flex xs12 sm12>
 										<v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="takePhoto()" :disabled="!photoBtnEnabled">
-											Scatta foto
+											{{ $t("message.control_photo_take") }}
 											<v-icon dark>camera_alt</v-icon>
 										</v-btn>
 									</v-flex>
@@ -78,7 +78,7 @@
 									</v-flex>
 									<v-flex xs12 sm12>
 										<v-btn large color="blue-grey darken-1" class="controlBtn" to="/gallery">
-											Galleria
+											{{ $t("message.control_photo_gallery") }}
 											<v-icon dark>photo_library</v-icon>
 										</v-btn>
 									</v-flex>
@@ -90,28 +90,28 @@
 			</template>
 			<template v-else>
 				<br>
-				In attesa che CoderBot torni online...<br>
+				{{ $t("message.coderbot_offline_1") }}<br>
 				<v-icon large>signal_wifi_off</v-icon>
 			</template>
 		</v-main>
 		<v-snackbar v-model="snackbar">
 			{{ snackText }}
 			<v-btn color="pink" text @click="snackbar = false">
-				Chiudi
+				{{ $t("message.close") }}
 			</v-btn>
 		</v-snackbar>
 		<v-dialog v-model="ttsdialog" width="600px">
 			<v-card>
 				<v-card-title>
-					<span class="headline">Text to Speech</span>
+					<span class="headline">{{ $t("message.gallery_empty") }}</span>
 				</v-card-title>
 				<v-card-text>
-					<v-text-field v-model="ttstext" label="Frase da pronunciare" solo></v-text-field>
+					<v-text-field v-model="ttstext" label="$t('message.control_text_to_speech')" solo></v-text-field>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="gray darken-1" text="text" @click="ttsdialog=false">Annulla</v-btn>
-					<v-btn color="green darken-1" text="text" @click="say()">Pronuncia</v-btn>
+					<v-btn color="gray darken-1" text="text" @click="ttsdialog=false">{{ $t("message.cancel") }}</v-btn>
+					<v-btn color="green darken-1" text="text" @click="say()">{{ $t("message.control_speak") }}</v-btn>
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
@@ -119,6 +119,8 @@
 </template>
 <script>
 import sidebar from '../components/Sidebar';
+
+console.log(process.env.CB_ENDPOINT + process.env.APIv1);
 
 export default {
   components: { sidebar },
@@ -131,7 +133,7 @@ export default {
         .then(() => {
           this.ttsBtnEnabled = false;
           this.ttsdialog = false;
-          this.snackText = 'Sto pronunciando';
+          this.snackText = this.$i18n.t('message.control_speaking');
           this.snackbar = true;
           setTimeout(() => {
             this.ttsBtnEnabled = true;
@@ -143,7 +145,7 @@ export default {
       const axios = this.$axios;
       axios.get(`${CBv1}/bot`, { params: { cmd: 'take_photo' } })
         .then(() => {
-          this.snackText = 'Foto scattata';
+          this.snackText = this.$i18n.t('message.control_photo_taken');
           this.snackbar = true;
           this.photoBtnEnabled = false;
           setTimeout(() => {
@@ -158,7 +160,7 @@ export default {
         .then(() => {
           this.ttsBtnEnabled = false;
 			        this.ttsdialog = false;
-          this.snackText = 'Nota in riproduzione';
+          this.snackText = this.$i18n.t('message.control_sount_playing');
           this.snackbar = true;
           setTimeout(() => {
             this.ttsBtnEnabled = true;
@@ -175,10 +177,10 @@ export default {
       const axios = this.$axios;
       axios.get(`${CBv1}/bot`, { params: { cmd: 'video_rec' } })
         .then(() => {
-          this.snackText = 'Registrazione Avviata';
+          this.snackText = this.$i18n.t('message.control_video_rec_started');
           this.snackbar = true;
           this.photoBtnEnabled = false;
-          this.videoBtn.text = 'Ferma registrazione video';
+          this.videoBtn.text = this.$i18n.t('message.control_video_rec_started');
           this.videoBtn.icon = 'stop';
           this.videoBtn.action = 'stop';
         });
@@ -188,13 +190,13 @@ export default {
       const axios = this.$axios;
       axios.get(`${CBv1}/bot`, { params: { cmd: 'video_stop' } })
         .then(() => {
-          this.snackText = 'Registrazione terminata';
+          this.snackText = this.$i18n.t('message.control_video_rec_stopped');
           this.snackbar = true;
           this.videoBtn.enabled = false;
           this.videoBtn.action = 'record';
           setTimeout(() => {
             this.videoBtn.enabled = true;
-            this.videoBtn.text = 'Registra Video';
+            this.videoBtn.text = this.$i18n.t('message.control_video_rec');
             this.videoBtn.icon = 'videocam';
             this.photoBtnEnabled = true;
           }, 1000);
@@ -206,7 +208,7 @@ export default {
       axios.get(`${CB}/status`)
         .then((response) => {
           if (this.status == 0 && response.status) {
-            this.snackText = 'CoderBot è tornato online';
+            this.snackText = this.$i18n.t('message.coderbot_online');
             this.snackbar = true;
           }
 
@@ -219,7 +221,7 @@ export default {
           console.log(error);
 
           if (this.status) {
-            this.snackText = 'CoderBot irrangiungibile';
+            this.snackText = this.$i18n.t('message.coderbot_offline_2');
             this.snackbar = true;
           }
           this.status = 0;
@@ -316,7 +318,7 @@ export default {
       ttsBtnEnabled: true,
       photoBtnEnabled: true,
       videoBtn: {
-        text: 'Registra Video',
+        text: this.$i18n.t('message.control_video_rec'),
         icon: 'videocam',
         enabled: 'true',
         action: 'record',
