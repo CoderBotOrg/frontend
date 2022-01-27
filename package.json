@@ -16,7 +16,7 @@
   "dependencies": {
     "ar.js": "^1.4.10",
     "font-awesome-picker": "^2.0.0",
-    "three": "^0.92.0",
+    "three": "^0.137.0",
     "typeface-fira-mono": "0.0.54",
     "typeface-open-sans": "0.0.54",
     "typeface-overpass": "0.0.54",
