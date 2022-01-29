@@ -1,15 +1,15 @@
 <template>
-	<!-- Use computed CSS rules -->
-	<div :style="cssProps">
-		<v-app id="inspire">
-			<!-- the mobile draw animation doesn't play well with how Blockly is draw -->
-			<sidebar mobileDrawAnim=0></sidebar>
-			<v-app-bar color="indigo" dark fixed app>
-				<v-app-bar-nav-icon @click.stop="toggleSidebar()" v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
-				<v-app-bar-title v-if="activity.showName">
-					{{ activity.name }}
-				</v-app-bar-title>
-				<v-spacer></v-spacer>
+  <!-- Use computed CSS rules -->
+  <div :style="cssProps">
+    <v-app id="inspire">
+      <!-- the mobile draw animation doesn't play well with how Blockly is draw -->
+      <sidebar mobileDrawAnim=0></sidebar>
+      <v-app-bar color="indigo" dark fixed app>
+        <v-app-bar-nav-icon @click.stop="toggleSidebar()" v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
+        <v-app-bar-title v-if="activity.showName">
+          {{ activity.name }}
+        </v-app-bar-title>
+        <v-spacer></v-spacer>
         <!-- If the API is available, show the desired buttons -->
         <template v-if="status == 200">
           <template v-for="button in activity.buttons">
@@ -20,7 +20,8 @@
               </v-btn>
             </template>
             <template v-else>
-              <v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn" :class="button.colorText">
+              <v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn"
+                :class="button.colorText">
                 {{ button.label }}
                 <v-icon right dark>{{ button.icon }}</v-icon>
               </v-btn>
@@ -32,226 +33,251 @@
         <v-btn @click="dialog = true" icon v-if="status != 200">
           <v-icon>error</v-icon>
         </v-btn>
-			</v-app-bar>
-			<!-- Page content -->
-			<v-main>
-				<!-- Blockly -->
-				<div style="height: 480px; width: 600px;">
-					<div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
-						<div ref="blocklyArea" style="height: 100%; width: 100%;" class="blocklyArea">
-							<div ref="blocklyDiv" style="height: 100%; width: 100%;" class="blocklyDiv">
-							</div>
-						</div>
-					</div>
-				</div>
-			</v-main>
-			<!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
-			<input type="file" style="display: none" ref="file" @change="importProgram">
-			<!-- When the selection is completed, the result is then handled by importProgram -->
-			<!--   Dialogs   -->
-			<!-- Runtime -->
-			<v-dialog v-model="runtimeDialog" width="500">
-				<v-card>
-					<v-card-title class="headline grey lighten-2" primary-title>
-						{{ $t("message.running") }}
-					</v-card-title>
-					<template v-if="activity.exec.camera">
-						<v-card-text v-if="runtimeDialog">
-							<v-img v-if="runtimeDialog" :src="webcamStream" />
-						</v-card-text>
-					</template>
-					<v-divider></v-divider>
-					<template v-if="activity.exec.log">
-						{{ log }}
-					</template>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-btn color="primary" text @click="runtimeDialog = false; stopProgram()">
-							{{ $t("message.close") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Load Program -->
-			<v-dialog v-model="carica" max-width="290">
-				<v-card>
-					<v-card-title class="headline">
-						{{ $t("message.program_list") }}
-					</v-card-title>
-					<v-list>
-						<v-list-item v-for="program in programList" :key="program.el" @click="{}">
-							<v-list-item-title ripple @click="loadProgram(program.name)">
-								{{ program.name }}
-							</v-list-item-title>
-							<v-btn v-if="program.default != 'True'" text icon color="grey darken-1" ripple @click="deleteProgramDlg(program.name)">
-								<v-icon>delete</v-icon>
-							</v-btn>
-						</v-list-item>
-					</v-list>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" text="text" @click="carica = false">
-							{{ $t("message.cancel") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Save Program -->
-			<v-dialog v-model="salva" max-width="430">
-				<v-card>
-					<v-card-title class="headline">
-						{{ $t("message.save_as") }}
-					</v-card-title>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-card-text>
-							<v-text-field v-model="newProgramName" label="Nome del programma" v-if="salva" onClick="this.select()" v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus></v-text-field>
-						</v-card-text>
-						<v-btn color="red darken-1" text="text" @click="salva = false">
-							{{ $t("message.cancel") }}
-						</v-btn>
-						<v-btn color="green darken-1" text="text" @click="saveProgramAs(), salva = false">
-							{{ $t("message.ok") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Name error -->
-			<v-dialog v-model="unvalidName" max-width="290">
-				<v-card>
-					<v-card-title class="headline">Error</v-card-title>
-					<v-card-text>
-						{{ $t("message.program_name_must_be_filled") }}
-					</v-card-text>
-					<v-card-actions>
-						<v-btn color="green darken-1" text="text" @click="unvalidName = false, salva = true">
-							Ok
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Overwrite error -->
-			<v-dialog v-model="CannotOverwrite" max-width="290">
-				<v-card>
-					<v-card-title class="headline">Error</v-card-title>
-					<v-card-text>
-						{{ $t("message.cannot_overwrite_default_program") }}
-					</v-card-text>
-					<v-card-actions>
-						<v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, salva = true">
-							{{ $t("message.ok") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Ask for overwrite -->
-			<v-dialog v-model="overwriteDialog" max-width="500">
-				<v-card>
-					<v-card-title class="headline">
-						{{ $t("message.overwrite") }}
-					</v-card-title>
-					<v-card-actions>
-						<v-card-text>
-							{{ $t('message.program_exists_overwrite', { programName: programName }) }}
-						</v-card-text>
-						<v-btn color="red darken-1" text="text" @click="overwriteDialog = false, salva = true">
-							{{ $t("message.no") }}
-						</v-btn>
-						<v-btn color="green darken-1" text="text" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
-							{{ $t("message.yes") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Delete Program -->
-			<v-dialog v-model="del" max-width="500">
-				<v-card>
-					<v-card-title class="headline">
-						{{ $t("message.delete") }}
-					</v-card-title>
-					<v-card-actions>
-						<v-card-text>
-							{{ $t('message.delete_sure', { programName: programName }) }}
-						</v-card-text>
-						<v-btn color="red darken-1" text="text" @click="del = false">
-							{{ $t("message.no") }}
-						</v-btn>
-						<v-btn color="green darken-1" text="text" @click="del = false, carica = false, deleteProgram(newProgramName)">
-							{{ $t("message.yes") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Show Code -->
-			<v-dialog v-model="dialogCode">
-				<v-card>
-					<v-card-title class="headline">Codice</v-card-title>
-					<v-card-text class="text-xs-left">
-						<prism language="python">{{ code }} </prism>
-					</v-card-text>
-					<v-divider></v-divider>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" text="text" @click="dialogCode = false">
-							{{ $t("message.ok") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Status -->
-			<v-dialog v-model="dialog" max-width="290">
-				<v-card>
-					<v-card-title class="headline">{{ $t("message.coderbot_state") }}</v-card-title>
-					<v-card-text>
-						{{ statusText }}
-					</v-card-text>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" text="text" @click="dialog = false">
-							{{ $t("message.ok") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Generic dialog -->
-			<v-dialog v-model="generalDialog" max-width="290">
-				<v-card>
-					<v-card-title class="headline">{{ generalDialogTitle }}</v-card-title>
-					<v-card-text>
-						{{ generalDialogText }}
-					</v-card-text>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-btn color="green darken-1" text="text" @click="generalDialog = false">
-							{{ $t("message.ok") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-			<!-- Notification Snackbar -->
-			<v-snackbar v-model="snackbar">
-				{{ snackText }}
-				<v-btn color="pink" text @click="snackbar = false">
-					{{ $t("message.close") }}
-				</v-btn>
-			</v-snackbar>
-		</v-app>
-	</div>
+      </v-app-bar>
+      <!-- Page content -->
+      <v-main>
+        <!-- Blockly -->
+        <div style="height: 480px; width: 600px;">
+          <div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
+            <div ref="blocklyArea" style="height: 100%; width: 100%;" class="blocklyArea">
+              <div ref="blocklyDiv" style="height: 100%; width: 100%;" class="blocklyDiv">
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-main>
+      <!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
+      <input type="file" style="display: none" ref="file" @change="importProgram">
+      <!-- When the selection is completed, the result is then handled by importProgram -->
+      <!--   Dialogs   -->
+      <!-- Runtime -->
+      <v-dialog v-model="runtimeDialog" width="500">
+        <v-card>
+          <v-card-title class="headline grey lighten-2" primary-title>
+            {{ $t("message.running") }}
+          </v-card-title>
+          <template v-if="activity.exec.camera">
+            <v-card-text v-if="runtimeDialog">
+              <v-img v-if="runtimeDialog" :src="webcamStream" />
+            </v-card-text>
+          </template>
+          <v-divider></v-divider>
+          <template v-if="activity.exec.log">
+            {{ log }}
+          </template>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="runtimeDialog = false; stopProgram()">
+              {{ $t("message.close") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Load Program -->
+      <v-dialog v-model="carica" max-width="290">
+        <v-card>
+          <v-card-title class="headline">
+            {{ $t("message.program_list") }}
+          </v-card-title>
+          <v-list>
+            <v-list-item v-for="program in programList" :key="program.el" @click="{}">
+              <v-list-item-title ripple @click="loadProgram(program.name)">
+                {{ program.name }}
+              </v-list-item-title>
+              <v-btn v-if="program.default != 'True'" text icon color="grey darken-1" ripple
+                @click="deleteProgramDlg(program.name)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-list-item>
+          </v-list>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="carica = false">
+              {{ $t("message.cancel") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Save Program -->
+      <v-dialog v-model="salva" max-width="430">
+        <v-card>
+          <v-card-title class="headline">
+            {{ $t("message.save_as") }}
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-card-text>
+              <v-text-field v-model="newProgramName" v-bind:label="$t('message.save_as')" v-if="salva" onClick="this.select()"
+                v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus>
+              </v-text-field>
+            </v-card-text>
+            <v-btn color="red darken-1" text="text" @click="salva = false">
+              {{ $t("message.cancel") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text" @click="saveProgramAs(), salva = false">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Name error -->
+      <v-dialog v-model="unvalidName" max-width="290">
+        <v-card>
+          <v-card-title class="headline">Error</v-card-title>
+          <v-card-text>
+            {{ $t("message.program_name_must_be_filled") }}
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="green darken-1" text="text" @click="unvalidName = false, salva = true">
+              Ok
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Overwrite error -->
+      <v-dialog v-model="CannotOverwrite" max-width="290">
+        <v-card>
+          <v-card-title class="headline">Error</v-card-title>
+          <v-card-text>
+            {{ $t("message.cannot_overwrite_default_program") }}
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, salva = true">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Ask for overwrite -->
+      <v-dialog v-model="overwriteDialog" max-width="500">
+        <v-card>
+          <v-card-title class="headline">
+            {{ $t("message.overwrite") }}
+          </v-card-title>
+          <v-card-actions>
+            <v-card-text>
+              {{ $t('message.program_exists_overwrite', { programName: programName }) }}
+            </v-card-text>
+            <v-btn color="red darken-1" text="text" @click="overwriteDialog = false, salva = true">
+              {{ $t("message.no") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
+              {{ $t("message.yes") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Delete Program -->
+      <v-dialog v-model="del" max-width="500">
+        <v-card>
+          <v-card-title class="headline">
+            {{ $t("message.delete") }}
+          </v-card-title>
+          <v-card-actions>
+            <v-card-text>
+              {{ $t('message.delete_sure', { programName: programName }) }}
+            </v-card-text>
+            <v-btn color="red darken-1" text="text" @click="del = false">
+              {{ $t("message.no") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text"
+              @click="del = false, carica = false, deleteProgram(newProgramName)">
+              {{ $t("message.yes") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Show Code -->
+      <v-dialog v-model="dialogCode">
+        <v-card>
+          <v-card-title class="headline">Codice</v-card-title>
+          <v-card-text class="text-xs-left">
+            <prism language="python">{{ code }} </prism>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="dialogCode = false">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Status -->
+      <v-dialog v-model="dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">{{ $t("message.coderbot_status") }}</v-card-title>
+          <v-card-text>
+            {{ statusText }}
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="dialog = false">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Generic dialog -->
+      <v-dialog v-model="generalDialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">{{ generalDialogTitle }}</v-card-title>
+          <v-card-text>
+            {{ generalDialogText }}
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="generalDialog = false">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- Notification Snackbar -->
+      <v-snackbar v-model="snackbar">
+        {{ snackText }}
+        <v-btn color="pink" text @click="snackbar = false">
+          {{ $t("message.close") }}
+        </v-btn>
+      </v-snackbar>
+    </v-app>
+  </div>
 </template>
 <script>
 import * as Blockly from 'blockly/core';
 import 'blockly/blocks';
 import 'blockly/python';
-import * as It from 'blockly/msg/it';
+import * as blockly_it from 'blockly/msg/it';
+import * as blockly_en from 'blockly/msg/en';
+import * as blockly_fr from 'blockly/msg/fr';
+
 import '../assets/js/blockly/blocks';
-import '../assets/js/blockly/bot_it';
+import * as bot_it from '../assets/js/blockly/bot_it.json';
+import * as bot_en from '../assets/js/blockly/bot_en.json';
+import * as bot_fr from '../assets/js/blockly/bot_fr.json';
+
 import * as music_package from '../assets/music_package.json';
+import i18n from '../i18n/index';
 
 import 'prismjs';
 import 'prismjs/components/prism-python.js';
 import sidebar from '../components/Sidebar';
 
-Blockly.setLocale(It);
+const locale = i18n.locale.substring(0, 2);
+
+const coderbot_locales = {
+  it: bot_it,
+  en: bot_en,
+  fr: bot_fr
+};
+Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
+
+const blockly_locales = {
+  it: blockly_it,
+  en: blockly_en,
+  fr: blockly_fr
+};
+Blockly.setLocale(blockly_locales[locale]);
 
 Blockly.Blocks.CoderBotSettings.instrumentlist = [];
 Blockly.Blocks.CoderBotSettings.animalist = [];
@@ -318,61 +344,64 @@ export default {
   computed: {
     statusText() {
       if (this.status) {
-        return 'Coderbot risulta online e funzionante. ';
+        return this.$i18n.t('message.coderbot_status_online');
       }
-      return 'Coderbot risulta offline e rotto';
+      return this.$i18n.t('message.coderbot_status_offline');
     },
   },
   mounted() {
     // Get the activity
     const axios = this.$axios;
-    const { CB } = this;
+    const {
+      CB
+    } = this;
     if (this.$route.path == '/program') {
       console.log('Loading the default activity');
       this.activity = {
         bodyFont: 'Roboto',
-        buttons: [{
-          action: 'saveProgram',
-          icon: 'save',
-          label: 'Salva',
-          type: 'text',
-        },
-        {
-          action: 'toggleSaveAs',
-          icon: 'edit',
-          label: 'Salva con Nome',
-          type: 'text',
-        },
-        {
-          action: 'loadProgramList',
-          icon: 'folder_open',
-          label: 'Carica',
-          type: 'text',
-        },
-        {
-          action: 'runProgramLegacy',
-          icon: 'play_arrow',
-          label: 'Esegui',
-          type: 'text',
-        },
-        {
-          action: 'getProgramCode',
-          icon: 'code',
-          label: 'Mostra codice',
-          type: 'text',
-        },
-        {
-          action: 'exportProgram',
-          icon: 'fa-file-export',
-          label: 'Esporta',
-          type: 'text',
-        },
-        {
-          action: 'pickFile',
-          icon: 'fa-file-import',
-          label: 'Importa',
-          type: 'text',
-        },
+        buttons: [
+          {
+            action: 'saveProgram',
+            icon: 'save',
+            label: this.$i18n.t('message.activity_program_save'),
+            type: 'text',
+          },
+          {
+            action: 'toggleSaveAs',
+            icon: 'edit',
+            label: this.$i18n.t('message.activity_program_save_as'),
+            type: 'text',
+          },
+          {
+            action: 'loadProgramList',
+            icon: 'folder_open',
+            label: this.$i18n.t('message.activity_program_load'),
+            type: 'text',
+          },
+          {
+            action: 'runProgramLegacy',
+            icon: 'play_arrow',
+            label: this.$i18n.t('message.activity_program_run'),
+            type: 'text',
+          },
+          {
+            action: 'getProgramCode',
+            icon: 'code',
+            label: this.$i18n.t('message.activity_program_show_code'),
+            type: 'text',
+          },
+          {
+            action: 'exportProgram',
+            icon: 'fa-file-export',
+            label: this.$i18n.t('message.activity_program_export'),
+            type: 'text',
+          },
+          {
+            action: 'pickFile',
+            icon: 'fa-file-import',
+            label: this.$i18n.t('message.activity_program_import'),
+            type: 'text',
+          },
 
         ],
         capsSwitch: false,
@@ -384,7 +413,7 @@ export default {
           log: true,
         },
         fontSize: 'Medio',
-        name: 'Programma',
+        name: this.$i18n.t('message.activity_program_title'),
         showName: true,
       };
     } else {
@@ -394,12 +423,11 @@ export default {
         params: {
           name: this.$route.params.name,
         },
-      })
-        .then((response) => {
-          console.log('Activity loaded', response.data);
-          this.activity = response.data;
-          this.updateCssProps();
-        });
+      }).then((response) => {
+        console.log('Activity loaded', response.data);
+        this.activity = response.data;
+        this.updateCssProps();
+      });
     }
 
     this.status = null;
@@ -422,14 +450,18 @@ export default {
     updateCssProps() {
       // (Re)Compute the CSS variables from the activity definition, then update them
       console.log('Computing CSS Props');
-      const { bodyFont } = this.activity;
+      const {
+        bodyFont
+      } = this.activity;
       let fontFamilyBody = '';
       if (bodyFont == 'opensans') {
         fontFamilyBody = 'Open Sans';
       } else if (bodyFont == 'roboto') {
         fontFamilyBody = 'Roboto';
       }
-      const { codeFont } = this.activity;
+      const {
+        codeFont
+      } = this.activity;
       let fontFamilyCode = '';
       if (codeFont == 'ubuntumono') {
         fontFamilyCode = 'Ubuntu Mono';
@@ -495,7 +527,9 @@ export default {
     },
 
     blocksExtensions() {
-      const { settings } = this;
+      const {
+        settings
+      } = this;
 
       // coderbot.cfg data (temp workaround, must be fetched from backend)
 
@@ -518,9 +552,11 @@ export default {
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_COUNTER = true; // to check, never used
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MOTION = false; // should come from config
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MPU = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CNN_MODEL_LIST = [['generic_fast_low', 'generic_fast_low'],
-						       ['generic_slow_high', 'generic_slow_high'],
-						       ['generic_object_detect', 'generic_object_detect']];
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CNN_MODEL_LIST = [
+        ['generic_fast_low', 'generic_fast_low'],
+        ['generic_slow_high', 'generic_slow_high'],
+        ['generic_object_detect', 'generic_object_detect']
+      ];
     },
 
     toggleSidebar() {
@@ -531,10 +567,14 @@ export default {
     getProgramData() {
       // Build the program object
       const name = this.programName;
-      const { workspace } = this;
+      const {
+        workspace
+      } = this;
       const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
       const dom_code = Blockly.Xml.domToText(xml_code);
-      const { isDefault } = this;
+      const {
+        isDefault
+      } = this;
 
       window.LoopTrap = 1000;
       Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
@@ -542,14 +582,19 @@ export default {
       Blockly.Python.INFINITE_LOOP_TRAP = null;
 
       return {
-        name, dom_code, code, default: isDefault,
+        name,
+        dom_code,
+        code,
+        default: isDefault,
       };
     },
 
     exportProgram() {
       // Create a blob object and simulate a click event starting the download
       const data = JSON.stringify(this.getProgramData());
-      const blob = new Blob([data], { type: 'text/json' });
+      const blob = new Blob([data], {
+        type: 'text/json'
+      });
       const e = document.createEvent('MouseEvents');
       const a = document.createElement('a');
       a.download = `${this.programName}.json` || 'noname.json';
@@ -567,8 +612,12 @@ export default {
     importProgram(e) {
       // Once the file is selected, read it and populate the Blockly
       //  workspace with the contained program
-      const { workspace } = this;
-      const { files } = e.target;
+      const {
+        workspace
+      } = this;
+      const {
+        files
+      } = e.target;
       if (files[0] !== undefined) {
         const fileName = files[0].name;
         if (fileName.lastIndexOf('.') <= 0) {
@@ -610,8 +659,12 @@ export default {
     saveProgram() {
       if (this.programName != '') {
         const axios = this.$axios;
-        const { CB } = this;
-        const { overwrite } = this.$data;
+        const {
+          CB
+        } = this;
+        const {
+          overwrite
+        } = this.$data;
         console.log('save');
         console.log(overwrite);
         const data = this.getProgramData();
@@ -620,22 +673,21 @@ export default {
           dom_code: data.dom_code,
           code: data.code,
           default: '',
-        })
-          .then((prog_data) => {
-            if (prog_data.data == 'defaultOverwrite' || prog_data.data == 'askOverwrite') {
-              if (prog_data.data == 'askOverwrite') {
-                this.$data.overwriteDialog = true;
-              } else {
-                this.$data.programName = this.$data.defaultProgramName;
-                this.$data.defaultProgramName = '';
-                this.$data.CannotOverwrite = true;
-              }
+        }).then((prog_data) => {
+          if (prog_data.data == 'defaultOverwrite' || prog_data.data == 'askOverwrite') {
+            if (prog_data.data == 'askOverwrite') {
+              this.$data.overwriteDialog = true;
             } else {
-              this.$data.isDefault = '';
-              this.$data.overwrite = 0;
-              console.log('salvato');
+              this.$data.programName = this.$data.defaultProgramName;
+              this.$data.defaultProgramName = '';
+              this.$data.CannotOverwrite = true;
             }
-          });
+          } else {
+            this.$data.isDefault = '';
+            this.$data.overwrite = 0;
+            console.log('salvato');
+          }
+        });
       } else {
         this.unvalidName = true;
       }
@@ -644,7 +696,9 @@ export default {
     loadProgramList() {
       // Get the list of available programs and populate the popup
       const axios = this.$axios;
-      const { CB } = this.$data;
+      const {
+        CB
+      } = this.$data;
       axios.get(`${CB}/list`)
         .then((response) => {
           this.$data.carica = true;
@@ -654,21 +708,24 @@ export default {
 
     loadProgram(program) {
       const axios = this.$axios;
-      const { CB } = this.$data;
-      const { workspace } = this.$data;
+      const {
+        CB
+      } = this.$data;
+      const {
+        workspace
+      } = this.$data;
       this.$data.carica = false;
       this.$data.programName = program;
       axios.get(`${CB}/load`, {
         params: {
           name: program,
         },
-      })
-        .then((data) => {
-          workspace.clear();
-          const xml = Blockly.Xml.textToDom(data.data.dom_code);
-          Blockly.Xml.domToWorkspace(xml, workspace);
-          this.$data.isDefault = data.data.default;
-        });
+      }).then((data) => {
+        workspace.clear();
+        const xml = Blockly.Xml.textToDom(data.data.dom_code);
+        Blockly.Xml.domToWorkspace(xml, workspace);
+        this.$data.isDefault = data.data.default;
+      });
     },
 
     deleteProgramDlg(program) {
@@ -684,24 +741,27 @@ export default {
         this.$data.workspace.clear();
       }
       const axios = this.$axios;
-      const { CB } = this.$data;
+      const {
+        CB
+      } = this.$data;
       console.log('delete');
       axios.post(`${CB}/delete`, {
         name: program,
-      })
-        .then(() => {
-          console.log('deleted');
-        });
+      }).then(() => {
+        console.log('deleted');
+      });
     },
 
     pollStatus() {
       const axios = this.$axios;
-      const { CB } = this;
+      const {
+        CB
+      } = this;
       axios.get(`${CB}/status`)
         .then((response) => {
           // If the reconnection happened while in this component, send a notification
           if (this.status == 0 && response.status) {
-            this.snackText = 'CoderBot è tornato online';
+            this.snackText = this.$i18n.t('message.coderbot_status_online');
             this.snackbar = true;
           }
           this.statusData = response.data;
@@ -715,7 +775,7 @@ export default {
           console.log(error);
           // If the disconnection happened while in this component, send a notification
           if (this.status) {
-            this.snackText = 'CoderBot irrangiungibile';
+            this.snackText = this.$i18n.t('coderbot_offline_2');
             this.snackbar = true;
           }
           this.status = 0;
@@ -729,9 +789,13 @@ export default {
         element = element.offsetParent;
       } while (element);
 
-      const { offsetWidth } = this.$refs.blocklyArea;
+      const {
+        offsetWidth
+      } = this.$refs.blocklyArea;
       this.$refs.blocklyDiv.style.width = `${offsetWidth}px`;
-      const { offsetHeight } = this.$refs.blocklyArea;
+      const {
+        offsetHeight
+      } = this.$refs.blocklyArea;
       this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
     },
 
@@ -757,7 +821,9 @@ export default {
     runProgramExperimental() {
       if (this.status) {
         const axios = this.$axios;
-        const { CB } = this;
+        const {
+          CB
+        } = this;
         const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         const dom_code = Blockly.Xml.domToText(xml_code);
         Blockly.Python.INFINITE_LOOP_TRAP = null;
@@ -778,7 +844,9 @@ export default {
     runProgram() {
       if (this.status) {
         const axios = this.$axios;
-        const { CB } = this;
+        const {
+          CB
+        } = this;
         // POST /program/save
         const xml_code = Blockly.Xml.workspaceToDom(this.workspace);
         const dom_code = Blockly.Xml.domToText(xml_code);
@@ -791,14 +859,13 @@ export default {
           name: 'Hello, World!',
           dom_code,
           code,
-        })
-          .then((response) => {
-            console.log(response);
-          });
+        }).then((response) => {
+          console.log(response);
+        });
       } else {
         this.generalDialog = true;
-        this.generalDialogTitle = 'Errore';
-        this.generalDialogText = 'Il coderbot risulta offline, non puoi eseguire il programma.';
+        this.generalDialogTitle = this.$i18n.t('error');
+        this.generalDialogText = this.$i18n.t('coderbot_offline_3');
       }
     },
 
@@ -864,7 +931,6 @@ export default {
   },
 
 };
-
 </script>
 <style scoped>
 .application {

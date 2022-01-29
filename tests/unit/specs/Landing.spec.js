@@ -7,6 +7,9 @@ import { shallowMount } from '@vue/test-utils'
 // Utilities
 import { createLocalVue, mount } from '@vue/test-utils'
 
+import { i18n } from '../testutils'
+
+
 describe('Landing.vue', () => {
   const localVue = createLocalVue();
   let vuetify;
@@ -18,7 +21,7 @@ describe('Landing.vue', () => {
   it('should render correct contents', () => {
     const msg = 'CoderBot';
     const wrapper = shallowMount(Landing, {
-      propsData: { msg }
+      i18n, propsData: { msg }
     })
     expect(wrapper.find('.logo').text()).toMatch(msg);
   });

@@ -1,51 +1,51 @@
 <template>
-	<div>
-		<v-app id="inspire">
-			<sidebar></sidebar>
-			<v-app-bar color="indigo" dark fixed app>
-				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-				<v-app-bar-title v-if="!saved">{{ $t("message.activity_new") }} {{prefix}} {{activity.name}}</v-app-bar-title>
-				<v-app-bar-title v-else>{{ $t("message.activity_modify") }} {{prefix}} {{activity.name}}</v-app-bar-title>
-				<v-spacer></v-spacer>
-				<v-btn text @click="save()">
-					<v-icon>save</v-icon>
-					{{ $t("message.save") }}
-				</v-btn>
-				<v-tabs slot="extension" v-model="tab" centered slider-color="white">
-					<v-tab v-for="item in tabs" :key="item">
-						{{ item }}
-					</v-tab>
-				</v-tabs>
-			</v-app-bar>
-			<v-main>
-				<v-tabs-items v-model="tab">
-					<v-tab-item>
-						<v-container grid-list-md text-xs-center>
-							<v-layout row wrap>
-								<!-- Column A -->
-								<v-flex xs12 md6 offset-md3>
-									<p style="text-align: left">
-										<v-alert :value="true" type="info" style="font-size:16px">
-											{{ $t("message.activity_tip_1") }}
-										</v-alert>
-									</p>
-									<h3 class="text-xs-left">{{ $t("message.activity_data") }} </h3>
-									<v-card>
-										<v-form class="cardContent">
-											<v-text-field v-model="activity.name" label="Nome" required></v-text-field>
-											<v-text-field v-model="activity.description" label="Descrizione"></v-text-field>
-											<v-select v-model="defaultView" :items="viste" label="Vista predefinita" required></v-select>
-										</v-form>
-									</v-card>
-									<br><br>
-									<h3 class="text-xs-left">{{ $t("message.activity_typography") }} </h3>
-									<v-card>
-										<div class="cardContent">
-											<!--
+  <div>
+    <v-app id="inspire">
+      <sidebar></sidebar>
+      <v-app-bar color="indigo" dark fixed app>
+        <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
+        <v-app-bar-title v-if="!saved">{{ $t("message.activity_new") }} {{prefix}} {{activity.name}}</v-app-bar-title>
+        <v-app-bar-title v-else>{{ $t("message.activity_modify") }} {{prefix}} {{activity.name}}</v-app-bar-title>
+        <v-spacer></v-spacer>
+        <v-btn text @click="save()">
+          <v-icon>save</v-icon>
+          {{ $t("message.save") }}
+        </v-btn>
+        <v-tabs slot="extension" v-model="tab" centered slider-color="white">
+          <v-tab v-for="item in tabs" :key="item">
+            {{ item }}
+          </v-tab>
+        </v-tabs>
+      </v-app-bar>
+      <v-main>
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <!-- Column A -->
+                <v-flex xs12 md6 offset-md3>
+                  <p style="text-align: left">
+                    <v-alert :value="true" type="info" style="font-size:16px">
+                      {{ $t("message.activity_tip_1") }}
+                    </v-alert>
+                  </p>
+                  <h3 class="text-xs-left">{{ $t("message.activity_data") }} </h3>
+                  <v-card>
+                    <v-form class="cardContent">
+                      <v-text-field v-model="activity.name" label="Nome" required></v-text-field>
+                      <v-text-field v-model="activity.description" label="Descrizione"></v-text-field>
+                      <v-select v-model="defaultView" :items="viste" label="Vista predefinita" required></v-select>
+                    </v-form>
+                  </v-card>
+                  <br><br>
+                  <h3 class="text-xs-left">{{ $t("message.activity_typography") }} </h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <!--
 											<v-select :items="fontSizeLabels" v-model="activity.fontSize" label="Grandezza testo"></v-select>
 										-->
-											<v-switch :label="`Solo maiuscole`" v-model="activity.capsSwitch"></v-switch>
-											<!--
+                      <v-switch :label="`Solo maiuscole`" v-model="activity.capsSwitch"></v-switch>
+                      <!--
 											<v-layout row wrap>
 												<v-flex>
 													<v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
@@ -55,36 +55,36 @@
 												</v-flex>
 											</v-layout>
 										-->
-										</div>
-									</v-card>
-									<br><br>
-									<h3 class="text-xs-left">{{ $t("message.activity_typography_font_ui") }} </h3>
-									<v-card>
-										<div class="cardContent">
-											<span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
-											<v-radio-group v-model="activity.bodyFont" column>
-												<v-radio label="Roboto" value="Roboto"></v-radio>
-												<v-radio label="Open Sans" value="opensans"></v-radio>
-												<!--
+                    </div>
+                  </v-card>
+                  <br><br>
+                  <h3 class="text-xs-left">{{ $t("message.activity_typography_font_ui") }} </h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
+                      <v-radio-group v-model="activity.bodyFont" column>
+                        <v-radio label="Roboto" value="Roboto"></v-radio>
+                        <v-radio label="Open Sans" value="opensans"></v-radio>
+                        <!--
 												<v-radio label="Test Me (Altà leggibilità, indicato per dislessia)" value="testme"></v-radio>
 												<v-radio label="Open-Dyslexic (Altà leggibilità, indicato per dislessia)" value="open-dys"></v-radio>
 											-->
-											</v-radio-group>
-										</div>
-									</v-card>
-									<br><br>
-									<h3 class="text-xs-left">{{ $t("message.activity_typography_font_editor") }}</h3>
-									<v-card>
-										<div class="cardContent">
-											<span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
-											<v-radio-group v-model="activity.codeFont" column>
-												<v-radio label="Ubuntu Mono" value="ubuntumono"></v-radio>
-												<v-radio label="Roboto Mono" value="robotomono"></v-radio>
-											</v-radio-group>
-										</div>
-									</v-card>
-									<br><br>
-									<!--
+                      </v-radio-group>
+                    </div>
+                  </v-card>
+                  <br><br>
+                  <h3 class="text-xs-left">{{ $t("message.activity_typography_font_editor") }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
+                      <v-radio-group v-model="activity.codeFont" column>
+                        <v-radio label="Ubuntu Mono" value="ubuntumono"></v-radio>
+                        <v-radio label="Roboto Mono" value="robotomono"></v-radio>
+                      </v-radio-group>
+                    </div>
+                  </v-card>
+                  <br><br>
+                  <!--
 									<h3 class="text-xs-left">Lingua</h3>
 									<v-card>
 										<div class="cardContent">
@@ -94,7 +94,7 @@
 									</v-card>
 									<br><br>
 								-->
-									<!--
+                  <!--
 									<h3 class="text-xs-left">Viste disponibilità</h3>
 									<v-card>
 										<div class="cardContent">
@@ -113,8 +113,8 @@
 										</div>
 									</v-card>
 									-->
-									<br><br>
-									<!--
+                  <br><br>
+                  <!--
 									<h3 class="text-xs-left">Funzionalità sperimentali</h3>
 									<v-card>
 										<div class="cardContent">
@@ -132,132 +132,136 @@
 										</div>
 									</v-card>
 								-->
-								</v-flex>
-							</v-layout>
-						</v-container>
-					</v-tab-item>
-					<v-tab-item>
-						<v-container grid-list-md text-xs-center>
-							<v-flex xs12 md8 offset-md2>
-								<v-flex>
-									<h3> {{ $t("message.activity_toolbar_preview") }} </h3>
-									<v-app-bar>
-										<v-app-bar-nav-icon v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
-										<v-app-bar-title v-if="activity.showName">{{ activity.name || "Nome Attività"}}</v-app-bar-title>
-										<v-spacer></v-spacer>
-										<template v-for="button in activity.buttons">
-											<v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
-												{{ button.label }}
-												<v-icon right dark>{{ button.icon }}</v-icon>
-											</v-btn>
-											&nbsp;&nbsp;
-										</template>
-									</v-app-bar>
-									<br>
-									<v-switch label="Icona menù laterale" v-model="activity.drawerEnabled"></v-switch>
-									<v-switch label="Nome Attività" v-model="activity.showName"></v-switch>
-									<br>
-									<h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
-									<v-btn @click="addButton()" outlined color="green">
-										<v-icon>add</v-icon> {{ $t("message.activity_toolbar_buttons_add") }}
-									</v-btn>
-									<v-btn @click="restoreDefaults()" outlined color="blue">
-										<v-icon>undo</v-icon> {{ $t("message.activity_toolbar_buttons_predefined") }}
-									</v-btn>
-									<v-btn @click="removeAll()" outlined color="red">
-										<v-icon>clear</v-icon> {{ $t("message.activity_toolbar_buttons_remove_all") }}
-									</v-btn>
-									<br><br>
-									<div v-for="button, i in activity.buttons" :key="button.id">
-										<h3>Pulsante {{i + 1}}
-											<v-btn @click="removeButton(i)" text icon v-if="!button.notErasable">
-												<v-icon>clear</v-icon>
-											</v-btn>
-										</h3>
-										<v-card>
-											<div class="cardContent">
-												<span class="grey--text text--darken-2" v-if="button.notErasable"> {{ $t("message.activity_toolbar_buttons_cannot_remove_run") }} </span>
-												<v-text-field v-model="button.label" label="Etichetta"></v-text-field>
-												<v-select v-model="button.action" :items="actions" label="Azione" :disabled="button.notErasable">
-												</v-select>
-												<v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
-												<v-layout row wrap>
-													<v-flex xs4 style="text-align: left">
-														<span style="vertical-align: 55%"> {{ $t("message.activity_toolbar_buttons_color") }} &nbsp;&nbsp;</span>
-														<div style="display:inline-block">
-															<swatches popover-to="left" v-model="button.colorBtn"></swatches>
-														</div>
-													</v-flex>
-													<v-flex xs4 style="text-align: left">
-														{{ $t("message.activity_toolbar_buttons_icon") }} <v-btn style="margin:0" large text @click="b=i; iconPicker=true;" color="black">
-															<v-icon large color="black">{{ button.icon }}</v-icon>
-														</v-btn>
-													</v-flex>
-												</v-layout>
-												<v-divider></v-divider>
-												<br>
-												<v-btn :color="button.colorBtn" :class="button.colorText">
-													{{ button.label }}
-													<v-icon right dark>{{ button.icon }}</v-icon>
-												</v-btn>
-											</div>
-										</v-card>
-										<br>
-									</div>
-								</v-flex>
-							</v-flex>
-						</v-container>
-						<v-dialog v-model="iconPicker" max-width="600px">
-							<v-card>
-								<v-card-title class="headline">{{ $t("message.activity_toolbar_buttons_icon_select") }}</v-card-title>
-								<v-card-text>
-									<v-container>
-										<v-layout row wrap>
-											<template v-for="icon, i in iconList">
-												<v-flex xs1 :key="icon.id">
-													<v-icon large @click="activity.buttons[b].icon=icon; iconPicker = false">{{ icon }}</v-icon>
-												</v-flex>
-												<template v-if="i%10==0">
-													<br :key="i">
-												</template>
-											</template>
-										</v-layout>
-									</v-container>
-								</v-card-text>
-							</v-card>
-						</v-dialog>
-					</v-tab-item>
-					<!--
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-flex xs12 md8 offset-md2>
+                <v-flex>
+                  <h3> {{ $t("message.activity_toolbar_preview") }} </h3>
+                  <v-app-bar>
+                    <v-app-bar-nav-icon v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
+                    <v-app-bar-title v-if="activity.showName">{{ activity.name || "Nome Attività"}}</v-app-bar-title>
+                    <v-spacer></v-spacer>
+                    <template v-for="button in activity.buttons">
+                      <v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
+                        {{ button.label }}
+                        <v-icon right dark>{{ button.icon }}</v-icon>
+                      </v-btn>
+                      &nbsp;&nbsp;
+                    </template>
+                  </v-app-bar>
+                  <br>
+                  <v-switch label="Icona menù laterale" v-model="activity.drawerEnabled"></v-switch>
+                  <v-switch label="Nome Attività" v-model="activity.showName"></v-switch>
+                  <br>
+                  <h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
+                  <v-btn @click="addButton()" outlined color="green">
+                    <v-icon>add</v-icon> {{ $t("message.activity_toolbar_buttons_add") }}
+                  </v-btn>
+                  <v-btn @click="restoreDefaults()" outlined color="blue">
+                    <v-icon>undo</v-icon> {{ $t("message.activity_toolbar_buttons_predefined") }}
+                  </v-btn>
+                  <v-btn @click="removeAll()" outlined color="red">
+                    <v-icon>clear</v-icon> {{ $t("message.activity_toolbar_buttons_remove_all") }}
+                  </v-btn>
+                  <br><br>
+                  <div v-for="button, i in activity.buttons" :key="button.id">
+                    <h3>Pulsante {{i + 1}}
+                      <v-btn @click="removeButton(i)" text icon v-if="!button.notErasable">
+                        <v-icon>clear</v-icon>
+                      </v-btn>
+                    </h3>
+                    <v-card>
+                      <div class="cardContent">
+                        <span class="grey--text text--darken-2" v-if="button.notErasable">
+                          {{ $t("message.activity_toolbar_buttons_cannot_remove_run") }} </span>
+                        <v-text-field v-model="button.label" label="Etichetta"></v-text-field>
+                        <v-select v-model="button.action" :items="actions" label="Azione"
+                          :disabled="button.notErasable">
+                        </v-select>
+                        <v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
+                        <v-layout row wrap>
+                          <v-flex xs4 style="text-align: left">
+                            <span style="vertical-align: 55%"> {{ $t("message.activity_toolbar_buttons_color") }}
+                              &nbsp;&nbsp;</span>
+                            <div style="display:inline-block">
+                              <swatches popover-to="left" v-model="button.colorBtn"></swatches>
+                            </div>
+                          </v-flex>
+                          <v-flex xs4 style="text-align: left">
+                            {{ $t("message.activity_toolbar_buttons_icon") }} <v-btn style="margin:0" large text
+                              @click="b=i; iconPicker=true;" color="black">
+                              <v-icon large color="black">{{ button.icon }}</v-icon>
+                            </v-btn>
+                          </v-flex>
+                        </v-layout>
+                        <v-divider></v-divider>
+                        <br>
+                        <v-btn :color="button.colorBtn" :class="button.colorText">
+                          {{ button.label }}
+                          <v-icon right dark>{{ button.icon }}</v-icon>
+                        </v-btn>
+                      </div>
+                    </v-card>
+                    <br>
+                  </div>
+                </v-flex>
+              </v-flex>
+            </v-container>
+            <v-dialog v-model="iconPicker" max-width="600px">
+              <v-card>
+                <v-card-title class="headline">{{ $t("message.activity_toolbar_buttons_icon_select") }}</v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-layout row wrap>
+                      <template v-for="icon, i in iconList">
+                        <v-flex xs1 :key="icon.id">
+                          <v-icon large @click="activity.buttons[b].icon=icon; iconPicker = false">{{ icon }}</v-icon>
+                        </v-flex>
+                        <template v-if="i%10==0">
+                          <br :key="i">
+                        </template>
+                      </template>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+          </v-tab-item>
+          <!--
 					<v-tab-item>
 						<wsFactory />
 					</v-tab-item>
 				-->
-					<v-tab-item>
-						<v-container grid-list-md text-xs-center>
-							<v-layout row wrap>
-								<!-- Column A -->
-								<v-flex xs12 md6 offset-md3>
-									<h3 class="text-xs-left">{{ $t("message.activity_views") }}</h3>
-									<v-card>
-										<v-form class="cardContent">
-											<v-switch label="Camera" v-model="activity.exec.camera"></v-switch>
-											<v-switch label="Log" v-model="activity.exec.log"></v-switch>
-										</v-form>
-									</v-card>
-								</v-flex>
-							</v-layout>
-						</v-container>
-					</v-tab-item>
-					<v-tab-item>
-						<wsFactory />
-					</v-tab-item>
-				</v-tabs-items>
-			</v-main>
-		</v-app>
-		<v-snackbar v-model="snackbar">
-			{{ snackbarText }}
-		</v-snackbar>
-	</div>
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <!-- Column A -->
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t("message.activity_views_title") }}</h3>
+                  <v-card>
+                    <v-form class="cardContent">
+                      <v-switch v-bind:label='$t("message.activity_views_runtime_camera")' v-model="activity.exec.camera"></v-switch>
+                      <v-switch v-bind:label='$t("message.activity_views_runtime_log")' v-model="activity.exec.log"></v-switch>
+                    </v-form>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+          <v-tab-item>
+            <wsFactory />
+          </v-tab-item>
+        </v-tabs-items>
+      </v-main>
+    </v-app>
+    <v-snackbar v-model="snackbar">
+      {{ snackbarText }}
+    </v-snackbar>
+  </div>
 </template>
 <script>
 import Swatches from 'vue-swatches';
@@ -268,14 +272,19 @@ import sidebar from '../components/Sidebar';
 
 export default {
   name: 'ActivityEditor',
-  components: { Swatches, sidebar/* , wsFactory */ },
+  components: {
+    Swatches,
+    sidebar /* , wsFactory */
+  },
   computed: {
     prefix() {
       if (this.activity.name != null && this.activity.name != '') return '-';
       return '';
     },
     bodyUIstyleObj() {
-      const { bodyFont } = this.activity;
+      const {
+        bodyFont
+      } = this.activity;
       let fontFamily = '';
       if (bodyFont == 'opensans') fontFamily = 'Open Sans';
       else if (bodyFont == 'roboto') fontFamily = 'Roboto';
@@ -289,7 +298,9 @@ export default {
       return obj;
     },
     codeUIstyleObj() {
-      const { codeFont } = this.activity;
+      const {
+        codeFont
+      } = this.activity;
       let fontFamily = '';
       if (codeFont == 'ubuntumono') fontFamily = 'Ubuntu Mono';
       else if (codeFont == 'robotomono') fontFamily = 'Roboto Mono';
@@ -343,7 +354,8 @@ export default {
         'volume_up',
         'clear',
         'block',
-        'add'],
+        'add'
+      ],
       snackbarText: '',
       b: 0,
       activity: {
@@ -363,23 +375,45 @@ export default {
 
       },
       colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black', 'grey', 'black', 'white'],
-      textColors: [{
-        text: 'Bianco',
-        value: 'white--text',
-      },
-      {
-        text: 'Nero',
-        value: 'black--text',
-      },
+      textColors: [
+        {
+          text: 'Bianco',
+          value: 'white--text',
+        },
+        {
+          text: 'Nero',
+          value: 'black--text',
+        },
       ],
       actions: [
-        { text: 'Esegui', value: 'runProgramLegacy' },
-        { text: 'Salva', value: 'saveProgram' },
-        { text: 'Carica Programma', value: 'loadProgramList' },
-        { text: 'Esporta', value: 'exportProgram' },
-        { text: 'Importa', value: 'pickFile' },
-        { text: 'Salva con Nome', value: 'toggleSaveAs' },
-        { text: 'Mostra Codice', value: 'getProgramCode' },
+        {
+          text: this.$i18n.t('message.activity_program_run'),
+          value: 'runProgramLegacy'
+        },
+        {
+          text: this.$i18n.t('message.activity_program_save'),
+          value: 'saveProgram'
+        },
+        {
+          text: this.$i18n.t('message.activity_program_load'),
+          value: 'loadProgramList'
+        },
+        {
+          text: this.$i18n.t('message.activity_program_export'),
+          value: 'exportProgram'
+        },
+        {
+          text: this.$i18n.t('message.activity_program_import'),
+          value: 'pickFile'
+        },
+        {
+          text: this.$i18n.t('message.activity_program_save_as'),
+          value: 'toggleSaveAs'
+        },
+        {
+          text: this.$i18n.t('message.activity_program_show_code'),
+          value: 'getProgramCode'
+        },
       ],
       value: 0,
       fontSizeLabels: [
@@ -408,34 +442,49 @@ export default {
       experimental: true,
       stepbystep: false,
       tab: null,
-      tabs: ['Generali', 'Barra degli Strumenti', 'Vista Esecuzione'],
-      // tabs: ['Generali', 'Barra degli Strumenti', 'Palette Comandi', 'Vista Esecuzione'],
+      tabs: [
+        this.$i18n.t('message.activity_tabs_general'),
+        this.$i18n.t('message.activity_tabs_toolbar'),
+        this.$i18n.t('message.activity_tabs_runtime')
+      ],
       ar: false,
       // drawer: null,
       source: null,
       msg: 'Welcome to Your Vue.js App',
       defaultView: 'blocks',
       viste: [
-        { text: 'Blocchi', value: 'blocks' },
-        { text: 'Esecuzione', value: 'exec', disabled: true },
-        { text: 'Python', value: 'python', disabled: true },
+        {
+          text: this.$i18n.t('message.activity_views_blocks'),
+          value: 'blocks'
+        },
+        {
+          text: this.$i18n.t('message.activity_views_runtime'),
+          value: 'exec',
+          disabled: true
+        },
+        {
+          text: this.$i18n.t('message.activity_views_python'),
+          value: 'python',
+          disabled: true
+        },
       ],
     };
   },
   mounted() {
     if (this.$route.params.name) {
       const axios = this.$axios;
-      const { CB } = this;
+      const {
+        CB
+      } = this;
       console.log('Loading activity', this.$route.params.name);
       this.saved = true;
       axios.get(`${CB}/loadActivity`, {
         params: {
           name: this.$route.params.name,
         },
-      })
-        .then((response) => {
-          this.activity = response.data;
-        });
+      }).then((response) => {
+        this.activity = response.data;
+      });
     } else {
       this.restoreDefaults();
     }
@@ -444,17 +493,18 @@ export default {
     save() {
       if (this.activity.name) {
         const axios = this.$axios;
-        const { CB } = this;
+        const {
+          CB
+        } = this;
         axios.post(`${CB}/saveActivity`, {
           activity: this.activity,
-        })
-          .then(() => {
-            this.snackbarText = 'Attività salvata';
-            this.snackbar = true;
-            this.saved = true;
-          });
+        }).then(() => {
+          this.snackbarText = this.$i18n.t('activity_saved');
+          this.snackbar = true;
+          this.saved = true;
+        });
       } else {
-        this.snackbarText = "Salvataggio non riuscito: inserisci un nome all'attività!";
+        this.snackbarText = this.$i18n.t('activity_save_error');
         this.snackbar = true;
       }
     },
@@ -471,37 +521,38 @@ export default {
       this.activity.buttons.splice(index, 1);
     },
     removeAll() {
-      this.activity.buttons = [{
-        label: 'Esegui',
-        icon: 'play_arrow',
-        colorBtn: 'green',
-        colorText: 'white--text',
-        action: 'runProgramLegacy',
-        notErasable: true,
-      },
+      this.activity.buttons = [
+        {
+          label: this.$i18n.t('message.activity_program_run'),
+          icon: 'play_arrow',
+          colorBtn: 'green',
+          colorText: 'white--text',
+          action: 'runProgramLegacy',
+          notErasable: true
+        },
       ];
     },
     restoreDefaults() {
-      this.activity.buttons = [{
-        label: 'Esegui',
-        icon: 'play_arrow',
-        colorBtn: 'green',
-        colorText: 'white--text',
-        action: 'runProgramLegacy',
-        notErasable: true,
-      },
-      {
-        label: 'Salva',
-        icon: 'save',
-        colorBtn: 'blue',
-        colorText: 'white--text',
-        action: 'saveProgram',
-      },
+      this.activity.buttons = [
+        {
+          label: this.$i18n.t('message.activity_program_run'),
+          icon: 'play_arrow',
+          colorBtn: 'green',
+          colorText: 'white--text',
+          action: 'runProgramLegacy',
+          notErasable: true,
+        },
+        {
+          label: this.$i18n.t('message.activity_program_save'),
+          icon: 'save',
+          colorBtn: 'blue',
+          colorText: 'white--text',
+          action: 'saveProgram',
+        },
       ];
     },
   },
 };
-
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

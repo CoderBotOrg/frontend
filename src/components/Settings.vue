@@ -1,11 +1,11 @@
 <template>
-	<div>
-		<v-app id="inspire">
-			<sidebar></sidebar>
-			<v-app-bar color="indigo" dark fixed app>
-				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-				<v-app-bar-title>Impostazioni</v-app-bar-title>
-				<v-spacer></v-spacer>
+  <div>
+    <v-app id="inspire">
+      <sidebar></sidebar>
+      <v-app-bar color="indigo" dark fixed app>
+        <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
+        <v-app-bar-title>{{ $t("message.settings_title") }}</v-app-bar-title>
+        <v-spacer></v-spacer>
         <template v-if="status == 200">
           <v-btn text @click="save">
             <v-icon>save</v-icon>
@@ -17,530 +17,532 @@
             <v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
           </v-btn>
         </template>
-				<v-tabs slot="extension" v-model="tab" centered slider-color="white">
-					<v-tab v-for="item in tabs" :key="item">
-						{{ item }}
-					</v-tab>
-				</v-tabs>
-			</v-app-bar>
-			<v-main>
-				<!--<template v-if="status == 200">-->
-					<v-tabs-items v-model="tab">
-						<v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap>
-									<!-- Column A -->
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Sistema </h3>
-										<v-card>
-											<div class="cardContent">
-												<v-select v-model="settings.progLevel" :items="blocklyToolboxItems" label="Livello Toolbox Blockly"></v-select>
-												<!--<v-text-field v-model="settings.cbName" label="Nome CoderBot"></v-text-field>
+        <v-tabs slot="extension" v-model="tab" centered slider-color="white">
+          <v-tab v-for="item in tabs" :key="item">
+            {{ item }}
+          </v-tab>
+        </v-tabs>
+      </v-app-bar>
+      <v-main>
+        <!--<template v-if="status == 200">-->
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <!-- Column A -->
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t("message.settings_system") }} </h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-select v-model="settings.progLevel" :items="blocklyToolboxItems"
+                        v-bind:label="$t('message.settings_toolbox_level')"></v-select>
+                      <!--<v-text-field v-model="settings.cbName" v-bind:label="Nome CoderBot"></v-text-field>
 												<br>-->
-												<div v-for="(value, key) in cb.info" :key="key">
-													{{ key }}: <code>{{ value }}</code>
-												</div>
-												Vue app commit build: <code> {{ lastCommit }} </code>
-											</div>
-										</v-card>
-										<br>
-										<h3 class="text-xs-left">Stato </h3>
-										<v-card>
-											<div class="cardContent">
-												<div v-for="(value, key) in cb.status" :key="key">
-													<div v-if="key != 'log'">
-														{{ key }}: <code>{{ value }}</code>
-													</div>
-												</div>
-												<br>
-											</div>
-										</v-card>
-										<br>
-										<h3 class="text-xs-left"> Azioni </h3>
-										<v-card>
-											<div class="cardContent text-xs-center">
-												<v-btn @click="shutdown" color="info">
-													<v-icon>fas fa-power-off</v-icon> Spegni
-												</v-btn>
-												<v-btn @click="reboot" color="info">
-													<v-icon>fas fa-redo</v-icon> Riavvia
-												</v-btn>
-												<v-btn @click="restoreConfig" color="warning">
-													<v-icon>fas fa-redo</v-icon> Ripristina Impostazioni
-												</v-btn>
-												<!-- ** Restore button + dialog box** -->
-                        <v-dialog v-model="dialog" width="500">
-                          <!-- eslint-disable-next-line vue/no-unused-vars -->
-                          <template v-slot:activator="data">
-                            <v-btn slot="activator" color="error" dark>
-                              <v-icon>fas fa-wrench</v-icon> Ripristina ad impostazioni di fabbrica
-                            </v-btn>
-                            <v-card>
-                              <v-card-title class="headline grey lighten-2" primary-title>
-                                <h3>CoderBot - Restore</h3>
-                              </v-card-title>
-                              <v-card-text>
-                                Sei sicuro di voler ripristinare il CoderBot?
-                                <br>
-                                <h3><b>Tutti i file salvati verranno cancellati</b></h3>
-                              </v-card-text>
-                              <v-divider></v-divider>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="primary" @click="dialog = false">
-                                  Esci
-                                </v-btn>
-                                <v-btn color="error" @click="restore">
-                                  <b>Ripristina</b>
-                                </v-btn>
-                              </v-card-actions>
-                            </v-card>
-                          </template>
-                        </v-dialog>
-												<!-- Logs -->
-                        <v-dialog v-model="dialog_logs" width="700">
-                          <!-- eslint-disable-next-line vue/no-unused-vars -->
-                          <template v-slot:activator="data">
-                            <v-btn slot="activator" color="warning" dark>
-                              <v-icon>fas fa-file-signature</v-icon> Show logs
-                            </v-btn>
-                            <v-card>
-                              <v-card-title class="headline grey lighten-2" primary-title>
-                                <h3>CoderBot - Logs</h3>
-                              </v-card-title>
-                              <div class="cardContent">
-                                <div v-for="value, key in cb.logs.log" :key="key">
-                                  {{ value }}
-                                </div>
-                              </div>
-                              <v-divider></v-divider>
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="primary" @click="dialog_logs = false">
-                                  Esci
-                                </v-btn>
-                              </v-card-actions>
-                            </v-card>
+                      <div v-for="(value, key) in cb.info" :key="key">
+                        {{ key }}: <code>{{ value }}</code>
+                      </div>
+                      {{ $t('message.settings_frontend_build') }}: <code> {{ lastCommit }} </code>
+                    </div>
+                  </v-card>
+                  <br>
+                  <h3 class="text-xs-left">Stato </h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <div v-for="(value, key) in cb.status" :key="key">
+                        <div v-if="key != 'log'">
+                          {{ key }}: <code>{{ value }}</code>
+                        </div>
+                      </div>
+                      <br>
+                    </div>
+                  </v-card>
+                  <br>
+                  <h3 class="text-xs-left"> {{ $t('message.settings_actions') }} </h3>
+                  <v-card>
+                    <div class="cardContent text-xs-center">
+                      <v-btn @click="shutdown" color="info">
+                        <v-icon>fas fa-power-off</v-icon> {{ $t('message.settings_actions_off') }}
+                      </v-btn>
+                      <v-btn @click="reboot" color="info">
+                        <v-icon>fas fa-redo</v-icon> {{ $t('message.settings_actions_restart') }}
+                      </v-btn>
+                      <v-btn @click="restoreConfig" color="warning">
+                        <v-icon>fas fa-redo</v-icon> {{ $t('message.settings_actions_reset') }}
+                      </v-btn>
+                      <!-- ** Restore button + dialog box** -->
+                      <v-dialog v-model="dialog" width="500">
+                        <!-- eslint-disable-next-line vue/no-unused-vars -->
+                        <template v-slot:activator="data">
+                          <v-btn slot="activator" color="error" dark>
+                            <v-icon>fas fa-wrench</v-icon> {{ $t('message.settings_action_reset_factory') }}
+                          </v-btn>
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2" primary-title>
+                              <h3>CoderBot - {{ $t('message.settings_actions_reset_factory_title') }}</h3>
+                            </v-card-title>
+                            <v-card-text>
+                              {{ $t('message.settings_actions_reset_factory_text_1') }}
+                              <br>
+                              <h3><b>{{ $t('message.settings_actions_reset_factory_text_1') }}</b></h3>
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" @click="dialog = false">
+                                {{ $t('message.cancel') }}
+                              </v-btn>
+                              <v-btn color="error" @click="restore">
+                                <b>{{ $t('message.settings_actions_reset_factory_restore') }}</b>
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
                         </template>
-                          </v-dialog>
-												<!--
-												<v-btn color="warning">Aggiorna</v-btn>
-												<v-btn color="error">Ripristina ad Impostazioni di fabbrica</v-btn> -->
-											</div>
-										</v-card>
-										<br>
-										<h3 class="text-xs-left"> Aggiornamento </h3>
-										<v-card>
-											<div class="cardContent">
-												<template v-if="updateStatus==1">
-													Caricamento del file:
-													<h3>{{ counter }} %</h3>
-													<br>
-													{{ updateStatusText }}
-												</template>
-												<template v-if="updateStatus==2">
-												</template>
-												<template v-if="updateStatus==0">
-													<v-text-field label="Seleziona il pacchetto di aggiornamento" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
-													<input type="file" style="display: none" ref="file" @change="onFilePicked">
-													<template v-if="this.fileObj">CoderBot verrà riavviato per applicare l'aggiornamento.<br></template>
-													<v-btn v-if="this.fileObj" @click="upload" color="error">Conferma</v-btn>
-												</template>
-											</div>
-										</v-card>
-										<br><br>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-tab-item>
-						<v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap>
-									<!-- Column A -->
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">In modalità controllo</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-text-field v-model="settings.ctrlFwdSpeed" label="Forward speed" />
-												<v-text-field v-model="settings.ctrlFwdElapse" label="Forward elapse / distance" />
-												<v-text-field v-model="settings.ctrlTurnSpeed" label="Turn speed" />
-												<v-text-field v-model="settings.ctrlTurnElapse" label="Turn elapse / angle" />
-											</div>
-										</v-card>
-										<br><br>
-										<h3 class="text-xs-left">In modalità programmazione</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-text-field v-model="settings.moveFwdSpeed" label="Forward speed" />
-												<v-text-field v-model="settings.moveFwdElapse" label="Forward elapse / distance" />
-												<v-text-field v-model="settings.moveTurnSpeed" label="Turn speed" />
-												<v-text-field v-model="settings.moveTurnElapse" label="Turn elapse / angle" />
-											</div>
-										</v-card>
-										<br><br>
-										<h3 class="text-xs-left">Parametri Motori</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-text-field v-model="settings.motorMode" label="Motor control mode" />
-												<v-text-field v-model="settings.trimFactor" label="Trim factor (1.0 = center)" />
-												<v-text-field v-model="settings.power[0]" label="Power (target angle -15)" />
-												<v-text-field v-model="settings.power[1]" label="Power (target angle -4)" />
-												<v-text-field v-model="settings.power[2]" label="Power (target angle -1)" />
-											</div>
-										</v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-tab-item>
-						<v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap>
-									<!-- Column A -->
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Suoni personalizzati</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-text-field v-model="settings.startSound" label="Avvio" />
-												<v-text-field v-model="settings.stopSound" label="Stop" />
-												<v-text-field v-model="settings.shutterSound" label="Otturatore" />
-											</div>
-										</v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-tab-item>
-						<v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap>
-									<!-- Column A -->
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Funzione pulsante fisico</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-radio-group v-model="settings.btnFun" column>
-													<v-radio label="Nessuno" value="none" />
-													<v-radio label="Inizia/Interrompi programma corrente" value="startstop" />
-												</v-radio-group>
-											</div>
-										</v-card>
-										<br>
-										<h3 class="text-xs-left">Carica all'avvio</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-text-field v-model="settings.startupProgram" label="Nome script" />
-											</div>
-										</v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-tab-item>
-						<v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap>
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Configurazione di Rete</h3>
-										<v-card>
-											<div class="cardContent">
-												<v-radio-group v-model="settings.wifiMode" column>
-													<v-radio label="Connetti ad una rete WiFi già esistente (client)" value="client"></v-radio>
-													<v-radio label="Lascia che CoderBot configuri la propria rete WiFi locale (ad-hoc)" value="ap"></v-radio>
-                          <v-text-field v-model="settings.wifiSSID" label="SSID"></v-text-field>
-                          <v-text-field v-model="settings.wifiPsw" label="Password"></v-text-field>
-												</v-radio-group>
-                        <v-card-actions>
-                          <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
-                              <v-dialog v-model="dialog" max-width="290">
-                                <v-card>
-                                  <v-card-title class="text-h5">
-                                    Attenzione!
-                                  </v-card-title>
-                                  <v-card-text>
-                                    Questa operazione cambierà la configurazione di CoderBot che sarà poi riavviato.
-                                  </v-card-text>
-                                  <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                      color="secondary"
-                                      @click="dialog = false"
-                                    >
-                                      Annulla
-                                    </v-btn>
-                                    <v-btn
-                                      color="primary"
-                                      @click="dialog = false; saveWifi"
-                                    >
-                                      Ok
-                                    </v-btn>
-                                  </v-card-actions>
-                                </v-card>
-                              </v-dialog>
-                        </v-card-actions>
-											</div>
-										</v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-							<v-card-text>
-							</v-card-text>
-						</v-tab-item>
-            <!-- TEST TAB -->
-            <v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap align-center>
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">COMPONENTS TESTS</h3>
-										<v-card>
+                      </v-dialog>
+                      <!-- Logs -->
+                      <v-dialog v-model="dialog_logs" width="700">
+                        <!-- eslint-disable-next-line vue/no-unused-vars -->
+                        <template v-slot:activator="data">
+                          <v-btn slot="activator" color="warning" dark>
+                            <v-icon>fas fa-file-signature</v-icon> {{ $t('message.settings_actions_show_logs') }}
+                          </v-btn>
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2" primary-title>
+                              <h3>CoderBot - {{ $t('message.settings_actions_show_logs_title') }}</h3>
+                            </v-card-title>
+                            <div class="cardContent">
+                              <div v-for="value, key in cb.logs.log" :key="key">
+                                {{ value }}
+                              </div>
+                            </div>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" @click="dialog_logs = false">
+                                {{ $t('message.close') }}
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-dialog>
+                    </div>
+                  </v-card>
+                  <br>
+                  <h3 class="text-xs-left"> {{ $t('message.settings_actions_update_title') }} </h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <template v-if="updateStatus==1">
+                        {{ $t('message.settings_update_upload') }}
+                        <h3>{{ counter }} %</h3>
+                        <br>
+                        {{ updateStatusText }}
+                      </template>
+                      <template v-if="updateStatus==2">
+                      </template>
+                      <template v-if="updateStatus==0">
+                        <v-text-field v-bind:label="$t('message.settings_update_upload')" @click='pickFile' v-model='fileName'
+                          prepend-icon='attach_file'></v-text-field>
+                        <input type="file" style="display: none" ref="file" @change="onFilePicked">
+                        <template v-if="this.fileObj">{{ $t('message.settings_update_text') }}<br></template>
+                        <v-btn v-if="this.fileObj" @click="upload" color="error">{{ $t('message.ok') }}</v-btn>
+                      </template>
+                    </div>
+                  </v-card>
+                  <br><br>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <!-- Column A -->
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_movement_control') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-text-field v-model="settings.ctrlFwdSpeed"
+                        v-bind:label="$t('message.settings_movement_control_forward_speed')" />
+                      <v-text-field v-model="settings.ctrlFwdElapse"
+                        v-bind:label="$t('message.settings_movement_control_forward_elapse')" />
+                      <v-text-field v-model="settings.ctrlTurnSpeed"
+                        v-bind:label="$t('message.settings_movement_control_turn_speed')" />
+                      <v-text-field v-model="settings.ctrlTurnElapse"
+                        v-bind:label="$t('message.settings_movement_control_turn_elapse')" />
+                    </div>
+                  </v-card>
+                  <br><br>
+                  <h3 class="text-xs-left">{{ $t('message.settings_movement_program') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-text-field v-model="settings.moveFwdSpeed"
+                        v-bind:label="$t('message.settings_movement_program_forward_speed')" />
+                      <v-text-field v-model="settings.moveFwdElapse"
+                        v-bind:label="$t('message.settings_movement_program_forward_elapse')" />
+                      <v-text-field v-model="settings.moveTurnSpeed"
+                        v-bind:label="$t('message.settings_movement_program_turn_speed')" />
+                      <v-text-field v-model="settings.moveTurnElapse"
+                        v-bind:label="$t('message.settings_movement_program_turn_elapse')" />
+                    </div>
+                  </v-card>
+                  <br><br>
+                  <h3 class="text-xs-left">{{ $t('message.settings_movement_parameters') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-text-field v-model="settings.motorMode"
+                        v-bind:label="$t('message.settings_movement_parameters_mode')" />
+                      <v-text-field v-model="settings.trimFactor"
+                        v-bind:label="$t('message.settings_movement_parameters_trim')" />
+                      <v-text-field v-model="settings.power[0]"
+                        v-bind:label="$t('message.settings_movement_parameters_power_1')" />
+                      <v-text-field v-model="settings.power[1]"
+                        v-bind:label="$t('message.settings_movement_parameters_power_2')" />
+                      <v-text-field v-model="settings.power[2]"
+                        v-bind:label="$t('message.settings_movement_parameters_power_3')" />
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <!-- Column A -->
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_sounds_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-text-field v-model="settings.startSound" v-bind:label="$t('message.settings_sounds_start')" />
+                      <v-text-field v-model="settings.stopSound" v-bind:label="$t('message.settings_sounds_stop')" />
+                      <v-text-field v-model="settings.shutterSound" v-bind:label="$t('message.settings_sounds_shutter')" />
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <!-- Column A -->
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_button_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-radio-group v-model="settings.btnFun" column>
+                        <v-radio v-bind:label="$t('message.settings_button_none')" value="none" />
+                        <v-radio v-bind:label="$t('message.settings_button_startstop')" value="startstop" />
+                      </v-radio-group>
+                    </div>
+                  </v-card>
+                  <br>
+                  <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-text-field v-model="settings.startupProgram" v-bind:label="$t('message.settings_load_at_start_title')" />
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-radio-group v-model="settings.wifiMode" column>
+                        <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client"></v-radio>
+                        <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap">
+                        </v-radio>
+                        <v-text-field v-model="settings.wifiSSID" v-bind:label="SSID"></v-text-field>
+                        <v-text-field v-model="settings.wifiPsw" v-bind:label="Password"></v-text-field>
+                      </v-radio-group>
+                      <v-card-actions>
+                        <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
+                        <v-dialog v-model="dialog" max-width="290">
+                          <v-card>
+                            <v-card-title class="text-h5">
+                              {{ $t('message.settings_network_save_title') }}
+                            </v-card-title>
+                            <v-card-text>
+                              {{ $t('message.settings_network_save_text_1') }}
+                            </v-card-text>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="secondary" @click="dialog = false">
+                                {{ $t('message.cancel') }}
+                              </v-btn>
+                              <v-btn color="primary" @click="dialog = false; saveWifi">
+                                {{ $t('message.ok') }}
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                      </v-card-actions>
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+            <v-card-text>
+            </v-card-text>
+          </v-tab-item>
+          <!-- TEST TAB -->
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap align-center>
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_component_test_title') }}</h3>
+                  <v-card>
 
-											<div class="cardContent">
-												<div id='test_array'>
-                          <!-- SONAR -->
-                          <v-layout row wrap justify-center>
-                              <!-- switch -->
-                              <v-flex xs12 offset-md2 md5>
-                                  <v-switch label="Sonar" value="sonar" v-model="checkedTests" color="orange"></v-switch>
-                              </v-flex>
-                              <!-- button state -->
-                              <v-flex xs12 md4>
-                                  <span v-if="cb.logs.test != null && cb.logs.test.sonar != 0">
-                                      <!-- passed -->
-                                      <span v-if="cb.logs.test.sonar == 1">
-                                          <v-btn @click="runTests" slot="activator" color="green" dark>
-                                              <v-icon>fas fa-check</v-icon> Passed
-                                          </v-btn>
-                                      </span>
-                                      <!-- failed -->
-                                      <span v-else>
-                                          <v-btn @click="runTests" slot="activator" color="red" dark>
-                                              <v-icon>fas fa-times</v-icon> Failed
-                                          </v-btn>
-                                      </span>
-                                  </span>
-                                  <!-- not tested -->
-                                  <span v-else>
-                                      <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                          <v-icon>fas fa-question</v-icon> Not tested
-                                      </v-btn>
-                                  </span>
-                              </v-flex>
-                          </v-layout>
-                                <!-- MOTORS -->
-                                <v-layout row wrap justify-center>
-                                    <!-- switch -->
-                                    <v-flex xs12 offset-md2 md5>
-                                        <v-switch label="Motors" value="motors" v-model="checkedTests" color="orange">
-                                        </v-switch>
-                                    </v-flex>
-                                    <!-- button state -->
-                                    <v-flex xs12 md4>
-                                        <span v-if="cb.logs.test != null && cb.logs.test.motors != 0">
-                                            <!-- passed -->
-                                            <span v-if="cb.logs.test.motors== 1">
-                                                <v-btn @click="runTests" slot="activator" color="green" dark>
-                                                    <v-icon>fas fa-check</v-icon> Passed
-                                                </v-btn>
-                                            </span>
-                                            <!-- failed -->
-                                            <span v-else>
-                                                <v-btn @click="runTests" slot="activator" color="red" dark>
-                                                    <v-icon>fas fa-times</v-icon> Failed
-                                                </v-btn>
-                                            </span>
-                                        </span>
-                                        <!-- not tested -->
-                                        <span v-else>
-                                            <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                                <v-icon>fas fa-question</v-icon> Not tested
-                                            </v-btn>
-                                        </span>
-                                    </v-flex>
-                                </v-layout>
+                    <div class="cardContent">
+                      <div id='test_array'>
+                        <!-- SONAR -->
+                        <v-layout row wrap justify-center>
+                          <!-- switch -->
+                          <v-flex xs12 offset-md2 md5>
+                            <v-switch v-bind:label="Sonar" value="sonar" v-model="checkedTests" color="orange"></v-switch>
+                          </v-flex>
+                          <!-- button state -->
+                          <v-flex xs12 md4>
+                            <span v-if="cb.logs.test != null && cb.logs.test.sonar != 0">
+                              <!-- passed -->
+                              <span v-if="cb.logs.test.sonar == 1">
+                                <v-btn @click="runTests" slot="activator" color="green" dark>
+                                  <v-icon>fas fa-check</v-icon> {{ $t('message.settings_component_test_passed') }}
+                                </v-btn>
+                              </span>
+                              <!-- failed -->
+                              <span v-else>
+                                <v-btn @click="runTests" slot="activator" color="red" dark>
+                                  <v-icon>fas fa-times</v-icon> {{ $t('message.settings_component_test_failed') }}
+                                </v-btn>
+                              </span>
+                            </span>
+                            <!-- not tested -->
+                            <span v-else>
+                              <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                <v-icon>fas fa-question</v-icon> {{ $t('message.settings_component_test_not_tested') }}
+                              </v-btn>
+                            </span>
+                          </v-flex>
+                        </v-layout>
+                        <!-- MOTORS -->
+                        <v-layout row wrap justify-center>
+                          <!-- switch -->
+                          <v-flex xs12 offset-md2 md5>
+                            <v-switch v-bind:label="Motors" value="motors" v-model="checkedTests" color="orange">
+                            </v-switch>
+                          </v-flex>
+                          <!-- button state -->
+                          <v-flex xs12 md4>
+                            <span v-if="cb.logs.test != null && cb.logs.test.motors != 0">
+                              <!-- passed -->
+                              <span v-if="cb.logs.test.motors== 1">
+                                <v-btn @click="runTests" slot="activator" color="green" dark>
+                                  <v-icon>fas fa-check</v-icon> {{ $t('message.settings_component_test_passed') }}
+                                </v-btn>
+                              </span>
+                              <!-- failed -->
+                              <span v-else>
+                                <v-btn @click="runTests" slot="activator" color="red" dark>
+                                  <v-icon>fas fa-times</v-icon> {{ $t('message.settings_component_test_not_failed') }}
+                                </v-btn>
+                              </span>
+                            </span>
+                            <!-- not tested -->
+                            <span v-else>
+                              <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                <v-icon>fas fa-question</v-icon> {{ $t('message.settings_component_test_not_tested') }}
+                              </v-btn>
+                            </span>
+                          </v-flex>
+                        </v-layout>
 
-                                <!-- SPEAKER -->
-                                <v-layout row wrap justify-center>
-                                    <!-- switch -->
-                                    <v-flex xs12 offset-md2 md5>
-                                        <v-switch label="Speaker" value="speaker" v-model="checkedTests" color="orange">
-                                        </v-switch>
-                                    </v-flex>
-                                    <!-- button state -->
-                                    <v-flex xs12 md4>
-                                        <span v-if="cb.logs.test != null && cb.logs.test.speaker != 0">
-                                            <!-- passed -->
-                                            <span v-if="cb.logs.test.speaker== 1">
-                                                <v-btn @click="runTests" slot="activator" color="green" dark>
-                                                    <v-icon>fas fa-check</v-icon> Passed
-                                                </v-btn>
-                                            </span>
-                                            <!-- failed -->
-                                            <span v-else>
-                                                <v-btn @click="runTests" slot="activator" color="red" dark>
-                                                    <v-icon>fas fa-times</v-icon> Failed
-                                                </v-btn>
-                                            </span>
-                                        </span>
-                                        <!-- not tested -->
-                                        <span v-else>
-                                            <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                                <v-icon>fas fa-question</v-icon> Not tested
-                                            </v-btn>
-                                        </span>
-                                    </v-flex>
-                                </v-layout>
+                        <!-- SPEAKER -->
+                        <v-layout row wrap justify-center>
+                          <!-- switch -->
+                          <v-flex xs12 offset-md2 md5>
+                            <v-switch v-bind:label="Speaker" value="speaker" v-model="checkedTests" color="orange">
+                            </v-switch>
+                          </v-flex>
+                          <!-- button state -->
+                          <v-flex xs12 md4>
+                            <span v-if="cb.logs.test != null && cb.logs.test.speaker != 0">
+                              <!-- passed -->
+                              <span v-if="cb.logs.test.speaker== 1">
+                                <v-btn @click="runTests" slot="activator" color="green" dark>
+                                  <v-icon>fas fa-check</v-icon> {{ $t('message.settings_component_test_passed') }}
+                                </v-btn>
+                              </span>
+                              <!-- failed -->
+                              <span v-else>
+                                <v-btn @click="runTests" slot="activator" color="red" dark>
+                                  <v-icon>fas fa-times</v-icon> {{ $t('message.settings_component_test_not_failed') }}
+                                </v-btn>
+                              </span>
+                            </span>
+                            <!-- not tested -->
+                            <span v-else>
+                              <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                <v-icon>fas fa-question</v-icon> {{ $t('message.settings_component_test_not_tested') }}
+                              </v-btn>
+                            </span>
+                          </v-flex>
+                        </v-layout>
 
-                                <!-- OCR -->
-                                <v-layout row wrap justify-center>
-                                    <!-- switch -->
-                                    <v-flex xs12 offset-md2 md5>
-                                        <v-switch label="OCR" value="ocr" v-model="checkedTests" color="orange">
-                                        </v-switch>
-                                    </v-flex>
-                                    <!-- button state -->
-                                    <v-flex xs12 md4>
-                                        <span v-if="cb.logs.test != null && cb.logs.test.ocr != 0">
-                                            <!-- passed -->
-                                            <span v-if="cb.logs.test.ocr== 1">
-                                                <v-btn @click="runTests" slot="activator" color="green" dark>
-                                                    <v-icon>fas fa-check</v-icon> Passed
-                                                </v-btn>
-                                            </span>
-                                            <!-- failed -->
-                                            <span v-else>
-                                                <v-btn @click="runTests" slot="activator" color="red" dark>
-                                                    <v-icon>fas fa-times</v-icon> Failed
-                                                </v-btn>
-                                            </span>
-                                        </span>
-                                        <!-- not tested -->
-                                        <span v-else>
-                                            <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                                <v-icon>fas fa-question</v-icon> Not tested
-                                            </v-btn>
-                                        </span>
-                                    </v-flex>
-                                </v-layout>
+                        <!-- OCR -->
+                        <v-layout row wrap justify-center>
+                          <!-- switch -->
+                          <v-flex xs12 offset-md2 md5>
+                            <v-switch v-bind:label="OCR" value="ocr" v-model="checkedTests" color="orange">
+                            </v-switch>
+                          </v-flex>
+                          <!-- button state -->
+                          <v-flex xs12 md4>
+                            <span v-if="cb.logs.test != null && cb.logs.test.ocr != 0">
+                              <!-- passed -->
+                              <span v-if="cb.logs.test.ocr== 1">
+                                <v-btn @click="runTests" slot="activator" color="green" dark>
+                                  <v-icon>fas fa-check</v-icon> {{ $t('message.settings_component_test_not_passed') }}
+                                </v-btn>
+                              </span>
+                              <!-- failed -->
+                              <span v-else>
+                                <v-btn @click="runTests" slot="activator" color="red" dark>
+                                  <v-icon>fas fa-times</v-icon> {{ $t('message.settings_component_test_failed') }}
+                                </v-btn>
+                              </span>
+                            </span>
+                            <!-- not tested -->
+                            <span v-else>
+                              <v-btn @click="runTests" slot="activator" color="grey" dark>
+                                <v-icon>fas fa-question</v-icon> {{ $t('message.settings_component_test_not_tested') }}
+                              </v-btn>
+                            </span>
+                          </v-flex>
+                        </v-layout>
 
-                                <!-- DEBUG
+                        <!-- DEBUG
                                     <span>Checked names: {{ checkedTests }}</span>
                                 -->
-                            </div>
-                            <br>
-                            <v-card-actions>
+                      </div>
+                      <br>
+                      <v-card-actions>
 
-                                <v-btn v-if="!cb.logs.runningTest"
-                                        block
-                                        @click="runTests"
-                                        slot="activator"
-                                        color="orange"
-                                        dark>
-                                    <v-icon>fas fa-running</v-icon> Run tests
-                                </v-btn>
-                                <v-btn v-else
-                                        block
-                                        disabled>
-                                    <v-icon>fas fa-ellipsis-h</v-icon> Running tests...
-                                </v-btn>
-                                <!-- DEBUG
+                        <v-btn v-if="!cb.logs.runningTest" block @click="runTests" slot="activator" color="orange" dark>
+                          <v-icon>fas fa-running</v-icon> {{ $t('message.settings_component_test_run') }}
+                        </v-btn>
+                        <v-btn v-else block disabled>
+                          <v-icon>fas fa-ellipsis-h</v-icon> {{ $t('message.settings_component_test_text_1') }}
+                        </v-btn>
+                        <!-- DEBUG
                                     Running test: {{ cb.logs.runningTest }}
                                 -->
-                            </v-card-actions>
+                      </v-card-actions>
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+
+          <!-- AUDIO TAB -->
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap align-center>
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_audio_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      {{ $t('message.settings_audio_volume') }}<v-text-field v-model="settings.audioLevel" v-bind:label="$t('message.settings_audio_volume')" />
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+
+          <!-- PACKAGE MANAGER -->
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap align-center>
+                <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_music_packages_title') }}</h3>
+                  <br>
+                  <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_installed') }}</h3>
+                  <v-card v-for="pkgnames in settings.packagesInstalled" v-bind:key="pkgnames.key">
+                    <div class="cardContent">
+                      <li> nome: <b>{{pkgnames[0][0]}}</b> {{ $t('message.settings_music_packages_type') }} <b>{{pkgnames[1]}} </b><span
+                          style="display: flex; justify-content: flex-end">
+                          <v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                            <v-icon>fas fa-trash</v-icon> {{ $t('message.settings_music_packages_remove') }}
+                          </v-btn>
+                        </span>
+                      </li>
+                      <!--
+                            <div v-for="pkgnames in settings.packagesInstalled">
+                          <ul>
+                          <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                                    <v-icon>fas fa-trash</v-icon> Rimuovi
+                        </v-btn></span>
+                        </li>
+                        </ul>
                         </div>
-                    </v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-tab-item>
-
-						<!-- AUDIO TAB -->
-                        <v-tab-item>
-							<v-container grid-list-md text-xs-center>
-								<v-layout row wrap align-center>
-									<v-flex xs12 md6 offset-md3>
-										<h3 class="text-xs-left">Audio settings</h3>
-										<v-card>
-											<div class="cardContent">
-												Volume:
-
-												<v-text-field v-model="settings.audioLevel" label="Volume" />
-											</div>
-										</v-card>
-									</v-flex>
-								</v-layout>
-							</v-container>
-						</v-tab-item>
-
-                <!-- PACKAGE MANAGER -->
-                    <v-tab-item>
-                        <v-container grid-list-md text-xs-center>
-                            <v-layout row wrap align-center>
-                                <v-flex xs12 md6 offset-md3>
-                                    <h3 class="text-xs-left">Gestione Pacchetti</h3>
-									<br>
-                                    <h3 class="text-xs-left"> Pacchetti installati:</h3>
-                                    <v-card v-for="pkgnames in settings.packagesInstalled" v-bind:key="pkgnames.key">
-                                        <div class="cardContent">
-                                    <li>   nome: <b>{{pkgnames[0][0]}}</b>  tipo: <b>{{pkgnames[1]}} </b><span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
-                                            <v-icon>fas fa-trash</v-icon> Rimuovi </v-btn></span>
-                                            </li>
-<!--
-                                                <div v-for="pkgnames in settings.packagesInstalled">
-                                              <ul>
-                                             <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
-                                                        <v-icon>fas fa-trash</v-icon> Rimuovi
-                                            </v-btn></span>
-                                            </li>
-                                            </ul>
-                                            </div>
 -->
-                                            </div>
-                                    </v-card>
-                                        <br>
-										<h3 class="text-xs-left"> Aggiungi Pacchetto </h3>
-										<v-card>
-											<div class="cardContent">
-												<template v-if="updateStatus==1">
-													<b>Pacchetto installato</b>
-													<br>
-													{{ updateStatusText }}
-													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
-												</template>
-												<template v-if="updateStatus==2 || updateStatus==3">
-													<b>Installazione fallita</b>
-													<br>
-													{{ updateStatusText }}
-													<v-btn @click="refresh" color="error">Aggiorna</v-btn>
-												</template>
-												<template v-if="updateStatus==0">
-													<v-text-field label="Seleziona il pacchetto da installare" @click='pickFile' v-model='fileName' prepend-icon='attach_file'></v-text-field>
-													<input type="file" style="display: none" ref="file" @change="onFilePicked">
-													<template v-if="this.fileObj">Clicca "CONFERMA" per installare il pacchetto<br></template>
-													<v-btn v-if="this.fileObj" @click="uploadPackage" color="error">Conferma</v-btn>
-												</template>
-											</div>
-                                        </v-card>
-                                    </v-flex>
-                                    </v-layout>
-                                    </v-container>
-                                    </v-tab-item>
+                    </div>
+                  </v-card>
+                  <br>
+                  <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <template v-if="updateStatus==1">
+                        <b>{{ $t('message.settings_music_package_installed') }}</b>
+                        <br>
+                        {{ updateStatusText }}
+                        <v-btn @click="refresh" color="error">{{ $t('message.settings_music_packages_update') }}</v-btn>
+                      </template>
+                      <template v-if="updateStatus==2 || updateStatus==3">
+                        <b>{{ $t('message.settings_music_packages_installation_failed') }}</b>
+                        <br>
+                        {{ updateStatusText }}
+                        <v-btn @click="refresh" color="error">{{ $t('message.settings_music_packages_update') }}</v-btn>
+                      </template>
+                      <template v-if="updateStatus==0">
+                        <v-text-field label="$t('message.settings_music_packages_select')" @click='pickFile' v-model='fileName'
+                          prepend-icon='attach_file'></v-text-field>
+                        <input type="file" style="display: none" ref="file" @change="onFilePicked">
+                        <template v-if="this.fileObj">{{ $t('message.settings_music_packages_install_confirm_text') }}<br></template>
+                        <v-btn v-if="this.fileObj" @click="uploadPackage" color="error">{{ $t('message.settings_music_packages_install_confirm') }}</v-btn>
+                      </template>
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
 
-					</v-tabs-items>
-				<!--</template>
+        </v-tabs-items>
+        <!--</template>
 				<template v-else>
 					<br>
 					In attesa che CoderBot torni online...<br>
 					<v-icon large>signal_wifi_off</v-icon>
 				</template>-->
-			</v-main>
-			<!-- Notification Snackbar -->
-			<v-snackbar v-model="snackbar">
-				{{ snackText }}
-				<v-btn color="pink" text @click="snackbar = false">
-					Chiudi
-				</v-btn>
-			</v-snackbar>
-		</v-app>
-	</div>
+      </v-main>
+      <!-- Notification Snackbar -->
+      <v-snackbar v-model="snackbar">
+        {{ snackText }}
+        <v-btn color="pink" text @click="snackbar = false">
+          {{ $t('message.close') }}
+        </v-btn>
+      </v-snackbar>
+    </v-app>
+  </div>
 </template>
-
 <script>
 import sidebar from '../components/Sidebar';
 import * as music_package from '../assets/music_package.json';
@@ -557,7 +559,9 @@ Object.keys(music_package.packages).forEach((key) => {
 });
 
 export default {
-  components: { sidebar },
+  components: {
+    sidebar
+  },
   name: 'Settings',
   mounted() {
     this.pollStatus();
@@ -572,7 +576,9 @@ export default {
       this.$refs.file.click();
     },
     onFilePicked(e) {
-      const { files } = e.target;
+      const {
+        files
+      } = e.target;
       this.fileName = files[0].name;
       this.fileObj = files[0];
       this.formdata = new FormData();
@@ -587,23 +593,25 @@ export default {
       });
       */
       this.$axios.post(`${this.CB}/updatePackages`, this.formdata).then((result) => {
-			    this.updateStatus = result.data;
+        this.updateStatus = result.data;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
-        this.updateStatusText = 'Clicca "AGGIORNA" per visualizzare le modifiche.';
+        this.updateStatusText = this.$i18n.t('settings_music_packages_text_1');
         console.dir(result.data);
         if (this.updateStatus == 2) {
-          this.updateStatusText = 'Aggiornamento non avvenuto, il pacchetto è già presente con una versione successiva a quella che vuoi installare.';
+          this.updateStatusText = this.$i18n.t('settings_music_packages_text_2');
         }
         if (this.updateStatus == 3) {
-          this.updateStatusText = 'Aggiornamento non avvenuto, pacchetto già presente con stessa versione.';
+          this.updateStatusText = this.$i18n.t('settings_music_packages_text_3');
         }
       });
     },
 
     upload() {
       const config = {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
         onUploadProgress: (progressEvent) => {
           this.counter = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
         },
@@ -613,64 +621,70 @@ export default {
         this.uploadCompleted = true;
         this.uploadInProgress = false;
         console.dir(result.data);
-        this.updateStatusText = 'Upload completato. Riavvio in corso.';
+        this.updateStatusText = this.$i18n.t('settings_packages_text_1');
       });
     },
 
     refresh() {
       window.location.reload();
       /*    readTextFile
-            this.packagesInstalled = packageList
-            this.$http.get('vue/index.html#/settings').then((results) => {
-                  console.log(results.data.data);
-                  }, (results) => {
-                      console.log('ERROR');
-                      console.log(results);
-                    });
+          this.packagesInstalled = packageList
+          this.$http.get('vue/index.html#/settings').then((results) => {
+                console.log(results.data.data);
+                }, (results) => {
+                    console.log('ERROR');
+                    console.log(results);
+                  });
 */
     },
     /*       readTextFile(file, callback) {
-            var rawFile = new XMLHttpRequest();
-            rawFile.overrideMimeType("application/json");
-            rawFile.open("GET", file, true);
-            rawFile.onreadystatechange = function() {
-                if (rawFile.readyState === 4 && rawFile.status == "200") {
-                    callback(rawFile.responseText);
-                }
-            }
-            rawFile.send(null);
-        },
+          var rawFile = new XMLHttpRequest();
+          rawFile.overrideMimeType("application/json");
+          rawFile.open("GET", file, true);
+          rawFile.onreadystatechange = function() {
+              if (rawFile.readyState === 4 && rawFile.status == "200") {
+                  callback(rawFile.responseText);
+              }
+          }
+          rawFile.send(null);
+      },
 */
     restoreConfig() {
       const axios = this.$axios;
-      const { CB } = this;
+      const {
+        CB
+      } = this;
       axios.post(`${CB}/restoreSettings`)
         .then(() => {
-          this.snackText = 'Impostazioni ripristinate';
+          this.snackText = this.$i18n.t('settings_packages_reset_complete');
           this.snackbar = true;
           this.prepopulate();
         });
     },
     runTests() {
       const axios = this.$axios;
-      const { CB } = this;
+      const {
+        CB
+      } = this;
       this.cb.logs.runningTest = true;
-      axios.post(`${CB}/testCoderbot`, { params: this.checkedTests })
-        .then((response) => {
-          this.cb.logs.test = response.data;
-          this.snackText = 'Running tests';
-          this.snackbar = true;
-          this.prepopulate();
-          this.cb.logs.runningTest = false;
-        });
+      axios.post(`${CB}/testCoderbot`, {
+        params: this.checkedTests
+      }).then((response) => {
+        this.cb.logs.test = response.data;
+        this.snackText = 'Running tests';
+        this.snackbar = true;
+        this.prepopulate();
+        this.cb.logs.runningTest = false;
+      });
     },
     restore() {
       const axios = this.$axios;
-      const { CB } = this;
+      const {
+        CB
+      } = this;
       axios.post(`${CB}/reset`)
         .then(() => {
-          this.snackText = 'Ripristino ad impostazioni di fabbrica \
-                                        Reboot in corso...';
+          this.snackText = this.$i18n.t('settings_packages_reset_text_1');
           this.snackbar = true;
           this.prepopulate();
           setTimeout(() => this.dialog.close(), 5000);
@@ -679,21 +693,31 @@ export default {
     },
     shutdown() {
       const axios = this.$axios;
-      const { CBv1 } = this;
-      axios.get(`${CBv1}/bot`, { params: { cmd: 'halt' } })
-        .then(function success() {
-          this.snackText = 'Coderbot in spegnimento..';
-          this.snackbar = true;
-        });
+      const {
+        CBv1
+      } = this;
+      axios.get(`${CBv1}/bot`, {
+        params: {
+          cmd: 'halt'
+        }
+      }).then(function success() {
+        this.snackText = this.$i18n.t('coderbot_status_shutting_down');
+        this.snackbar = true;
+      });
     },
     reboot() {
       const axios = this.$axios;
-      const { CBv1 } = this;
-      axios.get(`${CBv1}/bot`, { params: { cmd: 'reboot' } })
-        .then(function success() {
-          this.snackText = 'Riavvio iniziato...';
-          this.snackbar = true;
-        });
+      const {
+        CBv1
+      } = this;
+      axios.get(`${CBv1}/bot`, {
+        params: {
+          cmd: 'reboot'
+        }
+      }).then(function success() {
+        this.snackText = this.$i18n.t('coderbot_status_restart_start');
+        this.snackbar = true;
+      });
     },
     getInfoAndStatus() {
       // Get bot info and status
@@ -710,11 +734,13 @@ export default {
     },
     pollStatus() {
       const axios = this.$axios;
-      const { CB } = this;
+      const {
+        CB
+      } = this;
       axios.get(`${CB}/status`)
         .then((response) => {
           if (this.status == 0 && response.status) {
-            this.snackText = 'CoderBot è tornato online';
+            this.snackText = this.$i18n.t('coderbot_status_online');
             this.snackbar = true;
             this.getInfoAndStatus();
             this.prepopulate();
@@ -727,14 +753,16 @@ export default {
           // handle error
           console.log(error);
           if (this.status) {
-            this.snackText = 'CoderBot irrangiungibile';
+            this.snackText = this.$i18n.t('coderbot_status_online');
             this.snackbar = true;
           }
           this.status = 0;
         });
     },
     deletePkg(pkgNameID) {
-      const { CBv1 } = this;
+      const {
+        CBv1
+      } = this;
       const axios = this.$axios;
       const qs = this.$qs;
       const pkgName = qs.stringify({
@@ -743,7 +771,7 @@ export default {
       axios.post(`${CBv1}/deletepkg`, pkgName)
         .then(() => {
           console.log('Pacchetto rimosso');
-          this.snackText = 'Pacchetto rimosso';
+          this.snackText = this.$i18n.t('settings_music_package_removed');
           this.snackbar = true;
           this.packagesInstalled = window.location.reload();
         });
@@ -758,44 +786,46 @@ export default {
           console.log(response.data);
           const remoteConfig = response.data;
           /*
-					button_func: "none"
-					camera_color_object_size_max: "160000"
-					camera_color_object_size_min: "4000"
-					camera_exposure_mode: "auto"
-					camera_framerate: "30"
-					camera_jpeg_bitrate: "1000000"
-					camera_jpeg_quality: "5"
-					camera_path_object_size_max: "160000"
-					camera_path_object_size_min: "4000"
-					cnn_default_model: ""
-					ctrl_fw_elapse: "-1"
-					ctrl_fw_speed: "99"
-					ctrl_hud_image: ""
-					ctrl_tr_elapse: "-1"
-					ctrl_tr_speed: "80"
-					cv_image_factor: "2"
-					load_at_start: ""
-					move_fw_elapse: "1"
-					move_fw_speed: "100"
-					move_motor_mode: "dc"
-					move_motor_trim: "1"
-					move_power_angle_1: "45"
-					move_power_angle_2: "60"
-					move_power_angle_3: "60"
-					move_tr_elapse: "0.5"
-					move_tr_speed: "85"
-					prog_level: "adv"
-					prog_maxblocks: "-1"
-					prog_scrollbars: "true"
-					show_control_move_commands: "true"
-					show_page_control: "true"
-					show_page_prefs: "true"
-					show_page_program: "true"
-					sound_shutter: "$shutter.mp3"
-					sound_start: "$startup.mp3"
-					sound_stop: "$shutdown.mp3"
-					*/
-          data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig.move_power_angle_3];
+        button_func: "none"
+        camera_color_object_size_max: "160000"
+        camera_color_object_size_min: "4000"
+        camera_exposure_mode: "auto"
+        camera_framerate: "30"
+        camera_jpeg_bitrate: "1000000"
+        camera_jpeg_quality: "5"
+        camera_path_object_size_max: "160000"
+        camera_path_object_size_min: "4000"
+        cnn_default_model: ""
+        ctrl_fw_elapse: "-1"
+        ctrl_fw_speed: "99"
+        ctrl_hud_image: ""
+        ctrl_tr_elapse: "-1"
+        ctrl_tr_speed: "80"
+        cv_image_factor: "2"
+        load_at_start: ""
+        move_fw_elapse: "1"
+        move_fw_speed: "100"
+        move_motor_mode: "dc"
+        move_motor_trim: "1"
+        move_power_angle_1: "45"
+        move_power_angle_2: "60"
+        move_power_angle_3: "60"
+        move_tr_elapse: "0.5"
+        move_tr_speed: "85"
+        prog_level: "adv"
+        prog_maxblocks: "-1"
+        prog_scrollbars: "true"
+        show_control_move_commands: "true"
+        show_page_control: "true"
+        show_page_prefs: "true"
+        show_page_program: "true"
+        sound_shutter: "$shutter.mp3"
+        sound_start: "$startup.mp3"
+        sound_stop: "$shutdown.mp3"
+        */
+          data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig
+            .move_power_angle_3
+          ];
           data.btnFun = remoteConfig.button_func;
           data.wifiMode = remoteConfig.wifi_mode;
           data.wifiSSID = remoteConfig.wifi_ssid;
@@ -823,7 +853,9 @@ export default {
       const qs = this.$qs;
       const selectedTab = this.tab;
       const axios = this.$axios;
-      const { CBv1 } = this;
+      const {
+        CBv1
+      } = this;
       const data = this.settings;
       if (selectedTab != 4) {
         const legacySettings = qs.stringify({
@@ -856,7 +888,7 @@ export default {
           .then(() => {
             console.log('Updated settings');
             this.prepopulate();
-            this.snackText = 'Impostazioni aggiornate';
+            this.snackText = this.$i18n.t('settings_updated');
             this.snackbar = true;
           });
       }
@@ -864,7 +896,9 @@ export default {
     saveWifi() {
       const qs = this.$qs;
       const axios = this.$axios;
-      const { CBv1 } = this;
+      const {
+        CBv1
+      } = this;
       const valuesAsString = qs.stringify({
         wifi_mode: this.settings.wifiMode,
         wifi_ssid: this.settings.wifiSSID,
@@ -874,7 +908,7 @@ export default {
       axios.post(`${CBv1}/wifi`, valuesAsString)
         .then(() => {
           console.log('Sent');
-          this.snackText = 'Impostazioni di rete aggiornate';
+          this.snackText = this.$i18n.t('settings_network_updated');
           this.snackbar = true;
         });
       console.log(`save wifi config - ssid: ${this.settings.wifiSSID}  pwd: ${this.settings.wifiPsw}`);
@@ -932,10 +966,22 @@ export default {
         progLevel: null,
       },
       blocklyToolboxItems: [
-        { text: 'Movimento', value: 'basic_move' },
-        { text: 'Base', value: 'basic' },
-        { text: 'Standard', value: 'std' },
-        { text: 'Avanzate', value: 'adv' },
+        {
+          text: this.$i18n.t('settings_toolbax_movement'),
+          value: 'basic_move'
+        },
+        {
+          text: this.$i18n.t('settings_toolbax_base'),
+          value: 'basic'
+        },
+        {
+          text: this.$i18n.t('settings_toolbax_standard'),
+          value: 'std'
+        },
+        {
+          text: this.$i18n.t('settings_toolbax_advanced'),
+          value: 'adv'
+        },
       ],
       cb: {
         info: {
@@ -961,23 +1007,32 @@ export default {
       },
       drawer: null,
       tab: null,
-      // tabs: ['Generali', 'Rete', 'Movimento', 'Suoni', 'Avanzate'],
-      tabs: ['Generali', 'Movimento', 'Suoni', 'Avanzate', 'Wifi', 'Test', 'Audio', 'Gestione Pacchetti'],
+      tabs: [
+        this.$i18n.t('message.settings_tabs_general'),
+        this.$i18n.t('message.settings_tabs_movement'),
+        this.$i18n.t('message.settings_tabs_sounds'),
+        this.$i18n.t('message.settings_tabs_advanced'),
+        this.$i18n.t('message.settings_tabs_network'),
+        this.$i18n.t('message.settings_tabs_test'),
+        this.$i18n.t('message.settings_tabs_audio'),
+        this.$i18n.t('message.settings_tabs_music_packages')
+      ],
     };
   },
 };
 </script>
 <style scoped>
 .cardContent {
-	text-align: left;
-	font-size: 16px;
-	padding: 16px;
+  text-align: left;
+  font-size: 16px;
+  padding: 16px;
 }
+
 .fa,
 .fas,
 .fab {
-	font-weight: 600;
-	margin-right: 7px;
-	text-size: 10px;
+  font-weight: 600;
+  margin-right: 7px;
+  text-size: 10px;
 }
 </style>

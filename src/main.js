@@ -4,7 +4,6 @@
 // Vue base
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import VueI18n from 'vue-i18n';
 
 // Vuex
 import axios from 'axios';
@@ -14,6 +13,7 @@ import vuetify from './plugins/vuetify';
 import store from './store/index';
 
 // Main components
+import i18n from './i18n/index';
 
 // Application Style
 import './main.styl';
@@ -43,18 +43,12 @@ import activityList from './components/ActivityList';
 import activity from './components/Activity';
 // import help from './components/Help'
 // import credits from './components/Credits'
-
-import * as it_messages from './locale/it/messages.json';
-import * as en_messages from './locale/en/messages.json';
-import * as fr_messages from './locale/fr/messages.json';
-
 // Utilities
 // This is to serialize parameters to send them as URLencoded
 // https://github.com/axios/axios/issues/350#issuecomment-227270046
 
 // Configuration
 Vue.use(VueRouter);
-Vue.use(VueI18n);
 
 Vue.prototype.$axios = axios.create();
 Vue.prototype.$base64 = base64;
@@ -64,18 +58,72 @@ Vue.config.productionTip = false;
 
 // Routing
 const routes = [
-  { path: '/', component: landing, meta: { title: 'CoderBot' } },
-  { path: '/control', component: control, meta: { title: 'CoderBot - Controlla' } },
-  { path: '/program', component: activity, meta: { title: 'CoderBot - Blockly' } },
-  { path: '/settings', component: settings, meta: { title: 'CoderBot - Impostazioni' } },
-  { path: '/gallery', component: gallery, meta: { title: 'CoderBot - Galleria' } },
+  {
+    path: '/',
+    component: landing,
+    meta: {
+      title: 'CoderBot',
+    }
+  },
+  {
+    path: '/control',
+    component: control,
+    meta: {
+      title: 'CoderBot - Controlla',
+    }
+  },
+  {
+    path: '/program',
+    component: activity,
+    meta: {
+      title: 'CoderBot - Blockly',
+    }
+  },
+  {
+    path: '/settings',
+    component: settings,
+    meta: {
+      title: 'CoderBot - Impostazioni',
+    }
+  },
+  {
+    path: '/gallery',
+    component: gallery,
+    meta: {
+      title: 'CoderBot - Galleria',
+    }
+  },
   // { path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
   // { path: '/credits', component: credits, meta: {title: 'CoderBot - Crediti'}},
   // { path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
-  { path: '/activity/new', component: activityEditor, meta: { title: 'CoderBot - Nuova Attività' } },
-  { path: '/activity/open', component: activityList, meta: { title: 'CoderBot - Apri Attività' } },
-  { path: '/activity/edit/:name', component: activityEditor, meta: { title: 'CoderBot - Modifica Attività' } },
-  { path: '/activity/open/:name', component: activity, meta: { title: 'CoderBot - Programma' } },
+  {
+    path: '/activity/new',
+    component: activityEditor,
+    meta: {
+      title: 'CoderBot - Nuova Attività'
+    }
+  },
+  {
+    path: '/activity/open',
+    component: activityList,
+    meta: {
+      title: 'CoderBot - Apri Attività'
+    }
+  },
+  {
+    path: '/activity/edit/:name',
+    component: activityEditor,
+    meta: {
+      title: 'CoderBot - Modifica Attività'
+    }
+  },
+  {
+    path: '/activity/open/:name',
+    component: activity,
+    meta: {
+      title: 'CoderBot - Programma'
+    }
+  },
 ];
 
 const router = new VueRouter({
@@ -96,24 +144,6 @@ router.beforeEach((to, from, next) => {
   if (nearestWithTitle) document.title = nearestWithTitle.meta.title;
 
   next();
-});
-
-const messages = {
-  it: {
-    message: it_messages.default,
-  },
-  en: {
-    message: en_messages.default,
-  },
-  fr: {
-    message: fr_messages.default,
-  },
-};
-
-// Create VueI18n instance with options
-const i18n = new VueI18n({
-  // locale: 'en', // set locale
-  messages, // set locale messages
 });
 
 /* eslint-disable no-new */

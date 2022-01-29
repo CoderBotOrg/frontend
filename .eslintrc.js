@@ -1,3 +1,5 @@
+const { off } = require("node-notifier");
+
 // https://eslint.org/docs/user-guide/configuring
 module.exports = {
   "root": true,
@@ -20,6 +22,7 @@ module.exports = {
   },
 
   "rules": {
+    "comma-dangle": "off",
     "no-tabs": "off",
     "no-console": "off",
     "max-len": "off",

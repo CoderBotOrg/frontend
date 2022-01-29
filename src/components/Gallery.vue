@@ -1,54 +1,57 @@
 <template>
-	<div>
-		<v-app id="inspire">
-			<sidebar></sidebar>
-			<v-app-bar color="indigo" dark fixed app>
-				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-				<v-app-bar-title>{{ $t("message.gallery_title") }}</v-app-bar-title>
-			</v-app-bar>
-			<v-main>
-				<v-layout>
-					<v-flex xs12 sm8 offset-sm2>
-						<template v-if="photos.length == 0">
-							<br>
-							<h3>{{ $t("message.gallery_empty") }}</h3>
-						</template>
-						<template v-else>
-							<v-card>
-								<v-container grid-list-sm fluid>
-									<v-layout row wrap>
-										<v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
-											<v-card text tile class="d-flex">
-												<v-layout column>
-													<div class="subheading">{{ photos[n-1].name }} <v-btn v-on:click="deletePhoto(photos[n-1].name)" text icon color="red lighten-2">
-															<v-icon>delete</v-icon>
-														</v-btn>
-													</div>
-													<a :href="CBv1+'/photos/'+photos[n-1].name" target="_blank">
-												<v-img :src="CBv1+'/photos/'+photos[n-1].name" aspect-ratio="1" class="grey lighten-2">
-													<v-layout slot="placeholder" fill-height align-center justify-center ma-0>
-														<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-													</v-layout>
-												</v-img>
-												</a>
-												</v-layout>
-											</v-card>
-										</v-flex>
-									</v-layout>
-								</v-container>
-							</v-card>
-						</template>
-					</v-flex>
-				</v-layout>
-			</v-main>
-		</v-app>
-	</div>
+  <div>
+    <v-app id="inspire">
+      <sidebar></sidebar>
+      <v-app-bar color="indigo" dark fixed app>
+        <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
+        <v-app-bar-title>{{ $t("message.gallery_title") }}</v-app-bar-title>
+      </v-app-bar>
+      <v-main>
+        <v-layout>
+          <v-flex xs12 sm8 offset-sm2>
+            <template v-if="photos.length == 0">
+              <br>
+              <h3>{{ $t("message.gallery_empty") }}</h3>
+            </template>
+            <template v-else>
+              <v-card>
+                <v-container grid-list-sm fluid>
+                  <v-layout row wrap>
+                    <v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
+                      <v-card text tile class="d-flex">
+                        <v-layout column>
+                          <div class="subheading">{{ photos[n-1].name }} <v-btn
+                              v-on:click="deletePhoto(photos[n-1].name)" text icon color="red lighten-2">
+                              <v-icon>delete</v-icon>
+                            </v-btn>
+                          </div>
+                          <a :href="CBv1+'/photos/'+photos[n-1].name" target="_blank">
+                            <v-img :src="CBv1+'/photos/'+photos[n-1].name" aspect-ratio="1" class="grey lighten-2">
+                              <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
+                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                              </v-layout>
+                            </v-img>
+                          </a>
+                        </v-layout>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card>
+            </template>
+          </v-flex>
+        </v-layout>
+      </v-main>
+    </v-app>
+  </div>
 </template>
 <script>
 import sidebar from '../components/Sidebar';
 
 export default {
-  components: { sidebar },
+  components: {
+    sidebar
+  },
   name: 'Gallery',
   mounted() {
     this.getPhotos();
@@ -56,7 +59,9 @@ export default {
   methods: {
     getPhotos() {
       const axios = this.$axios;
-      const { CBv1 } = this;
+      const {
+        CBv1
+      } = this;
       axios.get(`${CBv1}/photos`)
         .then((response) => {
           this.photos = response.data;
@@ -64,7 +69,9 @@ export default {
     },
     deletePhoto(name) {
       const axios = this.$axios;
-      const { CBv1 } = this;
+      const {
+        CBv1
+      } = this;
       axios.delete(`${CBv1}/photos/${name}`)
         .then(() => {
           this.getPhotos();
@@ -85,16 +92,14 @@ export default {
     };
   },
 };
-
 </script>
 <style scoped>
 .v-card {
-	margin: 10px;
+  margin: 10px;
 }
 
 .container {
-	padding-top: 0px;
-	margin-top: 0px;
+  padding-top: 0px;
+  margin-top: 0px;
 }
-
 </style>

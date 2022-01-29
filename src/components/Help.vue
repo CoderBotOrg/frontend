@@ -1,20 +1,22 @@
 <template>
-	<div>
-		<v-app id="inspire">
-			<sidebar></sidebar>
-				<v-app-bar color="indigo" dark fixed app>
-				<v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-				<v-app-bar-title>Aiuto</v-app-bar-title>
-			</v-app-bar>
-			<v-main>Placeholder content</v-main>
-		</v-app>
-	</div>
+  <div>
+    <v-app id="inspire">
+      <sidebar></sidebar>
+      <v-app-bar color="indigo" dark fixed app>
+        <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
+        <v-app-bar-title>Aiuto</v-app-bar-title>
+      </v-app-bar>
+      <v-main>Placeholder content</v-main>
+    </v-app>
+  </div>
 </template>
 <script>
 import sidebar from '../components/Sidebar';
 
 export default {
-  components: { sidebar },
+  components: {
+    sidebar
+  },
   name: 'Help',
   methods: {
     toggleSidebar() {
@@ -28,5 +30,4 @@ export default {
     };
   },
 };
-
 </script>
