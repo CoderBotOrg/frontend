@@ -24,4 +24,5 @@ const language = window.navigator.userLanguage || window.navigator.language;
 export default new VueI18n({
   locale: language,
   messages: locales,
+  fallbackLocale: "en"
 });

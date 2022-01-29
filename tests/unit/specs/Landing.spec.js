@@ -7,8 +7,7 @@ import { shallowMount } from '@vue/test-utils'
 // Utilities
 import { createLocalVue, mount } from '@vue/test-utils'
 
-import { i18n } from '../testutils'
-
+import i18n from '../../../src/i18n/index';
 
 describe('Landing.vue', () => {
   const localVue = createLocalVue();
