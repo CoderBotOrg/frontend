@@ -81,11 +81,10 @@ export default {
       } = this.$data;
       // let programList = this.$data.programList
       axios.post(`${CB}/deleteActivity`, {
-          name,
-        })
-        .then(() => {
-          this.getActivities();
-        });
+        name,
+      }).then(() => {
+        this.getActivities();
+      });
     },
     toggleSidebar() {
       const currentStatus = this.$store.getters.drawerStatus;
