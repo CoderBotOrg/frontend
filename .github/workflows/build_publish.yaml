@@ -2,7 +2,7 @@ name: CoderBot Frontend Build and Publish as Release
 on:
   push:
     tags:
-      - v*.**    
+      - t*.** # disabled for now
 
 jobs:
   release:

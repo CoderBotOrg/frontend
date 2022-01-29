@@ -38,7 +38,7 @@ jobs:
       - run:
           root: ~/repo
           command: |
-            tar czf vue-app-dist.tgz dist
+            tar czf frontend.tgz dist
       - persist_to_workspace:
           root: ~/repo
           paths:
