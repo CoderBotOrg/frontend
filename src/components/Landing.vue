@@ -57,7 +57,7 @@
 import sidebar from '../components/Sidebar';
 import image_1 from '../assets/images/coderbot_wide1.jpg';
 import image_2 from '../assets/images/coderbot_wide3.jpg';
-import image_3 from '../assets/images/coderbot_wide4.jpg';
+// import image_3 from '../assets/images/coderbot_wide4.jpg';
 
 export default {
   components: {
@@ -73,9 +73,6 @@ export default {
   data() {
     return {
       carouselItems: [
-        {
-          src: image_3,
-        },
         {
           src: image_1,
         },
