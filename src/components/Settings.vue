@@ -257,8 +257,8 @@
                         <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client"></v-radio>
                         <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap">
                         </v-radio>
-                        <v-text-field v-model="settings.wifiSSID" v-bind:label="SSID"></v-text-field>
-                        <v-text-field v-model="settings.wifiPsw" v-bind:label="Password"></v-text-field>
+                        <v-text-field v-model="settings.wifiSSID" v-bind:label="$t('message.settings_network_ssid')"></v-text-field>
+                        <v-text-field v-model="settings.wifiPsw" v-bind:label="$t('message.settings_network_password')"></v-text-field>
                       </v-radio-group>
                       <v-card-actions>
                         <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
@@ -304,7 +304,7 @@
                         <v-layout row wrap justify-center>
                           <!-- switch -->
                           <v-flex xs12 offset-md2 md5>
-                            <v-switch v-bind:label="Sonar" value="sonar" v-model="checkedTests" color="orange"></v-switch>
+                            <v-switch v-bind:label="$t('message.settings_component_test_sonar')" value="sonar" v-model="checkedTests" color="orange"></v-switch>
                           </v-flex>
                           <!-- button state -->
                           <v-flex xs12 md4>
@@ -334,7 +334,7 @@
                         <v-layout row wrap justify-center>
                           <!-- switch -->
                           <v-flex xs12 offset-md2 md5>
-                            <v-switch v-bind:label="Motors" value="motors" v-model="checkedTests" color="orange">
+                            <v-switch v-bind:label="$t('message.settings_component_test_motors')" value="motors" v-model="checkedTests" color="orange">
                             </v-switch>
                           </v-flex>
                           <!-- button state -->
@@ -366,7 +366,7 @@
                         <v-layout row wrap justify-center>
                           <!-- switch -->
                           <v-flex xs12 offset-md2 md5>
-                            <v-switch v-bind:label="Speaker" value="speaker" v-model="checkedTests" color="orange">
+                            <v-switch v-bind:label="$t('message.settings_component_test_speaker')" value="speaker" v-model="checkedTests" color="orange">
                             </v-switch>
                           </v-flex>
                           <!-- button state -->
@@ -398,7 +398,7 @@
                         <v-layout row wrap justify-center>
                           <!-- switch -->
                           <v-flex xs12 offset-md2 md5>
-                            <v-switch v-bind:label="OCR" value="ocr" v-model="checkedTests" color="orange">
+                            <v-switch v-bind:label="$t('message.settings_component_test_ocr')" value="ocr" v-model="checkedTests" color="orange">
                             </v-switch>
                           </v-flex>
                           <!-- button state -->
@@ -425,10 +425,6 @@
                             </span>
                           </v-flex>
                         </v-layout>
-
-                        <!-- DEBUG
-                                    <span>Checked names: {{ checkedTests }}</span>
-                                -->
                       </div>
                       <br>
                       <v-card-actions>
@@ -439,9 +435,6 @@
                         <v-btn v-else block disabled>
                           <v-icon>fas fa-ellipsis-h</v-icon> {{ $t('message.settings_component_test_text_1') }}
                         </v-btn>
-                        <!-- DEBUG
-                                    Running test: {{ cb.logs.runningTest }}
-                                -->
                       </v-card-actions>
                     </div>
                   </v-card>
@@ -483,16 +476,6 @@
                           </v-btn>
                         </span>
                       </li>
-                      <!--
-                            <div v-for="pkgnames in settings.packagesInstalled">
-                          <ul>
-                          <li>   nome: {{pkgnames[0][0]}}  tipo: {{pkgnames[1]}} <span  style="display: flex; justify-content: flex-end"><v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
-                                    <v-icon>fas fa-trash</v-icon> Rimuovi
-                        </v-btn></span>
-                        </li>
-                        </ul>
-                        </div>
--->
                     </div>
                   </v-card>
                   <br>
@@ -545,18 +528,6 @@
 </template>
 <script>
 import sidebar from '../components/Sidebar';
-import * as music_package from '../assets/music_package.json';
-
-const packageList = [];
-
-Object.keys(music_package.packages).forEach((key) => {
-  const names = [music_package.packages[key].name_IT, key];
-  if (music_package.packages[key].category == 'instrument') {
-    packageList[packageList.length] = [names, 'instrument'];
-  } else if (music_package.packages[key].category == 'animal') {
-    packageList[packageList.length] = [names, 'animal'];
-  }
-});
 
 export default {
   components: {
@@ -570,6 +541,7 @@ export default {
     }, 1000);
     this.getInfoAndStatus();
     this.prepopulate();
+    this.loadMusicPackages();
   },
   methods: {
     pickFile() {
@@ -584,7 +556,22 @@ export default {
       this.formdata = new FormData();
       this.formdata.append('file_to_upload', files[0], files[0].name);
     },
-
+    loadMusicPackages() {
+      this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
+        this.settings.packagesInstalled = [];
+        const music_packages = JSON.parse(result.data);
+        Object.entries(music_packages).forEach((key) => {
+          const package_key = key[0];
+          const music_package = key[1];
+          const names = [music_package.name_IT, package_key];
+          if (music_package.category == 'instrument') {
+            this.settings.packagesInstalled.push([names, 'instrument']);
+          } else if (music_package.category == 'animal') {
+            this.settings.packagesInstalled.push([names, 'animal']);
+          }
+        });
+      });
+    },
     uploadPackage() {
       /*
       const qs = this.$qs;
@@ -760,21 +747,15 @@ export default {
         });
     },
     deletePkg(pkgNameID) {
-      const {
-        CBv1
-      } = this;
       const axios = this.$axios;
-      const qs = this.$qs;
-      const pkgName = qs.stringify({
-        nameID: pkgNameID,
+      axios.post(`${this.CB}/deleteMusicPackage`, {
+        package_name: pkgNameID,
+      }).then(() => {
+        console.log('Pacchetto rimosso');
+        this.snackText = this.$i18n.t('settings_music_package_removed');
+        this.snackbar = true;
+        this.loadMusicPackages();
       });
-      axios.post(`${CBv1}/deletepkg`, pkgName)
-        .then(() => {
-          console.log('Pacchetto rimosso');
-          this.snackText = this.$i18n.t('settings_music_package_removed');
-          this.snackbar = true;
-          this.packagesInstalled = window.location.reload();
-        });
     },
     prepopulate() {
       const axios = this.$axios;
@@ -948,7 +929,7 @@ export default {
         wifiPsw: null,
 
         audioLevel: null,
-        packagesInstalled: packageList,
+        packagesInstalled: null,
         moveFwdElapse: null,
         moveFwdSpeed: null,
         moveTurnElapse: null,
