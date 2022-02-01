@@ -583,13 +583,13 @@ export default {
         this.updateStatus = result.data;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
-        this.updateStatusText = this.$i18n.t('settings_music_packages_text_1');
+        this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_1');
         console.dir(result.data);
         if (this.updateStatus == 2) {
-          this.updateStatusText = this.$i18n.t('settings_music_packages_text_2');
+          this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_2');
         }
         if (this.updateStatus == 3) {
-          this.updateStatusText = this.$i18n.t('settings_music_packages_text_3');
+          this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_3');
         }
       });
     },
@@ -608,7 +608,7 @@ export default {
         this.uploadCompleted = true;
         this.uploadInProgress = false;
         console.dir(result.data);
-        this.updateStatusText = this.$i18n.t('settings_packages_text_1');
+        this.updateStatusText = this.$i18n.t('message.settings_packages_text_1');
       });
     },
 
@@ -643,7 +643,7 @@ export default {
       } = this;
       axios.post(`${CB}/restoreSettings`)
         .then(() => {
-          this.snackText = this.$i18n.t('settings_packages_reset_complete');
+          this.snackText = this.$i18n.t('message.settings_packages_reset_complete');
           this.snackbar = true;
           this.prepopulate();
         });
@@ -671,7 +671,7 @@ export default {
       } = this;
       axios.post(`${CB}/reset`)
         .then(() => {
-          this.snackText = this.$i18n.t('settings_packages_reset_text_1');
+          this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');
           this.snackbar = true;
           this.prepopulate();
           setTimeout(() => this.dialog.close(), 5000);
@@ -688,7 +688,7 @@ export default {
           cmd: 'halt'
         }
       }).then(function success() {
-        this.snackText = this.$i18n.t('coderbot_status_shutting_down');
+        this.snackText = this.$i18n.t('message.coderbot_status_shutting_down');
         this.snackbar = true;
       });
     },
@@ -702,7 +702,7 @@ export default {
           cmd: 'reboot'
         }
       }).then(function success() {
-        this.snackText = this.$i18n.t('coderbot_status_restart_start');
+        this.snackText = this.$i18n.t('message.coderbot_status_restart_start');
         this.snackbar = true;
       });
     },
@@ -727,7 +727,7 @@ export default {
       axios.get(`${CB}/status`)
         .then((response) => {
           if (this.status == 0 && response.status) {
-            this.snackText = this.$i18n.t('coderbot_status_online');
+            this.snackText = this.$i18n.t('message.coderbot_status_online');
             this.snackbar = true;
             this.getInfoAndStatus();
             this.prepopulate();
@@ -740,7 +740,7 @@ export default {
           // handle error
           console.log(error);
           if (this.status) {
-            this.snackText = this.$i18n.t('coderbot_status_online');
+            this.snackText = this.$i18n.t('message.coderbot_status_online');
             this.snackbar = true;
           }
           this.status = 0;
@@ -752,7 +752,7 @@ export default {
         package_name: pkgNameID,
       }).then(() => {
         console.log('Pacchetto rimosso');
-        this.snackText = this.$i18n.t('settings_music_package_removed');
+        this.snackText = this.$i18n.t('message.settings_music_package_removed');
         this.snackbar = true;
         this.loadMusicPackages();
       });
@@ -869,7 +869,7 @@ export default {
           .then(() => {
             console.log('Updated settings');
             this.prepopulate();
-            this.snackText = this.$i18n.t('settings_updated');
+            this.snackText = this.$i18n.t('message.settings_updated');
             this.snackbar = true;
           });
       }
@@ -889,7 +889,7 @@ export default {
       axios.post(`${CBv1}/wifi`, valuesAsString)
         .then(() => {
           console.log('Sent');
-          this.snackText = this.$i18n.t('settings_network_updated');
+          this.snackText = this.$i18n.t('message.settings_network_updated');
           this.snackbar = true;
         });
       console.log(`save wifi config - ssid: ${this.settings.wifiSSID}  pwd: ${this.settings.wifiPsw}`);
@@ -948,19 +948,19 @@ export default {
       },
       blocklyToolboxItems: [
         {
-          text: this.$i18n.t('settings_toolbax_movement'),
+          text: this.$i18n.t('message.settings_toolbax_movement'),
           value: 'basic_move'
         },
         {
-          text: this.$i18n.t('settings_toolbax_base'),
+          text: this.$i18n.t('message.settings_toolbax_base'),
           value: 'basic'
         },
         {
-          text: this.$i18n.t('settings_toolbax_standard'),
+          text: this.$i18n.t('message.settings_toolbax_standard'),
           value: 'std'
         },
         {
-          text: this.$i18n.t('settings_toolbax_advanced'),
+          text: this.$i18n.t('message.settings_toolbax_advanced'),
           value: 'adv'
         },
       ],
