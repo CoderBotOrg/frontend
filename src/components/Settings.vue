@@ -209,6 +209,62 @@
               <v-layout row wrap>
                 <!-- Column A -->
                 <v-flex xs12 md6 offset-md3>
+                  <h3 class="text-xs-left">{{ $t('message.settings_camera_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-select
+                        v-model="settings.camera_exposure_mode"
+                        :items="cameraExposureModes"
+                        item-text="text"
+                        item-value="key"
+                        v-bind:label="$t('message.settings_camera_exposure_mode')"
+                        single-line
+                      ></v-select>
+                      {{ $t("message.settings_camera_framerate") }}:
+                      <span v-text="settings.camera_framerate"></span>
+                      <v-slider v-model="settings.camera_framerate" min="5" max="30" step="5" />
+                      {{ $t("message.settings_camera_jpeg_bitrate") }}:
+                      <span v-text="settings.camera_jpeg_bitrate"></span>
+                      <v-slider v-model="settings.camera_jpeg_bitrate" min="1000000" max="10000000" step="1000000"
+                        v-bind:label="$t('message.settings_camera_jpeg_bitrate')" />
+                      {{ $t("message.settings_camera_jpeg_quality") }}:
+                      <span v-text="settings.camera_jpeg_quality"></span>
+                      <v-slider v-model="settings.camera_jpeg_quality" min="1" max="100" step="1"
+                        v-bind:label="$t('message.settings_camera_jpeg_quality')" />
+                    </div>
+                  </v-card>
+                  <br><br>
+                  <h3 class="text-xs-left">{{ $t('message.settings_camera_cv_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      {{ $t("message.settings_camera_cv_image_factor") }}:
+                      <span v-text="settings.cv_image_factor"></span>
+                      <v-slider v-model="settings.cv_image_factor" min="1" max="4" step="1" />
+                      <v-text-field v-model="settings.camera_color_object_size_max"
+                        v-bind:label="$t('message.settings_camera_color_object_size_max')" />
+                      <v-text-field v-model="settings.camera_color_object_size_min"
+                        v-bind:label="$t('message.settings_camera_color_object_size_min')" />
+                      <v-text-field v-model="settings.camera_path_object_size_max"
+                        v-bind:label="$t('message.settings_camera_path_object_size_max')" />
+                      <v-text-field v-model="settings.camera_path_object_size_min"
+                        v-bind:label="$t('message.settings_camera_path_object_size_min')" />
+                      <v-select
+                        v-model="settings.cnn_default_model"
+                        :items="cnnModels"
+                        item-text="text"
+                        item-value="key"
+                        v-bind:label="$t('message.settings_camera_cnn_default_model')" />
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-tab-item>
+          <v-tab-item>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <!-- Column A -->
+                <v-flex xs12 md6 offset-md3>
                   <h3 class="text-xs-left">{{ $t('message.settings_sounds_title') }}</h3>
                   <v-card>
                     <div class="cardContent">
@@ -507,14 +563,7 @@
               </v-layout>
             </v-container>
           </v-tab-item>
-
         </v-tabs-items>
-        <!--</template>
-				<template v-else>
-					<br>
-					In attesa che CoderBot torni online...<br>
-					<v-icon large>signal_wifi_off</v-icon>
-				</template>-->
       </v-main>
       <!-- Notification Snackbar -->
       <v-snackbar v-model="snackbar">
@@ -542,6 +591,7 @@ export default {
     this.getInfoAndStatus();
     this.prepopulate();
     this.loadMusicPackages();
+    this.loadCNNModels();
   },
   methods: {
     pickFile() {
@@ -569,6 +619,18 @@ export default {
           } else if (music_package.category == 'animal') {
             this.settings.packagesInstalled.push([names, 'animal']);
           }
+        });
+      });
+    },
+    loadCNNModels() {
+      this.$axios.get(`${this.CB}/listCNNModels`).then((result) => {
+        this.cnnModels = [];
+        const cnn_models = JSON.parse(result.data);
+        Object.entries(cnn_models).forEach((entry) => {
+          console.log(entry);
+          const model_key = entry[0];
+          // const model_data = entry[1];
+          this.cnnModels.push({ key: model_key, text: model_key });
         });
       });
     },
@@ -766,47 +828,21 @@ export default {
           const data = this.settings;
           console.log(response.data);
           const remoteConfig = response.data;
-          /*
-        button_func: "none"
-        camera_color_object_size_max: "160000"
-        camera_color_object_size_min: "4000"
-        camera_exposure_mode: "auto"
-        camera_framerate: "30"
-        camera_jpeg_bitrate: "1000000"
-        camera_jpeg_quality: "5"
-        camera_path_object_size_max: "160000"
-        camera_path_object_size_min: "4000"
-        cnn_default_model: ""
-        ctrl_fw_elapse: "-1"
-        ctrl_fw_speed: "99"
-        ctrl_hud_image: ""
-        ctrl_tr_elapse: "-1"
-        ctrl_tr_speed: "80"
-        cv_image_factor: "2"
-        load_at_start: ""
-        move_fw_elapse: "1"
-        move_fw_speed: "100"
-        move_motor_mode: "dc"
-        move_motor_trim: "1"
-        move_power_angle_1: "45"
-        move_power_angle_2: "60"
-        move_power_angle_3: "60"
-        move_tr_elapse: "0.5"
-        move_tr_speed: "85"
-        prog_level: "adv"
-        prog_maxblocks: "-1"
-        prog_scrollbars: "true"
-        show_control_move_commands: "true"
-        show_page_control: "true"
-        show_page_prefs: "true"
-        show_page_program: "true"
-        sound_shutter: "$shutter.mp3"
-        sound_start: "$startup.mp3"
-        sound_stop: "$shutdown.mp3"
-        */
           data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig
             .move_power_angle_3
           ];
+          data.ctrl_hud_image = remoteConfig.ctrl_hud_image;
+          data.cv_image_factor = remoteConfig.cv_image_factor;
+          data.camera_color_object_size_max = remoteConfig.camera_color_object_size_max;
+          data.camera_color_object_size_min = remoteConfig.camera_color_object_size_min;
+          data.camera_exposure_mode = remoteConfig.camera_exposure_mode;
+          data.camera_framerate = remoteConfig.camera_framerate;
+          data.camera_jpeg_bitrate = remoteConfig.camera_jpeg_bitrate;
+          data.camera_jpeg_quality = remoteConfig.camera_jpeg_quality;
+          data.camera_path_object_size_max = remoteConfig.camera_path_object_size_max;
+          data.camera_path_object_size_min = remoteConfig.camera_path_object_size_min;
+          data.cnn_default_model = remoteConfig.cnn_default_model;
+          data.prog_maxblocks = remoteConfig.prog_maxblocks;
           data.btnFun = remoteConfig.button_func;
           data.wifiMode = remoteConfig.wifi_mode;
           data.wifiSSID = remoteConfig.wifi_ssid;
@@ -840,6 +876,18 @@ export default {
       const data = this.settings;
       if (selectedTab != 4) {
         const legacySettings = qs.stringify({
+          ctrl_hud_image: data.ctrl_hud_image,
+          cv_image_factor: data.cv_image_factor,
+          camera_color_object_size_max: data.camera_color_object_size_max,
+          camera_color_object_size_min: data.camera_color_object_size_min,
+          camera_exposure_mode: data.camera_exposure_mode,
+          camera_framerate: data.camera_framerate,
+          camera_jpeg_bitrate: data.camera_jpeg_bitrate,
+          camera_jpeg_quality: data.camera_jpeg_quality,
+          camera_path_object_size_max: data.camera_path_object_size_max,
+          camera_path_object_size_min: data.camera_path_object_size_min,
+          cnn_default_model: data.cnn_default_model,
+          prog_maxblocks: data.prog_maxblocks,
           wifi_mode: data.wifiMode,
           wifi_ssid: data.wifiSSID,
           wifi_psk: data.wifiPsw,
@@ -920,6 +968,18 @@ export default {
       updateStatus: 0,
       // TODO: Prepopulate this
       settings: {
+        ctrl_hud_image: null,
+        cv_image_factor: null,
+        camera_color_object_size_max: null,
+        camera_color_object_size_min: null,
+        camera_exposure_mode: null,
+        camera_framerate: null,
+        camera_jpeg_bitrate: null,
+        camera_jpeg_quality: null,
+        camera_path_object_size_max: null,
+        camera_path_object_size_min: null,
+        cnn_default_model: null,
+        prog_maxblocks: null,
 
         cbName: 'CoderBot',
         power: [null, null, null],
@@ -991,6 +1051,7 @@ export default {
       tabs: [
         this.$i18n.t('message.settings_tabs_general'),
         this.$i18n.t('message.settings_tabs_movement'),
+        this.$i18n.t('message.settings_tabs_camera'),
         this.$i18n.t('message.settings_tabs_sounds'),
         this.$i18n.t('message.settings_tabs_advanced'),
         this.$i18n.t('message.settings_tabs_network'),
@@ -998,6 +1059,15 @@ export default {
         this.$i18n.t('message.settings_tabs_audio'),
         this.$i18n.t('message.settings_tabs_music_packages')
       ],
+      cameraExposureModes: [
+        { text: 'Auto', key: 'auto' },
+        { text: 'Sports', key: 'sports' },
+        { text: 'Night', key: 'night' },
+        { text: 'Fixed FPS', key: 'fixedfps' },
+        { text: 'Anti shake', key: 'antishake' },
+        { text: 'Very long', key: 'verylong' }
+      ],
+      cnnModels: []
     };
   },
 };
