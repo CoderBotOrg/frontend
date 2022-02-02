@@ -266,10 +266,11 @@ import sidebar from '../components/Sidebar';
 const locale = i18n.locale.substring(0, 2);
 
 const coderbot_locales = {
-  it: bot_it,
-  en: bot_en,
-  fr: bot_fr
+  it: bot_it.default,
+  en: bot_en.default,
+  fr: bot_fr.default
 };
+
 Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
 
 const blockly_locales = {
