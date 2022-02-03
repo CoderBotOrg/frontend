@@ -25,14 +25,47 @@
                     Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
                   </span>
                   <template v-for="activity in activityList">
-                    <v-list-item :key="activity.el">
+                    <v-list-item :key="activity.el" link>
                       <v-list-item-title ripple @click="goToActivity(activity.name)">
                         <b>{{ activity.name }}</b>
                         <small> {{activity.description}} </small>
                       </v-list-item-title>
-                      <v-btn text icon color="grey darken-1" ripple @click="deleteActivity(activity.name)">
+                      <v-btn text icon color="grey darken-1" ripple @click="confirmDeleteDlg = true">
                         <v-icon>delete</v-icon>
-                      </v-btn>
+                          <template>
+                            <v-row justify="center">
+                              <v-dialog
+                                v-model="confirmDeleteDlg"
+                                persistent
+                                max-width="290"
+                              >
+                                <v-card>
+                                  <v-card-title class="text-h5">
+                                    Conferma Cancella Attività
+                                  </v-card-title>
+                                  <v-card-text>Sei sicuro di voler cancellare l'attività?<br/>L'azione non è reversibile</v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                      color="green darken-1"
+                                      text
+                                      @click="confirmDeleteDlg = false"
+                                    >
+                                      Annulla
+                                    </v-btn>
+                                    <v-btn
+                                      color="green darken-1"
+                                      text
+                                      @click="confirmDeleteDlg = false; deleteActivity(activity.name)"
+                                    >
+                                      Ok
+                                    </v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+                            </v-row>
+                          </template>
+                        </v-btn>
                       <v-btn text icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
                         <v-icon>edit</v-icon>
                       </v-btn>
@@ -97,6 +130,7 @@ export default {
       activityList: null,
       drawer: null,
       source: null,
+      confirmDeleteDlg: null,
     };
   },
 };

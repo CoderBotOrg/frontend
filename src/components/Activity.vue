@@ -508,7 +508,7 @@ export default {
           // path: 'static/js/blockly/',
           // TODO: Use values from fetched configuration!
           scrollbars: true,
-          // MaxBlocks		: -1, // -1 as infinite not working FIXME
+          maxBlocks: this.activity ? this.activity.maxBlocks : -1,
           zoom: {
             controls: true,
             wheel: false,

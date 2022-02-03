@@ -842,7 +842,6 @@ export default {
           data.camera_path_object_size_max = remoteConfig.camera_path_object_size_max;
           data.camera_path_object_size_min = remoteConfig.camera_path_object_size_min;
           data.cnn_default_model = remoteConfig.cnn_default_model;
-          data.prog_maxblocks = remoteConfig.prog_maxblocks;
           data.btnFun = remoteConfig.button_func;
           data.wifiMode = remoteConfig.wifi_mode;
           data.wifiSSID = remoteConfig.wifi_ssid;
@@ -887,7 +886,6 @@ export default {
           camera_path_object_size_max: data.camera_path_object_size_max,
           camera_path_object_size_min: data.camera_path_object_size_min,
           cnn_default_model: data.cnn_default_model,
-          prog_maxblocks: data.prog_maxblocks,
           wifi_mode: data.wifiMode,
           wifi_ssid: data.wifiSSID,
           wifi_psk: data.wifiPsw,
@@ -979,7 +977,6 @@ export default {
         camera_path_object_size_max: null,
         camera_path_object_size_min: null,
         cnn_default_model: null,
-        prog_maxblocks: null,
 
         cbName: 'CoderBot',
         power: [null, null, null],

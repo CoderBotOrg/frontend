@@ -94,26 +94,30 @@
 									</v-card>
 									<br><br>
 								-->
-                  <!--
-									<h3 class="text-xs-left">Viste disponibilità</h3>
+									<h3 class="text-xs-left">Programmazione</h3>
 									<v-card>
 										<div class="cardContent">
 											<v-layout row wrap>
+                        <!--
 												<v-flex>
-													<v-checkbox v-model="availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
+													<v-checkbox v-model="activity.availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
 												</v-flex>
 												<v-flex>
-													<v-checkbox disabled v-model="availableViews" label="Editor Python" value="python"></v-checkbox>
+													<v-checkbox v-model="activity.availableViews" label="Editor Python" value="python"></v-checkbox>
 												</v-flex>
 												<v-flex>
-													<v-checkbox v-model="availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
+													<v-checkbox v-model="activity.availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
 												</v-flex>
-												<v-switch :label="`Permetti di visualizzare il codice generato`" v-model="capsSwitch"></v-switch>
+												<v-flex>
+  												<v-switch v-model="activity.viewSource" label="Permetti di visualizzare il codice generato"></v-switch>
+												</v-flex>
+                        -->
+												<v-flex>
+													<v-text-field v-model="activity.maxBlocks" label="Numero massimo di blocchi"></v-text-field>
+												</v-flex>
 											</v-layout>
 										</div>
 									</v-card>
-									-->
-                  <br><br>
                   <!--
 									<h3 class="text-xs-left">Funzionalità sperimentali</h3>
 									<v-card>
@@ -372,7 +376,9 @@ export default {
         capsSwitch: true,
         bodyFont: 'Roboto',
         codeFont: 'ubuntumono',
-
+        maxBlocks: -1,
+        availableViews: [],
+        viewSource: null,
       },
       colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black', 'grey', 'black', 'white'],
       textColors: [
@@ -436,7 +442,6 @@ export default {
       ],
       uiLang: 'Italiano',
       blocklyLang: 'Inglese',
-      availableViews: [],
       editHistory: false,
       navHistory: false,
       experimental: true,
