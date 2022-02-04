@@ -10,6 +10,7 @@
           {{ activity.name }}
         </v-app-bar-title>
         <v-spacer></v-spacer>
+        <v-chip class="ma-2" v-if="activity.maxBlocks > 0" label>{{ $t("message.activity_program_remaining_blocks") }}: {{ workspace.remainingCapacity() }}</v-chip>
         <!-- If the API is available, show the desired buttons -->
         <template v-if="status == 200">
           <template v-for="button in activity.buttons">

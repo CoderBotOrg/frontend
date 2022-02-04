@@ -33,8 +33,8 @@
                   <v-card>
                     <v-form class="cardContent">
                       <v-text-field v-model="activity.name" label="Nome" required></v-text-field>
-                      <v-text-field v-model="activity.description" label="Descrizione"></v-text-field>
-                      <v-select v-model="defaultView" :items="viste" label="Vista predefinita" required></v-select>
+                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')"></v-text-field>
+                      <v-select v-model="defaultView" :items="viste" v-bind:label="$t('message.activity_predefined_view')" required></v-select>
                     </v-form>
                   </v-card>
                   <br><br>
@@ -44,7 +44,7 @@
                       <!--
 											<v-select :items="fontSizeLabels" v-model="activity.fontSize" label="Grandezza testo"></v-select>
 										-->
-                      <v-switch :label="`Solo maiuscole`" v-model="activity.capsSwitch"></v-switch>
+                      <v-switch v-bind:label="$t('message.activity_caps_only')" v-model="activity.capsSwitch"></v-switch>
                       <!--
 											<v-layout row wrap>
 												<v-flex>
@@ -94,7 +94,7 @@
 									</v-card>
 									<br><br>
 								-->
-									<h3 class="text-xs-left">Programmazione</h3>
+									<h3 class="text-xs-left">{{ $t("message.activity_programing_title") }}</h3>
 									<v-card>
 										<div class="cardContent">
 											<v-layout row wrap>
@@ -113,7 +113,7 @@
 												</v-flex>
                         -->
 												<v-flex>
-													<v-text-field v-model="activity.maxBlocks" label="Numero massimo di blocchi"></v-text-field>
+													<v-text-field v-model="activity.maxBlocks" v-bind:label="$t('message.activity_blocks_max_blocks')"></v-text-field>
 												</v-flex>
 											</v-layout>
 										</div>
@@ -147,7 +147,7 @@
                   <h3> {{ $t("message.activity_toolbar_preview") }} </h3>
                   <v-app-bar>
                     <v-app-bar-nav-icon v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
-                    <v-app-bar-title v-if="activity.showName">{{ activity.name || "Nome Attività"}}</v-app-bar-title>
+                    <v-app-bar-title v-if="activity.showName">{{ activity.name || $t("message.activity_name")}}</v-app-bar-title>
                     <v-spacer></v-spacer>
                     <template v-for="button in activity.buttons">
                       <v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
@@ -158,8 +158,8 @@
                     </template>
                   </v-app-bar>
                   <br>
-                  <v-switch label="Icona menù laterale" v-model="activity.drawerEnabled"></v-switch>
-                  <v-switch label="Nome Attività" v-model="activity.showName"></v-switch>
+                  <v-switch v-bind:label="$t('message.activity_lateral_menu_icon')" v-model="activity.drawerEnabled"></v-switch>
+                  <v-switch v-bind:label="$t('message.activity_name')" v-model="activity.showName"></v-switch>
                   <br>
                   <h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
                   <v-btn @click="addButton()" outlined color="green">
@@ -182,11 +182,11 @@
                       <div class="cardContent">
                         <span class="grey--text text--darken-2" v-if="button.notErasable">
                           {{ $t("message.activity_toolbar_buttons_cannot_remove_run") }} </span>
-                        <v-text-field v-model="button.label" label="Etichetta"></v-text-field>
-                        <v-select v-model="button.action" :items="actions" label="Azione"
+                        <v-text-field v-model="button.label" v-bind:label="$t('message.activity_label')"></v-text-field>
+                        <v-select v-model="button.action" :items="actions" v-bind:label="$t('message.activity_action')"
                           :disabled="button.notErasable">
                         </v-select>
-                        <v-select :items="textColors" v-model="button.colorText" label="Colore testo"></v-select>
+                        <v-select :items="textColors" v-model="button.colorText" v-bind:label="$t('message.activity_text_color')"></v-select>
                         <v-layout row wrap>
                           <v-flex xs4 style="text-align: left">
                             <span style="vertical-align: 55%"> {{ $t("message.activity_toolbar_buttons_color") }}
@@ -437,8 +437,9 @@ export default {
         'Protanopia',
       ],
       langs: [
-        'Italiano',
-        'Inglese',
+        this.$i18n.t('message.activity_lang_italian'),
+        this.$i18n.t('message.activity_lang_english'),
+        this.$i18n.t('message.activity_lang_french'),
       ],
       uiLang: 'Italiano',
       blocklyLang: 'Inglese',

@@ -15,14 +15,18 @@
               <p style="text-align: left">
                 <v-alert :value="true" type="info" style="font-size:16px">
                   {{ $t("message.activity_tip_1") }}<br>
-                  L'icona <v-icon class="white--text">delete</v-icon> ti permette di eliminarla, mentre cliccando su
-                  <v-icon class="white--text">edit</v-icon> puoi modificarla.
+                  <i18n path="message.activity_list_text_1">
+                    <v-icon class="white--text">delete</v-icon>
+                    <v-icon class="white--text">edit</v-icon>
+                  </i18n>
                 </v-alert>
               </p>
               <v-card>
                 <v-list>
                   <span v-if="activityList == null || activityList == [] || activityList.length == 0">
-                    Nessuna Attività, perchè non ne <a href="#/activity/new">crei</a> una nuova?
+                  <i18n path="message.activity_list_text_2" tag="label" for="message.activity_list_create">
+                    <a href="#/activity/new">{{ $t("message.activity_list_create") }}</a>
+                  </i18n>
                   </span>
                   <template v-for="activity in activityList">
                     <v-list-item :key="activity.el" link>
@@ -41,9 +45,9 @@
                               >
                                 <v-card>
                                   <v-card-title class="text-h5">
-                                    Conferma Cancella Attività
+                                    {{ $t("message.activity_list_delete_confirm_title") }}
                                   </v-card-title>
-                                  <v-card-text>Sei sicuro di voler cancellare l'attività?<br/>L'azione non è reversibile</v-card-text>
+                                  <v-card-text>{{ $t("message.activity_list_delete_confirm_text") }}</v-card-text>
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn
