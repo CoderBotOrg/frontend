@@ -381,7 +381,7 @@ export default {
             type: 'text',
           },
           {
-            action: 'runProgramLegacy',
+            action: 'runProgram',
             icon: 'play_arrow',
             label: this.$i18n.t('message.activity_program_run'),
             type: 'text',
@@ -509,7 +509,7 @@ export default {
           // path: 'static/js/blockly/',
           // TODO: Use values from fetched configuration!
           scrollbars: true,
-          maxBlocks: this.activity ? this.activity.maxBlocks : -1,
+          maxBlocks: this.activity.maxBlocks,
           zoom: {
             controls: true,
             wheel: false,
@@ -842,7 +842,6 @@ export default {
         });
       }
     },
-
     runProgram() {
       if (this.status) {
         const axios = this.$axios;
@@ -858,11 +857,15 @@ export default {
         Blockly.Python.INFINITE_LOOP_TRAP = null;
 
         axios.post(`${CB}/exec`, {
-          name: 'Hello, World!',
+          name: 'run program',
           dom_code,
           code,
         }).then((response) => {
           console.log(response);
+          this.runtimeDialog = true;
+          setTimeout(() => {
+            this.updateExecStatus();
+          }, 1000);
         });
       } else {
         this.generalDialog = true;
@@ -870,7 +873,7 @@ export default {
         this.generalDialogText = this.$i18n.t('coderbot_offline_3');
       }
     },
-
+    /*
     runProgramLegacy() {
       if (this.status) {
         const axios = this.$axios;
@@ -899,14 +902,7 @@ export default {
           });
       }
     },
-
-    run() {
-      // Run program handler
-
-      // Some decision logic here
-      this.runProgramLegacy();
-    },
-
+    */
     stopProgram() {
       console.log('Stopping');
       const axios = this.$axios;

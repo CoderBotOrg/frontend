@@ -33,8 +33,10 @@
                   <v-card>
                     <v-form class="cardContent">
                       <v-text-field v-model="activity.name" label="Nome" required></v-text-field>
-                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')"></v-text-field>
-                      <v-select v-model="defaultView" :items="viste" v-bind:label="$t('message.activity_predefined_view')" required></v-select>
+                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')">
+                      </v-text-field>
+                      <v-select v-model="defaultView" :items="viste"
+                        v-bind:label="$t('message.activity_predefined_view')" required></v-select>
                     </v-form>
                   </v-card>
                   <br><br>
@@ -44,7 +46,8 @@
                       <!--
 											<v-select :items="fontSizeLabels" v-model="activity.fontSize" label="Grandezza testo"></v-select>
 										-->
-                      <v-switch v-bind:label="$t('message.activity_caps_only')" v-model="activity.capsSwitch"></v-switch>
+                      <v-switch v-bind:label="$t('message.activity_caps_only')" v-model="activity.capsSwitch">
+                      </v-switch>
                       <!--
 											<v-layout row wrap>
 												<v-flex>
@@ -94,10 +97,10 @@
 									</v-card>
 									<br><br>
 								-->
-									<h3 class="text-xs-left">{{ $t("message.activity_programing_title") }}</h3>
-									<v-card>
-										<div class="cardContent">
-											<v-layout row wrap>
+                  <h3 class="text-xs-left">{{ $t("message.activity_programing_title") }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-layout row wrap>
                         <!--
 												<v-flex>
 													<v-checkbox v-model="activity.availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
@@ -112,12 +115,17 @@
   												<v-switch v-model="activity.viewSource" label="Permetti di visualizzare il codice generato"></v-switch>
 												</v-flex>
                         -->
-												<v-flex>
-													<v-text-field v-model="activity.maxBlocks" v-bind:label="$t('message.activity_blocks_max_blocks')"></v-text-field>
-												</v-flex>
-											</v-layout>
-										</div>
-									</v-card>
+                        <v-flex>
+                          <v-checkbox v-model="activity.autoRecVideo"
+                            v-bind:label="$t('message.activity_auto_rec_video')"></v-checkbox>
+                        </v-flex>
+                        <v-flex>
+                          <v-text-field v-model="activity.maxBlocks"
+                            v-bind:label="$t('message.activity_blocks_max_blocks')"></v-text-field>
+                        </v-flex>
+                      </v-layout>
+                    </div>
+                  </v-card>
                   <!--
 									<h3 class="text-xs-left">Funzionalità sperimentali</h3>
 									<v-card>
@@ -147,7 +155,8 @@
                   <h3> {{ $t("message.activity_toolbar_preview") }} </h3>
                   <v-app-bar>
                     <v-app-bar-nav-icon v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
-                    <v-app-bar-title v-if="activity.showName">{{ activity.name || $t("message.activity_name")}}</v-app-bar-title>
+                    <v-app-bar-title v-if="activity.showName">{{ activity.name || $t("message.activity_name")}}
+                    </v-app-bar-title>
                     <v-spacer></v-spacer>
                     <template v-for="button in activity.buttons">
                       <v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
@@ -158,7 +167,8 @@
                     </template>
                   </v-app-bar>
                   <br>
-                  <v-switch v-bind:label="$t('message.activity_lateral_menu_icon')" v-model="activity.drawerEnabled"></v-switch>
+                  <v-switch v-bind:label="$t('message.activity_lateral_menu_icon')" v-model="activity.drawerEnabled">
+                  </v-switch>
                   <v-switch v-bind:label="$t('message.activity_name')" v-model="activity.showName"></v-switch>
                   <br>
                   <h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
@@ -186,7 +196,8 @@
                         <v-select v-model="button.action" :items="actions" v-bind:label="$t('message.activity_action')"
                           :disabled="button.notErasable">
                         </v-select>
-                        <v-select :items="textColors" v-model="button.colorText" v-bind:label="$t('message.activity_text_color')"></v-select>
+                        <v-select :items="textColors" v-model="button.colorText"
+                          v-bind:label="$t('message.activity_text_color')"></v-select>
                         <v-layout row wrap>
                           <v-flex xs4 style="text-align: left">
                             <span style="vertical-align: 55%"> {{ $t("message.activity_toolbar_buttons_color") }}
@@ -248,8 +259,10 @@
                   <h3 class="text-xs-left">{{ $t("message.activity_views_title") }}</h3>
                   <v-card>
                     <v-form class="cardContent">
-                      <v-switch v-bind:label='$t("message.activity_views_runtime_camera")' v-model="activity.exec.camera"></v-switch>
-                      <v-switch v-bind:label='$t("message.activity_views_runtime_log")' v-model="activity.exec.log"></v-switch>
+                      <v-switch v-bind:label='$t("message.activity_views_runtime_camera")'
+                        v-model="activity.exec.camera"></v-switch>
+                      <v-switch v-bind:label='$t("message.activity_views_runtime_log")' v-model="activity.exec.log">
+                      </v-switch>
                     </v-form>
                   </v-card>
                 </v-flex>
@@ -376,11 +389,15 @@ export default {
         capsSwitch: true,
         bodyFont: 'Roboto',
         codeFont: 'ubuntumono',
-        maxBlocks: -1,
+        maxBlocks: 0,
         availableViews: [],
         viewSource: null,
+        autoRecVideo: null,
       },
-      colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black', 'grey', 'black', 'white'],
+      colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal',
+        'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black',
+        'grey', 'black', 'white'
+      ],
       textColors: [
         {
           text: 'Bianco',
@@ -394,7 +411,7 @@ export default {
       actions: [
         {
           text: this.$i18n.t('message.activity_program_run'),
-          value: 'runProgramLegacy'
+          value: 'runProgram'
         },
         {
           text: this.$i18n.t('message.activity_program_save'),
@@ -527,16 +544,14 @@ export default {
       this.activity.buttons.splice(index, 1);
     },
     removeAll() {
-      this.activity.buttons = [
-        {
-          label: this.$i18n.t('message.activity_program_run'),
-          icon: 'play_arrow',
-          colorBtn: 'green',
-          colorText: 'white--text',
-          action: 'runProgramLegacy',
-          notErasable: true
-        },
-      ];
+      this.activity.buttons = [{
+        label: this.$i18n.t('message.activity_program_run'),
+        icon: 'play_arrow',
+        colorBtn: 'green',
+        colorText: 'white--text',
+        action: 'runProgram',
+        notErasable: true
+      }];
     },
     restoreDefaults() {
       this.activity.buttons = [
@@ -545,7 +560,7 @@ export default {
           icon: 'play_arrow',
           colorBtn: 'green',
           colorText: 'white--text',
-          action: 'runProgramLegacy',
+          action: 'runProgram',
           notErasable: true,
         },
         {
@@ -562,15 +577,14 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.rounded1 {
-	border-radius: 25px;
-	border: 2px solid #73AD21;
-	padding: 20px;
-	width: 100px;
-}
+  .rounded1 {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 100px;
+  }
 
-.cardContent {
-	padding: 16px;
-}
-
+  .cardContent {
+    padding: 16px;
+  }
 </style>

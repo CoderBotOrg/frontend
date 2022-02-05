@@ -55,14 +55,14 @@
                                       text
                                       @click="confirmDeleteDlg = false"
                                     >
-                                      Annulla
+                                      {{ $t("message.cancel") }}
                                     </v-btn>
                                     <v-btn
                                       color="green darken-1"
                                       text
                                       @click="confirmDeleteDlg = false; deleteActivity(activity.name)"
                                     >
-                                      Ok
+                                      {{ $t("message.ok") }}
                                     </v-btn>
                                   </v-card-actions>
                                 </v-card>
