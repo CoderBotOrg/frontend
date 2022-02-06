@@ -849,6 +849,7 @@ export default {
           CB
         } = this;
         // POST /program/save
+        const options = this.activity;
         const xml_code = Blockly.Xml.workspaceToDom(this.workspace);
         const dom_code = Blockly.Xml.domToText(xml_code);
         window.LoopTrap = 1000;
@@ -860,6 +861,7 @@ export default {
           name: 'run program',
           dom_code,
           code,
+          options,
         }).then((response) => {
           console.log(response);
           this.runtimeDialog = true;

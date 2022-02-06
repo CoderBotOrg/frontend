@@ -97,7 +97,7 @@
       </template>
       <template v-else>
         <br>
-        {{ $t("message.coderbot_offline_1") }}<br>
+        {{ $t("message.coderbot_status_offline_1") }}<br>
         <v-icon large>signal_wifi_off</v-icon>
       </template>
     </v-main>

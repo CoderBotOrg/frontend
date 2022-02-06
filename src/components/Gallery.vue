@@ -14,30 +14,61 @@
               <h3>{{ $t("message.gallery_empty") }}</h3>
             </template>
             <template v-else>
-              <v-card>
-                <v-container grid-list-sm fluid>
-                  <v-layout row wrap>
-                    <v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
-                      <v-card text tile class="d-flex">
-                        <v-layout column>
-                          <div class="subheading">{{ photos[n-1].name }} <v-btn
-                              v-on:click="deletePhoto(photos[n-1].name)" text icon color="red lighten-2">
-                              <v-icon>delete</v-icon>
-                            </v-btn>
-                          </div>
-                          <a :href="CBv1+'/photos/'+photos[n-1].name" target="_blank">
-                            <v-img :src="CBv1+'/photos/'+photos[n-1].name" aspect-ratio="1" class="grey lighten-2">
-                              <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
-                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                              </v-layout>
-                            </v-img>
-                          </a>
+              <v-container grid-list-sm fluid>
+                <v-layout row wrap>
+                  <v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
+                    <v-card
+                      class="mx-auto my-12"
+                      max-width="256"
+                      >
+                      <a class="text-decoration-none" @click="photo=photos[n-1]; gallery_detail=true">
+                      <v-img v-if="photos[n-1].type=='jpg'" :src="CBv1+'/photos/'+photos[n-1].thumbName" class="grey lighten-2">
+                        <v-layout slot="placeholder" fill-height align-center justify-center ma-2>
+                          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                         </v-layout>
-                      </v-card>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card>
+                      </v-img>
+                      <v-img v-else-if="photos[n-1].type=='mp4'" :src="CBv1+'/photos/'+photos[n-1].thumbName" class="grey lighten-2">
+                        <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
+                          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                        </v-layout>
+                      </v-img>
+                      <v-card-title class="subheading">
+                        {{ photos[n-1].name }}
+                      </v-card-title>
+                      </a>
+                      <v-card-actions>
+                        <v-btn
+                          v-on:click="deletePhoto(photos[n-1].fileName)" text icon color="red lighten-2">
+                          <v-icon>delete</v-icon>
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+              <v-dialog v-model="gallery_detail">
+                <v-card class="mx-auto my-12" max-width="640">
+                  <v-card-title class="text-h5 grey lighten-2">
+                    {{ photo.name }}
+                  </v-card-title>
+                  <v-img v-if="photo.type=='jpg'" :src="CBv1+'/photos/'+photo.fileName" aspect-ratio="1" class="grey lighten-2">
+                    <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
+                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    </v-layout>
+                  </v-img>
+                  <video v-else-if="photo.type=='mp4'" controls autoplay :src="CBv1+'/photos/'+photo.fileName"/>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="gallery_detail = false"
+                    >
+                      {{ $t("message.close") }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </template>
           </v-flex>
         </v-layout>
@@ -62,9 +93,20 @@ export default {
       const {
         CBv1
       } = this;
+      this.photos = [];
       axios.get(`${CBv1}/photos`)
         .then((response) => {
-          this.photos = response.data;
+          response.data.forEach((element) => {
+            this.photos.push(
+              {
+                name: element.name.substring(0, element.name.indexOf('.')),
+                type: element.name.substring(element.name.indexOf('.') + 1),
+                thumbName: `${element.name.substring(0, element.name.indexOf('.'))}_thumb.jpg`,
+                fileName: element.name
+              }
+            );
+          });
+          this.photo = {};
         });
     },
     deletePhoto(name) {
@@ -89,8 +131,13 @@ export default {
       photos: [],
       drawer: null,
       l: null,
+      photo: null,
+      gallery_detail: null
     };
   },
+  computed: {
+
+  }
 };
 </script>
 <style scoped>
