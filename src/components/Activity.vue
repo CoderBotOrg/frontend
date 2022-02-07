@@ -55,7 +55,22 @@
       <v-dialog v-model="runtimeDialog" width="500">
         <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>
-            {{ $t("message.running") }}
+            {{ $t("message.program_status_title") }}
+            <v-spacer></v-spacer>
+            <v-chip v-if="program_status"
+              class="ma-2"
+              color="red"
+              text-color="white"
+            >
+              {{ $t("message.program_running")}}
+            </v-chip>
+            <v-chip v-else
+              class="ma-2"
+              color="grey"
+              text-color="white"
+            >
+              {{ $t("message.program_completed")}}
+            </v-chip>
           </v-card-title>
           <template v-if="activity.exec.camera">
             <v-card-text v-if="runtimeDialog">
@@ -69,7 +84,8 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" text @click="runtimeDialog = false; stopProgram()">
-              {{ $t("message.close") }}
+              <span v-if="program_status">{{ $t("message.program_stop") }}</span>
+              <span v-else>{{ $t("message.close") }}</span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -364,6 +380,7 @@ export default {
     dirty: false,
     confirm_exit_dialog: null,
     router_next: null,
+    program_status: null
   }),
   computed: {
     statusText() {
@@ -921,7 +938,8 @@ export default {
       console.log('Updating Execution status');
       axios.get(`${this.CBv1}/program/status`)
         .then((response) => {
-          if (response.data.running) {
+          this.program_status = response.data.running;
+          if (this.program_status) {
             // Check again in a second
             setTimeout(() => {
               this.updateExecStatus();
