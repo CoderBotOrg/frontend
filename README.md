@@ -1,4 +1,4 @@
-# vue-app
+# CoderBot frontend app
 ![Build](https://github.com/CoderBotOrg/frontend/actions/workflows/build.yml/badge.svg)
 
 > CoderBot is a RaspberryPI-based programmable robot for educational purposes. Check the [project website](https://www.coderbot.org) for more information.
@@ -19,8 +19,8 @@ Run the backend, following the instructions [here](https://github.com/CoderBotOr
 Once the backend is online:
 
 ```bash
-git clone https://github.com/CoderBotOrg/vue-app.git
-cd vue-app
+git clone https://github.com/CoderBotOrg/frontend.git
+cd frontend
 npm install
 npm run dev
 ```
