@@ -249,15 +249,21 @@
                       ></v-select>
                       {{ $t("message.settings_camera_framerate") }}:
                       <span v-text="settings.camera_framerate"></span>
-                      <v-slider v-model="settings.camera_framerate" min="5" max="30" step="5" />
+                      <v-slider v-model="settings.camera_framerate" min="5" max="30" step="5"
+                        @change="$v.settings.camera_framerate.$touch"
+                      />
                       {{ $t("message.settings_camera_jpeg_bitrate") }}:
                       <span v-text="settings.camera_jpeg_bitrate"></span>
                       <v-slider v-model="settings.camera_jpeg_bitrate" min="1000000" max="10000000" step="1000000"
-                        v-bind:label="$t('message.settings_camera_jpeg_bitrate')" />
+                        v-bind:label="$t('message.settings_camera_jpeg_bitrate')"
+                        @change="$v.settings.camera_jpeg_bitrate.$touch"
+                      />
                       {{ $t("message.settings_camera_jpeg_quality") }}:
                       <span v-text="settings.camera_jpeg_quality"></span>
                       <v-slider v-model="settings.camera_jpeg_quality" min="1" max="100" step="1"
-                        v-bind:label="$t('message.settings_camera_jpeg_quality')" />
+                        v-bind:label="$t('message.settings_camera_jpeg_quality')"
+                        @change="$v.settings.camera_jpeg_quality.$touch"
+                      />
                     </div>
                   </v-card>
                   <br><br>
@@ -266,7 +272,9 @@
                     <div class="cardContent">
                       {{ $t("message.settings_camera_cv_image_factor") }}:
                       <span v-text="settings.cv_image_factor"></span>
-                      <v-slider v-model="settings.cv_image_factor" min="1" max="4" step="1" />
+                      <v-slider v-model="settings.cv_image_factor" min="1" max="4" step="1"
+                        @change="$v.settings.cv_image_factor.$touch"
+                      />
                       <v-text-field v-model="settings.camera_color_object_size_max"
                         @input="$v.settings.camera_color_object_size_max.$touch"
                         v-bind:label="$t('message.settings_camera_color_object_size_max')" />

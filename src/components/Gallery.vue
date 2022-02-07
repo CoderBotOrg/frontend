@@ -38,7 +38,7 @@
                       </a>
                       <v-card-actions>
                         <v-btn
-                          v-on:click="deletePhoto(photos[n-1].fileName)" text icon color="red lighten-2">
+                          v-on:click="photo=photos[n-1]; confirmDeleteDlg=true" text icon color="red lighten-2">
                           <v-icon>delete</v-icon>
                         </v-btn>
                       </v-card-actions>
@@ -69,6 +69,36 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+              <v-dialog
+                v-model="confirmDeleteDlg"
+                persistent
+                max-width="290"
+              >
+                <v-card>
+                  <v-card-title class="text-h5">
+                    {{ $t("message.gallery_photo_confirm_title") }}
+                  </v-card-title>
+                  <v-card-text>{{ $t("message.gallery_photo_confirm_text") }}</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="green darken-1"
+                      text
+                      @click="confirmDeleteDlg = false"
+                    >
+                      {{ $t("message.cancel") }}
+                    </v-btn>
+                    <v-btn
+                      color="green darken-1"
+                      text
+                      @click="confirmDeleteDlg = false; deletePhoto(photo.fileName)"
+                    >
+                      {{ $t("message.ok") }}
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
             </template>
           </v-flex>
         </v-layout>
@@ -132,7 +162,8 @@ export default {
       drawer: null,
       l: null,
       photo: null,
-      gallery_detail: null
+      gallery_detail: null,
+      confirmDeleteDlg: null
     };
   },
   computed: {

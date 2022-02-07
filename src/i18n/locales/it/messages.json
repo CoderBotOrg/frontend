@@ -104,6 +104,8 @@
     "control_text_to_speech": "Text to Speech",
     "gallery_title": "Gallery",
     "gallery_empty": "Galleria vuota!",
+    "gallery_photo_confirm_title": "Conferma",
+    "gallery_photo_confirm_text": "Sei sicuro di voler cancellare questa foto o video?",
     "settings_title": "Impostazioni",
     "settings_system": "Sistema",
     "settings_toolbox_level": "Livello Toolbox",
