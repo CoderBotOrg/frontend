@@ -234,6 +234,24 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <!-- Confirm exit dialog -->
+      <v-dialog v-model="confirm_exit_dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">{{ $t("message.confirm") }}</v-card-title>
+          <v-card-text>
+            {{ $t("message.activity_confirm_exit_text") }}
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="confirm_exit_dialog=false">
+              {{ $t("message.cancel") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text" @click="confirm_exit_dialog=false; router_next(true)">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <!-- Notification Snackbar -->
       <v-snackbar v-model="snackbar">
         {{ snackText }}
@@ -293,9 +311,10 @@ Object.keys(music_package.packages).forEach((key) => {
     Blockly.Blocks.CoderBotSettings.animalist[Blockly.Blocks.CoderBotSettings.animalist.length] = names;
   }
 });
+// let workspace = null;
 
 export default {
-  name: 'Blockly',
+  name: 'Activity',
   components: {
     sidebar,
     Prism: () => import('vue-prism-component'),
@@ -342,6 +361,9 @@ export default {
     defaultProgramName: '',
     overwrite: 0,
     overwriteDialog: false,
+    dirty: false,
+    confirm_exit_dialog: null,
+    router_next: null,
   }),
   computed: {
     statusText() {
@@ -448,6 +470,14 @@ export default {
         this.initBlockly(settings);
       });
   },
+  beforeRouteLeave(to, from, next) {
+    if (this.workspace.dirty) {
+      this.router_next = next;
+      this.confirm_exit_dialog = true;
+    } else {
+      next();
+    }
+  },
   methods: {
     updateCssProps() {
       // (Re)Compute the CSS variables from the activity definition, then update them
@@ -519,6 +549,13 @@ export default {
           },
         },
       );
+      const {
+        workspace
+      } = this;
+      workspace.dirty = false;
+      workspace.addChangeListener(() => {
+        workspace.dirty = true;
+      });
 
       // Pass the reference to the method to call, don't execute it (`()`)
       // window.addEventListener('resize', this.resizeWorkspace, false);
@@ -527,7 +564,6 @@ export default {
       // this.resizeWorkspace()
       // Blockly.svgResize(this.workspace);
     },
-
     blocksExtensions() {
       const {
         settings
@@ -688,6 +724,7 @@ export default {
             this.$data.isDefault = '';
             this.$data.overwrite = 0;
             console.log('salvato');
+            this.workspace.dirty = false;
           }
         });
       } else {
@@ -774,7 +811,7 @@ export default {
           this.info = response.data;
         })
         .catch((error) => {
-          console.log(error);
+          console.log(`pollStatus error: ${error}`);
           // If the disconnection happened while in this component, send a notification
           if (this.status) {
             this.snackText = this.$i18n.t('coderbot_offline_2');
@@ -862,8 +899,7 @@ export default {
           dom_code,
           code,
           options,
-        }).then((response) => {
-          console.log(response);
+        }).then(() => {
           this.runtimeDialog = true;
           setTimeout(() => {
             this.updateExecStatus();
@@ -875,42 +911,11 @@ export default {
         this.generalDialogText = this.$i18n.t('coderbot_offline_3');
       }
     },
-    /*
-    runProgramLegacy() {
-      if (this.status) {
-        const axios = this.$axios;
-        const qs = this.$qs;
-        this.log = '';
-        // POST /program/save
-        const xml_code = Blockly.Xml.workspaceToDom(this.workspace);
-        const dom_code = Blockly.Xml.domToText(xml_code);
-        window.LoopTrap = 1000;
-        Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
-        const code = Blockly.Python.workspaceToCode(this.workspace);
-        Blockly.Python.INFINITE_LOOP_TRAP = null;
-
-        const valuesAsString = qs.stringify({
-          name: 'Hello, World!',
-          dom_code,
-          code,
-        });
-
-        axios.post(`${this.CBv1}/program/exec`, valuesAsString)
-          .then(() => {
-            this.runtimeDialog = true;
-            setTimeout(() => {
-              this.updateExecStatus();
-            }, 1000);
-          });
-      }
-    },
-    */
     stopProgram() {
       console.log('Stopping');
       const axios = this.$axios;
       axios.post(`${this.CBv1}/program/end`);
     },
-
     updateExecStatus() {
       const axios = this.$axios;
       console.log('Updating Execution status');

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "vuelidate": "^0.7.7",
     "axios": "^0.25.0",
     "base-64": "^1.0.0",
     "blockly": "^7.20211209.2",

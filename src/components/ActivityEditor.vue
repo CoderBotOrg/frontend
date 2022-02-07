@@ -5,7 +5,7 @@
       <v-app-bar color="indigo" dark fixed app>
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title v-if="!saved">{{ $t("message.activity_new") }} {{prefix}} {{activity.name}}</v-app-bar-title>
-        <v-app-bar-title v-else>{{ $t("message.activity_modify") }} {{prefix}} {{activity.name}}</v-app-bar-title>
+        <v-app-bar-title v-else>{{ $t("message.activity_edit") }} {{prefix}} {{activity.name}}</v-app-bar-title>
         <v-spacer></v-spacer>
         <v-btn text @click="save()">
           <v-icon>save</v-icon>
@@ -274,10 +274,28 @@
           </v-tab-item>
         </v-tabs-items>
       </v-main>
+      <!-- Confirm exit dialog -->
+      <v-dialog v-model="confirm_exit_dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">{{ $t("message.confirm") }}</v-card-title>
+          <v-card-text>
+            {{ $t("message.activity_confirm_exit_text") }}
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="confirm_exit_dialog=false">
+              {{ $t("message.cancel") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text" @click="confirm_exit_dialog=false; router_next(true)">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-snackbar v-model="snackbar">
+        {{ snackbarText }}
+      </v-snackbar>
     </v-app>
-    <v-snackbar v-model="snackbar">
-      {{ snackbarText }}
-    </v-snackbar>
   </div>
 </template>
 <script>
@@ -491,6 +509,10 @@ export default {
           disabled: true
         },
       ],
+      confirm_exit_dialog: null,
+      route_next: null,
+      dirty: false,
+      unwatch: null
     };
   },
   mounted() {
@@ -511,6 +533,12 @@ export default {
     } else {
       this.restoreDefaults();
     }
+    this.unwatch = this.$watch('activity', () => {
+      this.dirty = true;
+    }, { deep: true });
+  },
+  unmounted() {
+    this.unwatch();
   },
   methods: {
     save() {

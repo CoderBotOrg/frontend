@@ -3,7 +3,11 @@
 
 // Vue base
 import Vue from 'vue';
+
+// VueRouter
 import VueRouter from 'vue-router';
+// Vuelidate
+import Vuelidate from 'vuelidate';
 
 // Vuex
 import axios from 'axios';
@@ -49,6 +53,7 @@ import activity from './components/Activity';
 
 // Configuration
 Vue.use(VueRouter);
+Vue.use(Vuelidate);
 
 Vue.prototype.$axios = axios.create();
 Vue.prototype.$base64 = base64;
@@ -59,6 +64,7 @@ Vue.config.productionTip = false;
 // Routing
 const routes = [
   {
+    name: 'home',
     path: '/',
     component: landing,
     meta: {
@@ -66,62 +72,69 @@ const routes = [
     }
   },
   {
+    name: 'control',
     path: '/control',
     component: control,
     meta: {
-      title: 'CoderBot - Controlla',
+      title: `CoderBot - ${i18n.t('message.control')}`,
     }
   },
   {
+    name: 'program',
     path: '/program',
     component: activity,
     meta: {
-      title: 'CoderBot - Blockly',
+      title: `CoderBot - ${i18n.t('message.program')}`,
     }
   },
   {
+    name: 'gallery',
     path: '/settings',
     component: settings,
     meta: {
-      title: 'CoderBot - Impostazioni',
+      title: `CoderBot - ${i18n.t('message.settings')}`,
     }
   },
   {
     path: '/gallery',
     component: gallery,
     meta: {
-      title: 'CoderBot - Galleria',
+      title: `CoderBot - ${i18n.t('message.gallery')}`,
     }
   },
   // { path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
   // { path: '/credits', component: credits, meta: {title: 'CoderBot - Crediti'}},
   // { path: '/ar', component: arexample, meta: {title: 'CoderBot'} },
   {
+    name: 'activity_new',
     path: '/activity/new',
     component: activityEditor,
     meta: {
-      title: 'CoderBot - Nuova Attività'
+      title: `CoderBot - ${i18n.t('message.activity_new')}`
     }
   },
   {
-    path: '/activity/open',
+    name: 'activity_manage',
+    path: '/activity/manage',
     component: activityList,
     meta: {
-      title: 'CoderBot - Apri Attività'
+      title: `CoderBot - ${i18n.t('message.activity_manage')}`
     }
   },
   {
+    name: 'activity_edit',
     path: '/activity/edit/:name',
     component: activityEditor,
     meta: {
-      title: 'CoderBot - Modifica Attività'
+      title: `CoderBot - ${i18n.t('message.activity_edit')}`
     }
   },
   {
+    name: 'activity_open',
     path: '/activity/open/:name',
     component: activity,
     meta: {
-      title: 'CoderBot - Programma'
+      title: `CoderBot - ${i18n.t('message.activity_open')}`
     }
   },
 ];

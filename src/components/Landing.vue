@@ -30,22 +30,9 @@
               <v-btn text large color="primary" to="control">
                 <v-icon left dark>games</v-icon>{{ $t("message.control") }}
               </v-btn> <br>
-              <!--
-							<v-btn text large color="primary">
-								<v-icon left dark>open_in_new</v-icon>Apri Attività
-							</v-btn> <br>
-							<v-btn text large color="primary" to="new">
-								<v-icon left dark>add</v-icon>Nuova Attività
-							</v-btn> <br>
-							-->
               <v-btn text large color="primary" to="settings">
                 <v-icon left dark>settings</v-icon>{{ $t("message.settings") }}
               </v-btn> <br>
-              <!--
-							<v-btn text large color="primary">
-								<v-icon left dark>help</v-icon>Aiuto
-							</v-btn> <br>
-							-->
             </v-flex>
           </v-layout>
         </v-container>
@@ -63,7 +50,7 @@ export default {
   components: {
     sidebar
   },
-  name: 'CoderBot',
+  name: 'Landing',
   methods: {
     toggleSidebar() {
       const currentStatus = this.$store.getters.drawerStatus;

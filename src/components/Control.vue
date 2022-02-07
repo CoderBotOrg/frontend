@@ -249,13 +249,12 @@ export default {
             this.snackbar = true;
           }
 
-          // console.log(response)
           this.statusData = response.data;
           this.status = response.status;
         })
         .catch((error) => {
           // handle error
-          console.log(error);
+          console.log(`pollStatus error: ${error}`);
 
           if (this.status) {
             this.snackText = this.$i18n.t('message.coderbot_offline_2');
@@ -279,40 +278,32 @@ export default {
         axios.post(`${CB}/move`, {
           speed: 100,
           elapse: -1,
-        }).then((response) => {
-          console.log(response);
         }).catch((error) => {
-          console.log(error);
+          console.log(`move error: ${error}`);
         });
       } else if (direction == 1) {
         // RIGHT, turn right
         axios.post(`${CB}/turn`, {
           speed: -80,
           elapse: -1,
-        }).then((response) => {
-          console.log(response);
         }).catch((error) => {
-          console.log(error);
+          console.log(`turn error: ${error}`);
         });
       } else if (direction == 2) {
         // LEFT, turn left
         axios.post(`${CB}/turn`, {
           speed: 80,
           elapse: -1,
-        }).then((response) => {
-          console.log(response);
         }).catch((error) => {
-          console.log(error);
+          console.log(`turn error: ${error}`);
         });
       } else if (direction == 3) {
         // DOWN, move backwards
         axios.post(`${CB}/move`, {
           speed: -100,
           elapse: -1,
-        }).then((response) => {
-          console.log(response);
         }).catch((error) => {
-          console.log(error);
+          console.log(`move error: ${error}`);
         });
       }
     },
@@ -332,17 +323,13 @@ export default {
       if (pressDuration < 500) {
         console.log('Too fast, postponing it by', delay, 'ms..');
         setTimeout(() => {
-          axios.post(`${CB}/stop`).then((response) => {
-            console.log(response);
-          }).catch((error) => {
-            console.log(error);
+          axios.post(`${CB}/stop`).catch((error) => {
+            console.log(`stopping error: ${error}`);
           });
         }, delay);
       } else {
-        axios.post(`${CB}/stop`).then((response) => {
-          console.log(response);
-        }).catch((error) => {
-          console.log(error);
+        axios.post(`${CB}/stop`).catch((error) => {
+          console.log(`stop error: ${error}`);
         });
       }
     },

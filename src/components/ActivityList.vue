@@ -91,13 +91,13 @@ export default {
   components: {
     sidebar
   },
-  name: 'CoderBot',
+  name: 'ActivityList',
   mounted() {
     this.getActivities();
   },
   methods: {
-    goToActivity: (name) => {
-      window.location = `#/activity/open/${name}`;
+    goToActivity(name) {
+      this.$router.push({ name: 'activity_open', params: { name } });
     },
     getActivities() {
       const axios = this.$axios;
@@ -108,7 +108,6 @@ export default {
       axios.get(`${CB}/listActivities`)
         .then((response) => {
           this.$data.activityList = response.data;
-          console.log(this.$data.activityList);
         });
     },
     deleteActivity(name) {

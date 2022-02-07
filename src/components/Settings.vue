@@ -35,7 +35,10 @@
                   <v-card>
                     <div class="cardContent">
                       <v-select v-model="settings.progLevel" :items="blocklyToolboxItems"
-                        v-bind:label="$t('message.settings_toolbox_level')"></v-select>
+                        v-bind:label="$t('message.settings_toolbox_level')"
+                        @select="$v.settings.progLevel.$touch"
+                      >
+                      </v-select>
                       <!--<v-text-field v-model="settings.cbName" v-bind:label="Nome CoderBot"></v-text-field>
 												<br>-->
                       <div v-for="(value, key) in cb.info" :key="key">
@@ -74,7 +77,7 @@
                         <!-- eslint-disable-next-line vue/no-unused-vars -->
                         <template v-slot:activator="data">
                           <v-btn slot="activator" color="error" dark>
-                            <v-icon>fas fa-wrench</v-icon> {{ $t('message.settings_action_reset_factory') }}
+                            <v-icon>fas fa-wrench</v-icon> {{ $t('message.settings_actions_reset_factory') }}
                           </v-btn>
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
@@ -161,13 +164,21 @@
                   <v-card>
                     <div class="cardContent">
                       <v-text-field v-model="settings.ctrlFwdSpeed"
-                        v-bind:label="$t('message.settings_movement_control_forward_speed')" />
+                        v-bind:label="$t('message.settings_movement_control_forward_speed')"
+                        @input="$v.settings.ctrlFwdSpeed.$touch"
+                      />
                       <v-text-field v-model="settings.ctrlFwdElapse"
-                        v-bind:label="$t('message.settings_movement_control_forward_elapse')" />
+                        v-bind:label="$t('message.settings_movement_control_forward_elapse')"
+                        @input="$v.settings.ctrlFwdElapse.$touch"
+                      />
                       <v-text-field v-model="settings.ctrlTurnSpeed"
-                        v-bind:label="$t('message.settings_movement_control_turn_speed')" />
+                        v-bind:label="$t('message.settings_movement_control_turn_speed')"
+                        @input="$v.settings.ctrlTurnSpeed.$touch"
+                      />
                       <v-text-field v-model="settings.ctrlTurnElapse"
-                        v-bind:label="$t('message.settings_movement_control_turn_elapse')" />
+                        v-bind:label="$t('message.settings_movement_control_turn_elapse')"
+                        @input="$v.settings.ctrlTurnElapse.$touch"
+                      />
                     </div>
                   </v-card>
                   <br><br>
@@ -175,13 +186,21 @@
                   <v-card>
                     <div class="cardContent">
                       <v-text-field v-model="settings.moveFwdSpeed"
-                        v-bind:label="$t('message.settings_movement_program_forward_speed')" />
+                        v-bind:label="$t('message.settings_movement_program_forward_speed')"
+                        @input="$v.settings.moveFwdSpeed.$touch"
+                      />
                       <v-text-field v-model="settings.moveFwdElapse"
-                        v-bind:label="$t('message.settings_movement_program_forward_elapse')" />
+                        v-bind:label="$t('message.settings_movement_program_forward_elapse')"
+                        @input="$v.settings.moveFwdElapse.$touch"
+                      />
                       <v-text-field v-model="settings.moveTurnSpeed"
-                        v-bind:label="$t('message.settings_movement_program_turn_speed')" />
+                        v-bind:label="$t('message.settings_movement_program_turn_speed')"
+                        @input="$v.settings.moveTurnSpeed.$touch"
+                      />
                       <v-text-field v-model="settings.moveTurnElapse"
-                        v-bind:label="$t('message.settings_movement_program_turn_elapse')" />
+                        v-bind:label="$t('message.settings_movement_program_turn_elapse')"
+                        @input="$v.settings.moveTurnElapse.$touch"
+                      />
                     </div>
                   </v-card>
                   <br><br>
@@ -189,15 +208,22 @@
                   <v-card>
                     <div class="cardContent">
                       <v-text-field v-model="settings.motorMode"
-                        v-bind:label="$t('message.settings_movement_parameters_mode')" />
+                        v-bind:label="$t('message.settings_movement_parameters_mode')"
+                        @input="$v.settings.motorMode.$touch"
+                      />
                       <v-text-field v-model="settings.trimFactor"
-                        v-bind:label="$t('message.settings_movement_parameters_trim')" />
+                        v-bind:label="$t('message.settings_movement_parameters_trim')"
+                        @input="$v.settings.trimFactor.$touch"
+                      />
                       <v-text-field v-model="settings.power[0]"
-                        v-bind:label="$t('message.settings_movement_parameters_power_1')" />
+                        v-bind:label="$t('message.settings_movement_parameters_power_1')"
+                      />
                       <v-text-field v-model="settings.power[1]"
-                        v-bind:label="$t('message.settings_movement_parameters_power_2')" />
+                        v-bind:label="$t('message.settings_movement_parameters_power_2')"
+                      />
                       <v-text-field v-model="settings.power[2]"
-                        v-bind:label="$t('message.settings_movement_parameters_power_3')" />
+                        v-bind:label="$t('message.settings_movement_parameters_power_3')"
+                      />
                     </div>
                   </v-card>
                 </v-flex>
@@ -219,6 +245,7 @@
                         item-value="key"
                         v-bind:label="$t('message.settings_camera_exposure_mode')"
                         single-line
+                        @select="$v.settings.camera_exposure_mode.$touch"
                       ></v-select>
                       {{ $t("message.settings_camera_framerate") }}:
                       <span v-text="settings.camera_framerate"></span>
@@ -241,19 +268,24 @@
                       <span v-text="settings.cv_image_factor"></span>
                       <v-slider v-model="settings.cv_image_factor" min="1" max="4" step="1" />
                       <v-text-field v-model="settings.camera_color_object_size_max"
+                        @input="$v.settings.camera_color_object_size_max.$touch"
                         v-bind:label="$t('message.settings_camera_color_object_size_max')" />
                       <v-text-field v-model="settings.camera_color_object_size_min"
+                        @input="$v.settings.camera_color_object_size_min.$touch"
                         v-bind:label="$t('message.settings_camera_color_object_size_min')" />
                       <v-text-field v-model="settings.camera_path_object_size_max"
+                        @input="$v.settings.camera_path_object_size_max.$touch"
                         v-bind:label="$t('message.settings_camera_path_object_size_max')" />
                       <v-text-field v-model="settings.camera_path_object_size_min"
+                        @input="$v.settings.camera_path_object_size_min.$touch"
                         v-bind:label="$t('message.settings_camera_path_object_size_min')" />
                       <v-select
                         v-model="settings.cnn_default_model"
                         :items="cnnModels"
                         item-text="text"
                         item-value="key"
-                        v-bind:label="$t('message.settings_camera_cnn_default_model')" />
+                        v-bind:label="$t('message.settings_camera_cnn_default_model')"
+                        @select="$v.settings.cnn_default_model.$touch" />
                     </div>
                   </v-card>
                 </v-flex>
@@ -268,9 +300,15 @@
                   <h3 class="text-xs-left">{{ $t('message.settings_sounds_title') }}</h3>
                   <v-card>
                     <div class="cardContent">
-                      <v-text-field v-model="settings.startSound" v-bind:label="$t('message.settings_sounds_start')" />
-                      <v-text-field v-model="settings.stopSound" v-bind:label="$t('message.settings_sounds_stop')" />
-                      <v-text-field v-model="settings.shutterSound" v-bind:label="$t('message.settings_sounds_shutter')" />
+                      <v-text-field v-model="settings.startSound" v-bind:label="$t('message.settings_sounds_start')"
+                        @input="$v.settings.startSound.$touch"
+                      />
+                      <v-text-field v-model="settings.stopSound" v-bind:label="$t('message.settings_sounds_stop')"
+                        @input="$v.settings.stopSound.$touch"
+                      />
+                      <v-text-field v-model="settings.shutterSound" v-bind:label="$t('message.settings_sounds_shutter')"
+                        @input="$v.settings.shutterSound.$touch"
+                      />
                     </div>
                   </v-card>
                 </v-flex>
@@ -285,8 +323,9 @@
                   <h3 class="text-xs-left">{{ $t('message.settings_button_title') }}</h3>
                   <v-card>
                     <div class="cardContent">
-                      <v-radio-group v-model="settings.btnFun" column>
-                        <v-radio v-bind:label="$t('message.settings_button_none')" value="none" />
+                      <v-radio-group v-model="settings.btnFun" column
+                      >
+                        <v-radio v-bind:label="$t('message.settings_button_none')" value="none"/>
                         <v-radio v-bind:label="$t('message.settings_button_startstop')" value="startstop" />
                       </v-radio-group>
                     </div>
@@ -295,7 +334,9 @@
                   <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
                   <v-card>
                     <div class="cardContent">
-                      <v-text-field v-model="settings.startupProgram" v-bind:label="$t('message.settings_load_at_start_title')" />
+                      <v-text-field v-model="settings.startupProgram" v-bind:label="$t('message.settings_load_at_start_title')"
+                        @input="$v.settings.startupProgram.$touch"
+                      />
                     </div>
                   </v-card>
                 </v-flex>
@@ -309,7 +350,9 @@
                   <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
                   <v-card>
                     <div class="cardContent">
-                      <v-radio-group v-model="settings.wifiMode" column>
+                      <v-radio-group v-model="settings.wifiMode" column
+                        @change="$v.settings.wifiMode.$touch"
+                      >
                         <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client"></v-radio>
                         <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap">
                         </v-radio>
@@ -507,7 +550,10 @@
                   <h3 class="text-xs-left">{{ $t('message.settings_audio_title') }}</h3>
                   <v-card>
                     <div class="cardContent">
-                      {{ $t('message.settings_audio_volume') }}<v-text-field v-model="settings.audioLevel" v-bind:label="$t('message.settings_audio_volume')" />
+                      {{ $t('message.settings_audio_volume') }}
+                      <v-text-field v-model="settings.audioLevel" v-bind:label="$t('message.settings_audio_volume')"
+                        @input="$v.settings.audioLevel.$touch"
+                      />
                     </div>
                   </v-card>
                 </v-flex>
@@ -565,6 +611,24 @@
           </v-tab-item>
         </v-tabs-items>
       </v-main>
+      <!-- Confirm exit dialog -->
+      <v-dialog v-model="confirm_exit_dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">{{ $t("message.confirm") }}</v-card-title>
+          <v-card-text>
+            {{ $t("message.settings_confirm_exit_text") }}
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="confirm_exit_dialog=false">
+              {{ $t("message.cancel") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text" @click="confirm_exit_dialog=false; router_next(true)">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <!-- Notification Snackbar -->
       <v-snackbar v-model="snackbar">
         {{ snackText }}
@@ -576,6 +640,10 @@
   </div>
 </template>
 <script>
+import {
+  required, alpha, integer, decimal
+} from 'vuelidate/lib/validators';
+
 import sidebar from '../components/Sidebar';
 
 export default {
@@ -593,6 +661,14 @@ export default {
     this.loadMusicPackages();
     this.loadCNNModels();
   },
+  beforeRouteLeave(to, from, next) {
+    if (this.$v.$anyDirty) {
+      this.router_next = next;
+      this.confirm_exit_dialog = true;
+    } else {
+      next();
+    }
+  },
   methods: {
     pickFile() {
       this.$refs.file.click();
@@ -608,16 +684,16 @@ export default {
     },
     loadMusicPackages() {
       this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
-        this.settings.packagesInstalled = [];
+        this.packagesInstalled = [];
         const music_packages = JSON.parse(result.data);
         Object.entries(music_packages).forEach((key) => {
           const package_key = key[0];
           const music_package = key[1];
           const names = [music_package.name_IT, package_key];
           if (music_package.category == 'instrument') {
-            this.settings.packagesInstalled.push([names, 'instrument']);
+            this.packagesInstalled.push([names, 'instrument']);
           } else if (music_package.category == 'animal') {
-            this.settings.packagesInstalled.push([names, 'animal']);
+            this.packagesInstalled.push([names, 'animal']);
           }
         });
       });
@@ -627,7 +703,6 @@ export default {
         this.cnnModels = [];
         const cnn_models = JSON.parse(result.data);
         Object.entries(cnn_models).forEach((entry) => {
-          console.log(entry);
           const model_key = entry[0];
           // const model_data = entry[1];
           this.cnnModels.push({ key: model_key, text: model_key });
@@ -655,7 +730,6 @@ export default {
         }
       });
     },
-
     upload() {
       const config = {
         headers: {
@@ -673,7 +747,6 @@ export default {
         this.updateStatusText = this.$i18n.t('message.settings_packages_text_1');
       });
     },
-
     refresh() {
       window.location.reload();
       /*    readTextFile
@@ -826,7 +899,6 @@ export default {
         .then((response) => {
           // handle success
           const data = this.settings;
-          console.log(response.data);
           const remoteConfig = response.data;
           data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig
             .move_power_angle_3
@@ -862,7 +934,6 @@ export default {
           data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse;
           data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed;
           data.audioLevel = remoteConfig.audio_volume_level;
-          data.packagesInstalled = remoteConfig.packages_installed;
         });
     },
     save() {
@@ -909,7 +980,6 @@ export default {
           ctrl_tr_elapse: data.ctrlTurnElapse,
           ctrl_tr_speed: data.ctrlTurnSpeed,
           audio_volume_level: data.audioLevel,
-          packages_installed: data.packagesInstalled,
         });
         axios.post(`${CBv1}/config`, legacySettings)
           .then(() => {
@@ -917,6 +987,8 @@ export default {
             this.prepopulate();
             this.snackText = this.$i18n.t('message.settings_updated');
             this.snackbar = true;
+            this.$v.settings.$reset();
+            console.log('set dirty false');
           });
       }
     },
@@ -944,6 +1016,7 @@ export default {
       const currentStatus = this.$store.getters.drawerStatus;
       this.$store.commit('toggleDrawer', !currentStatus);
     },
+    errorMessages() { return !this.$v.settings.camera_color_object_size_max.required ? 'Valore numerico necessario' : null; }
   },
   data() {
     return {
@@ -986,7 +1059,6 @@ export default {
         wifiPsw: null,
 
         audioLevel: null,
-        packagesInstalled: null,
         moveFwdElapse: null,
         moveFwdSpeed: null,
         moveTurnElapse: null,
@@ -1064,9 +1136,48 @@ export default {
         { text: 'Anti shake', key: 'antishake' },
         { text: 'Very long', key: 'verylong' }
       ],
-      cnnModels: []
+      cnnModels: [],
+      dirty: false,
+      confirm_exit_dialog: null,
+      router_next: null,
     };
   },
+  validations() {
+    return {
+      settings: {
+        ctrl_hud_image: { alpha },
+        cv_image_factor: { required: true },
+        camera_color_object_size_max: { required, integer },
+        camera_color_object_size_min: { required, integer },
+        camera_exposure_mode: { required, alpha },
+        camera_framerate: { required, integer },
+        camera_jpeg_bitrate: { required, integer },
+        camera_jpeg_quality: { required, integer },
+        camera_path_object_size_max: { required, integer },
+        camera_path_object_size_min: { required, integer },
+        cnn_default_model: { required, alpha },
+        wifiMode: { required, alpha },
+        wifiSSID: { required, alpha },
+        wifiPsw: { required, alpha },
+        audioLevel: { required, integer },
+        moveFwdElapse: { required, decimal },
+        moveFwdSpeed: { required, integer },
+        moveTurnElapse: { required, decimal },
+        moveTurnSpeed: { required, integer },
+        ctrlFwdElapse: { required, decimal },
+        ctrlFwdSpeed: { required, integer },
+        ctrlTurnElapse: { required, decimal },
+        ctrlTurnSpeed: { required, integer },
+        motorMode: { required, alpha },
+        trimFactor: { required, decimal },
+        startSound: { alpha },
+        stopSound: { alpha },
+        shutterSound: { alpha },
+        startupProgram: { alpha },
+        progLevel: { alpha }
+      },
+    };
+  }
 };
 </script>
 <style scoped>

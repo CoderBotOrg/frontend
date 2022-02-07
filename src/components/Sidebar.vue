@@ -19,45 +19,17 @@
               <v-list-item-title class="navEntry">{{ $t("message.docs") }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <!--
-				<v-list-item to="/help">
-					<v-list-item-action>
-						<v-icon large>help</v-icon>
-					</v-list-item-action>
-					<v-list-item-content>
-						<v-list-item-title class="navEntry">Aiuto</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-			-->
           <br>
           <v-divider>
           </v-divider>
           <br>
-          <!--
-				<v-list-item to="/activity">
-					<v-list-item-action>
-						<v-icon>open_in_new</v-icon>
-					</v-list-item-action>
-					<v-list-item-content>
-						<v-list-item-title>Apri Attività</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-				<v-list-item to="/new">
-					<v-list-item-action>
-						<v-icon>add</v-icon>
-					</v-list-item-action>
-					<v-list-item-content>
-						<v-list-item-title>Nuova Attività</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-				-->
           <h3>{{ $t("message.activity_title") }}</h3>
-          <v-list-item to="/activity/open">
+          <v-list-item to="/activity/manage">
             <v-list-item-action>
               <v-icon>open_in_new</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>{{ $t("message.activity_open") }}</v-list-item-title>
+              <v-list-item-title>{{ $t("message.activity_manage") }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/activity/new">
@@ -135,37 +107,17 @@
               <v-list-item-title class="navEntry">{{ $t("message.docs") }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <!--
-				<v-list-item to="/help">
-					<v-list-item-action>
-						<v-icon large>help</v-icon>
-					</v-list-item-action>
-					<v-list-item-content>
-						<v-list-item-title class="navEntry">Aiuto</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-			-->
           <br>
           <v-divider>
           </v-divider>
           <br>
-          <!--
-				<v-list-item to="/activity">
-					<v-list-item-action>
-						<v-icon>open_in_new</v-icon>
-					</v-list-item-action>
-					<v-list-item-content>
-						<v-list-item-title>Apri Attività</v-list-item-title>
-					</v-list-item-content>
-				</v-list-item>
-			-->
           <h3>{{ $t("message.activity_title") }}</h3>
-          <v-list-item to="/activity/open">
+          <v-list-item to="/activity/manage">
             <v-list-item-action>
               <v-icon>open_in_new</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>{{ $t("message.activity_open") }}</v-list-item-title>
+              <v-list-item-title>{{ $t("message.activity_manage") }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/activity/new">
@@ -237,6 +189,7 @@
 </template>
 <script>
 export default {
+  name: 'Sidebar',
   data() {
     return {
       socials: [
