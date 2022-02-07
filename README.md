@@ -1,5 +1,5 @@
 # vue-app
-![Build](https://github.com/CoderBotOrg/frontend/actions/workflows/build/badge.svg)
+![Build](https://github.com/CoderBotOrg/frontend/actions/workflows/build.yml/badge.svg)
 
 > CoderBot is a RaspberryPI-based programmable robot for educational purposes. Check the [project website](https://www.coderbot.org) for more information.
 >
