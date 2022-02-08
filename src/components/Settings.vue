@@ -166,18 +166,22 @@
                       <v-text-field v-model="settings.ctrlFwdSpeed"
                         v-bind:label="$t('message.settings_movement_control_forward_speed')"
                         @input="$v.settings.ctrlFwdSpeed.$touch"
+                        v-bind:error-messages="$v.settings.ctrlFwdSpeed.$error == true ? $t('message.validation_integer') : null"
                       />
                       <v-text-field v-model="settings.ctrlFwdElapse"
                         v-bind:label="$t('message.settings_movement_control_forward_elapse')"
                         @input="$v.settings.ctrlFwdElapse.$touch"
+                        v-bind:error-messages="$v.settings.ctrlFwdElapse.$error == true ? $t('message.validation_decimal') : null"
                       />
                       <v-text-field v-model="settings.ctrlTurnSpeed"
                         v-bind:label="$t('message.settings_movement_control_turn_speed')"
                         @input="$v.settings.ctrlTurnSpeed.$touch"
+                        v-bind:error-messages="$v.settings.ctrlTurnSpeed.$error == true ? $t('message.validation_integer') : null"
                       />
                       <v-text-field v-model="settings.ctrlTurnElapse"
                         v-bind:label="$t('message.settings_movement_control_turn_elapse')"
                         @input="$v.settings.ctrlTurnElapse.$touch"
+                        v-bind:error-messages="$v.settings.ctrlTurnElapse.$error == true ? $t('message.validation_decimal') : null"
                       />
                     </div>
                   </v-card>
@@ -188,18 +192,22 @@
                       <v-text-field v-model="settings.moveFwdSpeed"
                         v-bind:label="$t('message.settings_movement_program_forward_speed')"
                         @input="$v.settings.moveFwdSpeed.$touch"
+                        v-bind:error-messages="$v.settings.moveFwdSpeed.$error == true ? $t('message.validation_integer') : null"
                       />
                       <v-text-field v-model="settings.moveFwdElapse"
                         v-bind:label="$t('message.settings_movement_program_forward_elapse')"
                         @input="$v.settings.moveFwdElapse.$touch"
+                        v-bind:error-messages="$v.settings.moveFwdElapse.$error == true ? $t('message.validation_decimal') : null"
                       />
                       <v-text-field v-model="settings.moveTurnSpeed"
                         v-bind:label="$t('message.settings_movement_program_turn_speed')"
                         @input="$v.settings.moveTurnSpeed.$touch"
+                        v-bind:error-messages="$v.settings.moveTurnSpeed.$error == true ? $t('message.validation_integer') : null"
                       />
                       <v-text-field v-model="settings.moveTurnElapse"
                         v-bind:label="$t('message.settings_movement_program_turn_elapse')"
                         @input="$v.settings.moveTurnElapse.$touch"
+                        v-bind:error-messages="$v.settings.moveTurnElapse.$error == true ? $t('message.validation_decimal') : null"
                       />
                     </div>
                   </v-card>
@@ -214,6 +222,7 @@
                       <v-text-field v-model="settings.trimFactor"
                         v-bind:label="$t('message.settings_movement_parameters_trim')"
                         @input="$v.settings.trimFactor.$touch"
+                        v-bind:error-messages="$v.settings.trimFactor.$error == true ? $t('message.validation_decimal') : null"
                       />
                       <v-text-field v-model="settings.power[0]"
                         v-bind:label="$t('message.settings_movement_parameters_power_1')"
@@ -257,12 +266,14 @@
                       <v-slider v-model="settings.camera_jpeg_bitrate" min="1000000" max="10000000" step="1000000"
                         v-bind:label="$t('message.settings_camera_jpeg_bitrate')"
                         @change="$v.settings.camera_jpeg_bitrate.$touch"
+                        v-bind:error-messages="$v.settings.camera_jpeg_bitrate.$error == true ? $t('message.validation_integer') : null"
                       />
                       {{ $t("message.settings_camera_jpeg_quality") }}:
                       <span v-text="settings.camera_jpeg_quality"></span>
                       <v-slider v-model="settings.camera_jpeg_quality" min="1" max="100" step="1"
                         v-bind:label="$t('message.settings_camera_jpeg_quality')"
                         @change="$v.settings.camera_jpeg_quality.$touch"
+                        v-bind:error-messages="$v.settings.camera_jpeg_quality.$error == true ? $t('message.validation_integer') : null"
                       />
                     </div>
                   </v-card>
@@ -277,16 +288,24 @@
                       />
                       <v-text-field v-model="settings.camera_color_object_size_max"
                         @input="$v.settings.camera_color_object_size_max.$touch"
-                        v-bind:label="$t('message.settings_camera_color_object_size_max')" />
+                        v-bind:label="$t('message.settings_camera_color_object_size_max')"
+                        v-bind:error-messages="$v.settings.camera_color_object_size_max.$error == true ? $t('message.validation_integer') : null"
+                      />
                       <v-text-field v-model="settings.camera_color_object_size_min"
                         @input="$v.settings.camera_color_object_size_min.$touch"
-                        v-bind:label="$t('message.settings_camera_color_object_size_min')" />
+                        v-bind:label="$t('message.camera_color_object_size_min')"
+                        v-bind:error-messages="$v.settings.camera_color_object_size_min.$error == true ? $t('message.validation_integer') : null"
+                      />
                       <v-text-field v-model="settings.camera_path_object_size_max"
                         @input="$v.settings.camera_path_object_size_max.$touch"
-                        v-bind:label="$t('message.settings_camera_path_object_size_max')" />
+                        v-bind:label="$t('message.settings_camera_path_object_size_max')"
+                        v-bind:error-messages="$v.settings.camera_path_object_size_max.$error == true ? $t('message.validation_integer') : null"
+                      />
                       <v-text-field v-model="settings.camera_path_object_size_min"
                         @input="$v.settings.camera_path_object_size_min.$touch"
-                        v-bind:label="$t('message.settings_camera_path_object_size_min')" />
+                        v-bind:label="$t('message.settings_camera_path_object_size_min')"
+                        v-bind:error-messages="$v.settings.camera_path_object_size_min.$error == true ? $t('message.validation_integer') : null"
+                      />
                       <v-select
                         v-model="settings.cnn_default_model"
                         :items="cnnModels"
@@ -1153,36 +1172,141 @@ export default {
   validations() {
     return {
       settings: {
-        ctrl_hud_image: { alpha },
-        cv_image_factor: { required: true },
-        camera_color_object_size_max: { required, integer },
-        camera_color_object_size_min: { required, integer },
-        camera_exposure_mode: { required, alpha },
-        camera_framerate: { required, integer },
-        camera_jpeg_bitrate: { required, integer },
-        camera_jpeg_quality: { required, integer },
-        camera_path_object_size_max: { required, integer },
-        camera_path_object_size_min: { required, integer },
-        cnn_default_model: { required, alpha },
-        wifiMode: { required, alpha },
-        wifiSSID: { required, alpha },
-        wifiPsw: { required, alpha },
-        audioLevel: { required, integer },
-        moveFwdElapse: { required, decimal },
-        moveFwdSpeed: { required, integer },
-        moveTurnElapse: { required, decimal },
-        moveTurnSpeed: { required, integer },
-        ctrlFwdElapse: { required, decimal },
-        ctrlFwdSpeed: { required, integer },
-        ctrlTurnElapse: { required, decimal },
-        ctrlTurnSpeed: { required, integer },
-        motorMode: { required, alpha },
-        trimFactor: { required, decimal },
-        startSound: { alpha },
-        stopSound: { alpha },
-        shutterSound: { alpha },
-        startupProgram: { alpha },
-        progLevel: { alpha }
+        ctrl_hud_image: {
+          alpha
+        },
+        cv_image_factor: {
+          required: true
+        },
+        camera_color_object_size_max: {
+          required,
+          integer,
+          minValue: 0
+        },
+        camera_color_object_size_min: {
+          required,
+          integer,
+          minValue: 0
+        },
+        camera_exposure_mode: {
+          required,
+          alpha
+        },
+        camera_framerate: {
+          required,
+          integer,
+          minValue: 0,
+          maxValue: 30
+        },
+        camera_jpeg_bitrate: {
+          required,
+          integer,
+          minValue: 0
+        },
+        camera_jpeg_quality: {
+          required,
+          integer,
+          minValue: 0
+        },
+        camera_path_object_size_max: {
+          required,
+          integer,
+          minValue: 0
+        },
+        camera_path_object_size_min: {
+          required,
+          integer,
+          minValue: 0
+        },
+        cnn_default_model: {
+          required,
+          alpha
+        },
+        wifiMode: {
+          required,
+          alpha
+        },
+        wifiSSID: {
+          required,
+          alpha
+        },
+        wifiPsw: {
+          required,
+          alpha
+        },
+        audioLevel: {
+          required,
+          integer,
+          minValue: 0,
+          mazValue: 100
+        },
+        moveFwdElapse: {
+          required,
+          decimal,
+          minValue: 0.0
+        },
+        moveFwdSpeed: {
+          required,
+          integer,
+          minValue: 0,
+          maxValue: 100
+        },
+        moveTurnElapse: {
+          required,
+          decimal,
+          minValue: 0.0
+        },
+        moveTurnSpeed: {
+          required,
+          integer,
+          minValue: 0,
+          maxValue: 100
+        },
+        ctrlFwdElapse: {
+          required,
+          decimal,
+          minValue: 0.0
+        },
+        ctrlFwdSpeed: {
+          required,
+          integer,
+          minValue: 0,
+          maxValue: 100
+        },
+        ctrlTurnElapse: {
+          required,
+          decimal,
+          minValue: 0.0
+        },
+        ctrlTurnSpeed: {
+          required,
+          integer,
+          minValue: 0,
+          maxValue: 100
+        },
+        motorMode: {
+          required,
+          alpha
+        },
+        trimFactor: {
+          required,
+          decimal
+        },
+        startSound: {
+          alpha
+        },
+        stopSound: {
+          alpha
+        },
+        shutterSound: {
+          alpha
+        },
+        startupProgram: {
+          alpha
+        },
+        progLevel: {
+          alpha
+        }
       },
     };
   }

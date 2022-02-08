@@ -184,6 +184,26 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <!-- Clear Program -->
+      <v-dialog v-model="clear" max-width="500">
+        <v-card>
+          <v-card-title class="headline">
+            {{ $t("message.delete") }}
+          </v-card-title>
+          <v-card-actions>
+            <v-card-text>
+              {{ $t('message.clear_sure') }}
+            </v-card-text>
+            <v-btn color="red darken-1" text="text" @click="clear = false">
+              {{ $t("message.no") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text"
+              @click="del = false, carica = false, clearProgram()">
+              {{ $t("message.yes") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <!-- Delete Program -->
       <v-dialog v-model="del" max-width="500">
         <v-card>
@@ -370,6 +390,7 @@ export default {
     newProgramName: '',
     unvalidName: false,
     del: false,
+    clear: false,
     webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
     runtimeDialog: false,
     isDefault: '',
@@ -401,6 +422,12 @@ export default {
       this.activity = {
         bodyFont: 'Roboto',
         buttons: [
+          {
+            action: 'clearProgramDlg',
+            icon: 'clear',
+            label: this.$i18n.t('message.activity_program_clear'),
+            type: 'text',
+          },
           {
             action: 'saveProgram',
             icon: 'save',
@@ -782,6 +809,17 @@ export default {
         Blockly.Xml.domToWorkspace(xml, workspace);
         this.$data.isDefault = data.data.default;
       });
+    },
+
+    clearProgramDlg() {
+      this.$data.clear = true;
+    },
+
+    clearProgram() {
+      this.$data.programName = '';
+      this.$data.code = '';
+      this.$data.workspace.clear();
+      this.$data.clear = false;
     },
 
     deleteProgramDlg(program) {

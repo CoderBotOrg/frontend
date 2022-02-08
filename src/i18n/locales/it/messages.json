@@ -10,6 +10,7 @@
     "running": "Esecuzione",
     "close": "Chiudi",
     "program_list": "Lista Programmi",
+    "program_stop": "Interrompi programma",
     "cancel": "Annulla",
     "error": "Errore",
     "save_as": "Salva con nome",
@@ -27,6 +28,7 @@
     "program_exists_overwrite": "Esiste già un programma con nome : \"{programName}\" vuoi sovrascriverlo?",
     "delete": "Cancella",
     "delete_sure": "Sei sicuro di voler cancellare: \"{newProgramName}\"?",
+    "clear_sure": "Sei sicuro di voler pulire lo spazio di lavoro?",
     "coderbot_status": "Stato del CoderBot",
     "activity_new": "Nuova Attività",
     "activity_manage": "Gestisci",
@@ -34,6 +36,7 @@
     "activity_edit": "Modifica Attività",
     "activity_tip_1": "Qui puoi creare o modificare una attività, definendo come dovrà apparire allo studente che dovrà utilizzarla per scrivere programmi. Ricorda che l'attività andrà poi avviata (Menù Attività -> Apri) per poterne fare effettivamente uso.",
     "activity_data": "Dati Attività",
+    "activity_locale": "Lingua interfaccia",
     "activity_typography": "Tipografia",
     "activity_typography_font_ui": "Carattere tipografico dell'interfaccia",
     "activity_typography_font_editor": "Carattere tipografico del codice (valori, editor di codice)",
@@ -51,6 +54,7 @@
     "activity_title": "Attività",
     "activity_tip_2": "Qui puoi avviare un'attività salvata, cliccando sul suo nome.",
     "activity_program_title": "Programma",
+    "activity_program_clear": "Pulisci",
     "activity_program_run": "Esegui",
     "activity_program_load": "Carica Programma",
     "activity_program_save_as": "Salva con nome",
@@ -224,5 +228,9 @@
     "settings_toolbax_base": "Base",
     "settings_toolbax_standard": "Standard",
     "settings_toolbax_advanced": "Avanzate",
-    "settings_confirm_exit_text": "Le modifiche apportate andranno perse, comfermi di voler cambiare pagina?"
+    "settings_confirm_exit_text": "Le modifiche apportate andranno perse, comfermi di voler cambiare pagina?",
+    "validation_integer": "Inserire un numero intero (1234)",
+    "validation_decimal": "Inserire un numero decimale (12.34)",
+    "validation_integer_positive": "Inserire un numero intero maggiore o uguale a 0",
+    "validation_decimal_positive": "Inserire un numero decimale maggiore o uguale a 0.0"
 }    

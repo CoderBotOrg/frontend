@@ -32,11 +32,19 @@
                   <h3 class="text-xs-left">{{ $t("message.activity_data") }} </h3>
                   <v-card>
                     <v-form class="cardContent">
-                      <v-text-field v-model="activity.name" label="Nome" required></v-text-field>
-                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')">
+                      <v-text-field v-model="activity.name" label="Nome" required
+                        @input="$v.activity.name.$touch"
+                        v-bind:error-messages="$v.activity.name.$error == true ? $t('message.validation_alphanum') : null"
+                      ></v-text-field>
+                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')"
+                        @input="$v.activity.description.$touch"
+                        v-bind:error-messages="$v.activity.description.$error == true ? $t('message.validation_alphanum') : null"
+                      >
                       </v-text-field>
-                      <v-select v-model="defaultView" :items="viste"
-                        v-bind:label="$t('message.activity_predefined_view')" required></v-select>
+                      <v-select v-model="activity.defaultView" :items="viste"
+                        v-bind:label="$t('message.activity_predefined_view')" required
+                        @input="$v.activity.defaultView.$touch"
+                      ></v-select>
                     </v-form>
                   </v-card>
                   <br><br>
@@ -65,7 +73,10 @@
                   <v-card>
                     <div class="cardContent">
                       <span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
-                      <v-radio-group v-model="activity.bodyFont" column>
+                      <v-radio-group v-model="activity.bodyFont" column
+                        v-bind:label="$t('message.activity_predefined_view')" required
+                        @change="$v.activity.bodyFont.$touch"
+                      >
                         <v-radio label="Roboto" value="Roboto"></v-radio>
                         <v-radio label="Open Sans" value="opensans"></v-radio>
                         <!--
@@ -80,23 +91,24 @@
                   <v-card>
                     <div class="cardContent">
                       <span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
-                      <v-radio-group v-model="activity.codeFont" column>
+                      <v-radio-group v-model="activity.codeFont" column
+                        @change="$v.activity.codeFont.$touch"
+                      >
                         <v-radio label="Ubuntu Mono" value="ubuntumono"></v-radio>
                         <v-radio label="Roboto Mono" value="robotomono"></v-radio>
                       </v-radio-group>
                     </div>
                   </v-card>
                   <br><br>
-                  <!--
-									<h3 class="text-xs-left">Lingua</h3>
+									<h3 class="text-xs-left">{{ $t("message.activity_locale") }}</h3>
 									<v-card>
 										<div class="cardContent">
-											<v-select v-model="uiLang" :items="langs" label="Lingua Interfaccia" required></v-select>
-											<v-select v-model="blocklyLang" :items="langs" label="Lingua Blocchi" required></v-select>
+											<v-select v-model="activity.uiLang" :items="langs" v-bind:label="$t('message.activity_locale')" required
+                        @change="$v.activity.uiLang.$touch"
+                      ></v-select>
 										</div>
 									</v-card>
 									<br><br>
-								-->
                   <h3 class="text-xs-left">{{ $t("message.activity_programing_title") }}</h3>
                   <v-card>
                     <div class="cardContent">
@@ -117,11 +129,16 @@
                         -->
                         <v-flex>
                           <v-checkbox v-model="activity.autoRecVideo"
-                            v-bind:label="$t('message.activity_auto_rec_video')"></v-checkbox>
+                            v-bind:label="$t('message.activity_auto_rec_video')"
+                            @input="$v.activity.autoRecVideo.$touch"
+                          ></v-checkbox>
                         </v-flex>
                         <v-flex>
                           <v-text-field v-model="activity.maxBlocks"
-                            v-bind:label="$t('message.activity_blocks_max_blocks')"></v-text-field>
+                            v-bind:label="$t('message.activity_blocks_max_blocks')"
+                            @input="$v.activity.maxBlocks.$touch"
+                            v-bind:error-messages="$v.activity.maxBlocks.$error == true ? $t('message.validation_integer_positive') : null"
+                            ></v-text-field>
                         </v-flex>
                       </v-layout>
                     </div>
@@ -167,9 +184,13 @@
                     </template>
                   </v-app-bar>
                   <br>
-                  <v-switch v-bind:label="$t('message.activity_lateral_menu_icon')" v-model="activity.drawerEnabled">
+                  <v-switch v-bind:label="$t('message.activity_lateral_menu_icon')" v-model="activity.drawerEnabled"
+                    @change="$v.activity.drawerEnabled.$touch"
+                  >
                   </v-switch>
-                  <v-switch v-bind:label="$t('message.activity_name')" v-model="activity.showName"></v-switch>
+                  <v-switch v-bind:label="$t('message.activity_name')" v-model="activity.showName"
+                    @change="$v.activity.showName.$touch"
+                  ></v-switch>
                   <br>
                   <h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
                   <v-btn @click="addButton()" outlined color="green">
@@ -302,6 +323,10 @@
 import Swatches from 'vue-swatches';
 import 'vue-swatches/dist/vue-swatches.css';
 
+import {
+  alphaNum, integer,
+} from 'vuelidate/lib/validators';
+
 // import wsFactory from '../components/wsFactory';
 import sidebar from '../components/Sidebar';
 
@@ -310,6 +335,14 @@ export default {
   components: {
     Swatches,
     sidebar /* , wsFactory */
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.$v.$anyDirty) {
+      this.router_next = next;
+      this.confirm_exit_dialog = true;
+    } else {
+      next();
+    }
   },
   computed: {
     prefix() {
@@ -394,6 +427,8 @@ export default {
       snackbarText: '',
       b: 0,
       activity: {
+        uiLang: null,
+        defaultView: null,
         exec: {
           camera: true,
           log: true,
@@ -427,6 +462,10 @@ export default {
         },
       ],
       actions: [
+        {
+          text: this.$i18n.t('message.activity_program_clear'),
+          value: 'clearProgram'
+        },
         {
           text: this.$i18n.t('message.activity_program_run'),
           value: 'runProgram'
@@ -476,8 +515,6 @@ export default {
         this.$i18n.t('message.activity_lang_english'),
         this.$i18n.t('message.activity_lang_french'),
       ],
-      uiLang: 'Italiano',
-      blocklyLang: 'Inglese',
       editHistory: false,
       navHistory: false,
       experimental: true,
@@ -491,8 +528,6 @@ export default {
       ar: false,
       // drawer: null,
       source: null,
-      msg: 'Welcome to Your Vue.js App',
-      defaultView: 'blocks',
       viste: [
         {
           text: this.$i18n.t('message.activity_views_blocks'),
@@ -513,6 +548,26 @@ export default {
       route_next: null,
       dirty: false,
       unwatch: null
+    };
+  },
+  validations() {
+    return {
+      activity: {
+        uiLang: { },
+        defaultView: { },
+        drawerEnabled: { },
+        showName: { },
+        buttons: { },
+        fontSize: { },
+        capsSwitch: { },
+        bodyFont: { },
+        codeFont: { },
+        viewSource: { },
+        autoRecVideo: { },
+        name: { required: true, alphaNum },
+        description: { alphaNum },
+        maxBlocks: { integer, minValue: 0 },
+      },
     };
   },
   mounted() {
@@ -550,12 +605,13 @@ export default {
         axios.post(`${CB}/saveActivity`, {
           activity: this.activity,
         }).then(() => {
-          this.snackbarText = this.$i18n.t('activity_saved');
+          this.snackbarText = this.$i18n.t('message.activity_saved');
           this.snackbar = true;
           this.saved = true;
+          this.$v.$reset();
         });
       } else {
-        this.snackbarText = this.$i18n.t('activity_save_error');
+        this.snackbarText = this.$i18n.t('message.activity_save_error');
         this.snackbar = true;
       }
     },
