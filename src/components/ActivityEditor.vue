@@ -267,11 +267,6 @@
               </v-card>
             </v-dialog>
           </v-tab-item>
-          <!--
-					<v-tab-item>
-						<wsFactory />
-					</v-tab-item>
-				-->
           <v-tab-item>
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
@@ -290,9 +285,9 @@
               </v-layout>
             </v-container>
           </v-tab-item>
-          <v-tab-item>
-            <wsFactory />
-          </v-tab-item>
+					<v-tab-item>
+						<toolbox-editor />
+					</v-tab-item>
         </v-tabs-items>
       </v-main>
       <!-- Confirm exit dialog -->
@@ -329,12 +324,14 @@ import {
 
 // import wsFactory from '../components/wsFactory';
 import sidebar from '../components/Sidebar';
+import ToolboxEditor from '../components/ToolboxEditor';
 
 export default {
   name: 'ActivityEditor',
   components: {
     Swatches,
-    sidebar /* , wsFactory */
+    sidebar,
+    ToolboxEditor
   },
   beforeRouteLeave(to, from, next) {
     if (this.$v.$anyDirty) {
@@ -523,7 +520,8 @@ export default {
       tabs: [
         this.$i18n.t('message.activity_tabs_general'),
         this.$i18n.t('message.activity_tabs_toolbar'),
-        this.$i18n.t('message.activity_tabs_runtime')
+        this.$i18n.t('message.activity_tabs_runtime'),
+        this.$i18n.t('message.activity_tabs_toolbox')
       ],
       ar: false,
       // drawer: null,

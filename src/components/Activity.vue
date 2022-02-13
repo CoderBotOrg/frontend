@@ -311,7 +311,6 @@ import * as bot_it from '../assets/js/blockly/bot_it.json';
 import * as bot_en from '../assets/js/blockly/bot_en.json';
 import * as bot_fr from '../assets/js/blockly/bot_fr.json';
 
-import * as music_package from '../assets/music_package.json';
 import i18n from '../i18n/index';
 
 import 'prismjs';
@@ -337,17 +336,6 @@ Blockly.setLocale(blockly_locales[locale]);
 
 Blockly.Blocks.CoderBotSettings.instrumentlist = [];
 Blockly.Blocks.CoderBotSettings.animalist = [];
-
-// load music packages
-Object.keys(music_package.packages).forEach((key) => {
-  const names = [music_package.packages[key].name_IT, key];
-  if (music_package.packages[key].category == 'instrument') {
-    Blockly.Blocks.CoderBotSettings.instrumentlist[Blockly.Blocks.CoderBotSettings.instrumentlist.length] = names;
-  } else if (music_package.packages[key].category == 'animal') {
-    Blockly.Blocks.CoderBotSettings.animalist[Blockly.Blocks.CoderBotSettings.animalist.length] = names;
-  }
-});
-// let workspace = null;
 
 export default {
   name: 'Activity',
@@ -412,6 +400,8 @@ export default {
     },
   },
   mounted() {
+    this.loadMusicPackages();
+
     // Get the activity
     const axios = this.$axios;
     const {
@@ -669,6 +659,23 @@ export default {
         code,
         default: isDefault,
       };
+    },
+
+    loadMusicPackages() {
+      this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
+        this.packagesInstalled = [];
+        const music_packages = JSON.parse(result.data);
+        Object.entries(music_packages).forEach((key) => {
+          const package_key = key[0];
+          const music_package = key[1];
+          const names = [music_package.name_IT, package_key];
+          if (music_package.category == 'instrument') {
+            this.packagesInstalled.push([names, 'instrument']);
+          } else if (music_package.category == 'animal') {
+            this.packagesInstalled.push([names, 'animal']);
+          }
+        });
+      });
     },
 
     exportProgram() {
