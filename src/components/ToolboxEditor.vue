@@ -26,8 +26,8 @@
               </v-list-item-content>
               <v-list-item-icon>
                 <v-icon @click="editCategory(i)">edit</v-icon>
-                <v-icon @click="upCategory(i)">sort</v-icon>
-                <v-icon @click="downCategory(i)">stop</v-icon>
+                <v-icon @click="upCategory(i)">mdi-arrow-up</v-icon>
+                <v-icon @click="downCategory(i)">mdi-arrow-down</v-icon>
                 <v-icon @click="deleteCategory(i)">delete</v-icon>
               </v-list-item-icon>
             </v-list-item>
@@ -71,26 +71,28 @@
 <script>
 import * as Blockly from 'blockly/core';
 import 'blockly/blocks';
+import 'blockly/python';
+
 import * as blockly_it from 'blockly/msg/it';
 import * as blockly_en from 'blockly/msg/en';
 import * as blockly_fr from 'blockly/msg/fr';
-/*
+
 import '../assets/js/blockly/blocks';
 import * as bot_it from '../assets/js/blockly/bot_it.json';
 import * as bot_en from '../assets/js/blockly/bot_en.json';
 import * as bot_fr from '../assets/js/blockly/bot_fr.json';
-*/
+
 import i18n from '../i18n/index';
 
 const locale = i18n.locale.substring(0, 2);
-/*
+
 const coderbot_locales = {
   it: bot_it.default,
   en: bot_en.default,
   fr: bot_fr.default
 };
 Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
-*/
+
 const blockly_locales = {
   it: blockly_it,
   en: blockly_en,
@@ -98,17 +100,17 @@ const blockly_locales = {
 };
 Blockly.setLocale(blockly_locales[locale]);
 
-// Blockly.Blocks.CoderBotSettings.instrumentlist = [];
-// Blockly.Blocks.CoderBotSettings.animalist = [];
+Blockly.Blocks.CoderBotSettings.instrumentlist = [];
+Blockly.Blocks.CoderBotSettings.animalist = [];
 
 export default {
-  components: {
-  },
+  props: ['toolbox_in'],
   data: () => ({
     CB: process.env.CB_ENDPOINT + process.env.APIv2,
     CBv1: process.env.CB_ENDPOINT,
     workspace_toolbox_editor: null,
     workspace_toolbox_test: null,
+    in_changing_category: true,
     toolbox: {
       kind: 'categoryToolbox',
       contents: []
@@ -122,10 +124,11 @@ export default {
     category_index: null
   }),
 
-  computed: {
-  },
-
   mounted() {
+    if (this.toolbox_in) {
+      this.toolbox = this.toolbox_in;
+    }
+
     this.loadMusicPackages();
 
     const axios = this.$axios;
@@ -136,6 +139,9 @@ export default {
         const settings = response.data;
         this.settings = settings;
         this.initBlockly(settings);
+        if (this.toolbox.contents.length) {
+          this.onChangeCategory();
+        }
       });
   },
   beforeRouteLeave(to, from, next) {
@@ -165,22 +171,20 @@ export default {
     },
 
     onChangeCategory() {
-      this.workspace_toolbox_editor.clear();
-      this.in_changing_category = true;
-      this.toolbox.contents[this.category_index].contents.forEach((block) => {
-        const parentBlock = this.workspace_toolbox_editor.newBlock(block.type);
-        parentBlock.initSvg();
-        parentBlock.render();
-        parentBlock.bumpNeighbours();
-      });
-      /* const blocks = this.workspace_toolbox_editor.getTopBlocks();
-      let y = 0;
-      for (let i = 0; i < blocks.length; i++) {
-        blocks[i].moveTo(0, y);
-        y += blocks[i].getHeightWidth().height;
-        y += 10; // buffer
-      } */
-      this.in_changing_category = false;
+      if (this.category_index != null
+          && this.workspace_toolbox_editor != null) {
+        this.in_changing_category = true;
+        this.workspace_toolbox_editor.clear();
+        let y = 0;
+        this.toolbox.contents[this.category_index].contents.forEach((block) => {
+          const parentBlock = this.workspace_toolbox_editor.newBlock(block.type);
+          parentBlock.initSvg();
+          parentBlock.render();
+          parentBlock.moveTo(new Blockly.utils.Coordinate(5, y));
+          y += parentBlock.getHeightWidth().height + 10;
+        });
+        this.in_changing_category = false;
+      }
     },
 
     addCategory() {
@@ -201,6 +205,7 @@ export default {
       this.category_index = i;
       this.category = this.toolbox.contents[i];
       this.category_edit = true;
+      this.category_dialog = true;
     },
 
     saveCategory() {
@@ -236,7 +241,7 @@ export default {
       // Extend the default blocks set
       this.blocksExtensions();
 
-      const toolbox_full = require('../assets/toolbox_less.xml');
+      const toolbox_full = require('../assets/toolbox_adv.xml');
 
       // Clean the base64 encoding of the resource, removing meta infos
       const b64Toolbox = toolbox_full.substring(toolbox_full.indexOf(',') + 1).toString();
@@ -264,6 +269,7 @@ export default {
           },
         },
       );
+
       // Initialise Blockly Instance Toolbox Editor
       this.workspace_toolbox_test = Blockly.inject(
         // Blockly container
@@ -289,9 +295,10 @@ export default {
       const toolbox = this.toolbox;
       const state = this;
       function onToolboxEditorChange(event) {
-        if (event.type == Blockly.Events.BLOCK_CREATE
-            || (event.type == Blockly.Events.BLOCK_DELETE && state.in_changing_category == false)) {
-          // || event.type == Blockly.Events.BLOCK_MOVE) {
+        if ((event.type == Blockly.Events.BLOCK_CREATE
+            || event.type == Blockly.Events.BLOCK_DELETE
+            || event.type == Blockly.Events.BLOCK_MOVE)
+            && state.in_changing_category == false) {
           toolbox.contents[state.category_index].contents = [];
           workspace_toolbox_editor.getTopBlocks(true).forEach((ablock) => {
             toolbox.contents[state.category_index].contents.push({

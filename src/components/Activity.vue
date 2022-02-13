@@ -553,15 +553,19 @@ export default {
       // Extend the default blocks set
       this.blocksExtensions(settings);
 
-      const toolboxLevel = settings.prog_level;
-      const toolbox = require(`../assets/toolbox_${toolboxLevel}.xml`);
+      let serializedToolbox = null;
+      if (this.activity.toolbox == null) {
+        const toolboxLevel = settings.prog_level;
+        const toolbox = require(`../assets/toolbox_${toolboxLevel}.xml`);
 
-      // Clean the base64 encoding of the resource, removing meta infos
-      const b64Toolbox = toolbox.substring(toolbox.indexOf(',') + 1).toString();
+        // Clean the base64 encoding of the resource, removing meta infos
+        const b64Toolbox = toolbox.substring(toolbox.indexOf(',') + 1).toString();
 
-      // Decode it and get the clean serialized XML as plain string
-      const serializedToolbox = this.$base64.decode(b64Toolbox);
-
+        // Decode it and get the clean serialized XML as plain string
+        serializedToolbox = this.$base64.decode(b64Toolbox);
+      } else {
+        serializedToolbox = this.activity.toolbox;
+      }
       // Initialise Blockly Instance
       // Blockly.Generator.prototype.INDENT = '    ';
       this.workspace = Blockly.inject(

@@ -20,6 +20,7 @@
     "blockly": "^7.20211209.2",
     "core-js": "^3.6.5",
     "material-design-icons-iconfont": "^6.1.1",
+    "@mdi/font": "^6.5.95",
     "prismjs": "^1.26.0",
     "stylus-loader": "^3.0.2",
     "typeface-fira-mono": "^1.1.13",

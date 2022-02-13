@@ -286,7 +286,10 @@
             </v-container>
           </v-tab-item>
 					<v-tab-item>
-						<toolbox-editor />
+						<toolbox-editor
+            v-model="activity.toolbox"
+            :toolbox_in="activity.toolbox"
+            />
 					</v-tab-item>
         </v-tabs-items>
       </v-main>
@@ -443,6 +446,7 @@ export default {
         availableViews: [],
         viewSource: null,
         autoRecVideo: null,
+        toolbox: null
       },
       colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal',
         'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black',
@@ -653,6 +657,9 @@ export default {
           action: 'saveProgram',
         },
       ];
+    },
+    onToolboxSave() {
+      console.log(this.activity.toolbox);
     },
   },
 };
