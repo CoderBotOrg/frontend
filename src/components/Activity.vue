@@ -553,18 +553,13 @@ export default {
       // Extend the default blocks set
       this.blocksExtensions(settings);
 
-      let serializedToolbox = null;
+      let toolboxJSON = null;
       if (this.activity.toolbox == null) {
         const toolboxLevel = settings.prog_level;
-        const toolbox = require(`../assets/toolbox_${toolboxLevel}.xml`);
-
-        // Clean the base64 encoding of the resource, removing meta infos
-        const b64Toolbox = toolbox.substring(toolbox.indexOf(',') + 1).toString();
-
+        toolboxJSON = require(`../assets/toolbox_${toolboxLevel}.json`);
         // Decode it and get the clean serialized XML as plain string
-        serializedToolbox = this.$base64.decode(b64Toolbox);
       } else {
-        serializedToolbox = this.activity.toolbox;
+        toolboxJSON = this.activity.toolbox;
       }
       // Initialise Blockly Instance
       // Blockly.Generator.prototype.INDENT = '    ';
@@ -573,7 +568,7 @@ export default {
         this.$refs.blocklyDiv,
         // Options
         {
-          toolbox: serializedToolbox,
+          toolbox: toolboxJSON,
           // path: 'static/js/blockly/',
           // TODO: Use values from fetched configuration!
           scrollbars: true,

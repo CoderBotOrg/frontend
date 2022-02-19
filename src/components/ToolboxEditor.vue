@@ -2,16 +2,18 @@
   <v-container class="grey lighten-5 mb-6 blockly-toolbox-editor">
     <v-row class="fill-height">
       <v-col class="pa-2 fill-height">
-        <div ref="toolboxEditorBlocklyTotal" class="blocklyTotal fill-height">
-          <div ref="toolboxEditorBlocklyArea" class="blocklyArea fill-height">
-            <div ref="toolboxEditorBlocklyDiv" class="blocklyDiv fill-height">
-            </div>
-          </div>
-        </div>
+        <blockly-workspace
+          ref="workspace_toolbox_editor"
+          :settings="settings"
+          :toolbox="toolbox_editor"
+          @workspace-changed="onWorkspaceChanged()"
+        >
+        </blockly-workspace>
       </v-col>
       <v-col class="pa-2">
         <v-list>
           <v-list-item-group
+            v-if="toolbox.kind=='categoryToolbox'"
             v-model="category_index"
             color="primary"
             mandatory
@@ -33,17 +35,16 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-        <v-btn @click="addCategory()">Aggiungi Categoria</v-btn>
+        <v-btn @click="addCategory()">Aggiungi Nuova Categoria</v-btn>
+        <v-btn @click="addAllCategories()">Aggiungi Tutte</v-btn>
       </v-col>
       <v-col class="pa-2 fill-height">
-        <div class="fill-height">
-          <div ref="toolboxTesterBlocklyTotal" class="blocklyTotal fill-height">
-            <div ref="toolboxTesterBlocklyArea" class="blocklyArea fill-height">
-              <div ref="toolboxTesterBlocklyDiv" class="blocklyDiv fill-height">
-              </div>
-            </div>
-          </div>
-        </div>
+        <blockly-workspace
+          ref="workspace_toolbox_test"
+          :settings="settings"
+          :toolbox="toolbox_in"
+        >
+        </blockly-workspace>
       </v-col>
     </v-row>
     <v-dialog v-model="category_dialog" max-width="400px">
@@ -69,50 +70,26 @@
   </v-container>
 </template>
 <script>
-import * as Blockly from 'blockly/core';
-import 'blockly/blocks';
-import 'blockly/python';
+// import * as Blockly from 'blockly/core';
 
-import * as blockly_it from 'blockly/msg/it';
-import * as blockly_en from 'blockly/msg/en';
-import * as blockly_fr from 'blockly/msg/fr';
+import BlocklyWorkspace from './BlocklyWorkspace.vue';
 
-import '../assets/js/blockly/blocks';
-import * as bot_it from '../assets/js/blockly/bot_it.json';
-import * as bot_en from '../assets/js/blockly/bot_en.json';
-import * as bot_fr from '../assets/js/blockly/bot_fr.json';
-
-import i18n from '../i18n/index';
-
-const locale = i18n.locale.substring(0, 2);
-
-const coderbot_locales = {
-  it: bot_it.default,
-  en: bot_en.default,
-  fr: bot_fr.default
-};
-Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
-
-const blockly_locales = {
-  it: blockly_it,
-  en: blockly_en,
-  fr: blockly_fr
-};
-Blockly.setLocale(blockly_locales[locale]);
-
-Blockly.Blocks.CoderBotSettings.instrumentlist = [];
-Blockly.Blocks.CoderBotSettings.animalist = [];
+const categoryToolbox = 'categoryToolbox';
+const flyoutToolbox = 'flyoutToolbox';
 
 export default {
+  components: {
+    BlocklyWorkspace
+  },
   props: ['toolbox_in'],
   data: () => ({
     CB: process.env.CB_ENDPOINT + process.env.APIv2,
     CBv1: process.env.CB_ENDPOINT,
-    workspace_toolbox_editor: null,
-    workspace_toolbox_test: null,
-    in_changing_category: true,
+    toolbox_editor: null,
+    in_changing_category: false,
+    settings: {},
     toolbox: {
-      kind: 'categoryToolbox',
+      kind: categoryToolbox,
       contents: []
     },
     category: {
@@ -124,24 +101,22 @@ export default {
     category_index: null
   }),
 
+  beforeCreate() {
+  },
   mounted() {
+    const toolbox_full = require('../assets/toolbox_adv.json');
+    this.toolbox_editor = toolbox_full;
+
+    this.loadMusicPackages();
+
     if (this.toolbox_in) {
       this.toolbox = this.toolbox_in;
     }
 
-    this.loadMusicPackages();
-
-    const axios = this.$axios;
-
     // Get the legacy configuration and initialize Blockly
-    axios.get(`${this.CBv1}/config`)
+    this.$axios.get(`${this.CBv1}/config`)
       .then((response) => {
-        const settings = response.data;
-        this.settings = settings;
-        this.initBlockly(settings);
-        if (this.toolbox.contents.length) {
-          this.onChangeCategory();
-        }
+        this.settings = { ...this.settings, ...response.data };
       });
   },
   beforeRouteLeave(to, from, next) {
@@ -155,16 +130,17 @@ export default {
   methods: {
     loadMusicPackages() {
       this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
-        this.packagesInstalled = [];
+        this.settings.music_instruments = [];
+        this.settings.music_animals = [];
         const music_packages = JSON.parse(result.data);
         Object.entries(music_packages).forEach((key) => {
           const package_key = key[0];
           const music_package = key[1];
           const names = [music_package.name_IT, package_key];
           if (music_package.category == 'instrument') {
-            this.packagesInstalled.push([names, 'instrument']);
+            this.settings.music_instruments.push(names);
           } else if (music_package.category == 'animal') {
-            this.packagesInstalled.push([names, 'animal']);
+            this.settings.music_animals.push(names);
           }
         });
       });
@@ -172,17 +148,13 @@ export default {
 
     onChangeCategory() {
       if (this.category_index != null
-          && this.workspace_toolbox_editor != null) {
+        && this.toolbox.kind == categoryToolbox) {
+        const blockTypes = [];
         this.in_changing_category = true;
-        this.workspace_toolbox_editor.clear();
-        let y = 0;
         this.toolbox.contents[this.category_index].contents.forEach((block) => {
-          const parentBlock = this.workspace_toolbox_editor.newBlock(block.type);
-          parentBlock.initSvg();
-          parentBlock.render();
-          parentBlock.moveTo(new Blockly.utils.Coordinate(5, y));
-          y += parentBlock.getHeightWidth().height + 10;
+          blockTypes.push(block.type);
         });
+        this.$refs.workspace_toolbox_editor.addBlocks(blockTypes);
         this.in_changing_category = false;
       }
     },
@@ -196,9 +168,17 @@ export default {
       this.category_dialog = true;
     },
 
+    addAllCategories() {
+      this.toolbox.kind = categoryToolbox;
+      this.toolbox.contents = this.toolbox.contents.concat(this.toolbox_editor.contents);
+    },
+
     deleteCategory(i) {
       this.toolbox.contents.splice(i, 1);
-      this.workspace_toolbox_test.updateToolbox(this.toolbox);
+      if (this.toolbox.contents.length == 0) {
+        this.toolbox.kind = flyoutToolbox;
+        console.log('category is now flyoutToolbox');
+      }
     },
 
     editCategory(i) {
@@ -218,157 +198,43 @@ export default {
       if (this.category_edit) {
         this.toolbox.contents[this.category_index] = category;
       } else {
+        if (this.toolbox.kind == flyoutToolbox) {
+          this.toolbox.kind = categoryToolbox;
+          console.log('category is now categoryToolbox');
+          category.contents = this.toolbox.contents;
+          this.toolbox.contents = [];
+        }
         this.toolbox.contents.push(category);
       }
 
       this.category_dialog = false;
-      this.workspace_toolbox_test.updateToolbox(this.toolbox);
     },
 
     upCategory(i) {
       this.toolbox.contents.splice(i - 1, 0, this.toolbox.contents[i]);
       this.toolbox.contents.splice(i + 1, 1);
-      this.workspace_toolbox_test.updateToolbox(this.toolbox);
     },
 
     downCategory(i) {
       this.toolbox.contents.splice(i + 2, 0, this.toolbox.contents[i]);
       this.toolbox.contents.splice(i, 1);
-      this.workspace_toolbox_test.updateToolbox(this.toolbox);
     },
 
-    initBlockly() {
-      // Extend the default blocks set
-      this.blocksExtensions();
-
-      const toolbox_full = require('../assets/toolbox_adv.xml');
-
-      // Clean the base64 encoding of the resource, removing meta infos
-      const b64Toolbox = toolbox_full.substring(toolbox_full.indexOf(',') + 1).toString();
-
-      // Decode it and get the clean serialized XML as plain string
-      const serializedToolbox = this.$base64.decode(b64Toolbox);
-
-      // Initialise Blockly Instance Toolbox Editor
-      this.workspace_toolbox_editor = Blockly.inject(
-        // Blockly container
-        this.$refs.toolboxEditorBlocklyDiv,
-        // Options
-        {
-          toolbox: serializedToolbox,
-          // path: 'static/js/blockly/',
-          // TODO: Use values from fetched configuration!
-          scrollbars: true,
-          // maxBlocks: this.activity.maxBlocks,
-          zoom: {
-            controls: false,
-            wheel: false,
-            startScale: 1.0,
-            maxScale: 1.5,
-            minScale: 0.2,
-          },
-        },
-      );
-
-      // Initialise Blockly Instance Toolbox Editor
-      this.workspace_toolbox_test = Blockly.inject(
-        // Blockly container
-        this.$refs.toolboxTesterBlocklyDiv,
-        // Options
-        {
-          toolbox: this.toolbox,
-          // path: 'static/js/blockly/',
-          // TODO: Use values from fetched configuration!
-          scrollbars: false,
-          zoom: {
-            controls: false,
-            wheel: false,
-            startScale: 1.0,
-            maxScale: 1.5,
-            minScale: 0.2,
-          },
-        },
-      );
-
-      const workspace_toolbox_editor = this.workspace_toolbox_editor;
-      const workspace_toolbox_test = this.workspace_toolbox_test;
-      const toolbox = this.toolbox;
-      const state = this;
-      function onToolboxEditorChange(event) {
-        if ((event.type == Blockly.Events.BLOCK_CREATE
-            || event.type == Blockly.Events.BLOCK_DELETE
-            || event.type == Blockly.Events.BLOCK_MOVE)
-            && state.in_changing_category == false) {
-          toolbox.contents[state.category_index].contents = [];
-          workspace_toolbox_editor.getTopBlocks(true).forEach((ablock) => {
-            toolbox.contents[state.category_index].contents.push({
-              kind: 'block',
-              type: ablock.type
-            });
+    onWorkspaceChanged() {
+      if (this.in_changing_category == false) {
+        const contents = [];
+        this.$refs.workspace_toolbox_editor.workspace.getTopBlocks(true).forEach((ablock) => {
+          contents.push({
+            kind: 'block',
+            type: ablock.type
           });
-          workspace_toolbox_test.updateToolbox(toolbox);
+        });
+        if (this.toolbox.kind == categoryToolbox) {
+          this.toolbox.contents[this.category_index].contents = contents;
+        } else {
+          this.toolbox.contents = contents;
         }
       }
-      workspace_toolbox_editor.addChangeListener(onToolboxEditorChange);
-      /*
-      const blocklyArea = this.$refs.toolboxEditorBlocklyArea;
-      const blocklyDiv = this.$refs.toolboxEditorBlocklyDiv;
-      const workspace_toolbox_editor = this.workspace_toolbox_editor;
-      const onresize = function () {
-        // Compute the absolute coordinates and dimensions of blocklyArea.
-        console.log(blocklyArea);
-        let element = blocklyArea;
-        let x = 0;
-        let y = 0;
-        do {
-          x += element.offsetLeft;
-          y += element.offsetTop;
-          element = element.offsetParent;
-        } while (element);
-        // Position blocklyDiv over blocklyArea.
-        /* eslint-disable prefer-template */ /*
-        blocklyDiv.style.left = x + 'px';
-        blocklyDiv.style.top = y + 'px';
-        blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-        blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-        Blockly.svgResize(workspace_toolbox_editor);
-      };
-      window.addEventListener('resize', onresize, false);
-      onresize();
-      Blockly.svgResize(workspace_toolbox_editor);
-      */
-    },
-    blocksExtensions() {
-      const {
-        settings
-      } = this;
-
-      // coderbot.cfg data (temp workaround, must be fetched from backend)
-
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_elapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MOTION = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MPU = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_ENCODER_AVAILABLE = true; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL = settings.prog_level;
-
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SCROLLBARS = true; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MAXBLOCKS = -1;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SAVEONRUN = true; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_SPEED = settings.ctrl_fw_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_ELAPSE = settings.ctrl_fw_elapse;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_SPEED = settings.ctrl_tr_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_ELAPSE = settings.ctrl_tr_elapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_COUNTER = true; // to check, never used
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MOTION = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MPU = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CNN_MODEL_LIST = [
-        ['generic_fast_low', 'generic_fast_low'],
-        ['generic_slow_high', 'generic_slow_high'],
-        ['generic_object_detect', 'generic_object_detect']
-      ];
     },
   },
 };

@@ -1,0 +1,21 @@
+{
+  "kind": "flyoutToolbox",
+  "contents": [
+    {
+      "kind": "block",
+      "type": "coderbot_moveForward"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_moveBackward"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_turnLeft"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_turnRight"
+    }
+  ]
+}

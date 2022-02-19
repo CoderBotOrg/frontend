@@ -446,7 +446,10 @@ export default {
         availableViews: [],
         viewSource: null,
         autoRecVideo: null,
-        toolbox: null
+        toolbox: {
+          kind: 'flyoutToolbox',
+          contents: []
+        }
       },
       colors: ['red', 'pink', 'purple', 'yellow', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal',
         'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey', 'black',
