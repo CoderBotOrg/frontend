@@ -92,10 +92,10 @@ export default {
         // Options
         {
           toolbox: this.toolbox,
-          // path: 'static/js/blockly/',
+          media: 'media/',
           // TODO: Use values from fetched configuration!
           scrollbars: true,
-          maxBlocks: null, // this.activity.maxBlocks,
+          maxBlocks: settings.activity.maxBlocks,
           zoom: {
             controls: true,
             wheel: false,
@@ -220,6 +220,14 @@ export default {
 
     clear() {
       this.workspace.clear();
+    },
+
+    remainingCapacity() {
+      let capacity = null;
+      if (this.workspace) {
+        capacity = this.workspace.remainingCapacity();
+      }
+      return capacity;
     }
   },
 };

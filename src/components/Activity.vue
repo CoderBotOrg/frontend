@@ -10,7 +10,7 @@
           {{ activity.name }}
         </v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-chip class="ma-2" v-if="activity.maxBlocks > 0" label>{{ $t("message.activity_program_remaining_blocks") }}: {{ workspace.remainingCapacity() }}</v-chip>
+        <v-chip class="ma-2" v-if="activity.maxBlocks > 0" label>{{ $t("message.activity_program_remaining_blocks") }}: {{ remainingCapacity }}</v-chip>
         <!-- If the API is available, show the desired buttons -->
         <template v-if="status == 200">
           <template v-for="button in activity.buttons">
@@ -366,6 +366,9 @@ export default {
       }
       return this.$i18n.t('message.coderbot_status_offline');
     },
+    remainingCapacity() {
+      return this.$refs.workspace.remainingCapacity();
+    }
   },
   mounted() {
     this.loadMusicPackages();
@@ -452,6 +455,7 @@ export default {
       }).then((response) => {
         console.log('Activity loaded', response.data);
         this.activity = response.data;
+        this.settings.activity = response.data;
         this.updateCssProps();
 
         let toolboxJSON = null;
