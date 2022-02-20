@@ -188,6 +188,38 @@ export default {
           y += parentBlock.getHeightWidth().height + 10;
         });
       }
+    },
+    getProgramData() {
+      const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      const dom_code = Blockly.Xml.domToText(xml_code);
+      window.LoopTrap = 1000;
+      Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
+      const code = Blockly.Python.workspaceToCode(this.workspace);
+      Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+      return {
+        dom_code,
+        code,
+      };
+    },
+
+    getProgramCode() {
+      Blockly.Python.STATEMENT_PREFIX = null;
+      Blockly.Python.addReservedWords();
+      Blockly.Python.INFINITE_LOOP_TRAP = null;
+      const code = Blockly.Python.workspaceToCode(this.workspace);
+
+      return code;
+    },
+
+    loadProgram(dom_code) {
+      this.workspace.clear();
+      const xml = Blockly.Xml.textToDom(dom_code);
+      Blockly.Xml.domToWorkspace(xml, this.workspace);
+    },
+
+    clear() {
+      this.workspace.clear();
     }
   },
 };

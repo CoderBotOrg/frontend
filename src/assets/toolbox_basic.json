@@ -19,7 +19,7 @@
     },
     {
       "kind": "block",
-      "type": "coderbot_audio_say"
+      "type": "coderbot_audio_say",
       "value": {
         "name": "TEXT",
         "contents": {
@@ -58,7 +58,7 @@
     },
     {
       "kind": "block",
-      "type": "coderbot_repeat"
+      "type": "coderbot_repeat",
       "value": {
         "name": "TIMES",
         "contents": {

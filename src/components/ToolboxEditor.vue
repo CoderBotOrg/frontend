@@ -35,8 +35,8 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-        <v-btn @click="addCategory()">Aggiungi Nuova Categoria</v-btn>
-        <v-btn @click="addAllCategories()">Aggiungi Tutte</v-btn>
+        <v-btn @click="addCategory()">{{ $t('message.activity_toolbox_category_add') }}</v-btn>
+        <v-btn @click="addAllCategories()">{{ $t('message.activity_toolbox_category_add_all') }}</v-btn>
       </v-col>
       <v-col class="pa-2 fill-height">
         <blockly-workspace
