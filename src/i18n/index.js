@@ -19,7 +19,7 @@ const locales = {
 
 Vue.use(VueI18n);
 
-const language = window.navigator.userLanguage || window.navigator.language;
+const language = (window.navigator.userLanguage || window.navigator.language).substring(0, 2);
 
 export default new VueI18n({
   locale: language,
