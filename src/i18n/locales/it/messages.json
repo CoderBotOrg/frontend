@@ -237,6 +237,7 @@
     "settings_toolbax_standard": "Standard",
     "settings_toolbax_advanced": "Avanzate",
     "settings_confirm_exit_text": "Le modifiche apportate andranno perse, comfermi di voler cambiare pagina?",
+    "settings_restart_needed": "Per rendere effettive le modifiche, riavviare CdoerBot.",
     "validation_integer": "Inserire un numero intero (1234)",
     "validation_decimal": "Inserire un numero decimale (12.34)",
     "validation_integer_positive": "Inserire un numero intero maggiore o uguale a 0",

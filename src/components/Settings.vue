@@ -293,7 +293,7 @@
                       />
                       <v-text-field v-model="settings.camera_color_object_size_min"
                         @input="$v.settings.camera_color_object_size_min.$touch"
-                        v-bind:label="$t('message.camera_color_object_size_min')"
+                        v-bind:label="$t('message.settings_camera_color_object_size_min')"
                         v-bind:error-messages="$v.settings.camera_color_object_size_min.$error == true ? $t('message.validation_integer') : null"
                       />
                       <v-text-field v-model="settings.camera_path_object_size_max"
@@ -976,6 +976,16 @@ export default {
           this.snackText = this.$i18n.t('message.settings_errors');
           this.snackbar = true;
         } else {
+          /* eslint-disable func-names, object-shorthand, prefer-arrow-callback */
+          const needRestart = this.needRestart();
+          let needRestartFlag = false;
+          Object.entries(this.$v.settings).forEach(function (field) {
+            if (field[1].$dirty
+              && needRestart[field[0]]) {
+              needRestartFlag = true;
+            }
+          });
+          /* eslint-enable */
           const legacySettings = qs.stringify({
             ctrl_hud_image: data.ctrl_hud_image,
             cv_image_factor: data.cv_image_factor,
@@ -1016,7 +1026,7 @@ export default {
             .then(() => {
               console.log('Updated settings');
               this.prepopulate();
-              this.snackText = this.$i18n.t('message.settings_updated');
+              this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
               this.snackbar = true;
               this.$v.settings.$reset();
               console.log('set dirty false');
@@ -1048,7 +1058,40 @@ export default {
       const currentStatus = this.$store.getters.drawerStatus;
       this.$store.commit('toggleDrawer', !currentStatus);
     },
-    errorMessages() { return !this.$v.settings.camera_color_object_size_max.required ? 'Valore numerico necessario' : null; }
+    errorMessages() { return !this.$v.settings.camera_color_object_size_max.required ? 'Valore numerico necessario' : null; },
+    needRestart() {
+      return {
+        ctrl_hud_image: true,
+        cv_image_factor: true,
+        camera_color_object_size_max: true,
+        camera_color_object_size_min: true,
+        camera_exposure_mode: true,
+        camera_framerate: true,
+        camera_jpeg_bitrate: true,
+        camera_jpeg_quality: true,
+        camera_path_object_size_max: true,
+        camera_path_object_size_min: true,
+        cnn_default_model: true,
+        cbName: true,
+        btnFun: true,
+        audioLevel: true,
+        moveFwdElapse: false,
+        moveFwdSpeed: false,
+        moveTurnElapse: false,
+        moveTurnSpeed: false,
+        ctrlFwdElapse: false,
+        ctrlFwdSpeed: false,
+        ctrlTurnElapse: false,
+        ctrlTurnSpeed: false,
+        motorMode: true,
+        trimFactor: true,
+        startSound: true,
+        stopSound: true,
+        shutterSound: true,
+        startupProgram: true,
+        progLevel: false
+      };
+    }
   },
   data() {
     return {
@@ -1224,8 +1267,7 @@ export default {
           minValue: 0
         },
         cnn_default_model: {
-          required,
-          alpha
+          required
         },
         wifiMode: {
           required,
@@ -1233,11 +1275,9 @@ export default {
         },
         wifiSSID: {
           required,
-          alpha
         },
         wifiPsw: {
           required,
-          alpha
         },
         audioLevel: {
           required,
@@ -1298,19 +1338,14 @@ export default {
           decimal
         },
         startSound: {
-          alpha
         },
         stopSound: {
-          alpha
         },
         shutterSound: {
-          alpha
         },
         startupProgram: {
-          alpha
         },
         progLevel: {
-          alpha
         }
       },
     };
