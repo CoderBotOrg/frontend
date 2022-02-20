@@ -38,14 +38,13 @@
       <!-- Page content -->
       <v-main>
         <!-- Blockly -->
-        <div style="height: 480px; width: 600px;">
-          <div ref="blocklyTotal" style="height: 100%; width: 100%;" class="blocklyTotal">
-            <div ref="blocklyArea" style="height: 100%; width: 100%;" class="blocklyArea">
-              <div ref="blocklyDiv" style="height: 100%; width: 100%;" class="blocklyDiv">
-              </div>
-            </div>
-          </div>
-        </div>
+        <blockly-workspace
+          ref="workspace"
+          :settings="settings"
+          :toolbox="toolbox"
+          @workspace-changed="onWorkspaceChanged()"
+        >
+        </blockly-workspace>
       </v-main>
       <!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
       <input type="file" style="display: none" ref="file" @change="importProgram">
@@ -299,61 +298,17 @@
   </div>
 </template>
 <script>
-import * as Blockly from 'blockly/core';
-import 'blockly/blocks';
-import 'blockly/python';
-import * as blockly_it from 'blockly/msg/it';
-import * as blockly_en from 'blockly/msg/en';
-import * as blockly_fr from 'blockly/msg/fr';
-
-import '../assets/js/blockly/blocks';
-import * as bot_it from '../assets/js/blockly/bot_it.json';
-import * as bot_en from '../assets/js/blockly/bot_en.json';
-import * as bot_fr from '../assets/js/blockly/bot_fr.json';
-
-import * as music_package from '../assets/music_package.json';
-import i18n from '../i18n/index';
-
 import 'prismjs';
 import 'prismjs/components/prism-python.js';
-import sidebar from '../components/Sidebar';
-
-const locale = i18n.locale.substring(0, 2);
-
-const coderbot_locales = {
-  it: bot_it.default,
-  en: bot_en.default,
-  fr: bot_fr.default
-};
-
-Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
-
-const blockly_locales = {
-  it: blockly_it,
-  en: blockly_en,
-  fr: blockly_fr
-};
-Blockly.setLocale(blockly_locales[locale]);
-
-Blockly.Blocks.CoderBotSettings.instrumentlist = [];
-Blockly.Blocks.CoderBotSettings.animalist = [];
-
-// load music packages
-Object.keys(music_package.packages).forEach((key) => {
-  const names = [music_package.packages[key].name_IT, key];
-  if (music_package.packages[key].category == 'instrument') {
-    Blockly.Blocks.CoderBotSettings.instrumentlist[Blockly.Blocks.CoderBotSettings.instrumentlist.length] = names;
-  } else if (music_package.packages[key].category == 'animal') {
-    Blockly.Blocks.CoderBotSettings.animalist[Blockly.Blocks.CoderBotSettings.animalist.length] = names;
-  }
-});
-// let workspace = null;
+import sidebar from './Sidebar';
+import BlocklyWorkspace from './BlocklyWorkspace';
 
 export default {
   name: 'Activity',
   components: {
     sidebar,
-    Prism: () => import('vue-prism-component'),
+    BlocklyWorkspace,
+    Prism: () => import('vue-prism-component')
   },
   data: () => ({
     cssProps: {
@@ -365,7 +320,7 @@ export default {
       exec: {},
     },
     log: null,
-    settings: null,
+    settings: {},
     snackText: null,
     snackbar: false,
     drawer: false,
@@ -378,6 +333,7 @@ export default {
     info: null,
     code: '',
     workspace: null,
+    toolbox: null,
     generalDialog: false,
     generalDialogText: null,
     generalDialogTitle: null,
@@ -412,6 +368,8 @@ export default {
     },
   },
   mounted() {
+    this.loadMusicPackages();
+
     // Get the activity
     const axios = this.$axios;
     const {
@@ -495,6 +453,16 @@ export default {
         console.log('Activity loaded', response.data);
         this.activity = response.data;
         this.updateCssProps();
+
+        let toolboxJSON = null;
+        if (this.activity.toolbox == null) {
+          const toolboxLevel = this.settings.prog_level;
+          // Decode it and get the clean serialized XML as plain string
+          toolboxJSON = require(`../assets/toolbox_${toolboxLevel}.json`);
+        } else {
+          toolboxJSON = this.activity.toolbox;
+        }
+        this.toolbox = toolboxJSON;
       });
     }
 
@@ -509,13 +477,15 @@ export default {
     // Get the legacy configuration and initialize Blockly
     axios.get(`${this.CBv1}/config`)
       .then((response) => {
-        const settings = response.data;
-        this.settings = settings;
-        this.initBlockly(settings);
+        this.settings = { ...this.settings, ...response.data };
+        if (this.toolbox == null) {
+          const toolboxLevel = this.settings.prog_level;
+          this.toolbox = require(`../assets/toolbox_${toolboxLevel}.json`);
+        }
       });
   },
   beforeRouteLeave(to, from, next) {
-    if (this.workspace.dirty) {
+    if (this.dirty) {
       this.router_next = next;
       this.confirm_exit_dialog = true;
     } else {
@@ -559,86 +529,8 @@ export default {
       console.log('Computed CSS props:', this.cssProps);
     },
 
-    initBlockly(settings) {
-      // Extend the default blocks set
-      this.blocksExtensions(settings);
-
-      const toolboxLevel = settings.prog_level;
-      const toolbox = require(`../assets/toolbox_${toolboxLevel}.xml`);
-
-      // Clean the base64 encoding of the resource, removing meta infos
-      const b64Toolbox = toolbox.substring(toolbox.indexOf(',') + 1).toString();
-
-      // Decode it and get the clean serialized XML as plain string
-      const serializedToolbox = this.$base64.decode(b64Toolbox);
-
-      // Initialise Blockly Instance
-      // Blockly.Generator.prototype.INDENT = '    ';
-      this.workspace = Blockly.inject(
-        // Blockly container
-        this.$refs.blocklyDiv,
-        // Options
-        {
-          toolbox: serializedToolbox,
-          // path: 'static/js/blockly/',
-          // TODO: Use values from fetched configuration!
-          scrollbars: true,
-          maxBlocks: this.activity.maxBlocks,
-          zoom: {
-            controls: true,
-            wheel: false,
-            startScale: 1.0,
-            maxScale: 1.5,
-            minScale: 0.2,
-          },
-        },
-      );
-      const {
-        workspace
-      } = this;
-      workspace.dirty = false;
-      workspace.addChangeListener(() => {
-        workspace.dirty = true;
-      });
-
-      // Pass the reference to the method to call, don't execute it (`()`)
-      // window.addEventListener('resize', this.resizeWorkspace, false);
-
-      // Initial resize
-      // this.resizeWorkspace()
-      // Blockly.svgResize(this.workspace);
-    },
-    blocksExtensions() {
-      const {
-        settings
-      } = this;
-
-      // coderbot.cfg data (temp workaround, must be fetched from backend)
-
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_elapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MOTION = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MPU = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_ENCODER_AVAILABLE = true; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL = settings.prog_level;
-
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SCROLLBARS = true; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MAXBLOCKS = -1;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SAVEONRUN = true; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_SPEED = settings.ctrl_fw_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_ELAPSE = settings.ctrl_fw_elapse;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_SPEED = settings.ctrl_tr_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_ELAPSE = settings.ctrl_tr_elapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_COUNTER = true; // to check, never used
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MOTION = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MPU = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CNN_MODEL_LIST = [
-        ['generic_fast_low', 'generic_fast_low'],
-        ['generic_slow_high', 'generic_slow_high'],
-        ['generic_object_detect', 'generic_object_detect']
-      ];
+    onWorkspaceChanged() {
+      this.dirty = true;
     },
 
     toggleSidebar() {
@@ -649,26 +541,32 @@ export default {
     getProgramData() {
       // Build the program object
       const name = this.programName;
-      const {
-        workspace
-      } = this;
-      const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-      const dom_code = Blockly.Xml.domToText(xml_code);
-      const {
-        isDefault
-      } = this;
-
-      window.LoopTrap = 1000;
-      Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
-      const code = Blockly.Python.workspaceToCode(workspace);
-      Blockly.Python.INFINITE_LOOP_TRAP = null;
-
+      const { isDefault } = this;
+      const { dom_code, code } = this.$refs.workspace.getProgramData();
       return {
         name,
         dom_code,
         code,
         default: isDefault,
       };
+    },
+
+    loadMusicPackages() {
+      this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
+        this.settings.music_instruments = [];
+        this.settings.music_animals = [];
+        const music_packages = JSON.parse(result.data);
+        Object.entries(music_packages).forEach((key) => {
+          const package_key = key[0];
+          const music_package = key[1];
+          const names = [music_package.name_IT, package_key];
+          if (music_package.category == 'instrument') {
+            this.settings.music_instruments.push(names);
+          } else if (music_package.category == 'animal') {
+            this.settings.music_animals.push(names);
+          }
+        });
+      });
     },
 
     exportProgram() {
@@ -695,9 +593,6 @@ export default {
       // Once the file is selected, read it and populate the Blockly
       //  workspace with the contained program
       const {
-        workspace
-      } = this;
-      const {
         files
       } = e.target;
       if (files[0] !== undefined) {
@@ -709,8 +604,7 @@ export default {
         fr.readAsText(files[0]);
         fr.addEventListener('load', () => {
           const importedProgram = JSON.parse(fr.result);
-          const xml = Blockly.Xml.textToDom(importedProgram.dom_code);
-          Blockly.Xml.domToWorkspace(xml, workspace);
+          this.$refs.workspace.loadProgram(importedProgram.dom_code);
         });
       } else {
         console.log('Something went wrong importing');
@@ -748,7 +642,6 @@ export default {
           overwrite
         } = this.$data;
         console.log('save');
-        console.log(overwrite);
         const data = this.getProgramData();
         axios.post(`${CB}/saveProgram?overwrite=${overwrite}`, {
           name: data.name,
@@ -768,7 +661,7 @@ export default {
             this.$data.isDefault = '';
             this.$data.overwrite = 0;
             console.log('salvato');
-            this.workspace.dirty = false;
+            this.dirty = false;
           }
         });
       } else {
@@ -794,9 +687,6 @@ export default {
       const {
         CB
       } = this.$data;
-      const {
-        workspace
-      } = this.$data;
       this.$data.carica = false;
       this.$data.programName = program;
       axios.get(`${CB}/load`, {
@@ -804,9 +694,8 @@ export default {
           name: program,
         },
       }).then((data) => {
-        workspace.clear();
-        const xml = Blockly.Xml.textToDom(data.data.dom_code);
-        Blockly.Xml.domToWorkspace(xml, workspace);
+        console.log(data.data.dom_code);
+        this.$refs.workspace.loadProgram(data.data.dom_code);
         this.$data.isDefault = data.data.default;
       });
     },
@@ -818,8 +707,9 @@ export default {
     clearProgram() {
       this.$data.programName = '';
       this.$data.code = '';
-      this.$data.workspace.clear();
+      this.$refs.workspace.clear();
       this.$data.clear = false;
+      this.dirty = true;
     },
 
     deleteProgramDlg(program) {
@@ -828,7 +718,6 @@ export default {
     },
 
     deleteProgram(program) {
-      console.log(program);
       if (this.$data.programName == program) {
         this.$data.programName = '';
         this.$data.code = '';
@@ -876,64 +765,11 @@ export default {
         });
     },
 
-    resizeWorkspace() {
-      // Compute the absolute coordinates and dimensions of blocklyArea.
-      let element = this.$refs.blocklyArea;
-      do {
-        element = element.offsetParent;
-      } while (element);
-
-      const {
-        offsetWidth
-      } = this.$refs.blocklyArea;
-      this.$refs.blocklyDiv.style.width = `${offsetWidth}px`;
-      const {
-        offsetHeight
-      } = this.$refs.blocklyArea;
-      this.$refs.blocklyDiv.style.height = `${offsetHeight}px`;
-    },
-
     getProgramCode() {
-      // Expose the program, as generated by Blockly
-      if (this.experimental) {
-        this.experimental = false;
-        this.blocksExtensions();
-        this.experimental = true;
-      }
-
-      Blockly.Python.STATEMENT_PREFIX = null;
-      Blockly.Python.addReservedWords();
-      Blockly.Python.INFINITE_LOOP_TRAP = null;
-      this.code = Blockly.Python.workspaceToCode(this.workspace);
+      this.code = this.workspace.getProgramCode();
       this.dialogCode = true;
-
-      if (this.experimental) {
-        this.blocksExtensions();
-      }
     },
 
-    runProgramExperimental() {
-      if (this.status) {
-        const axios = this.$axios;
-        const {
-          CB
-        } = this;
-        const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        const dom_code = Blockly.Xml.domToText(xml_code);
-        Blockly.Python.INFINITE_LOOP_TRAP = null;
-        // Injecting custom code
-        Blockly.Python.STATEMENT_PREFIX = 'if not is_execFull:\n data_coderbotStatus["prog_gen"]["status"] = "pause"\n saveStatus()\n signal.pause()\ndata_coderbotStatus["prog_gen"]["currentBlockId"] = str(%1)\nsaveStatus()\n';
-        Blockly.Python.addReservedWords('#highlightBlock');
-        const code_modified = Blockly.Python.workspaceToCode();
-
-        axios.post(`${CB}/exec2`, {
-          name: 'Hello, World',
-          dom_code,
-          code: code_modified,
-          mode: this.execMode,
-        });
-      }
-    },
     runProgram() {
       if (this.status) {
         const axios = this.$axios;
@@ -942,12 +778,8 @@ export default {
         } = this;
         // POST /program/save
         const options = this.activity;
-        const xml_code = Blockly.Xml.workspaceToDom(this.workspace);
-        const dom_code = Blockly.Xml.domToText(xml_code);
-        window.LoopTrap = 1000;
-        Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
-        const code = Blockly.Python.workspaceToCode(this.workspace);
-        Blockly.Python.INFINITE_LOOP_TRAP = null;
+
+        const { dom_code, code } = this.workspace.getProgramData();
 
         axios.post(`${CB}/exec`, {
           name: 'run program',
@@ -966,11 +798,13 @@ export default {
         this.generalDialogText = this.$i18n.t('coderbot_offline_3');
       }
     },
+
     stopProgram() {
       console.log('Stopping');
       const axios = this.$axios;
       axios.post(`${this.CBv1}/program/end`);
     },
+
     updateExecStatus() {
       const axios = this.$axios;
       console.log('Updating Execution status');

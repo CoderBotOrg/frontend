@@ -972,51 +972,56 @@ export default {
       } = this;
       const data = this.settings;
       if (selectedTab != 4) {
-        const legacySettings = qs.stringify({
-          ctrl_hud_image: data.ctrl_hud_image,
-          cv_image_factor: data.cv_image_factor,
-          camera_color_object_size_max: data.camera_color_object_size_max,
-          camera_color_object_size_min: data.camera_color_object_size_min,
-          camera_exposure_mode: data.camera_exposure_mode,
-          camera_framerate: data.camera_framerate,
-          camera_jpeg_bitrate: data.camera_jpeg_bitrate,
-          camera_jpeg_quality: data.camera_jpeg_quality,
-          camera_path_object_size_max: data.camera_path_object_size_max,
-          camera_path_object_size_min: data.camera_path_object_size_min,
-          cnn_default_model: data.cnn_default_model,
-          wifi_mode: data.wifiMode,
-          wifi_ssid: data.wifiSSID,
-          wifi_psk: data.wifiPsw,
-          move_power_angle_1: data.power[0],
-          move_power_angle_2: data.power[1],
-          move_power_angle_3: data.power[2],
-          button_func: data.btnFun,
-          move_motor_mode: data.motorMode,
-          move_motor_trim: data.trimFactor,
-          sound_start: data.startSound,
-          sound_stop: data.stopSound,
-          sound_shutter: data.shutterSound,
-          load_at_start: data.startupProgram,
-          prog_level: data.progLevel,
-          move_fw_elapse: data.moveFwdElapse,
-          move_fw_speed: data.moveFwdSpeed,
-          move_tr_elapse: data.moveTurnElapse,
-          move_tr_speed: data.moveTurnSpeed,
-          ctrl_fw_elapse: data.ctrlFwdElapse,
-          ctrl_fw_speed: data.ctrlFwdSpeed,
-          ctrl_tr_elapse: data.ctrlTurnElapse,
-          ctrl_tr_speed: data.ctrlTurnSpeed,
-          audio_volume_level: data.audioLevel,
-        });
-        axios.post(`${CBv1}/config`, legacySettings)
-          .then(() => {
-            console.log('Updated settings');
-            this.prepopulate();
-            this.snackText = this.$i18n.t('message.settings_updated');
-            this.snackbar = true;
-            this.$v.settings.$reset();
-            console.log('set dirty false');
+        if (this.$v.$invalid) {
+          this.snackText = this.$i18n.t('message.settings_errors');
+          this.snackbar = true;
+        } else {
+          const legacySettings = qs.stringify({
+            ctrl_hud_image: data.ctrl_hud_image,
+            cv_image_factor: data.cv_image_factor,
+            camera_color_object_size_max: data.camera_color_object_size_max,
+            camera_color_object_size_min: data.camera_color_object_size_min,
+            camera_exposure_mode: data.camera_exposure_mode,
+            camera_framerate: data.camera_framerate,
+            camera_jpeg_bitrate: data.camera_jpeg_bitrate,
+            camera_jpeg_quality: data.camera_jpeg_quality,
+            camera_path_object_size_max: data.camera_path_object_size_max,
+            camera_path_object_size_min: data.camera_path_object_size_min,
+            cnn_default_model: data.cnn_default_model,
+            wifi_mode: data.wifiMode,
+            wifi_ssid: data.wifiSSID,
+            wifi_psk: data.wifiPsw,
+            move_power_angle_1: data.power[0],
+            move_power_angle_2: data.power[1],
+            move_power_angle_3: data.power[2],
+            button_func: data.btnFun,
+            move_motor_mode: data.motorMode,
+            move_motor_trim: data.trimFactor,
+            sound_start: data.startSound,
+            sound_stop: data.stopSound,
+            sound_shutter: data.shutterSound,
+            load_at_start: data.startupProgram,
+            prog_level: data.progLevel,
+            move_fw_elapse: data.moveFwdElapse,
+            move_fw_speed: data.moveFwdSpeed,
+            move_tr_elapse: data.moveTurnElapse,
+            move_tr_speed: data.moveTurnSpeed,
+            ctrl_fw_elapse: data.ctrlFwdElapse,
+            ctrl_fw_speed: data.ctrlFwdSpeed,
+            ctrl_tr_elapse: data.ctrlTurnElapse,
+            ctrl_tr_speed: data.ctrlTurnSpeed,
+            audio_volume_level: data.audioLevel,
           });
+          axios.post(`${CBv1}/config`, legacySettings)
+            .then(() => {
+              console.log('Updated settings');
+              this.prepopulate();
+              this.snackText = this.$i18n.t('message.settings_updated');
+              this.snackbar = true;
+              this.$v.settings.$reset();
+              console.log('set dirty false');
+            });
+        }
       }
     },
     saveWifi() {

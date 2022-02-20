@@ -1,0 +1,75 @@
+{
+  "kind": "flyoutToolbox",
+  "contents": [
+    {
+      "kind": "block",
+      "type": "coderbot_moveForward"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_moveBackward"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_turnLeft"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_turnRight"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_audio_say",
+      "value": {
+        "name": "TEXT",
+        "contents": {
+          "kind": "block",
+          "type": "text",
+          "field": {
+            "name": "TEXT",
+            "#text": "Ciao"
+          }
+        }
+      }
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_music_note_basic"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_animal_verse_basic"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_music_pause_basic"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_camera_photoTake"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_camera_videoRec"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_camera_videoStop"
+    },
+    {
+      "kind": "block",
+      "type": "coderbot_repeat",
+      "value": {
+        "name": "TIMES",
+        "contents": {
+          "kind": "block",
+          "type": "math_number",
+          "field": {
+            "name": "NUM",
+            "#text": "10"
+          }
+        }
+      }
+    }
+  ]
+}
