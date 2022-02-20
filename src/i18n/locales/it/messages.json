@@ -110,6 +110,8 @@
     "control_video_rec_stopped": "Registrazione terminata",
     "control_sound_playing": "'Nota in riproduzione'",
     "control_photo_gallery": "Galleria",
+    "gallery_pixel_color": "Colore del pixel",
+    "gallery_get_pixel_color": "Ricava colore del pixel",
     "coderbot_status_offline_1": "In attesa che CoderBot torni online...",
     "coderbot_status_offline_2": "CoderBot irraggiungibile",
     "coderbot_status_offline_3": "Il coderbot risulta offline, non puoi eseguire il programma.",
