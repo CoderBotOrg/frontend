@@ -270,7 +270,7 @@ const coderbot_locales = {
   en: bot_en,
   fr: bot_fr
 };
-Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
+Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale].default };
 
 const blockly_locales = {
   it: blockly_it,
@@ -504,7 +504,7 @@ export default {
         // Options
         {
           toolbox: serializedToolbox,
-          // path: 'static/js/blockly/',
+          media: 'media/',
           // TODO: Use values from fetched configuration!
           scrollbars: true,
           // MaxBlocks		: -1, // -1 as infinite not working FIXME
