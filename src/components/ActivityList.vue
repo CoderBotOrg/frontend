@@ -34,7 +34,7 @@
                         <b>{{ activity.name }}</b>
                         <small> {{activity.description}} </small>
                       </v-list-item-title>
-                      <v-btn text icon color="grey darken-1" ripple @click="confirmDeleteDlg = true">
+                      <v-btn text icon color="grey darken-1" v-if="activity.stock!=true" ripple @click="confirmDeleteDlg = true">
                         <v-icon>delete</v-icon>
                           <template>
                             <v-row justify="center">

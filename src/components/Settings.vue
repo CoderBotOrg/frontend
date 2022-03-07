@@ -685,8 +685,11 @@ export default {
     }, 1000);
     this.getInfoAndStatus();
     this.prepopulate();
-    this.loadMusicPackages();
-    this.loadCNNModels();
+    this.settings.packagesInstalled = this.$store.getters.musicPackages;
+    this.settings.cnnModels = this.$store.getters.cnnModels;
+    this.cb.info = this.$$store.getters.info;
+    this.cb.status = this.$$store.getters.status;
+    this.cb.logs = this.$$store.getters.logs;
   },
   beforeRouteLeave(to, from, next) {
     if (this.$v.$anyDirty) {
@@ -709,33 +712,6 @@ export default {
       this.formdata = new FormData();
       this.formdata.append('file_to_upload', files[0], files[0].name);
     },
-    loadMusicPackages() {
-      this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
-        this.packagesInstalled = [];
-        const music_packages = JSON.parse(result.data);
-        Object.entries(music_packages).forEach((key) => {
-          const package_key = key[0];
-          const music_package = key[1];
-          const names = [music_package.name_IT, package_key];
-          if (music_package.category == 'instrument') {
-            this.packagesInstalled.push([names, 'instrument']);
-          } else if (music_package.category == 'animal') {
-            this.packagesInstalled.push([names, 'animal']);
-          }
-        });
-      });
-    },
-    loadCNNModels() {
-      this.$axios.get(`${this.CB}/listCNNModels`).then((result) => {
-        this.cnnModels = [];
-        const cnn_models = JSON.parse(result.data);
-        Object.entries(cnn_models).forEach((entry) => {
-          const model_key = entry[0];
-          // const model_data = entry[1];
-          this.cnnModels.push({ key: model_key, text: model_key });
-        });
-      });
-    },
     uploadPackage() {
       /*
       const qs = this.$qs;
@@ -743,7 +719,7 @@ export default {
         nameID: this.fileName,
       });
       */
-      this.$axios.post(`${this.CB}/updatePackages`, this.formdata).then((result) => {
+      this.$coderbot.updatePackages(this.formData).then((result) => {
         this.updateStatus = result.data;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
@@ -767,7 +743,7 @@ export default {
         },
       };
       this.updateStatus = 1;
-      this.$axios.post(`${this.CB}/updateFromPackage`, this.formdata, config).then((result) => {
+      this.$$coderbot.updateFromPackage(this.formdata, config).then((result) => {
         this.uploadCompleted = true;
         this.uploadInProgress = false;
         console.dir(result.data);
@@ -776,34 +752,29 @@ export default {
     },
     refresh() {
       window.location.reload();
-      /*    readTextFile
-          this.packagesInstalled = packageList
-          this.$http.get('vue/index.html#/settings').then((results) => {
-                console.log(results.data.data);
-                }, (results) => {
-                    console.log('ERROR');
-                    console.log(results);
-                  });
-*/
-    },
-    /*       readTextFile(file, callback) {
-          var rawFile = new XMLHttpRequest();
-          rawFile.overrideMimeType("application/json");
-          rawFile.open("GET", file, true);
-          rawFile.onreadystatechange = function() {
-              if (rawFile.readyState === 4 && rawFile.status == "200") {
-                  callback(rawFile.responseText);
-              }
+      /*
+      readTextFile
+      this.packagesInstalled = packageList
+      this.$http.get('vue/index.html#/settings').then((results) => {
+            console.log(results.data.data);
+            }, (results) => {
+                console.log('ERROR');
+                console.log(results);
+              });
+      readTextFile(file, callback) {
+      var rawFile = new XMLHttpRequest();
+      rawFile.overrideMimeType("application/json");
+      rawFile.open("GET", file, true);
+      rawFile.onreadystatechange = function() {
+          if (rawFile.readyState === 4 && rawFile.status == "200") {
+              callback(rawFile.responseText);
           }
-          rawFile.send(null);
-      },
-*/
+      }
+      rawFile.send(null);
+      */
+    },
     restoreConfig() {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
-      axios.post(`${CB}/restoreSettings`)
+      this.$coderbot.restoreSettings()
         .then(() => {
           this.snackText = this.$i18n.t('message.settings_packages_reset_complete');
           this.snackbar = true;
@@ -811,14 +782,8 @@ export default {
         });
     },
     runTests() {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
       this.cb.logs.runningTest = true;
-      axios.post(`${CB}/testCoderbot`, {
-        params: this.checkedTests
-      }).then((response) => {
+      this.$coderbot.test(this.checkedTests).then((response) => {
         this.cb.logs.test = response.data;
         this.snackText = 'Running tests';
         this.snackbar = true;
@@ -827,11 +792,7 @@ export default {
       });
     },
     restore() {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
-      axios.post(`${CB}/reset`)
+      this.$coderbot.reset()
         .then(() => {
           this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');
           this.snackbar = true;
@@ -841,52 +802,23 @@ export default {
         });
     },
     shutdown() {
-      const axios = this.$axios;
-      const {
-        CBv1
-      } = this;
-      axios.get(`${CBv1}/bot`, {
-        params: {
-          cmd: 'halt'
-        }
-      }).then(function success() {
+      this.$coderbot.halt().then(function success() {
         this.snackText = this.$i18n.t('message.coderbot_status_shutting_down');
         this.snackbar = true;
       });
     },
     reboot() {
-      const axios = this.$axios;
-      const {
-        CBv1
-      } = this;
-      axios.get(`${CBv1}/bot`, {
-        params: {
-          cmd: 'reboot'
-        }
-      }).then(function success() {
+      this.$coderbot.reboot().then(function success() {
         this.snackText = this.$i18n.t('message.coderbot_status_restart_start');
         this.snackbar = true;
       });
     },
     getInfoAndStatus() {
       // Get bot info and status
-      const axios = this.$axios;
-      axios.get(`${this.CB}/status`)
-        .then((response) => {
-          this.cb.status = response.data;
-          this.cb.logs.log = response.data.log;
-        });
-      axios.get(`${this.CB}/info`)
-        .then((response) => {
-          this.cb.info = response.data;
-        });
+      return this.$coderbot.getInfoAndStatus();
     },
     pollStatus() {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
-      axios.get(`${CB}/status`)
+      this.getInfoAndStatus()
         .then((response) => {
           if (this.status == 0 && response.status) {
             this.snackText = this.$i18n.t('message.coderbot_status_online');
@@ -909,68 +841,17 @@ export default {
         });
     },
     deletePkg(pkgNameID) {
-      const axios = this.$axios;
-      axios.post(`${this.CB}/deleteMusicPackage`, {
-        package_name: pkgNameID,
-      }).then(() => {
+      this.$coderbot.deleteMusicPackage(pkgNameID).then(() => {
         console.log('Pacchetto rimosso');
         this.snackText = this.$i18n.t('message.settings_music_package_removed');
         this.snackbar = true;
-        this.loadMusicPackages();
       });
     },
     prepopulate() {
-      const axios = this.$axios;
-      // Prepopulate settings
-      axios.get(`${this.CBv1}/config`)
-        .then((response) => {
-          // handle success
-          const data = this.settings;
-          const remoteConfig = response.data;
-          data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig
-            .move_power_angle_3
-          ];
-          data.ctrl_hud_image = remoteConfig.ctrl_hud_image;
-          data.cv_image_factor = remoteConfig.cv_image_factor;
-          data.camera_color_object_size_max = remoteConfig.camera_color_object_size_max;
-          data.camera_color_object_size_min = remoteConfig.camera_color_object_size_min;
-          data.camera_exposure_mode = remoteConfig.camera_exposure_mode;
-          data.camera_framerate = remoteConfig.camera_framerate;
-          data.camera_jpeg_bitrate = remoteConfig.camera_jpeg_bitrate;
-          data.camera_jpeg_quality = remoteConfig.camera_jpeg_quality;
-          data.camera_path_object_size_max = remoteConfig.camera_path_object_size_max;
-          data.camera_path_object_size_min = remoteConfig.camera_path_object_size_min;
-          data.cnn_default_model = remoteConfig.cnn_default_model;
-          data.btnFun = remoteConfig.button_func;
-          data.wifiMode = remoteConfig.wifi_mode;
-          data.wifiSSID = remoteConfig.wifi_ssid;
-          data.wifiPsw = remoteConfig.wifi_psk;
-          data.motorMode = remoteConfig.move_motor_mode;
-          data.trimFactor = remoteConfig.move_motor_trim;
-          data.startSound = remoteConfig.sound_start;
-          data.stopSound = remoteConfig.sound_stop;
-          data.shutterSound = remoteConfig.sound_shutter;
-          data.startupProgram = remoteConfig.load_at_start;
-          data.progLevel = remoteConfig.prog_level;
-          data.moveFwdElapse = remoteConfig.move_fw_elapse;
-          data.moveFwdSpeed = remoteConfig.move_fw_speed;
-          data.moveTurnElapse = remoteConfig.move_tr_elapse;
-          data.moveTurnSpeed = remoteConfig.move_tr_speed;
-          data.ctrlFwdElapse = remoteConfig.ctrl_fw_elapse;
-          data.ctrlFwdSpeed = remoteConfig.ctrl_fw_speed;
-          data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse;
-          data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed;
-          data.audioLevel = remoteConfig.audio_volume_level;
-        });
+      this.settings = this.$store.getters.settings;
     },
     save() {
-      const qs = this.$qs;
       const selectedTab = this.tab;
-      const axios = this.$axios;
-      const {
-        CBv1
-      } = this;
-      const data = this.settings;
       if (selectedTab != 4) {
         if (this.$v.$invalid) {
           this.snackText = this.$i18n.t('message.settings_errors');
@@ -985,68 +866,20 @@ export default {
               needRestartFlag = true;
             }
           });
-          /* eslint-enable */
-          const legacySettings = qs.stringify({
-            ctrl_hud_image: data.ctrl_hud_image,
-            cv_image_factor: data.cv_image_factor,
-            camera_color_object_size_max: data.camera_color_object_size_max,
-            camera_color_object_size_min: data.camera_color_object_size_min,
-            camera_exposure_mode: data.camera_exposure_mode,
-            camera_framerate: data.camera_framerate,
-            camera_jpeg_bitrate: data.camera_jpeg_bitrate,
-            camera_jpeg_quality: data.camera_jpeg_quality,
-            camera_path_object_size_max: data.camera_path_object_size_max,
-            camera_path_object_size_min: data.camera_path_object_size_min,
-            cnn_default_model: data.cnn_default_model,
-            wifi_mode: data.wifiMode,
-            wifi_ssid: data.wifiSSID,
-            wifi_psk: data.wifiPsw,
-            move_power_angle_1: data.power[0],
-            move_power_angle_2: data.power[1],
-            move_power_angle_3: data.power[2],
-            button_func: data.btnFun,
-            move_motor_mode: data.motorMode,
-            move_motor_trim: data.trimFactor,
-            sound_start: data.startSound,
-            sound_stop: data.stopSound,
-            sound_shutter: data.shutterSound,
-            load_at_start: data.startupProgram,
-            prog_level: data.progLevel,
-            move_fw_elapse: data.moveFwdElapse,
-            move_fw_speed: data.moveFwdSpeed,
-            move_tr_elapse: data.moveTurnElapse,
-            move_tr_speed: data.moveTurnSpeed,
-            ctrl_fw_elapse: data.ctrlFwdElapse,
-            ctrl_fw_speed: data.ctrlFwdSpeed,
-            ctrl_tr_elapse: data.ctrlTurnElapse,
-            ctrl_tr_speed: data.ctrlTurnSpeed,
-            audio_volume_level: data.audioLevel,
+          this.$coderbot.saveSettings(this.settings).then(() => {
+            console.log('Updated settings');
+            this.prepopulate();
+            this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
+            this.snackbar = true;
+            this.$v.settings.$reset();
+            console.log('set dirty false');
           });
-          axios.post(`${CBv1}/config`, legacySettings)
-            .then(() => {
-              console.log('Updated settings');
-              this.prepopulate();
-              this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
-              this.snackbar = true;
-              this.$v.settings.$reset();
-              console.log('set dirty false');
-            });
         }
       }
     },
     saveWifi() {
-      const qs = this.$qs;
-      const axios = this.$axios;
-      const {
-        CBv1
-      } = this;
-      const valuesAsString = qs.stringify({
-        wifi_mode: this.settings.wifiMode,
-        wifi_ssid: this.settings.wifiSSID,
-        wifi_psk: this.settings.wifiPsw,
-      });
       // Send post with URL encoded parameters
-      axios.post(`${CBv1}/wifi`, valuesAsString)
+      this.$coderbot.saveWifiSettings(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
         .then(() => {
           console.log('Sent');
           this.snackText = this.$i18n.t('message.settings_network_updated');
@@ -1168,28 +1001,7 @@ export default {
           value: 'adv'
         },
       ],
-      cb: {
-        info: {
-          status: null,
-          internetConnectivity: null,
-          temp: null,
-          uptime: null,
-        },
-        status: {
-          model: null,
-          serial: null,
-          cbVersion: null,
-          backendVersion: null,
-          vueVersion: null,
-          kernel: null,
-          motors: null,
-        },
-        logs: {
-          log: null,
-          test: null,
-          runningTest: false,
-        },
-      },
+      cb: {},
       drawer: null,
       tab: null,
       tabs: [

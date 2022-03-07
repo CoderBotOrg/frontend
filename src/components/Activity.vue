@@ -320,7 +320,7 @@ export default {
       exec: {},
     },
     log: null,
-    settings: {},
+    settings: null,
     snackText: null,
     snackbar: false,
     drawer: false,
@@ -371,8 +371,7 @@ export default {
     }
   },
   mounted() {
-    this.loadMusicPackages();
-
+    this.settings = this.$store.getters.settings;
     // Get the activity
     const axios = this.$axios;
     const {
@@ -431,7 +430,6 @@ export default {
             label: this.$i18n.t('message.activity_program_import'),
             type: 'text',
           },
-
         ],
         capsSwitch: false,
         codeFont: 'ubuntumono',
@@ -444,7 +442,12 @@ export default {
         fontSize: 'Medio',
         name: this.$i18n.t('message.activity_program_title'),
         showName: true,
+        maxBlocks: null,
       };
+      const toolboxLevel = this.settings.progLevel;
+      // Decode it and get the clean serialized XML as plain string
+      this.toolbox = require(`../assets/toolbox_${toolboxLevel}.json`);
+      this.settings.maxBlocks = null; // default
     } else {
       console.log('Loading activity', this.$route.params.name);
       this.saved = true;
@@ -455,17 +458,18 @@ export default {
       }).then((response) => {
         console.log('Activity loaded', response.data);
         this.activity = response.data;
-        this.settings.activity = response.data;
+        this.settings.maxBlocks = this.activity.maxBlocks;
         this.updateCssProps();
 
         let toolboxJSON = null;
         if (this.activity.toolbox == null) {
-          const toolboxLevel = this.settings.prog_level;
+          const toolboxLevel = this.settings.progLevel;
           // Decode it and get the clean serialized XML as plain string
           toolboxJSON = require(`../assets/toolbox_${toolboxLevel}.json`);
         } else {
           toolboxJSON = this.activity.toolbox;
         }
+        console.log(this.settings);
         this.toolbox = toolboxJSON;
       });
     }
@@ -477,16 +481,6 @@ export default {
     setInterval(() => {
       this.pollStatus();
     }, 1000);
-
-    // Get the legacy configuration and initialize Blockly
-    axios.get(`${this.CBv1}/config`)
-      .then((response) => {
-        this.settings = { ...this.settings, ...response.data };
-        if (this.toolbox == null) {
-          const toolboxLevel = this.settings.prog_level;
-          this.toolbox = require(`../assets/toolbox_${toolboxLevel}.json`);
-        }
-      });
   },
   beforeRouteLeave(to, from, next) {
     if (this.dirty) {
@@ -553,24 +547,6 @@ export default {
         code,
         default: isDefault,
       };
-    },
-
-    loadMusicPackages() {
-      this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
-        this.settings.music_instruments = [];
-        this.settings.music_animals = [];
-        const music_packages = JSON.parse(result.data);
-        Object.entries(music_packages).forEach((key) => {
-          const package_key = key[0];
-          const music_package = key[1];
-          const names = [music_package.name_IT, package_key];
-          if (music_package.category == 'instrument') {
-            this.settings.music_instruments.push(names);
-          } else if (music_package.category == 'animal') {
-            this.settings.music_animals.push(names);
-          }
-        });
-      });
     },
 
     exportProgram() {
@@ -698,7 +674,6 @@ export default {
           name: program,
         },
       }).then((data) => {
-        console.log(data.data.dom_code);
         this.$refs.workspace.loadProgram(data.data.dom_code);
         this.$data.isDefault = data.data.default;
       });
@@ -783,7 +758,7 @@ export default {
         // POST /program/save
         const options = this.activity;
 
-        const { dom_code, code } = this.workspace.getProgramData();
+        const { dom_code, code } = this.$refs.workspace.getProgramData();
 
         axios.post(`${CB}/exec`, {
           name: 'run program',

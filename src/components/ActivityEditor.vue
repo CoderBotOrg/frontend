@@ -388,7 +388,8 @@ export default {
       CB: process.env.CB_ENDPOINT + process.env.APIv2,
       snackbar: false,
       iconPicker: false,
-      iconList: ['play_arrow',
+      iconList: [
+        'play_arrow',
         'pause',
         'stop',
         'save',
@@ -427,6 +428,7 @@ export default {
       snackbarText: '',
       b: 0,
       activity: {
+        stock: null,
         uiLang: null,
         defaultView: null,
         exec: {
@@ -645,6 +647,55 @@ export default {
     restoreDefaults() {
       this.activity.buttons = [
         {
+          action: 'clearProgramDlg',
+          icon: 'clear',
+          label: this.$i18n.t('message.activity_program_clear'),
+          type: 'text',
+        },
+        {
+          action: 'saveProgram',
+          icon: 'save',
+          label: this.$i18n.t('message.activity_program_save'),
+          type: 'text',
+        },
+        {
+          action: 'toggleSaveAs',
+          icon: 'edit',
+          label: this.$i18n.t('message.activity_program_save_as'),
+          type: 'text',
+        },
+        {
+          action: 'loadProgramList',
+          icon: 'folder_open',
+          label: this.$i18n.t('message.activity_program_load'),
+          type: 'text',
+        },
+        {
+          action: 'runProgram',
+          icon: 'play_arrow',
+          label: this.$i18n.t('message.activity_program_run'),
+          type: 'text',
+        },
+        {
+          action: 'getProgramCode',
+          icon: 'code',
+          label: this.$i18n.t('message.activity_program_show_code'),
+          type: 'text',
+        },
+        {
+          action: 'exportProgram',
+          icon: 'fa-file-export',
+          label: this.$i18n.t('message.activity_program_export'),
+          type: 'text',
+        },
+        {
+          action: 'pickFile',
+          icon: 'fa-file-import',
+          label: this.$i18n.t('message.activity_program_import'),
+          type: 'text',
+        },
+        /*
+        {
           label: this.$i18n.t('message.activity_program_run'),
           icon: 'play_arrow',
           colorBtn: 'green',
@@ -659,6 +710,7 @@ export default {
           colorText: 'white--text',
           action: 'saveProgram',
         },
+        */
       ];
     },
     onToolboxSave() {

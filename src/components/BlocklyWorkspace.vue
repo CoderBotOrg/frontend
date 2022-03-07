@@ -57,6 +57,7 @@ export default {
     // whenever settings changes, this function will run
     settings(newSettings, oldSettings) {
       if (newSettings != oldSettings) {
+        console.log('initBlockly.1');
         this.initBlockly(this.settings);
       }
     },
@@ -66,6 +67,7 @@ export default {
         if (this.workspace) {
           if (newToolbox.kind != this.toolbox_kind) {
             this.workspace.dispose();
+            console.log('initBlockly.2');
             this.initBlockly(this.settings);
             this.toolbox_kind = this.toolbox.kind;
           } else {
@@ -95,7 +97,7 @@ export default {
           media: 'media/',
           // TODO: Use values from fetched configuration!
           scrollbars: true,
-          maxBlocks: settings.activity.maxBlocks,
+          maxBlocks: settings.maxBlocks,
           zoom: {
             controls: true,
             wheel: false,
