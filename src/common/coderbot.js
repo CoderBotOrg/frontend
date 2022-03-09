@@ -194,6 +194,15 @@ class CoderBot {
   updatePackages(formdata) {
     return this.$axios.post(`${this.CB}/updatePackages`, formdata);
   }
+
+  loadActivity(activityName, activityDefault) {
+    return this.$axios.get(`${this.CB}/loadActivity`, {
+      params: {
+        name: activityName,
+        default: activityDefault
+      },
+    });
+  }
 }
 
 export default CoderBot;

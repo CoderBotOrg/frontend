@@ -45,6 +45,11 @@
                         v-bind:label="$t('message.activity_predefined_view')" required
                         @input="$v.activity.defaultView.$touch"
                       ></v-select>
+                      <v-checkbox
+                        v-model="activity.default"
+                        v-bind:label="$t('message.activity_default')"
+                        @input="$v.activity.default.$touch"
+                      ></v-checkbox>
                     </v-form>
                   </v-card>
                   <br><br>
@@ -429,6 +434,7 @@ export default {
       b: 0,
       activity: {
         stock: null,
+        default: null,
         uiLang: null,
         defaultView: null,
         exec: {
@@ -508,7 +514,6 @@ export default {
         'Grande',
         'Molto grande',
       ],
-
       daltonicSwitch: 0,
       daltonicType: 1,
       daltonicModes: [
@@ -560,6 +565,7 @@ export default {
   validations() {
     return {
       activity: {
+        default: { },
         uiLang: { },
         defaultView: { },
         drawerEnabled: { },
@@ -591,6 +597,13 @@ export default {
         },
       }).then((response) => {
         this.activity = response.data;
+        if (this.activity.toolbox == null) {
+          this.activity.toolbox = {
+            kind: 'flyoutToolbox',
+            contents: []
+          };
+        }
+        console.log(this.activity);
       });
     } else {
       this.restoreDefaults();
@@ -604,6 +617,7 @@ export default {
   },
   methods: {
     save() {
+      console.log(this.activity);
       if (this.activity.name) {
         const axios = this.$axios;
         const {

@@ -17,13 +17,13 @@
             <template v-if="button.type == 'text'">
               <v-btn @click="_self[button.action]()" text>
                 <v-icon>{{ button.icon }}</v-icon>
-                {{ button.label }}
+                {{ $t(button.label) }}
               </v-btn>
             </template>
             <template v-else>
               <v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn"
                 :class="button.colorText">
-                {{ button.label }}
+                {{ $t(button.label) }}
                 <v-icon right dark>{{ button.icon }}</v-icon>
               </v-btn>
             </template>
@@ -373,106 +373,29 @@ export default {
   mounted() {
     this.settings = this.$store.getters.settings;
     // Get the activity
-    const axios = this.$axios;
-    const {
-      CB
-    } = this;
+    let activityName = this.$route.params.name;
+    let activityDefault = false;
     if (this.$route.path == '/program') {
-      console.log('Loading the default activity');
-      this.activity = {
-        bodyFont: 'Roboto',
-        buttons: [
-          {
-            action: 'clearProgramDlg',
-            icon: 'clear',
-            label: this.$i18n.t('message.activity_program_clear'),
-            type: 'text',
-          },
-          {
-            action: 'saveProgram',
-            icon: 'save',
-            label: this.$i18n.t('message.activity_program_save'),
-            type: 'text',
-          },
-          {
-            action: 'toggleSaveAs',
-            icon: 'edit',
-            label: this.$i18n.t('message.activity_program_save_as'),
-            type: 'text',
-          },
-          {
-            action: 'loadProgramList',
-            icon: 'folder_open',
-            label: this.$i18n.t('message.activity_program_load'),
-            type: 'text',
-          },
-          {
-            action: 'runProgram',
-            icon: 'play_arrow',
-            label: this.$i18n.t('message.activity_program_run'),
-            type: 'text',
-          },
-          {
-            action: 'getProgramCode',
-            icon: 'code',
-            label: this.$i18n.t('message.activity_program_show_code'),
-            type: 'text',
-          },
-          {
-            action: 'exportProgram',
-            icon: 'fa-file-export',
-            label: this.$i18n.t('message.activity_program_export'),
-            type: 'text',
-          },
-          {
-            action: 'pickFile',
-            icon: 'fa-file-import',
-            label: this.$i18n.t('message.activity_program_import'),
-            type: 'text',
-          },
-        ],
-        capsSwitch: false,
-        codeFont: 'ubuntumono',
-        description: null,
-        drawerEnabled: true,
-        exec: {
-          camera: true,
-          log: true,
-        },
-        fontSize: 'Medio',
-        name: this.$i18n.t('message.activity_program_title'),
-        showName: true,
-        maxBlocks: null,
-      };
-      const toolboxLevel = this.settings.progLevel;
-      // Decode it and get the clean serialized XML as plain string
-      this.toolbox = require(`../assets/toolbox_${toolboxLevel}.json`);
-      this.settings.maxBlocks = null; // default
-    } else {
-      console.log('Loading activity', this.$route.params.name);
-      this.saved = true;
-      axios.get(`${CB}/loadActivity`, {
-        params: {
-          name: this.$route.params.name,
-        },
-      }).then((response) => {
-        console.log('Activity loaded', response.data);
-        this.activity = response.data;
-        this.settings.maxBlocks = this.activity.maxBlocks;
-        this.updateCssProps();
-
-        let toolboxJSON = null;
-        if (this.activity.toolbox == null) {
-          const toolboxLevel = this.settings.progLevel;
-          // Decode it and get the clean serialized XML as plain string
-          toolboxJSON = require(`../assets/toolbox_${toolboxLevel}.json`);
-        } else {
-          toolboxJSON = this.activity.toolbox;
-        }
-        console.log(this.settings);
-        this.toolbox = toolboxJSON;
-      });
+      activityName = this.$route.params.name;
+      activityDefault = true;
     }
+    this.$coderbot.loadActivity(activityName, activityDefault).then((activity) => {
+      this.activity = activity.data;
+
+      this.settings.maxBlocks = this.activity.maxBlocks;
+      this.updateCssProps();
+
+      let toolboxJSON = null;
+      if (this.activity.toolbox == null) {
+        const toolboxLevel = this.settings.progLevel;
+        // Decode it and get the clean serialized XML as plain string
+        toolboxJSON = require(`../assets/toolbox_${toolboxLevel}.json`);
+      } else {
+        toolboxJSON = this.activity.toolbox;
+      }
+      console.log(this.settings);
+      this.toolbox = toolboxJSON;
+    });
 
     this.status = null;
     this.pollStatus();
