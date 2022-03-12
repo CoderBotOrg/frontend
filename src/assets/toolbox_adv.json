@@ -664,6 +664,36 @@
     },
     {
       "kind": "category",
+      "name": "CoderBot - Base",
+      "colour": "40",
+      "contents": [{
+        "kind": "block",
+        "type": "coderbot_basic_moveForward"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_moveBackward"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_turnLeft"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_turnRight"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_repeat"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_audio_say"
+        }        
+      ]
+    },    
+    {
+      "kind": "category",
       "name": "Camera",
       "colour": "120",
       "contents": [{

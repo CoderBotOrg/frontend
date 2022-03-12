@@ -434,7 +434,7 @@
                           </v-flex>
                           <!-- button state -->
                           <v-flex xs12 md4>
-                            <span v-if="cb.logs.test != null && cb.logs.test.sonar != 0">
+                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.sonar != 0">
                               <!-- passed -->
                               <span v-if="cb.logs.test.sonar == 1">
                                 <v-btn @click="runTests" slot="activator" color="green" dark>
@@ -465,7 +465,7 @@
                           </v-flex>
                           <!-- button state -->
                           <v-flex xs12 md4>
-                            <span v-if="cb.logs.test != null && cb.logs.test.motors != 0">
+                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.motors != 0">
                               <!-- passed -->
                               <span v-if="cb.logs.test.motors== 1">
                                 <v-btn @click="runTests" slot="activator" color="green" dark>
@@ -475,7 +475,7 @@
                               <!-- failed -->
                               <span v-else>
                                 <v-btn @click="runTests" slot="activator" color="red" dark>
-                                  <v-icon>fas fa-times</v-icon> {{ $t('message.settings_component_test_not_failed') }}
+                                  <v-icon>fas fa-times</v-icon> {{ $t('message.settings_component_test_failed') }}
                                 </v-btn>
                               </span>
                             </span>
@@ -497,7 +497,7 @@
                           </v-flex>
                           <!-- button state -->
                           <v-flex xs12 md4>
-                            <span v-if="cb.logs.test != null && cb.logs.test.speaker != 0">
+                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.speaker != 0">
                               <!-- passed -->
                               <span v-if="cb.logs.test.speaker== 1">
                                 <v-btn @click="runTests" slot="activator" color="green" dark>
@@ -529,11 +529,11 @@
                           </v-flex>
                           <!-- button state -->
                           <v-flex xs12 md4>
-                            <span v-if="cb.logs.test != null && cb.logs.test.ocr != 0">
+                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.ocr != 0">
                               <!-- passed -->
                               <span v-if="cb.logs.test.ocr== 1">
                                 <v-btn @click="runTests" slot="activator" color="green" dark>
-                                  <v-icon>fas fa-check</v-icon> {{ $t('message.settings_component_test_not_passed') }}
+                                  <v-icon>fas fa-check</v-icon> {{ $t('message.settings_component_test_passed') }}
                                 </v-btn>
                               </span>
                               <!-- failed -->
@@ -555,7 +555,7 @@
                       <br>
                       <v-card-actions>
 
-                        <v-btn v-if="!cb.logs.runningTest" block @click="runTests" slot="activator" color="orange" dark>
+                        <v-btn v-if="cb.logs != null && !cb.logs.runningTest" block @click="runTests" slot="activator" color="orange" dark>
                           <v-icon>fas fa-running</v-icon> {{ $t('message.settings_component_test_run') }}
                         </v-btn>
                         <v-btn v-else block disabled>
@@ -668,7 +668,7 @@
 </template>
 <script>
 import {
-  required, alpha, integer, decimal
+  required, alpha, integer, decimal, between, minValue, maxValue
 } from 'vuelidate/lib/validators';
 
 import sidebar from '../components/Sidebar';
@@ -687,9 +687,8 @@ export default {
     this.prepopulate();
     this.settings.packagesInstalled = this.$store.getters.musicPackages;
     this.settings.cnnModels = this.$store.getters.cnnModels;
-    this.cb.info = this.$$store.getters.info;
-    this.cb.status = this.$$store.getters.status;
-    this.cb.logs = this.$$store.getters.logs;
+    this.cb.info = this.$store.getters.info;
+    this.cb.status = this.$store.getters.status;
   },
   beforeRouteLeave(to, from, next) {
     if (this.$v.$anyDirty) {
@@ -826,9 +825,8 @@ export default {
             this.getInfoAndStatus();
             this.prepopulate();
           }
-          this.statusData = response.data;
-          this.status = response.status;
-          this.cb.logs.log = response.data.log;
+          this.status = this.$store.getters.status != null ? 200 : 500;
+          this.cb.logs.log = this.$store.getters.status.log;
         })
         .catch((error) => {
           // handle error
@@ -1001,7 +999,11 @@ export default {
           value: 'adv'
         },
       ],
-      cb: {},
+      cb: {
+        logs: {
+          log: []
+        }
+      },
       drawer: null,
       tab: null,
       tabs: [
@@ -1041,12 +1043,12 @@ export default {
         camera_color_object_size_max: {
           required,
           integer,
-          minValue: 0
+          minValue: minValue(0)
         },
         camera_color_object_size_min: {
           required,
           integer,
-          minValue: 0
+          minValue: minValue(0)
         },
         camera_exposure_mode: {
           required,
@@ -1055,18 +1057,17 @@ export default {
         camera_framerate: {
           required,
           integer,
-          minValue: 0,
-          maxValue: 30
+          between: between(0, 30)
         },
         camera_jpeg_bitrate: {
           required,
           integer,
-          minValue: 0
+          minValue: minValue(0)
         },
         camera_jpeg_quality: {
           required,
           integer,
-          minValue: 0
+          minValue: minValue(0)
         },
         camera_path_object_size_max: {
           required,
@@ -1076,7 +1077,7 @@ export default {
         camera_path_object_size_min: {
           required,
           integer,
-          minValue: 0
+          minValue: minValue(0)
         },
         cnn_default_model: {
           required
@@ -1094,52 +1095,48 @@ export default {
         audioLevel: {
           required,
           integer,
-          minValue: 0,
-          mazValue: 100
+          between: between(0, 100)
         },
         moveFwdElapse: {
           required,
           decimal,
-          minValue: 0.0
+          minValue: minValue(0.0)
         },
         moveFwdSpeed: {
           required,
           integer,
-          minValue: 0,
-          maxValue: 100
+          between: between(0, 100)
         },
         moveTurnElapse: {
           required,
           decimal,
-          minValue: 0.0
+          minValue: minValue(0.0)
         },
         moveTurnSpeed: {
           required,
           integer,
-          minValue: 0,
-          maxValue: 100
+          between: between(0, 100)
         },
         ctrlFwdElapse: {
           required,
           decimal,
-          minValue: 0.0
+          minValue: minValue(0.0)
         },
         ctrlFwdSpeed: {
           required,
           integer,
-          minValue: 0,
-          maxValue: 100
+          between: between(0, 100)
         },
         ctrlTurnElapse: {
           required,
           decimal,
-          minValue: 0.0
+          minValue: minValue(0.0)
         },
         ctrlTurnSpeed: {
           required,
           integer,
           minValue: 0,
-          maxValue: 100
+          maxValue: maxValue(100)
         },
         motorMode: {
           required,

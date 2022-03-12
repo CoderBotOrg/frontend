@@ -151,11 +151,7 @@ class CoderBot {
       .then((response) => {
         this.$store.commit('setInfo', response.data);
       });
-    const p3 = this.$axios.get(`${this.CB}/logs`)
-      .then((response) => {
-        this.$store.commit('setLogs', response.data);
-      });
-    return Promise.all([p1, p2, p3]);
+    return Promise.all([p1, p2]);
   }
 
   deleteMusicPackage(pkgNameID) {
