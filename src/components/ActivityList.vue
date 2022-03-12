@@ -34,6 +34,7 @@
                         <b>{{ activity.name }}</b>
                         <small> {{activity.description}} </small>
                       </v-list-item-title>
+                      <v-icon v-if="activity.default">mdi-star</v-icon>
                       <v-btn text icon color="grey darken-1" v-if="activity.stock!=true" ripple @click="confirmDeleteDlg = true">
                         <v-icon>delete</v-icon>
                           <template>
@@ -100,25 +101,14 @@ export default {
       this.$router.push({ name: 'activity_open', params: { name } });
     },
     getActivities() {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this.$data;
       // let programList = this.$data.programList
-      axios.get(`${CB}/listActivities`)
+      this.$coderbot.getActivities()
         .then((response) => {
           this.$data.activityList = response.data;
         });
     },
     deleteActivity(name) {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this.$data;
-      // let programList = this.$data.programList
-      axios.post(`${CB}/deleteActivity`, {
-        name,
-      }).then(() => {
+      this.$coderbot.deleteActivity(name).then(() => {
         this.getActivities();
       });
     },

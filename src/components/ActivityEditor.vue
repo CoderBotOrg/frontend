@@ -578,32 +578,23 @@ export default {
         viewSource: { },
         autoRecVideo: { },
         name: { required: true, alphaNum },
-        description: { alphaNum },
+        description: { },
         maxBlocks: { integer, minValue: 0 },
       },
     };
   },
   mounted() {
     if (this.$route.params.name) {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
       console.log('Loading activity', this.$route.params.name);
       this.saved = true;
-      axios.get(`${CB}/loadActivity`, {
-        params: {
-          name: this.$route.params.name,
-        },
-      }).then((response) => {
-        this.activity = response.data;
+      this.$coderbot.loadActivity(this.$route.params.name, false).then((activity) => {
+        this.activity = activity;
         if (this.activity.toolbox == null) {
           this.activity.toolbox = {
             kind: 'flyoutToolbox',
             contents: []
           };
         }
-        console.log(this.activity);
       });
     } else {
       this.restoreDefaults();
@@ -617,15 +608,8 @@ export default {
   },
   methods: {
     save() {
-      console.log(this.activity);
       if (this.activity.name) {
-        const axios = this.$axios;
-        const {
-          CB
-        } = this;
-        axios.post(`${CB}/saveActivity`, {
-          activity: this.activity,
-        }).then(() => {
+        this.$coderbot.saveActivity(this.activity).then(() => {
           this.snackbarText = this.$i18n.t('message.activity_saved');
           this.snackbar = true;
           this.saved = true;
@@ -728,7 +712,6 @@ export default {
       ];
     },
     onToolboxSave() {
-      console.log(this.activity.toolbox);
     },
   },
 };

@@ -203,6 +203,75 @@ class CoderBot {
       },
     });
   }
+
+  getActivities() {
+    return this.$axios.get(`${this.CB}/listActivities`);
+  }
+
+  deleteActivity(name) {
+    return this.$axios.post(`${this.CB}/deleteActivity`, {
+      name,
+    });
+  }
+
+  saveActivity(an_activity) {
+    return this.$axios.post(`${this.CB}/saveActivity`, {
+      activity: an_activity
+    });
+  }
+
+  saveProgram(overwrite, name, dom_code, code, is_default) {
+    return this.$axios.post(`${this.CB}/saveProgram`, {
+      overwrite,
+      name,
+      dom_code,
+      code,
+      default: is_default
+    });
+  }
+
+  listPrograms() {
+    return this.$axios.get(`${this.CB}/list`);
+  }
+
+  loadProgram(name) {
+    return this.$axios.get(`${this.CB}/load`, {
+      params: {
+        name
+      },
+    });
+  }
+
+  deleteProgram(name) {
+    return this.$axios.post(`${this.CB}/delete`, {
+      name,
+    });
+  }
+
+  status() {
+    return this.$axios.get(`${this.CB}/status`);
+  }
+
+  info() {
+    return this.$axios.get(`${this.CB}/info`);
+  }
+
+  execProgram(dom_code, code, options) {
+    return this.$axios.post(`${this.CB}/exec`, {
+      name: 'run program',
+      dom_code,
+      code,
+      options
+    });
+  }
+
+  stopProgram() {
+    return this.$axios.post(`${this.CBv1}/program/end`);
+  }
+
+  programStatus() {
+    return this.$axios.get(`${this.CBv1}/program/status`);
+  }
 }
 
 export default CoderBot;

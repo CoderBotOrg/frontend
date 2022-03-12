@@ -393,7 +393,6 @@ export default {
       } else {
         toolboxJSON = this.activity.toolbox;
       }
-      console.log(this.settings);
       this.toolbox = toolboxJSON;
     });
 
@@ -537,21 +536,8 @@ export default {
 
     saveProgram() {
       if (this.programName != '') {
-        const axios = this.$axios;
-        const {
-          CB
-        } = this;
-        const {
-          overwrite
-        } = this.$data;
-        console.log('save');
         const data = this.getProgramData();
-        axios.post(`${CB}/saveProgram?overwrite=${overwrite}`, {
-          name: data.name,
-          dom_code: data.dom_code,
-          code: data.code,
-          default: '',
-        }).then((prog_data) => {
+        this.$coderbot.saveProgram(this.$data.overwrite, data.name, data.dom_code, data.code, '').then((prog_data) => {
           if (prog_data.data == 'defaultOverwrite' || prog_data.data == 'askOverwrite') {
             if (prog_data.data == 'askOverwrite') {
               this.$data.overwriteDialog = true;
@@ -574,11 +560,7 @@ export default {
 
     loadProgramList() {
       // Get the list of available programs and populate the popup
-      const axios = this.$axios;
-      const {
-        CB
-      } = this.$data;
-      axios.get(`${CB}/list`)
+      this.$coderbot.listPrograms()
         .then((response) => {
           this.$data.carica = true;
           this.$data.programList = response.data;
@@ -586,17 +568,9 @@ export default {
     },
 
     loadProgram(program) {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this.$data;
       this.$data.carica = false;
       this.$data.programName = program;
-      axios.get(`${CB}/load`, {
-        params: {
-          name: program,
-        },
-      }).then((data) => {
+      this.$coderbot.loadProgram(this.$data.programName).then((data) => {
         this.$refs.workspace.loadProgram(data.data.dom_code);
         this.$data.isDefault = data.data.default;
       });
@@ -625,24 +599,14 @@ export default {
         this.$data.code = '';
         this.$data.workspace.clear();
       }
-      const axios = this.$axios;
-      const {
-        CB
-      } = this.$data;
       console.log('delete');
-      axios.post(`${CB}/delete`, {
-        name: program,
-      }).then(() => {
+      this.$coderbot.deleteProgram(program).then(() => {
         console.log('deleted');
       });
     },
 
     pollStatus() {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
-      axios.get(`${CB}/status`)
+      this.$coderbot.status()
         .then((response) => {
           // If the reconnection happened while in this component, send a notification
           if (this.status == 0 && response.status) {
@@ -652,7 +616,7 @@ export default {
           this.statusData = response.data;
           this.status = response.status;
         });
-      axios.get(`${this.CB}/info`)
+      this.$coderbot.info()
         .then((response) => {
           this.info = response.data;
         })
@@ -668,27 +632,16 @@ export default {
     },
 
     getProgramCode() {
-      this.code = this.workspace.getProgramCode();
+      this.code = this.$refs.workspace.getProgramCode();
       this.dialogCode = true;
     },
 
     runProgram() {
       if (this.status) {
-        const axios = this.$axios;
-        const {
-          CB
-        } = this;
         // POST /program/save
         const options = this.activity;
-
         const { dom_code, code } = this.$refs.workspace.getProgramData();
-
-        axios.post(`${CB}/exec`, {
-          name: 'run program',
-          dom_code,
-          code,
-          options,
-        }).then(() => {
+        this.$coderbot.execProgram(dom_code, code, options).then(() => {
           this.runtimeDialog = true;
           setTimeout(() => {
             this.updateExecStatus();
@@ -703,14 +656,12 @@ export default {
 
     stopProgram() {
       console.log('Stopping');
-      const axios = this.$axios;
-      axios.post(`${this.CBv1}/program/end`);
+      this.$coderbot.stopProgram();
     },
 
     updateExecStatus() {
-      const axios = this.$axios;
       console.log('Updating Execution status');
-      axios.get(`${this.CBv1}/program/status`)
+      this.$coderbot.programStatus()
         .then((response) => {
           this.program_status = response.data.running;
           if (this.program_status) {
