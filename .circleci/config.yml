@@ -43,7 +43,7 @@ jobs:
           root: ~/repo
           paths:
             - dist
-            - ./*.tgz
+            - ./*.tar.gz
             - circle_tag.txt
 
   publish:
@@ -57,7 +57,7 @@ jobs:
           command: |
             CIRCLE_TAG=$(cat circle_tag.txt)
             echo $CIRCLE_TAG
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} *.tgz
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} *.tar.gz
 workflows:
   version: 2
   build_only:
