@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:14.6
+      - image: circleci/node:16
       
     working_directory: ~/repo
 
@@ -38,7 +38,7 @@ jobs:
       - run:
           root: ~/repo
           command: |
-            tar czf frontend.tgz dist
+            tar czf frontend.tar.gz dist
       - persist_to_workspace:
           root: ~/repo
           paths:

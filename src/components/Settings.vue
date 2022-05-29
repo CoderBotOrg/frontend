@@ -31,23 +31,6 @@
               <v-layout row wrap>
                 <!-- Column A -->
                 <v-flex xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t("message.settings_system") }} </h3>
-                  <v-card>
-                    <div class="cardContent">
-                      <v-select v-model="settings.progLevel" :items="blocklyToolboxItems"
-                        v-bind:label="$t('message.settings_toolbox_level')"
-                        @select="$v.settings.progLevel.$touch"
-                      >
-                      </v-select>
-                      <!--<v-text-field v-model="settings.cbName" v-bind:label="Nome CoderBot"></v-text-field>
-												<br>-->
-                      <div v-for="(value, key) in cb.info" :key="key">
-                        {{ key }}: <code>{{ value }}</code>
-                      </div>
-                      {{ $t('message.settings_frontend_build') }}: <code> {{ lastCommit }} </code>
-                    </div>
-                  </v-card>
-                  <br>
                   <h3 class="text-xs-left">Stato </h3>
                   <v-card>
                     <div class="cardContent">
@@ -981,24 +964,6 @@ export default {
         startupProgram: null,
         progLevel: null,
       },
-      blocklyToolboxItems: [
-        {
-          text: this.$i18n.t('message.settings_toolbax_movement'),
-          value: 'basic_move'
-        },
-        {
-          text: this.$i18n.t('message.settings_toolbax_base'),
-          value: 'basic'
-        },
-        {
-          text: this.$i18n.t('message.settings_toolbax_standard'),
-          value: 'std'
-        },
-        {
-          text: this.$i18n.t('message.settings_toolbax_advanced'),
-          value: 'adv'
-        },
-      ],
       cb: {
         logs: {
           log: []

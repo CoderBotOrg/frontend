@@ -275,14 +275,13 @@
           <v-tab-item>
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
-                <!-- Column A -->
                 <v-flex xs12 md6 offset-md3>
                   <h3 class="text-xs-left">{{ $t("message.activity_views_title") }}</h3>
                   <v-card>
                     <v-form class="cardContent">
                       <v-switch v-bind:label='$t("message.activity_views_runtime_camera")'
-                        v-model="activity.exec.camera"></v-switch>
-                      <v-switch v-bind:label='$t("message.activity_views_runtime_log")' v-model="activity.exec.log">
+                        v-model="activity.camera"></v-switch>
+                      <v-switch v-bind:label='$t("message.activity_views_runtime_log")' v-model="activity.log">
                       </v-switch>
                     </v-form>
                   </v-card>
@@ -588,7 +587,7 @@ export default {
       console.log('Loading activity', this.$route.params.name);
       this.saved = true;
       this.$coderbot.loadActivity(this.$route.params.name, false).then((activity) => {
-        this.activity = activity;
+        this.activity = activity.data;
         if (this.activity.toolbox == null) {
           this.activity.toolbox = {
             kind: 'flyoutToolbox',

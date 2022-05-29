@@ -7,11 +7,9 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "build2": "node build/build.js",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "e2e": "node test/e2e/runner.js",
+    "e2e": "node tests/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "unit": "jest --config test/unit/jest.conf.js --coverage"
+    "unit": "jest --config tests/unit/jest.conf.js --coverage"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
