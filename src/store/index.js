@@ -9,6 +9,8 @@ const state = {
   status: null,
   settings: null,
   musicPackages: null,
+  musicInstruments: null,
+  musicAnimals: null,
   cnnModules: null,
   activity: null
 };
@@ -32,6 +34,12 @@ const mutations = {
   },
   setMusicPackages(state, val) {
     state.musicPackages = val;
+  },
+  setMusicInstruments(state, val) {
+    state.musicInstruments = val;
+  },
+  setMusicAnimals(state, val) {
+    state.musicAnimals = val;
   },
   setCNNModels(state, val) {
     state.cnnModules = val;
@@ -59,6 +67,12 @@ const getters = {
   },
   musicPackages(state) {
     return state.musicPackages;
+  },
+  musicInstruments(state) {
+    return state.musicInstruments;
+  },
+  musicAnimals(state) {
+    return state.musicAnimals;
   },
   cnnModules(state) {
     return state.cnnModules;

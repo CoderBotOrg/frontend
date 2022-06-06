@@ -17,17 +17,23 @@ class CoderBot {
     const result = await this.$axios.get(`${this.CB}/listMusicPackages`);
     const packagesInstalled = [];
     const music_packages = JSON.parse(result.data);
+    const musicInstruments = [];
+    const musicAnimals = [];
     Object.entries(music_packages).forEach((key) => {
       const package_key = key[0];
       const music_package = key[1];
       const names = [music_package.name_IT, package_key];
       if (music_package.category == 'instrument') {
         packagesInstalled.push([names, 'instrument']);
+        musicInstruments.push(names);
       } else if (music_package.category == 'animal') {
         packagesInstalled.push([names, 'animal']);
+        musicAnimals.push(names);
       }
     });
     this.$store.commit('setMusicPackages', packagesInstalled);
+    this.$store.commit('setMusicInstruments', musicInstruments);
+    this.$store.commit('setMusicAnimals', musicAnimals);
   }
 
   async loadCNNModels() {

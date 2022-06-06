@@ -107,7 +107,7 @@ export default {
     const toolbox_full = require('../assets/toolbox_adv.json');
     this.toolbox_editor = toolbox_full;
 
-    this.loadMusicPackages();
+    // this.loadMusicPackages();
 
     if (this.toolbox_in) {
       this.toolbox = this.toolbox_in;
@@ -128,6 +128,7 @@ export default {
     }
   },
   methods: {
+    /*
     loadMusicPackages() {
       this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
         this.settings.music_instruments = [];
@@ -145,7 +146,7 @@ export default {
         });
       });
     },
-
+    */
     onChangeCategory() {
       if (this.category_index != null
         && this.toolbox.kind == categoryToolbox) {

@@ -130,25 +130,25 @@ export default {
       // Blockly.svgResize(this.workspace);
     },
     blocksExtensions(settings) {
-      Blockly.Blocks.CoderBotSettings.instrumentlist = settings.music_instruments;
-      Blockly.Blocks.CoderBotSettings.animalist = settings.music_animals;
+      Blockly.Blocks.CoderBotSettings.instrumentlist = this.$store.getters.musicInstruments;
+      Blockly.Blocks.CoderBotSettings.animalist = this.$store.getters.musicAnimals;
       // coderbot.cfg data (temp workaround, must be fetched from backend)
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_SPEED = settings.move_fw_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE = settings.move_fw_elapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED = settings.move_tr_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE = settings.move_tr_elapse; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_SPEED = settings.moveFwdSpeed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE = settings.moveFwdElapse; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED = settings.moveTurnSpeed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE = settings.moveTurnElapse; // to check
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MOTION = false; // should come from config
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MPU = false; // should come from config
       Blockly.Blocks.CoderBotSettings.CODERBOT_ENCODER_AVAILABLE = true; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL = settings.prog_level;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL = settings.progLevel;
 
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SCROLLBARS = true; // to check
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MAXBLOCKS = -1;
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SAVEONRUN = true; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_SPEED = settings.ctrl_fw_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_ELAPSE = settings.ctrl_fw_elapse;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_SPEED = settings.ctrl_tr_speed;
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_ELAPSE = settings.ctrl_tr_elapse; // to check
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_SPEED = settings.ctrlFwdSpeed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_FW_ELAPSE = settings.ctrlFwdElapse;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_SPEED = settings.ctrlTurnSpeed;
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_ELAPSE = settings.ctrlTurnElapse; // to check
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_COUNTER = true; // to check, never used
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MOTION = false; // should come from config
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MPU = false; // should come from config
