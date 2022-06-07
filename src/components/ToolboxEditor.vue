@@ -1,7 +1,7 @@
 <template>
-  <v-container class="grey lighten-5 mb-6 blockly-toolbox-editor">
-    <v-row class="fill-height">
-      <v-col class="pa-2 fill-height">
+  <v-container class="grey lighten-5 mb-6 _blockly-toolbox-editor">
+    <v-row>
+      <v-col class="pa-2 blockly-toolbox-editor">
         <blockly-workspace
           ref="workspace_toolbox_editor"
           :settings="settings"
@@ -107,8 +107,6 @@ export default {
     const toolbox_full = require('../assets/toolbox_adv.json');
     this.toolbox_editor = toolbox_full;
 
-    // this.loadMusicPackages();
-
     if (this.toolbox_in) {
       this.toolbox = this.toolbox_in;
     }
@@ -128,25 +126,6 @@ export default {
     }
   },
   methods: {
-    /*
-    loadMusicPackages() {
-      this.$axios.get(`${this.CB}/listMusicPackages`).then((result) => {
-        this.settings.music_instruments = [];
-        this.settings.music_animals = [];
-        const music_packages = JSON.parse(result.data);
-        Object.entries(music_packages).forEach((key) => {
-          const package_key = key[0];
-          const music_package = key[1];
-          const names = [music_package.name_IT, package_key];
-          if (music_package.category == 'instrument') {
-            this.settings.music_instruments.push(names);
-          } else if (music_package.category == 'animal') {
-            this.settings.music_animals.push(names);
-          }
-        });
-      });
-    },
-    */
     onChangeCategory() {
       if (this.category_index != null
         && this.toolbox.kind == categoryToolbox) {
@@ -254,7 +233,12 @@ code {
 .blocklyToolboxDiv {
   z-index: 1 !important;
 }
+
 .blockly-toolbox-editor {
   height: 480px;
+}
+
+.blocklyFlyout {
+  z-index: 1 !important;
 }
 </style>

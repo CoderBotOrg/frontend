@@ -17,8 +17,8 @@
 
 Blockly = require('blockly');
 
-Blockly.HSV_SATURATION = 0.99;
-Blockly.HSV_VALUE = 0.99;
+Blockly.HSV_SATURATION = 0.9;
+Blockly.HSV_VALUE = 0.7;
 
 const sbsPrefix = '';
 
