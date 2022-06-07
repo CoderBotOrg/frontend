@@ -643,6 +643,45 @@
         },
         {
           "kind": "block",
+          "type": "coderbot_adv_move_enc",
+          "value": [{
+              "name": "SPEED",
+              "contents": {
+                "kind": "block",
+                "type": "math_number",
+                "field": {
+                  "name": "NUM",
+                  "#text": "100"
+                }
+              }
+            },
+            {
+              "name": "DISTANCE",
+              "contents": {
+                "kind": "block",
+                "type": "math_number",
+                "field": {
+                  "name": "NUM",
+                  "#text": "1000"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_move_servo",
+          "value": [{
+              "name": "ANGLE",
+              "contents": {
+                "kind": "block",
+                "type": "math_number"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "block",
           "type": "coderbot_adv_stop"
         },
         {

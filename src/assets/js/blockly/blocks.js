@@ -148,6 +148,71 @@ Blockly.Python.coderbot_basic_turnRight = function (block) {
   return `${sbsPrefix}get_bot().right(speed=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED}, elapse=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE})\n`;
 };
 
+Blockly.Blocks['coderbot_adv_move_enc'] = {
+  // Block for moving forward.
+  init: function() {
+    this.setHelpUrl('http://code.google.com/p/blockly/wiki/Motor');
+    this.setColour(40);
+    
+    this.appendValueInput('SPEED')
+        .setCheck('Number')
+        .appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR + " " + Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_SPEED);
+    this.appendValueInput('DISTANCE')
+        .setCheck('Number')
+        .appendField(Blockly.Msg.CODERBOT_MOVE_ADV_MOTOR_DISTANCE);
+    this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var mode = thisBlock.getFieldValue('ACTION');
+      return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL;
+    });
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+  }
+};
+
+Blockly.Python['coderbot_adv_move_enc'] = function(block) {
+  // Generate Python for moving forward.
+  var speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
+  var distance = Blockly.Python.valueToCode(block, 'DISTANCE', Blockly.Python.ORDER_NONE);
+  var code = "get_bot().move(speed=" + speed + ", distance=" + distance + ")\n";
+  return code;
+};
+
+// servo
+Blockly.Blocks['coderbot_move_servo'] = {
+  // Block for moving forward.
+  init: function() {
+    this.setHelpUrl('http://code.google.com/p/blockly/wiki/Motor');
+    this.setColour(40);
+
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.CODERBOT_MOVE_SERVO)
+        .appendField(new Blockly.FieldDropdown([[Blockly.Msg.CODERBOT_MOVE_SERVO_1, "0"],
+                                                [Blockly.Msg.CODERBOT_MOVE_SERVO_2, "1"]]), 'SERVO');
+    this.appendValueInput('ANGLE')
+        .setCheck('Number')
+        .appendField(Blockly.Msg.CODERBOT_MOVE_SERVO_ANGLE);
+    this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var mode = thisBlock.getFieldValue('ACTION');
+      return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_SERVO_TIP_TAIL;
+    });
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+  }
+};
+
+Blockly.Python['coderbot_move_servo'] = function(block) {
+  // Generate Python for servo control.
+  var servo = block.getFieldValue('SERVO');
+  var angle = Blockly.Python.valueToCode(block, 'ANGLE', Blockly.Python.ORDER_NONE);
+  var code = "get_bot().servo(servo=" + servo + ", angle=" + angle + ")\n";
+  return code;
+};
 Blockly.Blocks.coderbot_basic_audio_say = {
   // Block for text to speech.
   init() {

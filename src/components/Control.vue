@@ -278,6 +278,7 @@ export default {
         axios.post(`${CB}/move`, {
           speed: 100,
           elapse: -1,
+          distance: 0,
         }).catch((error) => {
           console.log(`move error: ${error}`);
         });
@@ -302,6 +303,7 @@ export default {
         axios.post(`${CB}/move`, {
           speed: -100,
           elapse: -1,
+          distance: 0,
         }).catch((error) => {
           console.log(`move error: ${error}`);
         });
