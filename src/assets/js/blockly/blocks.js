@@ -714,11 +714,7 @@ Blockly.Blocks.coderbot_camera_photoTake = {
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
     this.setColour(120);
     const di = this.appendDummyInput();
-    if (Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL.indexOf('basic') >= 0) {
-      di.appendField(new Blockly.FieldImage('/static/images/blocks/photo_take.png', 32, 32, '*'));
-    } else {
-      di.appendField(Blockly.Msg.CODERBOT_PHOTO_TAKE);
-    }
+    di.appendField(Blockly.Msg.CODERBOT_PHOTO_TAKE);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_PhotoTooltip'));
@@ -730,6 +726,24 @@ Blockly.Python.coderbot_camera_photoTake = function (block) {
   return `${sbsPrefix}get_cam().photo_take()\n`;
 };
 
+Blockly.Blocks.coderbot_basic_camera_photoTake = {
+  // Block for taking a picture.
+  init() {
+    this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
+    this.setColour(120);
+    const di = this.appendDummyInput();
+    di.appendField(new Blockly.FieldImage('/static/images/blocks/photo_take.png', 32, 32, '*'));
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(('CoderBot_PhotoTooltip'));
+  },
+};
+
+Blockly.Python.coderbot_camera_basic_photoTake = function (block) {
+  // Generate Python for turning left or right.
+  return `${sbsPrefix}get_cam().photo_take()\n`;
+};
+
 Blockly.Blocks.coderbot_camera_videoRec = {
   // Block for recording a video (start).
   init() {
@@ -737,11 +751,7 @@ Blockly.Blocks.coderbot_camera_videoRec = {
     this.setColour(120);
 
     const di = this.appendDummyInput();
-    if (Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL.indexOf('basic') >= 0) {
-      di.appendField(new Blockly.FieldImage('/static/images/blocks/video_rec.png', 32, 32, '*'));
-    } else {
-      di.appendField(Blockly.Msg.CODERBOT_VIDEO_REC);
-    }
+    di.appendField(Blockly.Msg.CODERBOT_VIDEO_REC);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_VideoTooltip'));
@@ -753,6 +763,25 @@ Blockly.Python.coderbot_camera_videoRec = function (block) {
   return `${sbsPrefix}get_cam().video_rec()\n`;
 };
 
+Blockly.Blocks.coderbot_basic_camera_videoRec = {
+  // Block for recording a video (start).
+  init() {
+    this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
+    this.setColour(120);
+
+    const di = this.appendDummyInput();
+    di.appendField(new Blockly.FieldImage('/static/images/blocks/video_rec.png', 32, 32, '*'));
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(('CoderBot_VideoTooltip'));
+  },
+};
+
+Blockly.Python.coderbot_basic_camera_videoRec = function (block) {
+  // Generate Python for turning left or right.
+  return `${sbsPrefix}get_cam().video_rec()\n`;
+};
+
 Blockly.Blocks.coderbot_camera_videoStop = {
   // Block for recording a video (stop).
   init() {
@@ -760,11 +789,7 @@ Blockly.Blocks.coderbot_camera_videoStop = {
     this.setColour(120);
 
     const di = this.appendDummyInput();
-    if (Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL.indexOf('basic') >= 0) {
-      di.appendField(new Blockly.FieldImage('/static/images/blocks/video_stop.png', 32, 32, '*'));
-    } else {
-      di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP);
-    }
+    di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_VideoTooltip'));
@@ -772,6 +797,25 @@ Blockly.Blocks.coderbot_camera_videoStop = {
 };
 
 Blockly.Python.coderbot_camera_videoStop = function (block) {
+  // Generate Python for turning left or right.
+  return `${sbsPrefix}get_cam().video_stop()\n`;
+};
+
+Blockly.Blocks.coderbot_basic_camera_videoStop = {
+  // Block for recording a video (stop).
+  init() {
+    this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
+    this.setColour(120);
+
+    const di = this.appendDummyInput();
+    di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(('CoderBot_VideoTooltip'));
+  },
+};
+
+Blockly.Python.coderbot_basic_camera_videoStop = function (block) {
   // Generate Python for turning left or right.
   return `${sbsPrefix}get_cam().video_stop()\n`;
 };
@@ -1278,11 +1322,7 @@ Blockly.Blocks.coderbot_audio_play = {
     this.setColour(220);
     const vi = this.appendValueInput('FILENAME');
     vi.setCheck('String');
-    if (Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL.indexOf('basic') >= 0) {
-      vi.appendField(new Blockly.FieldImage('/static/images/blocks/play.png', 32, 32, '*'));
-    } else {
-      vi.appendField(Blockly.Msg.CODERBOT_AUDIO_PLAY_FILE);
-    }
+    vi.appendField(Blockly.Msg.CODERBOT_AUDIO_PLAY_FILE);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_audio_play_Tooltip'));

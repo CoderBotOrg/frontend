@@ -728,7 +728,19 @@
         {
           "kind": "block",
           "type": "coderbot_basic_audio_say"
-        }        
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_camera_photoTake"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_camera_videoRec"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_basic_camera_videoStop"
+        }
       ]
     },    
     {
@@ -736,8 +748,8 @@
       "name": "Camera",
       "colour": "120",
       "contents": [{
-        "kind": "block",
-        "type": "coderbot_camera_photoTake"
+          "kind": "block",
+          "type": "coderbot_camera_photoTake"
         },
         {
           "kind": "block",
@@ -901,6 +913,10 @@
         {
           "kind": "block",
           "type": "coderbot_atmega_set_output"
+        },
+        {
+          "kind": "block",
+          "type": "coderbot_atmega_set_led"
         }
       ]
     },
