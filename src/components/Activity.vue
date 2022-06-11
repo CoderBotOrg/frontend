@@ -115,7 +115,7 @@
         </v-card>
       </v-dialog>
       <!-- Save Program -->
-      <v-dialog v-model="salva" max-width="430">
+      <v-dialog v-model="save" max-width="430">
         <v-card>
           <v-card-title class="headline">
             {{ $t("message.save_as") }}
@@ -123,29 +123,29 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-card-text>
-              <v-text-field v-model="newProgramName" v-bind:label="$t('message.save_as')" v-if="salva" onClick="this.select()"
-                v-on:keyup.enter="saveProgramAs(), salva = false" v-on:keyup.esc="salva = false" autofocus>
+              <v-text-field v-model="newProgramName" v-bind:label="$t('message.save_as')" v-if="save" onClick="this.select()"
+                v-on:keyup.enter="saveProgramAs(), save = false" v-on:keyup.esc="save = false" autofocus>
               </v-text-field>
             </v-card-text>
-            <v-btn color="red darken-1" text="text" @click="salva = false">
+            <v-btn color="red darken-1" text="text" @click="save = false">
               {{ $t("message.cancel") }}
             </v-btn>
-            <v-btn color="green darken-1" text="text" @click="saveProgramAs(), salva = false">
+            <v-btn color="green darken-1" text="text" @click="saveProgramAs(), save = false">
               {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
       <!-- Name error -->
-      <v-dialog v-model="unvalidName" max-width="290">
+      <v-dialog v-model="invalidName" max-width="290">
         <v-card>
           <v-card-title class="headline">Error</v-card-title>
           <v-card-text>
             {{ $t("message.program_name_must_be_filled") }}
           </v-card-text>
           <v-card-actions>
-            <v-btn color="green darken-1" text="text" @click="unvalidName = false, salva = true">
-              Ok
+            <v-btn color="green darken-1" text="text" @click="invalidName = false, save = true">
+              {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -158,7 +158,7 @@
             {{ $t("message.cannot_overwrite_default_program") }}
           </v-card-text>
           <v-card-actions>
-            <v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, salva = true">
+            <v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, save = true">
               {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
@@ -174,7 +174,7 @@
             <v-card-text>
               {{ $t('message.program_exists_overwrite', { programName: programName }) }}
             </v-card-text>
-            <v-btn color="red darken-1" text="text" @click="overwriteDialog = false, salva = true">
+            <v-btn color="red darken-1" text="text" @click="overwriteDialog = false, save = true">
               {{ $t("message.no") }}
             </v-btn>
             <v-btn color="green darken-1" text="text" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
@@ -341,10 +341,10 @@ export default {
     execMode: 'fullExec', // can be 'fullExec' or 'stepByStep',
     carica: false,
     programList: '',
-    salva: false,
+    save: false,
     programName: '',
     newProgramName: '',
-    unvalidName: false,
+    invalidName: false,
     del: false,
     clear: false,
     webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
@@ -352,7 +352,7 @@ export default {
     isDefault: '',
     CannotOverwrite: false,
     defaultProgramName: '',
-    overwrite: 0,
+    overwrite: true,
     overwriteDialog: false,
     dirty: false,
     confirm_exit_dialog: null,
@@ -514,7 +514,7 @@ export default {
     },
 
     toggleSaveAs() {
-      this.salva = true;
+      this.save = true;
       this.newProgramName = this.programName;
     },
 
@@ -527,10 +527,11 @@ export default {
           this.defaultProgramName = this.programName;
           this.programName = this.newProgramName;
           this.newProgramName = '';
+          this.$data.overwrite = false;
           this.saveProgram();
         }
       } else {
-        this.unvalidName = true;
+        this.invalidName = true;
       }
     },
 
@@ -548,13 +549,13 @@ export default {
             }
           } else {
             this.$data.isDefault = '';
-            this.$data.overwrite = 0;
-            console.log('salvato');
+            this.$data.overwrite = true;
+            console.log('saved');
             this.dirty = false;
           }
         });
       } else {
-        this.unvalidName = true;
+        this.invalidName = true;
       }
     },
 

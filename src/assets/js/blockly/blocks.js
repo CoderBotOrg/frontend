@@ -1351,7 +1351,7 @@ Blockly.Blocks.coderbot_audio_hear = {
       .setCheck(['Number'])
       .appendField(Blockly.Msg.CODERBOT_AUDIO_HEAR_ELAPSE);
     this.setInputsInline(true);
-    this.setOutput(true, ['Number']);
+    this.setOutput(true, ['Boolean']);
     this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
   },
 };

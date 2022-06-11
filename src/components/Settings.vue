@@ -369,7 +369,7 @@
                         <v-text-field v-model="settings.wifiSSID" v-bind:label="$t('message.settings_network_ssid')"></v-text-field>
                         <v-text-field v-model="settings.wifiPsw" v-bind:label="$t('message.settings_network_password')"></v-text-field>
                       </v-radio-group>
-                      <v-card-actions>
+                      <!--v-card-actions>
                         <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
                         <v-dialog v-model="dialog" max-width="290">
                           <v-card>
@@ -384,13 +384,13 @@
                               <v-btn color="secondary" @click="dialog = false">
                                 {{ $t('message.cancel') }}
                               </v-btn>
-                              <v-btn color="primary" @click="dialog = false; saveWifi">
+                              <v-btn color="primary" @click="dialog = false; saveWifi();">
                                 {{ $t('message.ok') }}
                               </v-btn>
                             </v-card-actions>
                           </v-card>
                         </v-dialog>
-                      </v-card-actions>
+                      </v-card-actions-->
                     </div>
                   </v-card>
                 </v-flex>
@@ -832,35 +832,41 @@ export default {
       this.settings = this.$store.getters.settings;
     },
     save() {
-      const selectedTab = this.tab;
-      if (selectedTab != 4) {
-        if (this.$v.$invalid) {
-          this.snackText = this.$i18n.t('message.settings_errors');
+      if (this.$v.$invalid) {
+        this.snackText = this.$i18n.t('message.settings_errors');
+        this.snackbar = true;
+        console.log(this.$v);
+      } else {
+        /* eslint-disable func-names, object-shorthand, prefer-arrow-callback */
+        const needRestart = this.needRestart();
+        let needRestartFlag = false;
+        Object.entries(this.$v.settings).forEach(function (field) {
+          if (field[1].$dirty
+            && needRestart[field[0]]) {
+            needRestartFlag = true;
+          }
+        });
+        this.$coderbot.saveSettings(this.settings).then(() => {
+          console.log('Updated settings');
+          this.prepopulate();
+          this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
           this.snackbar = true;
-        } else {
-          /* eslint-disable func-names, object-shorthand, prefer-arrow-callback */
-          const needRestart = this.needRestart();
-          let needRestartFlag = false;
-          Object.entries(this.$v.settings).forEach(function (field) {
-            if (field[1].$dirty
-              && needRestart[field[0]]) {
-              needRestartFlag = true;
-            }
-          });
-          this.$coderbot.saveSettings(this.settings).then(() => {
-            console.log('Updated settings');
-            this.prepopulate();
-            this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
-            this.snackbar = true;
-            this.$v.settings.$reset();
-            console.log('set dirty false');
-          });
+          this.$v.settings.$reset();
+          console.log('set dirty false');
+        });
+        if (this.$v.settings.wifiMode.$dirty || this.$v.settings.wifiSSID.$dirty || this.$v.settings.wifiPsw.$dirty) {
+          this.$coderbot.saveWifiParams(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
+            .then(() => {
+              console.log('Sent');
+              this.snackText = this.$i18n.t('message.settings_network_updated');
+              this.snackbar = true;
+            });
         }
       }
     },
     saveWifi() {
       // Send post with URL encoded parameters
-      this.$coderbot.saveWifiSettings(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
+      this.$coderbot.saveWifiParams(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
         .then(() => {
           console.log('Sent');
           this.snackText = this.$i18n.t('message.settings_network_updated');
@@ -1065,7 +1071,7 @@ export default {
         moveFwdElapse: {
           required,
           decimal,
-          minValue: minValue(0.0)
+          minValue: minValue(-1.0)
         },
         moveFwdSpeed: {
           required,
@@ -1075,7 +1081,7 @@ export default {
         moveTurnElapse: {
           required,
           decimal,
-          minValue: minValue(0.0)
+          minValue: minValue(-1.0)
         },
         moveTurnSpeed: {
           required,
@@ -1085,7 +1091,7 @@ export default {
         ctrlFwdElapse: {
           required,
           decimal,
-          minValue: minValue(0.0)
+          minValue: minValue(-1.0)
         },
         ctrlFwdSpeed: {
           required,
@@ -1095,7 +1101,7 @@ export default {
         ctrlTurnElapse: {
           required,
           decimal,
-          minValue: minValue(0.0)
+          minValue: minValue(-1.0)
         },
         ctrlTurnSpeed: {
           required,
