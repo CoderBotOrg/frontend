@@ -3,7 +3,7 @@
     <sidebar></sidebar>
     <v-app-bar color="indigo" dark fixed app>
       <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-      <v-app-bar-title>CoderBot</v-app-bar-title>
+      <v-app-bar-title class="title"><div>CoderBot</div></v-app-bar-title>
       <v-spacer></v-spacer>
       <!--
       <template v-if="status == 200">

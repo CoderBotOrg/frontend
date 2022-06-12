@@ -6,8 +6,8 @@
       <sidebar mobileDrawAnim=0></sidebar>
       <v-app-bar color="indigo" dark fixed app>
         <v-app-bar-nav-icon @click.stop="toggleSidebar()" v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
-        <v-app-bar-title v-if="activity.showName">
-          {{ activity.name }}
+        <v-app-bar-title class="title" v-if="activity.showName">
+          <div>{{ activity.name }}</div>
         </v-app-bar-title>
         <v-spacer></v-spacer>
         <v-chip class="ma-2" v-if="activity.maxBlocks > 0" label>{{ $t("message.activity_program_remaining_blocks") }}: {{ remainingCapacity }}</v-chip>

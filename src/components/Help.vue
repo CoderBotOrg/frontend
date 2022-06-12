@@ -4,7 +4,7 @@
       <sidebar></sidebar>
       <v-app-bar color="indigo" dark fixed app>
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-        <v-app-bar-title>Aiuto</v-app-bar-title>
+        <v-app-bar-title class="title"><div>Aiuto</div></v-app-bar-title>
       </v-app-bar>
       <v-main>Placeholder content</v-main>
     </v-app>

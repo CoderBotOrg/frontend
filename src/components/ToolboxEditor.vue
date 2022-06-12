@@ -70,8 +70,6 @@
   </v-container>
 </template>
 <script>
-// import * as Blockly from 'blockly/core';
-
 import BlocklyWorkspace from './BlocklyWorkspace.vue';
 
 const categoryToolbox = 'categoryToolbox';
@@ -204,9 +202,25 @@ export default {
       if (this.in_changing_category == false) {
         const contents = [];
         this.$refs.workspace_toolbox_editor.workspace.getTopBlocks(true).forEach((ablock) => {
+          const inputlist = {};
+          /* eslint-disable no-underscore-dangle */
+          let i = 0;
+          ablock.inputList.forEach((aninput) => {
+            if (aninput.type == 1) {
+              inputlist[aninput.name] = {
+                shadow: {
+                  kind: 'block',
+                  /* eslint-disable no-underscore-dangle */
+                  type: ablock.childBlocks_[i].type
+                }
+              };
+              i++;
+            }
+          });
           contents.push({
             kind: 'block',
-            type: ablock.type
+            type: ablock.type,
+            inputs: inputlist
           });
         });
         if (this.toolbox.kind == categoryToolbox) {

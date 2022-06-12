@@ -1394,17 +1394,17 @@ Blockly.Blocks.coderbot_music_note_basic = {
         alt: 'note',
         flipRtl: 'FALSE'
       }))
-      .appendField('NOTA ')
+      .appendField('NOTA')
       .appendField(new Blockly.FieldDropdown([
-        ['DO      ', 'C2'],
-        ['RE      ', 'D2'],
-        ['MI       ', 'E2'],
-        ['FA       ', 'F2'],
-        ['SOL    ', 'G2'],
-        ['LA       ', 'A3'],
-        ['SI        ', 'B3'],
-        ['DO+    ', 'C3'],
-        ['RE+     ', 'D3']
+        ['DO', 'C2'],
+        ['RE', 'D2'],
+        ['MI', 'E2'],
+        ['FA', 'F2'],
+        ['SOL', 'G2'],
+        ['LA', 'A3'],
+        ['SI', 'B3'],
+        ['DO+', 'C3'],
+        ['RE+', 'D3']
       ]), 'NAME');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);

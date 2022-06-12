@@ -4,7 +4,7 @@
       <sidebar></sidebar>
       <v-app-bar color="indigo" dark fixed app>
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
-        <v-app-bar-title>{{ $t("message.gallery_title") }}</v-app-bar-title>
+        <v-app-bar-title class="title"><div>{{ $t("message.gallery_title") }}</div></v-app-bar-title>
       </v-app-bar>
       <v-main>
         <v-layout>
