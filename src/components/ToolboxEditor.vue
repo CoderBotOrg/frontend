@@ -206,7 +206,7 @@ export default {
           /* eslint-disable no-underscore-dangle */
           let i = 0;
           ablock.inputList.forEach((aninput) => {
-            if (aninput.type == 1) {
+            if (aninput.type == 1 && ablock.childBlocks_.length > i) {
               inputlist[aninput.name] = {
                 shadow: {
                   kind: 'block',
