@@ -112,7 +112,6 @@
                       </v-dialog>
                     </div>
                   </v-card>
-                  <br>
                   <h3 class="text-xs-left"> {{ $t('message.settings_actions_update_title') }} </h3>
                   <v-card>
                     <div class="cardContent">
@@ -133,7 +132,17 @@
                       </template>
                     </div>
                   </v-card>
+                  <br/><br/>
                   <br><br>
+                  <h3 class="text-xs-left">{{ $t('message.settings_admin_password_title') }}</h3>
+                  <v-card>
+                    <div class="cardContent">
+                      <v-text-field v-model="settings.adminPassword"
+                        v-bind:label="$t('message.settings_admin_password')"
+                        @input="$v.settings.motorMode.$touch"
+                      />
+                    </div>
+                  </v-card>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -621,6 +630,26 @@
           </v-tab-item>
         </v-tabs-items>
       </v-main>
+      <!-- Admin password dialog -->
+      <v-dialog v-model="adminPassword_dialog" max-width="290" persistent>
+        <v-card>
+          <v-card-title class="headline">{{ $t("message.settings_admin_password_verify_title") }}</v-card-title>
+          <v-card-text>
+            {{ $t("message.settings_admin_password_verify") }}
+            <v-text-field v-model="adminPassword"
+            />
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text="text" @click="adminPassword_dialog=false; $router.go(-1);">
+              {{ $t("message.cancel") }}
+            </v-btn>
+            <v-btn color="green darken-1" text="text" @click="checkAdminPassword()">
+              {{ $t("message.ok") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <!-- Confirm exit dialog -->
       <v-dialog v-model="confirm_exit_dialog" max-width="290">
         <v-card>
@@ -672,6 +701,7 @@ export default {
     this.settings.cnnModels = this.$store.getters.cnnModels;
     this.cb.info = this.$store.getters.info;
     this.cb.status = this.$store.getters.status;
+    this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
   },
   beforeRouteLeave(to, from, next) {
     if (this.$v.$anyDirty) {
@@ -911,6 +941,11 @@ export default {
         startupProgram: true,
         progLevel: false
       };
+    },
+    checkAdminPassword() {
+      if (this.settings.adminPassword == this.adminPassword) {
+        this.adminPassword_dialog = false;
+      }
     }
   },
   data() {
@@ -969,6 +1004,7 @@ export default {
         shutterSound: null,
         startupProgram: null,
         progLevel: null,
+        adminPassword: null,
       },
       cb: {
         logs: {
@@ -1000,6 +1036,8 @@ export default {
       dirty: false,
       confirm_exit_dialog: null,
       router_next: null,
+      adminPassword: null,
+      adminPassword_dialog: true,
     };
   },
   validations() {
@@ -1129,7 +1167,7 @@ export default {
         }
       },
     };
-  }
+  },
 };
 </script>
 <style scoped>

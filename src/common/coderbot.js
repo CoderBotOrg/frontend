@@ -174,6 +174,7 @@ class CoderBot {
     data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse;
     data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed;
     data.audioLevel = remoteConfig.audio_volume_level;
+    data.adminPassword = remoteConfig.admin_password;
     this.$store.commit('setSettings', data);
   }
 
@@ -214,6 +215,7 @@ class CoderBot {
       ctrl_tr_elapse: settings.ctrlTurnElapse,
       ctrl_tr_speed: settings.ctrlTurnSpeed,
       audio_volume_level: settings.audioLevel,
+      admin_password: settings.adminPassword,
     });
     this.$store.commit('setSettings', settings);
     return this.$axios.post(`${this.CBv1}/config`, legacySettings);

@@ -41,14 +41,15 @@ const routes = [
     }
   },
   {
-    name: 'gallery',
+    name: 'settings',
     path: '/settings',
     component: settings,
     meta: {
       title: `CoderBot - ${i18n.t('message.settings')}`,
-    }
+    },
   },
   {
+    name: 'gallery',
     path: '/gallery',
     component: gallery,
     meta: {
