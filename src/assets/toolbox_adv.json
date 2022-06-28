@@ -2,7 +2,7 @@
   "kind": "categoryToolbox",
   "contents": [{
       "kind": "category",
-      "name": "Logica",
+      "name": "message.blockly_toolbox_category_logic",
       "colour": "210",
       "contents": [{
         "kind": "block",
@@ -38,7 +38,7 @@
     },
     {
       "kind": "category",
-      "name": "Cicli",
+      "name": "message.blockly_toolbox_category_cycles",
       "colour": "120",
       "contents": [{
         "kind": "block",
@@ -111,7 +111,7 @@
     },
     {
       "kind": "category",
-      "name": "Matematica",
+      "name": "message.blockly_toolbox_category_math",
       "colour": "230",
       "contents": [{
           "kind": "block",
@@ -322,7 +322,7 @@
     },
     {
       "kind": "category",
-      "name": "Testo",
+      "name": "message.blockly_toolbox_category_text",
       "colour": "160",
       "contents": [{
         "kind": "block",
@@ -511,7 +511,7 @@
     },
     {
       "kind": "category",
-      "name": "Liste",
+      "name": "message.blockly_toolbox_category_lists",
       "colour": "260",
       "contents": [{
         "kind": "block",
@@ -644,19 +644,19 @@
     },
     {
       "kind": "category",
-      "name": "Variabili",
+      "name": "message.blockly_toolbox_category_variables",
       "custom": "VARIABLE",
       "colour": "330"
     },
     {
       "kind": "category",
-      "name": "Funzioni",
+      "name": "message.blockly_toolbox_category_functions",
       "custom": "PROCEDURE",
       "colour": "290"
     },
     {
       "kind": "category",
-      "name": "Eventi",
+      "name": "message.blockly_toolbox_category_events",
       "colour": "15",
       "contents": [{
           "kind": "block",
@@ -749,7 +749,7 @@
     },
     {
       "kind": "category",
-      "name": "Movimento",
+      "name": "message.blockly_toolbox_category_movement",
       "colour": "40",
       "contents": [{
           "kind": "block",
@@ -922,7 +922,7 @@
     },
     {
       "kind": "category",
-      "name": "CoderBot - Base",
+      "name": "message.blockly_toolbox_category_base",
       "colour": "40",
       "contents": [{
           "kind": "block",
@@ -964,7 +964,7 @@
     },
     {
       "kind": "category",
-      "name": "Camera",
+      "name": "message.blockly_toolbox_category_camera",
       "colour": "120",
       "contents": [{
           "kind": "block",
@@ -982,7 +982,7 @@
     },
     {
       "kind": "category",
-      "name": "Visione",
+      "name": "message.blockly_toolbox_category_vision",
       "colour": "250",
       "contents": [{
           "kind": "block",
@@ -1048,7 +1048,7 @@
     },
     {
       "kind": "category",
-      "name": "Sensori",
+      "name": "message.blockly_toolbox_category_sensors",
       "colour": "240",
       "contents": [{
           "kind": "block",
@@ -1074,7 +1074,7 @@
     },
     {
       "kind": "category",
-      "name": "Suoni",
+      "name": "message.blockly_toolbox_category_sound",
       "colour": "220",
       "contents": [{
           "kind": "block",
@@ -1120,7 +1120,7 @@
     },
     {
       "kind": "category",
-      "name": "Estensioni I/O",
+      "name": "message.blockly_toolbox_category_io_extensions",
       "colour": "240",
       "contents": [{
           "kind": "block",
@@ -1196,7 +1196,7 @@
     },
     {
       "kind": "category",
-      "name": "Music",
+      "name": "message.blockly_toolbox_category_music",
       "colour": "345",
       "contents": [{
           "kind": "block",

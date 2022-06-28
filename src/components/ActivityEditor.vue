@@ -108,7 +108,11 @@
 									<h3 class="text-xs-left">{{ $t("message.activity_locale") }}</h3>
 									<v-card>
 										<div class="cardContent">
-											<v-select v-model="activity.uiLang" :items="langs" v-bind:label="$t('message.activity_locale')" required
+											<v-select v-model="activity.uiLang"
+                        :items="langs"
+                        item-text="text"
+                        item-value="key"
+                        v-bind:label="$t('message.activity_locale')" required
                         @change="$v.activity.uiLang.$touch"
                       ></v-select>
 										</div>
@@ -124,12 +128,6 @@
 												</v-flex>
 												<v-flex>
 													<v-checkbox v-model="activity.availableViews" label="Editor Python" value="python"></v-checkbox>
-												</v-flex>
-												<v-flex>
-													<v-checkbox v-model="activity.availableViews" label="Visuale di Esecuzione" value="runtime"></v-checkbox>
-												</v-flex>
-												<v-flex>
-  												<v-switch v-model="activity.viewSource" label="Permetti di visualizzare il codice generato"></v-switch>
 												</v-flex>
                         -->
                         <v-flex>
@@ -280,8 +278,9 @@
                   <v-card>
                     <v-form class="cardContent">
                       <v-switch v-bind:label='$t("message.activity_views_runtime_camera")'
-                        v-model="activity.camera"></v-switch>
-                      <v-switch v-bind:label='$t("message.activity_views_runtime_log")' v-model="activity.log">
+                        v-model="activity.exec.camera"></v-switch>
+                      <v-switch v-bind:label='$t("message.activity_views_runtime_log")'
+                        v-model="activity.exec.log">
                       </v-switch>
                     </v-form>
                   </v-card>
@@ -508,10 +507,10 @@ export default {
       ],
       value: 0,
       fontSizeLabels: [
-        'Piccolo',
-        'Medio',
-        'Grande',
-        'Molto grande',
+        this.$i18n.t('message.activity_font_size_s'),
+        this.$i18n.t('message.activity_font_size_m'),
+        this.$i18n.t('message.activity_font_size_l'),
+        this.$i18n.t('message.activity_font_size_xl'),
       ],
       daltonicSwitch: 0,
       daltonicType: 1,
@@ -521,9 +520,10 @@ export default {
         'Protanopia',
       ],
       langs: [
-        this.$i18n.t('message.activity_lang_italian'),
-        this.$i18n.t('message.activity_lang_english'),
-        this.$i18n.t('message.activity_lang_french'),
+        { key: 'browser', text: this.$i18n.t('message.activity_lang_browser') },
+        { key: 'it', text: this.$i18n.t('message.activity_lang_italian') },
+        { key: 'en', text: this.$i18n.t('message.activity_lang_english') },
+        { key: 'fr', text: this.$i18n.t('message.activity_lang_french') },
       ],
       editHistory: false,
       navHistory: false,
@@ -541,7 +541,7 @@ export default {
       source: null,
       viste: [
         {
-          text: this.$i18n.t('message.activity_views_blocks'),
+          text: this.$i18n.t('message.activity_views_program'),
           value: 'blocks'
         },
         {
@@ -646,68 +646,51 @@ export default {
         {
           action: 'clearProgramDlg',
           icon: 'clear',
-          label: 'message.activity_program_clear',
+          label: this.$i18n.t('message.activity_program_clear'),
           type: 'text',
         },
         {
           action: 'saveProgram',
           icon: 'save',
-          label: 'message.activity_program_save',
+          label: this.$i18n.t('message.activity_program_save'),
           type: 'text',
         },
         {
           action: 'toggleSaveAs',
           icon: 'edit',
-          label: 'message.activity_program_save_as',
+          label: this.$i18n.t('message.activity_program_save_as'),
           type: 'text',
         },
         {
           action: 'loadProgramList',
           icon: 'folder_open',
-          label: 'message.activity_program_load',
+          label: this.$i18n.t('message.activity_program_load'),
           type: 'text',
         },
         {
           action: 'runProgram',
           icon: 'play_arrow',
-          label: 'message.activity_program_run',
+          label: this.$i18n.t('message.activity_program_run'),
           type: 'text',
         },
         {
           action: 'getProgramCode',
           icon: 'code',
-          label: 'message.activity_program_show_code',
+          label: this.$i18n.t('message.activity_program_show_code'),
           type: 'text',
         },
         {
           action: 'exportProgram',
           icon: 'fa-file-export',
-          label: 'message.activity_program_export',
+          label: this.$i18n.t('message.activity_program_export'),
           type: 'text',
         },
         {
           action: 'pickFile',
           icon: 'fa-file-import',
-          label: 'message.activity_program_import',
+          label: this.$i18n.t('message.activity_program_import'),
           type: 'text',
-        },
-        /*
-        {
-          label: this.$i18n.t('message.activity_program_run'),
-          icon: 'play_arrow',
-          colorBtn: 'green',
-          colorText: 'white--text',
-          action: 'runProgram',
-          notErasable: true,
-        },
-        {
-          label: this.$i18n.t('message.activity_program_save'),
-          icon: 'save',
-          colorBtn: 'blue',
-          colorText: 'white--text',
-          action: 'saveProgram',
-        },
-        */
+        }
       ];
     },
     onToolboxSave() {

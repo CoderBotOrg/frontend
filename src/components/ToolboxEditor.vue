@@ -103,6 +103,13 @@ export default {
   },
   mounted() {
     const toolbox_full = require('../assets/toolbox_adv.json');
+    // i18n toolbox categories
+    toolbox_full.contents.forEach((item) => {
+      if (item.name.startsWith('message.')) {
+        /* eslint-disable no-param-reassign */
+        item.name = this.$i18n.t(item.name);
+      }
+    });
     this.toolbox_editor = toolbox_full;
 
     if (this.toolbox_in) {

@@ -1,9 +1,13 @@
+import i18n from '../i18n/index';
+
 class CoderBot {
   constructor(CB, APIv1, APIv2, axios, store) {
     this.CB = CB + APIv2;
     this.CBv1 = CB + APIv1;
     this.$axios = axios;
     this.$store = store;
+    this.$i18n = i18n;
+    this.initActivity();
   }
 
   load() {
@@ -11,6 +15,89 @@ class CoderBot {
     const p2 = this.loadMusicPackages();
     const p3 = this.loadCNNModels();
     return Promise.all([p1, p2, p3]);
+  }
+
+  initActivity() {
+    this.loadActivity(null, true).then((activity) => {
+      if (activity.data == '') {
+        const toolbox_full = require('../assets/toolbox_adv.json');
+        const defaultActivity = {
+          stock: true,
+          default: true,
+          uiLang: 'browser',
+          defaultView: null,
+          exec: {
+            camera: true,
+            log: false
+          },
+          name: 'default',
+          drawerEnabled: true,
+          showName: true,
+          description: '',
+          fontSize: 'Medio',
+          capsSwitch: true,
+          bodyFont: 'Roboto',
+          codeFont: 'ubuntumono',
+          maxBlocks: 0,
+          availableViews: [],
+          viewSource: null,
+          autoRecVideo: null,
+          toolbox: null,
+          buttons: [
+            {
+              action: 'clearProgramDlg',
+              icon: 'clear',
+              label: this.$i18n.t('message.activity_program_clear'),
+              type: 'text',
+            },
+            {
+              action: 'saveProgram',
+              icon: 'save',
+              label: this.$i18n.t('message.activity_program_save'),
+              type: 'text',
+            },
+            {
+              action: 'toggleSaveAs',
+              icon: 'edit',
+              label: this.$i18n.t('message.activity_program_save_as'),
+              type: 'text',
+            },
+            {
+              action: 'loadProgramList',
+              icon: 'folder_open',
+              label: this.$i18n.t('message.activity_program_load'),
+              type: 'text',
+            },
+            {
+              action: 'runProgram',
+              icon: 'play_arrow',
+              label: this.$i18n.t('message.activity_program_run'),
+              type: 'text',
+            },
+            {
+              action: 'getProgramCode',
+              icon: 'code',
+              label: this.$i18n.t('message.activity_program_show_code'),
+              type: 'text',
+            },
+            {
+              action: 'exportProgram',
+              icon: 'fa-file-export',
+              label: this.$i18n.t('message.activity_program_export'),
+              type: 'text',
+            },
+            {
+              action: 'pickFile',
+              icon: 'fa-file-import',
+              label: this.$i18n.t('message.activity_program_import'),
+              type: 'text',
+            }
+          ]
+        };
+        defaultActivity.toolbox = toolbox_full;
+        this.saveActivity(defaultActivity);
+      }
+    });
   }
 
   async loadMusicPackages() {

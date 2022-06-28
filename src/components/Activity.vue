@@ -17,13 +17,13 @@
             <template v-if="button.type == 'text'">
               <v-btn @click="_self[button.action]()" text>
                 <v-icon>{{ button.icon }}</v-icon>
-                {{ $t(button.label) }}
+                {{ button.label }}
               </v-btn>
             </template>
             <template v-else>
               <v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn"
                 :class="button.colorText">
-                {{ $t(button.label) }}
+                {{ button.label }}
                 <v-icon right dark>{{ button.icon }}</v-icon>
               </v-btn>
             </template>
@@ -375,13 +375,15 @@ export default {
     // Get the activity
     let activityName = this.$route.params.name;
     let activityDefault = false;
-    if (this.$route.path == '/program') {
+    if (this.$router.path == '/program') {
       activityName = this.$route.params.name;
       activityDefault = true;
     }
     this.$coderbot.loadActivity(activityName, activityDefault).then((activity) => {
       this.activity = activity.data;
-
+      if (this.activity.uiLang != 'browser') {
+        this.$i18n.locale = this.activity.uiLang;
+      }
       this.settings.maxBlocks = this.activity.maxBlocks;
       this.updateCssProps();
 
