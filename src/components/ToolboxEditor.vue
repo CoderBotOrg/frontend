@@ -11,29 +11,37 @@
         </blockly-workspace>
       </v-col>
       <v-col class="pa-2">
-        <v-list>
-          <v-list-item-group
+        <v-list v-if="toolbox.kind=='categoryToolbox'">
+          <!--v-list-group
             v-if="toolbox.kind=='categoryToolbox'"
             v-model="category_index"
             color="primary"
             mandatory
             @change="onChangeCategory()"
-          >
+          -->
             <v-list-item
+              link
               v-for="(category, i) in toolbox.contents"
               :key="i"
+              :title="category.name"
+              @click="onChangeCategory(i)"
               >
-              <v-list-item-content>
-                <v-list-item-title v-text="category.name"></v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-icon>
-                <v-icon @click="editCategory(i)">edit</v-icon>
-                <v-icon @click="upCategory(i)">mdi-arrow-up</v-icon>
-                <v-icon @click="downCategory(i)">mdi-arrow-down</v-icon>
-                <v-icon @click="deleteCategory(i)">delete</v-icon>
-              </v-list-item-icon>
+              <template v-slot:append>
+                <v-list-item-avatar>
+                <v-icon @click="editCategory(i)" icon=mdi-pencil></v-icon>
+                </v-list-item-avatar>
+                <v-list-item-avatar>
+                <v-icon @click="upCategory(i)" icon="mdi-arrow-up"></v-icon>
+                </v-list-item-avatar>
+                <v-list-item-avatar>
+                <v-icon @click="downCategory(i)" icon="mdi-arrow-down"></v-icon>
+                </v-list-item-avatar>
+                <v-list-item-avatar>
+                <v-icon @click="deleteCategory(i)" icon="mdi-delete"></v-icon>
+                </v-list-item-avatar>
+              </template>
             </v-list-item>
-          </v-list-item-group>
+          <!--/v-list-group-->
         </v-list>
         <v-btn @click="addCategory()">{{ $t('message.activity_toolbox_category_add') }}</v-btn>
         <v-btn @click="addAllCategories()">{{ $t('message.activity_toolbox_category_add_all') }}</v-btn>
@@ -59,6 +67,7 @@
             show-swatches
             swatches-max-height="148"
             v-model="category.color_rgb"
+            mode="hsla"
           ></v-color-picker>
         </v-card-text>
         <v-card-actions>
@@ -92,7 +101,9 @@ export default {
     },
     category: {
       name: '',
-      color_rgb: '',
+      color_rgb: {
+        h: 300, s: 1, l: 0.5, a: 1
+      },
       contents: []
     },
     category_dialog: null,
@@ -131,15 +142,19 @@ export default {
     }
   },
   methods: {
-    onChangeCategory() {
+    onChangeCategory(i) {
+      this.category_index = i;
       if (this.category_index != null
         && this.toolbox.kind == categoryToolbox) {
         const blockTypes = [];
         this.in_changing_category = true;
-        this.toolbox.contents[this.category_index].contents.forEach((block) => {
-          blockTypes.push(block.type);
-        });
-        this.$refs.workspace_toolbox_editor.addBlocks(blockTypes);
+        if (this.toolbox.contents[this.category_index].contents != null) {
+          this.toolbox.contents[this.category_index].contents.forEach((block) => {
+            blockTypes.push(block.type);
+          });
+          console.log(blockTypes);
+          // this.$refs.workspace_toolbox_editor.addBlocks(blockTypes);
+        }
         this.in_changing_category = false;
       }
     },
@@ -174,9 +189,10 @@ export default {
     },
 
     saveCategory() {
+      console.log(this.category.color_rgb);
       const category = {
         name: this.category.name,
-        colour: this.category.color_rgb.hsla.h,
+        // colour: this.category.color_rgb.hsla.h,
         kind: 'category',
         contents: []
       };
@@ -189,6 +205,7 @@ export default {
           category.contents = this.toolbox.contents;
           this.toolbox.contents = [];
         }
+        console.log('saveCategory.end');
         this.toolbox.contents.push(category);
       }
 
@@ -206,6 +223,7 @@ export default {
     },
 
     onWorkspaceChanged() {
+      console.log('onWorkspaceChanged');
       if (this.in_changing_category == false) {
         const contents = [];
         this.$refs.workspace_toolbox_editor.workspace.getTopBlocks(true).forEach((ablock) => {

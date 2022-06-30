@@ -8,36 +8,42 @@
       </v-app-bar>
       <v-main>
         <v-container grid-list-md text-xs-center>
-          <v-layout row wrap>
+          <v-row>
             <!-- Column A -->
-            <v-flex xs12 md6 offset-md3>
-              <h3 class="text-xs-left">{{ $t("message.activity_list") }}</h3>
-              <p style="text-align: left">
-                <v-alert :value="true" type="info" style="font-size:16px">
+            <v-col>
+              <h3>{{ $t("message.activity_list") }}</h3>
+              <p>
+                <v-alert :value="true" type="info">
                   {{ $t("message.activity_tip_1") }}<br>
-                  <i18n path="message.activity_list_text_1">
-                    <v-icon class="white--text">delete</v-icon>
-                    <v-icon class="white--text">edit</v-icon>
-                  </i18n>
+                  <i18n-t keypath="message.activity_list_text_1">
+                    <v-icon class="white--text" icon="mdi-delete"></v-icon>
+                    <v-icon class="white--text" icon="mdi-pencil"></v-icon>
+                  </i18n-t>
                 </v-alert>
               </p>
               <v-card>
                 <v-list>
                   <span v-if="activityList == null || activityList == [] || activityList.length == 0">
-                  <i18n path="message.activity_list_text_2" tag="label" for="message.activity_list_create">
+                  <i18n-t keypath="message.activity_list_text_2" tag="label" for="message.activity_list_create">
                     <a href="#/activity/new">{{ $t("message.activity_list_create") }}</a>
-                  </i18n>
+                  </i18n-t>
                   </span>
-                  <template v-for="activity in activityList">
-                    <v-list-item :key="activity.el" link>
-                      <v-list-item-title ripple @click="goToActivity(activity.name)">
-                        <b>{{ activity.name }}</b>
-                        <small> {{activity.description}} </small>
+                  <template v-for="activity in activityList" :key="activity.el">
+                    <v-list-item link>
+                      <v-list-item-header @click="goToActivity(activity.name)">
+                      <v-list-item-title>
+                        {{ activity.name }}
                       </v-list-item-title>
-                      <v-icon v-if="activity.default">mdi-star</v-icon>
-                      <v-btn text icon color="grey darken-1" v-if="activity.stock!=true" ripple @click="confirmDeleteDlg = true">
-                        <v-icon>delete</v-icon>
-                          <template>
+                      <v-list-item-subtitle>
+                        {{ activity.description }}
+                      </v-list-item-subtitle>
+                      </v-list-item-header>
+                      <v-list-item-avatar>
+                        <v-icon v-if="activity.default" icon="mdi-star"></v-icon>
+                      </v-list-item-avatar>
+                      <v-list-item-avatar>
+                      <v-btn color="grey" variant="text" v-if="activity.stock!=true" ripple @click="confirmDeleteDlg = true">
+                        <v-icon icon="mdi-delete"></v-icon>
                             <v-row justify="center">
                               <v-dialog
                                 v-model="confirmDeleteDlg"
@@ -69,17 +75,19 @@
                                 </v-card>
                               </v-dialog>
                             </v-row>
-                          </template>
-                        </v-btn>
-                      <v-btn text icon color="grey darken-1" ripple :href="'#/activity/edit/'+activity.name">
-                        <v-icon>edit</v-icon>
                       </v-btn>
+                      </v-list-item-avatar>
+                      <v-list-item-avatar>
+                      <v-btn variant="text" ripple :href="'#/activity/edit/'+activity.name">
+                        <v-icon icon="mdi-pencil"></v-icon>
+                      </v-btn>
+                      </v-list-item-avatar>
                     </v-list-item>
                   </template>
                 </v-list>
               </v-card>
-            </v-flex>
-          </v-layout>
+            </v-col>
+          </v-row>
         </v-container>
       </v-main>
     </v-app>

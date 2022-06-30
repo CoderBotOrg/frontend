@@ -2,13 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 // Vue base
-import Vue from 'vue';
-
-// VueRouter
-import VueRouter from 'vue-router';
+import { createApp } from 'vue';
 
 // Vuelidate
-import Vuelidate from 'vuelidate';
+// import useVuelidate from '@vuelidate/core';
 
 // Vuex
 import axios from 'axios';
@@ -35,8 +32,7 @@ import 'typeface-quicksand';
 import 'typeface-overpass';
 import 'typeface-overpass-mono';
 
-// Components
-import app from './App.vue';
+import App from './App.vue';
 
 import router from './routes';
 
@@ -46,27 +42,23 @@ import CoderBot from './common/coderbot';
 // This is to serialize parameters to send them as URLencoded
 // https://github.com/axios/axios/issues/350#issuecomment-227270046
 
-// Configuration
-Vue.use(VueRouter);
-Vue.use(Vuelidate);
-
-Vue.prototype.$axios = axios.create();
-Vue.prototype.$coderbot = new CoderBot(process.env.CB_ENDPOINT, process.env.APIv1, process.env.APIv2, Vue.prototype.$axios, store);
-
-Vue.config.productionTip = false;
+const $axios = axios.create();
+const $coderbot = new CoderBot(process.env.CB_ENDPOINT, process.env.APIv1, process.env.APIv2, $axios, store);
 
 // this will block until CoderBot returns several configuration data.
-Vue.prototype.$coderbot.load().then(() => {
+$coderbot.load().then(() => {
   console.log('config loaded');
   /* eslint-disable no-new */
-  new Vue({
-    router,
-    store,
-    vuetify,
-    i18n,
-    el: '#app',
-    render: (h) => h(app),
-  });
+  const app = createApp(App);
+  // Configuration
+  app.use(router);
+  app.use(vuetify);
+  app.use(store);
+  app.use(i18n);
+
+  app.config.globalProperties.$axios = $axios;
+  app.config.globalProperties.$coderbot = $coderbot;
+  app.mount('#app');
 }).catch((errors) => {
   console.error(errors);
 });

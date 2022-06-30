@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 
 import * as it_messages from './locales/it/messages.json';
 import * as en_messages from './locales/en/messages.json';
@@ -17,14 +16,14 @@ const locales = {
   },
 };
 
-Vue.use(VueI18n);
-
 const language = (window.navigator.userLanguage || window.navigator.language).substring(0, 2);
 
 console.log(language);
 
-export default new VueI18n({
+/* eslint-disable new-cap */
+export default new createI18n({
   locale: language,
   messages: locales,
-  fallbackLocale: 'en'
+  fallbackLocale: 'en',
+  globalInjection: true
 });

@@ -4,14 +4,6 @@
     <v-app-bar color="indigo" dark fixed app>
       <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
       <v-app-bar-title class="title"><div>CoderBot</div></v-app-bar-title>
-      <v-spacer></v-spacer>
-      <!--
-      <template v-if="status == 200">
-        <v-btn @click="dialog = true" icon>
-          <v-icon>check_circle</v-icon>
-        </v-btn>
-      </template>
-    -->
       <template v-if="status != 200">
         <v-btn text>
           <v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
@@ -23,82 +15,84 @@
     </v-app-bar>
     <v-main>
       <template v-if="status == 200">
-        <div>
-          <v-container grid-list-md text-xs-center>
-            <v-layout row wrap>
-              <v-flex xs12 lg8>
-                <v-img :src="webcamStream" />
-              </v-flex>
-              <v-flex xs12 lg4>
-                <br>
-                <v-layout row wrap>
-                  <v-flex xs12 sm12>
-
+        <v-container>
+          <v-row no-gutters>
+            <v-col cols="8">
+              <v-img :src="webcamStream" style="width: 640px;"/>
+            </v-col>
+            <v-col cols="4">
+              <v-container class="d-flex align-center flex-column">
+                <v-row no-gutters class="d-flex align-center flex-column">
+                  <v-col>
                     <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(0)"
                       v-on:mouseup="stop()">
-                      <v-icon dark>keyboard_arrow_up</v-icon>
+                      <v-icon dark icon="mdi-arrow-up"></v-icon>
                     </v-btn>
-
-                  </v-flex>
-                  <v-flex xs12 sm12>
-
+                  </v-col>
+                </v-row>
+                <v-row no-gutters>
+                  <v-col>
                     <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(1)"
                       v-on:mouseup="stop()">
-                      <v-icon dark>keyboard_arrow_left</v-icon>
+                      <v-icon dark icon="mdi-arrow-left"></v-icon>
                     </v-btn>
-
                     <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(2)"
                       v-on:mouseup="stop()">
-                      <v-icon dark>keyboard_arrow_right</v-icon>
+                      <v-icon dark icon="mdi-arrow-right"></v-icon>
                     </v-btn>
-
-                  </v-flex>
-                  <v-flex xs12 sm12>
-
+                  </v-col>
+                </v-row>
+                <v-row no-gutters>
+                  <v-col>
                     <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(3)"
                       v-on:mouseup="stop()">
-                      <v-icon dark>keyboard_arrow_down</v-icon>
+                      <v-icon dark icon="mdi-arrow-down"></v-icon>
                     </v-btn>
-
-                  </v-flex>
-                  <v-flex xs12 sm12>
-                    <br><br><br>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <br/>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col class="d-flex align-center flex-column">
                     <v-btn large color="blue-grey darken-1" v-on:click="ttsdialog = true" class="controlBtn"
                       :disabled="!ttsBtnEnabled">
                       {{ $t("message.control_speak") }}
-                      <v-icon>chat_bubble_outline</v-icon>
+                      <v-icon icon="mdi-bullhorn-variant"></v-icon>
                     </v-btn>
-                  </v-flex>
-                  <v-flex xs12 sm12>
+                  </v-col>
+                  <v-col class="d-flex align-center flex-column">
                     <v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="takePhoto()"
                       :disabled="!photoBtnEnabled">
                       {{ $t("message.control_photo_take") }}
-                      <v-icon dark>camera_alt</v-icon>
+                      <v-icon dark icon="mdi-camera"></v-icon>
                     </v-btn>
-                  </v-flex>
-                  <v-flex xs12 sm12>
+                  </v-col>
+                  <v-col class="d-flex align-center flex-column">
                     <v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="videoHandler()"
                       :disabled="!videoBtn.enabled">
                       {{ videoBtn.text }}
-                      <v-icon dark>{{ videoBtn.icon }} </v-icon>
+                      <v-icon dark>mdi-{{ videoBtn.icon }}</v-icon>
                     </v-btn>
-                  </v-flex>
-                  <v-flex xs12 sm12>
-                    <v-btn large color="blue-grey darken-1" class="controlBtn" to="/gallery">
+                  </v-col>
+                  <v-col class="d-flex align-center flex-column">
+                    <v-btn color="blue-grey darken-1" class="controlBtn" to="/gallery">
                       {{ $t("message.control_photo_gallery") }}
-                      <v-icon dark>photo_library</v-icon>
+                      <v-icon dark icon="mdi-image-multiple"></v-icon>
                     </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </div>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-col>
+          </v-row>
+        </v-container>
       </template>
       <template v-else>
         <br>
         {{ $t("message.coderbot_status_offline_1") }}<br>
-        <v-icon large>signal_wifi_off</v-icon>
+        <v-icon large icon="mdi-signal_wifi_off"></v-icon>
       </template>
     </v-main>
     <v-snackbar v-model="snackbar">
@@ -232,7 +226,7 @@ export default {
         setTimeout(() => {
           this.videoBtn.enabled = true;
           this.videoBtn.text = this.$i18n.t('message.control_video_rec');
-          this.videoBtn.icon = 'videocam';
+          this.videoBtn.icon = 'video-box';
           this.photoBtnEnabled = true;
         }, 1000);
       });
@@ -351,7 +345,7 @@ export default {
       photoBtnEnabled: true,
       videoBtn: {
         text: this.$i18n.t('message.control_video_rec'),
-        icon: 'videocam',
+        icon: 'video-box',
         enabled: 'true',
         action: 'record',
 

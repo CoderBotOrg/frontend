@@ -7,34 +7,35 @@
         <v-app-bar-title class="title"><div>CoderBot</div></v-app-bar-title>
       </v-app-bar>
       <v-main>
-        <br>
+        <v-container class="d-flex align-center flex-column">
         <div style="font-size: 24px;"> {{ $t("message.welcome") }} </div>
         <div class="logo">CoderBot</div>
-        <v-flex xs12 md8 offset-md2>
+        <v-col xs12 md8 offset-md2>
           <v-carousel interval="10000" hide-delimiters>
             <v-carousel-item v-for="(item,i) in carouselItems" :key="i" :src="item.src">
             </v-carousel-item>
           </v-carousel>
-        </v-flex>
+        </v-col>
         <br>
         <div style="font-size: 18px;"> {{ $t("message.choose_action") }} </div>
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
-            <v-flex xs12 md6 offset-md3>
-              <v-btn text large color="primary" to="program">
-                <v-icon left dark>flip_to_front</v-icon>{{ $t("message.program") }}
+            <v-col xs12 md6 offset-md3>
+              <v-btn large color="primary" to="/program">
+                <v-icon left icon="mdi-flip-to-front"></v-icon>{{ $t("message.program") }}
               </v-btn> <br>
-              <v-btn text large color="primary" target="_blank" href="/docs">
-                <v-icon left dark>help</v-icon>{{ $t("message.docs") }}
+              <v-btn large color="primary" target="_blank" href="/docs">
+                <v-icon left icon="mdi-help"></v-icon>{{ $t("message.docs") }}
               </v-btn> <br>
-              <v-btn text large color="primary" to="control">
-                <v-icon left dark>games</v-icon>{{ $t("message.control") }}
+              <v-btn large color="primary" to="/control">
+                <v-icon left icon="mdi-gamepad"></v-icon>{{ $t("message.control") }}
               </v-btn> <br>
-              <v-btn text large color="primary" to="settings">
-                <v-icon left dark>settings</v-icon>{{ $t("message.settings") }}
+              <v-btn large color="primary" to="/settings">
+                <v-icon left icon="mdi-cog"></v-icon>{{ $t("message.settings") }}
               </v-btn> <br>
-            </v-flex>
+            </v-col>
           </v-layout>
+        </v-container>
         </v-container>
       </v-main>
     </v-app>

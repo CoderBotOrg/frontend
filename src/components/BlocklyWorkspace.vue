@@ -23,7 +23,7 @@ import * as bot_fr from '../assets/js/blockly/bot_fr.json';
 
 import i18n from '../i18n/index';
 
-const locale = i18n.locale.substring(0, 2);
+const locale = i18n.global.locale.substring(0, 2);
 
 const coderbot_locales = {
   it: bot_it.default,

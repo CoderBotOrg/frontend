@@ -8,7 +8,7 @@
       </v-app-bar>
       <v-main>
         <v-layout>
-          <v-flex xs12 sm8 offset-sm2>
+          <v-col xs12 sm8 offset-sm2>
             <template v-if="photos.length == 0">
               <br>
               <h3>{{ $t("message.gallery_empty") }}</h3>
@@ -16,7 +16,7 @@
             <template v-else>
               <v-container grid-list-sm fluid>
                 <v-layout row wrap>
-                  <v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
+                  <v-col v-for="n in photos.length" :key="n" xs3 d-flex>
                     <v-card
                       class="mx-auto my-12"
                       max-width="256"
@@ -43,7 +43,7 @@
                         </v-btn>
                       </v-card-actions>
                     </v-card>
-                  </v-flex>
+                  </v-col>
                 </v-layout>
               </v-container>
               <v-dialog v-model="gallery_detail">
@@ -114,7 +114,7 @@
               </v-dialog>
 
             </template>
-          </v-flex>
+          </v-col>
         </v-layout>
       </v-main>
     </v-app>

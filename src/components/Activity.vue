@@ -375,7 +375,7 @@ export default {
     // Get the activity
     let activityName = this.$route.params.name;
     let activityDefault = false;
-    if (this.$router.path == '/program') {
+    if (this.$router.name == 'program') {
       activityName = this.$route.params.name;
       activityDefault = true;
     }
