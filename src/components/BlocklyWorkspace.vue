@@ -10,6 +10,7 @@
 </template>
 <script>
 import * as Blockly from 'blockly/core';
+import DarkTheme from '@blockly/theme-dark';
 import 'blockly/blocks';
 import 'blockly/python';
 import * as blockly_it from 'blockly/msg/it';
@@ -49,6 +50,7 @@ export default {
   props: [
     'settings',
     'toolbox',
+    'theme',
   ],
   setup() {
     return {
@@ -100,6 +102,7 @@ export default {
         {
           toolbox: this.toolbox,
           media: 'media/',
+          theme: this.theme == 'dark' ? DarkTheme : null,
           // TODO: Use values from fetched configuration!
           scrollbars: true,
           maxBlocks: settings.maxBlocks,

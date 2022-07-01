@@ -62,6 +62,8 @@
 										-->
                       <v-switch v-bind:label="$t('message.activity_caps_only')" v-model="activity.capsSwitch">
                       </v-switch>
+                      <v-switch v-bind:label="$t('message.activity_theme')" v-model="activity.theme" value="dark">
+                      </v-switch>
                       <!--
 											<v-layout row wrap>
 												<v-col>
@@ -466,6 +468,7 @@ export default {
         stock: null,
         default: null,
         uiLang: null,
+        theme: null,
         defaultView: null,
         exec: {
           camera: true,

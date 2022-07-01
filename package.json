@@ -15,6 +15,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "axios": "^0.27.2",
     "blockly": "^8.0.3",
+    "@blockly/theme-dark": "^3.0.12",
     "core-js": "^3.23.3",
     "material-design-icons-iconfont": "^6.7.0",
     "@mdi/font": "^6.7.96",

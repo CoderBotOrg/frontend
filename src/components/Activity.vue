@@ -42,6 +42,7 @@
           ref="workspace"
           :settings="settings"
           :toolbox="toolbox"
+          :theme="theme.global.name.value"
           @workspace-changed="onWorkspaceChanged()"
         >
         </blockly-workspace>
@@ -51,8 +52,8 @@
       <!-- When the selection is completed, the result is then handled by importProgram -->
       <!--   Dialogs   -->
       <!-- Runtime -->
-      <v-dialog v-model="runtimeDialog" width="500">
-        <v-card>
+      <v-dialog v-model="runtimeDialog">
+        <v-card style="width:500px;">
           <v-card-title class="headline grey lighten-2" primary-title>
             {{ $t("message.program_status_title") }}
             <v-spacer></v-spacer>
@@ -152,14 +153,14 @@
         </v-card>
       </v-dialog>
       <!-- Overwrite error -->
-      <v-dialog v-model="CannotOverwrite" max-width="290">
+      <v-dialog v-model="cannotOverwrite" max-width="290">
         <v-card>
           <v-card-title class="headline">Error</v-card-title>
           <v-card-text>
             {{ $t("message.cannot_overwrite_default_program") }}
           </v-card-text>
           <v-card-actions>
-            <v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, save = true">
+            <v-btn color="green darken-1" text="text" @click="cannotOverwrite = false, save = true">
               {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
@@ -302,6 +303,7 @@
 import 'prismjs';
 import 'prismjs/components/prism-python.js';
 import Prism from 'vue-prism-component';
+import { useTheme } from 'vuetify';
 import sidebar from './Sidebar';
 import BlocklyWorkspace from './BlocklyWorkspace';
 
@@ -311,6 +313,13 @@ export default {
     sidebar,
     BlocklyWorkspace,
     Prism,
+  },
+  setup() {
+    return {
+      theme: useTheme(),
+      CB: process.env.CB_ENDPOINT + process.env.APIv2,
+      CBv1: process.env.CB_ENDPOINT,
+    };
   },
   data: () => ({
     cssProps: {
@@ -329,12 +338,9 @@ export default {
     tabs: null,
     dialog: false,
     dialogCode: false,
-    CB: process.env.CB_ENDPOINT + process.env.APIv2,
-    CBv1: process.env.CB_ENDPOINT,
     status: null,
     info: null,
     code: '',
-    workspace: null,
     toolbox: null,
     generalDialog: false,
     generalDialogText: null,
@@ -352,7 +358,7 @@ export default {
     webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
     runtimeDialog: false,
     isDefault: '',
-    CannotOverwrite: false,
+    cannotOverwrite: false,
     defaultProgramName: '',
     overwrite: true,
     overwriteDialog: false,
@@ -370,7 +376,7 @@ export default {
     },
     remainingCapacity() {
       return this.$refs.workspace.remainingCapacity();
-    }
+    },
   },
   mounted() {
     this.settings = this.$store.getters.settings;
@@ -386,6 +392,7 @@ export default {
       if (this.activity.uiLang != 'browser') {
         this.$i18n.locale = this.activity.uiLang;
       }
+      this.theme.global.name.value = this.activity.theme != 'dark' ? 'light' : 'dark';
       this.settings.maxBlocks = this.activity.maxBlocks;
       this.updateCssProps();
 
@@ -525,7 +532,7 @@ export default {
     saveProgramAs() {
       if (this.newProgramName != '') {
         if (this.isDefault == 'True' && this.programName == this.newProgramName) {
-          this.CannotOverwrite = true;
+          this.cannotOverwrite = true;
           console.log('error');
         } else {
           this.defaultProgramName = this.programName;
@@ -549,7 +556,7 @@ export default {
             } else {
               this.$data.programName = this.$data.defaultProgramName;
               this.$data.defaultProgramName = '';
-              this.$data.CannotOverwrite = true;
+              this.$data.cannotOverwrite = true;
             }
           } else {
             this.$data.isDefault = '';

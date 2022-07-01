@@ -59,6 +59,7 @@ $coderbot.load().then(() => {
   app.config.globalProperties.$axios = $axios;
   app.config.globalProperties.$coderbot = $coderbot;
   app.mount('#app');
+  app.defaultTheme = 'dark';
 }).catch((errors) => {
   console.error(errors);
 });
