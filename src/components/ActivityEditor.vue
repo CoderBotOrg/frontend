@@ -170,24 +170,26 @@
             </v-container>
           </v-window-item>
           <v-window-item key="toolbar" value="toolbar">
-            <v-container grid-list-md text-xs-center>
-              <v-col xs12 md8 offset-md2>
+            <v-container>
+              <v-row>
                 <v-col>
                   <h3> {{ $t("message.activity_toolbar_preview") }} </h3>
                   <v-app-bar>
                     <v-app-bar-nav-icon v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
                     <v-app-bar-title v-if="activity.showName">{{ activity.name || $t("message.activity_name")}}
                     </v-app-bar-title>
-                    <v-spacer></v-spacer>
                     <template v-for="button in activity.buttons">
-                      <v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
-                        {{ button.label }}
-                        <v-icon right dark>{{ button.icon }}</v-icon>
+                      <v-btn :color="button.colorBtn" :class="button.colorText">
+                        <v-icon :icon="button.icon"></v-icon>
+                        <span v-if="activity.showButtonLabel">{{ button.label }}</span>
                       </v-btn>
                       &nbsp;&nbsp;
                     </template>
                   </v-app-bar>
-                  <br>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <v-switch v-bind:label="$t('message.activity_lateral_menu_icon')" v-model="activity.drawerEnabled"
                     @change="v$.activity.drawerEnabled.$touch"
                   >
@@ -195,22 +197,39 @@
                   <v-switch v-bind:label="$t('message.activity_name')" v-model="activity.showName"
                     @change="v$.activity.showName.$touch"
                   ></v-switch>
-                  <br>
+                  <v-switch v-bind:label="$t('message.activity_toolbar_buttons_show_label')" v-model="activity.showButtonLabel"
+                    @change="v$.activity.showButtonLabel.$touch"
+                  ></v-switch>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <v-btn @click="addButton()" outlined color="green">
-                    <v-icon>add</v-icon> {{ $t("message.activity_toolbar_buttons_add") }}
+                    <v-icon icon="mdi-add"></v-icon> {{ $t("message.activity_toolbar_buttons_add") }}
                   </v-btn>
+                </v-col>
+                <v-col>
                   <v-btn @click="restoreDefaults()" outlined color="blue">
-                    <v-icon>undo</v-icon> {{ $t("message.activity_toolbar_buttons_predefined") }}
+                    <v-icon icon="mdi-undo"></v-icon> {{ $t("message.activity_toolbar_buttons_predefined") }}
                   </v-btn>
+                </v-col>
+                <v-col>
                   <v-btn @click="removeAll()" outlined color="red">
-                    <v-icon>clear</v-icon> {{ $t("message.activity_toolbar_buttons_remove_all") }}
+                    <v-icon icon="mdi-clear"></v-icon> {{ $t("message.activity_toolbar_buttons_remove_all") }}
                   </v-btn>
-                  <br><br>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <div v-for="button, i in activity.buttons" :key="button.id">
                     <h3>Pulsante {{i + 1}}
-                      <v-btn @click="removeButton(i)" text icon v-if="!button.notErasable">
-                        <v-icon>clear</v-icon>
+                      <v-btn @click="removeButton(i)" v-if="!button.notErasable">
+                        <v-icon icon="mdi-close"></v-icon> {{ $t("message.activity_toolbar_buttons_remove") }}
                       </v-btn>
                     </h3>
                     <v-card>
@@ -243,10 +262,9 @@
                         </v-btn>
                       </div>
                     </v-card>
-                    <br>
                   </div>
                 </v-col>
-              </v-col>
+              </v-row>
             </v-container>
             <v-dialog v-model="colorPicker" max-width="600px">
               <v-card>
@@ -410,7 +428,9 @@ export default {
         'mdi-play',
         'mdi-pause',
         'mdi-stop',
+        'mdi-close',
         'mdi-content-save',
+        'mdi-content-save-edit',
         'mdi-autorenew',
         'mdi-wrench',
         'mdi-check-circle',
@@ -454,6 +474,7 @@ export default {
         name: null,
         drawerEnabled: true,
         showName: true,
+        showButtonLabel: true,
         buttons: null,
         description: null,
         fontSize: 'Medio',
@@ -581,6 +602,7 @@ export default {
         defaultView: { },
         drawerEnabled: { },
         showName: { },
+        showButtonLabel: { },
         buttons: { },
         fontSize: { },
         capsSwitch: { },
@@ -596,7 +618,6 @@ export default {
   },
   mounted() {
     if (this.$route.params.name) {
-      console.log('Loading activity', this.$route.params.name);
       this.saved = true;
       this.$coderbot.loadActivity(this.$route.params.name, false).then((activity) => {
         this.activity = activity.data;
@@ -657,49 +678,49 @@ export default {
       this.activity.buttons = [
         {
           action: 'clearProgramDlg',
-          icon: 'clear',
+          icon: 'mdi-close',
           label: this.$i18n.t('message.activity_program_clear'),
           type: 'text',
         },
         {
           action: 'saveProgram',
-          icon: 'save',
+          icon: 'mdi-content-save',
           label: this.$i18n.t('message.activity_program_save'),
           type: 'text',
         },
         {
           action: 'toggleSaveAs',
-          icon: 'edit',
+          icon: 'mdi-content-save-edit',
           label: this.$i18n.t('message.activity_program_save_as'),
           type: 'text',
         },
         {
           action: 'loadProgramList',
-          icon: 'folder_open',
+          icon: 'mdi-folder-open',
           label: this.$i18n.t('message.activity_program_load'),
           type: 'text',
         },
         {
           action: 'runProgram',
-          icon: 'play_arrow',
+          icon: 'mdi-play',
           label: this.$i18n.t('message.activity_program_run'),
           type: 'text',
         },
         {
           action: 'getProgramCode',
-          icon: 'code',
+          icon: 'mdi-code-braces',
           label: this.$i18n.t('message.activity_program_show_code'),
           type: 'text',
         },
         {
           action: 'exportProgram',
-          icon: 'fa-file-export',
+          icon: 'mdi-export',
           label: this.$i18n.t('message.activity_program_export'),
           type: 'text',
         },
         {
           action: 'pickFile',
-          icon: 'fa-file-import',
+          icon: 'mdi-import',
           label: this.$i18n.t('message.activity_program_import'),
           type: 'text',
         }

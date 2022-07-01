@@ -65,9 +65,7 @@
             hide-canvas
             hide-inputs
             show-swatches
-            swatches-max-height="148"
             v-model="category.color_rgb"
-            mode="hsla"
           ></v-color-picker>
         </v-card-text>
         <v-card-actions>
@@ -152,8 +150,7 @@ export default {
           this.toolbox.contents[this.category_index].contents.forEach((block) => {
             blockTypes.push(block.type);
           });
-          console.log(blockTypes);
-          // this.$refs.workspace_toolbox_editor.addBlocks(blockTypes);
+          this.$refs.workspace_toolbox_editor.addBlocks(blockTypes);
         }
         this.in_changing_category = false;
       }
@@ -223,14 +220,13 @@ export default {
     },
 
     onWorkspaceChanged() {
-      console.log('onWorkspaceChanged');
       if (this.in_changing_category == false) {
         const contents = [];
         this.$refs.workspace_toolbox_editor.workspace.getTopBlocks(true).forEach((ablock) => {
           const inputlist = {};
-          /* eslint-disable no-underscore-dangle */
           let i = 0;
           ablock.inputList.forEach((aninput) => {
+            /* eslint-disable no-underscore-dangle */
             if (aninput.type == 1 && ablock.childBlocks_.length > i) {
               inputlist[aninput.name] = {
                 shadow: {

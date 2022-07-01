@@ -85,6 +85,12 @@
                     </v-list-item>
                   </template>
                 </v-list>
+                <v-card-actions>
+                  <v-btn to="/activity/new">
+                  <v-icon icon="mdi-plus-box-multiple" size="large"></v-icon>
+                  {{ $t("message.activity_new") }}
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-col>
           </v-row>

@@ -33,6 +33,7 @@ class CoderBot {
           name: 'default',
           drawerEnabled: true,
           showName: true,
+          showButtonLabel: true,
           description: '',
           fontSize: 'Medio',
           capsSwitch: true,
@@ -46,54 +47,60 @@ class CoderBot {
           buttons: [
             {
               action: 'clearProgramDlg',
-              icon: 'clear',
-              label: this.$i18n.t('message.activity_program_clear'),
+              icon: 'mdi-close',
+              label: this.$i18n.global.t('message.activity_program_clear'),
               type: 'text',
             },
             {
               action: 'saveProgram',
-              icon: 'save',
-              label: this.$i18n.t('message.activity_program_save'),
+              icon: 'mdi-content-save',
+              label: this.$i18n.global.t('message.activity_program_save'),
               type: 'text',
             },
             {
               action: 'toggleSaveAs',
-              icon: 'edit',
-              label: this.$i18n.t('message.activity_program_save_as'),
+              icon: 'mdi-content-save-edit',
+              label: this.$i18n.global.t('message.activity_program_save_as'),
               type: 'text',
             },
             {
               action: 'loadProgramList',
-              icon: 'folder_open',
-              label: this.$i18n.t('message.activity_program_load'),
+              icon: 'mdi-folder-open',
+              label: this.$i18n.global.t('message.activity_program_load'),
               type: 'text',
             },
             {
               action: 'runProgram',
-              icon: 'play_arrow',
-              label: this.$i18n.t('message.activity_program_run'),
+              icon: 'mdi-play',
+              label: this.$i18n.global.t('message.activity_program_run'),
               type: 'text',
             },
             {
               action: 'getProgramCode',
-              icon: 'code',
-              label: this.$i18n.t('message.activity_program_show_code'),
+              icon: 'mdi-code-braces',
+              label: this.$i18n.global.t('message.activity_program_show_code'),
               type: 'text',
             },
             {
               action: 'exportProgram',
-              icon: 'fa-file-export',
-              label: this.$i18n.t('message.activity_program_export'),
+              icon: 'mdi-export',
+              label: this.$i18n.global.t('message.activity_program_export'),
               type: 'text',
             },
             {
               action: 'pickFile',
-              icon: 'fa-file-import',
-              label: this.$i18n.t('message.activity_program_import'),
+              icon: 'mdi-import',
+              label: this.$i18n.global.t('message.activity_program_import'),
               type: 'text',
             }
           ]
         };
+        toolbox_full.contents.forEach((item) => {
+          if (item.name.startsWith('message.')) {
+            /* eslint-disable no-param-reassign */
+            item.name = this.$i18n.global.t(item.name);
+          }
+        });
         defaultActivity.toolbox = toolbox_full;
         this.saveActivity(defaultActivity);
       }

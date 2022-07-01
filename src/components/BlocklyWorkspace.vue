@@ -31,6 +31,7 @@ const coderbot_locales = {
   fr: bot_fr.default
 };
 
+/* eslint-disable no-import-assign */
 Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
 
 const blockly_locales = {
@@ -49,10 +50,16 @@ export default {
     'settings',
     'toolbox',
   ],
-  data: () => ({
-    workspace: null,
-    toolbox_kind: null
-  }),
+  setup() {
+    return {
+      workspace: null
+    };
+  },
+  data() {
+    return {
+      toolbox_kind: null
+    };
+  },
   watch: {
     // whenever settings changes, this function will run
     settings(newSettings, oldSettings) {
@@ -105,6 +112,7 @@ export default {
           },
         },
       );
+
       const {
         workspace
       } = this;
@@ -179,13 +187,13 @@ export default {
     addBlocks(blockTypes) {
       if (this.workspace) {
         this.workspace.clear();
-        let y = 0;
+        let y = 5;
         blockTypes.forEach((block) => {
           const parentBlock = this.workspace.newBlock(block);
           parentBlock.initSvg();
           parentBlock.render();
           parentBlock.moveTo(new Blockly.utils.Coordinate(5, y));
-          y += parentBlock.getHeightWidth().height + 10;
+          y += parentBlock.getHeightWidth().height + 20;
         });
       }
     },

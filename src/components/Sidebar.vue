@@ -14,25 +14,14 @@
             </v-list-item-avatar>
             <v-list-item-title class="navEntry">{{ $t("message.docs") }}</v-list-item-title>
           </v-list-item>
-          <br>
-          <v-divider>
-            {{ $t("message.activity_title") }}
-          </v-divider>
+          <v-divider/>
           <v-list-item to="/activity/manage">
             <v-list-item-avatar>
               <v-icon icon="mdi-pencil-box-multiple" size="large"></v-icon>
             </v-list-item-avatar>
             <v-list-item-title>{{ $t("message.activity_manage") }}</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/activity/new">
-            <v-list-item-avatar>
-              <v-icon icon="mdi-plus-box-multiple" size="large"></v-icon>
-            </v-list-item-avatar>
-            <v-list-item-title>{{ $t("message.activity_new") }}</v-list-item-title>
-          </v-list-item>
-          <v-divider>
-          </v-divider>
-          <br>
+          <v-divider/>
           <v-list-item to="/program">
             <v-list-item-avatar>
               <v-icon large icon="mdi-flip-to-front" size="large"></v-icon>
@@ -45,19 +34,20 @@
             </v-list-item-avatar>
             <v-list-item-title class="navEntry">{{ $t("message.control") }}</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/settings">
-            <v-list-item-avatar>
-              <v-icon large icon="mdi-cog" size="large"></v-icon>
-            </v-list-item-avatar>
-            <v-list-item-title class="navEntry">{{ $t("message.settings") }}</v-list-item-title>
-          </v-list-item>
           <v-list-item to="/gallery">
             <v-list-item-avatar>
               <v-icon large icon="mdi-image-multiple" size="large"></v-icon>
             </v-list-item-avatar>
             <v-list-item-title class="navEntry">{{ $t("message.gallery") }}</v-list-item-title>
           </v-list-item>
-          <br>
+          <v-divider/>
+          <v-list-item to="/settings">
+            <v-list-item-avatar>
+              <v-icon large icon="mdi-cog" size="large"></v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title class="navEntry">{{ $t("message.settings") }}</v-list-item-title>
+          </v-list-item>
+          <v-divider/>
           <v-layout row wrap fill-height>
             <v-col xs12 style="position:absolute; bottom: 1%;">
               <small>

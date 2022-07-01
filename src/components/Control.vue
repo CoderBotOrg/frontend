@@ -22,31 +22,33 @@
             </v-col>
             <v-col cols="4">
               <v-container class="d-flex align-center flex-column">
-                <v-row no-gutters class="d-flex align-center flex-column">
-                  <v-col>
-                    <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(0)"
+                <v-row>
+                  <v-col class="d-flex align-center flex-column">
+                    <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(0)"
                       v-on:mouseup="stop()">
-                      <v-icon dark icon="mdi-arrow-up"></v-icon>
+                      <v-icon icon="mdi-arrow-up"></v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
-                <v-row no-gutters>
+                <v-row>
                   <v-col>
-                    <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(1)"
+                    <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(1)"
                       v-on:mouseup="stop()">
-                      <v-icon dark icon="mdi-arrow-left"></v-icon>
+                      <v-icon icon="mdi-arrow-left"></v-icon>
                     </v-btn>
-                    <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(2)"
+                  </v-col>
+                  <v-col>
+                    <v-btn large color="indigo" class="white--text jp-btn" v-on:mousedown="move(2)"
                       v-on:mouseup="stop()">
-                      <v-icon dark icon="mdi-arrow-right"></v-icon>
+                      <v-icon icon="mdi-arrow-right"></v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
-                <v-row no-gutters>
+                <v-row>
                   <v-col>
-                    <v-btn large color="blue-grey darken-4" class="white--text jp-btn" v-on:mousedown="move(3)"
+                    <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(3)"
                       v-on:mouseup="stop()">
-                      <v-icon dark icon="mdi-arrow-down"></v-icon>
+                      <v-icon icon="mdi-arrow-down"></v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -56,31 +58,37 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col class="d-flex align-center flex-column">
-                    <v-btn large color="blue-grey darken-1" v-on:click="ttsdialog = true" class="controlBtn"
+                  <v-col>
+                    <v-btn color="indigo" v-on:click="ttsdialog = true" class="controlBtn"
                       :disabled="!ttsBtnEnabled">
                       {{ $t("message.control_speak") }}
                       <v-icon icon="mdi-bullhorn-variant"></v-icon>
                     </v-btn>
                   </v-col>
+                </v-row>
+                <v-row>
                   <v-col class="d-flex align-center flex-column">
-                    <v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="takePhoto()"
+                    <v-btn color="indigo" class="controlBtn" v-on:click="takePhoto()"
                       :disabled="!photoBtnEnabled">
                       {{ $t("message.control_photo_take") }}
-                      <v-icon dark icon="mdi-camera"></v-icon>
+                      <v-icon icon="mdi-camera"></v-icon>
                     </v-btn>
                   </v-col>
+                </v-row>
+                <v-row>
                   <v-col class="d-flex align-center flex-column">
-                    <v-btn large color="blue-grey darken-1" class="controlBtn" v-on:click="videoHandler()"
+                    <v-btn color="indigo" class="controlBtn" v-on:click="videoHandler()"
                       :disabled="!videoBtn.enabled">
                       {{ videoBtn.text }}
                       <v-icon dark>mdi-{{ videoBtn.icon }}</v-icon>
                     </v-btn>
                   </v-col>
+                </v-row>
+                <v-row>
                   <v-col class="d-flex align-center flex-column">
-                    <v-btn color="blue-grey darken-1" class="controlBtn" to="/gallery">
+                    <v-btn color="indigo" class="controlBtn" to="/gallery">
                       {{ $t("message.control_photo_gallery") }}
-                      <v-icon dark icon="mdi-image-multiple"></v-icon>
+                      <v-icon icon="mdi-image-multiple"></v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>

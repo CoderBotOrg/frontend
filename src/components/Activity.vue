@@ -15,16 +15,16 @@
         <template v-if="status == 200">
           <template v-for="button in activity.buttons">
             <template v-if="button.type == 'text'">
-              <v-btn @click="_self[button.action]()" text>
-                <v-icon>{{ button.icon }}</v-icon>
-                {{ button.label }}
+              <v-btn @click="this[button.action]()">
+                <v-icon :icon="button.icon"></v-icon>
+                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
               </v-btn>
             </template>
             <template v-else>
-              <v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn"
+              <v-btn @click="this[button.action]()" style="height: 70%" :color="button.colorBtn"
                 :class="button.colorText">
-                {{ button.label }}
-                <v-icon right dark>{{ button.icon }}</v-icon>
+                <v-icon :icon="button.icon"></v-icon>
+                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
               </v-btn>
             </template>
             &nbsp;&nbsp;
@@ -32,7 +32,7 @@
         </template>
         <!-- If the API is not responding, show an error icon -->
         <v-btn @click="dialog = true" icon v-if="status != 200">
-          <v-icon>error</v-icon>
+          <v-icon icon="mdi-error"></v-icon>
         </v-btn>
       </v-app-bar>
       <!-- Page content -->
@@ -97,13 +97,16 @@
           </v-card-title>
           <v-list>
             <v-list-item v-for="program in programList" :key="program.el" @click="{}">
+              <v-list-item-header>
               <v-list-item-title ripple @click="loadProgram(program.name)">
                 {{ program.name }}
               </v-list-item-title>
-              <v-btn v-if="program.default != 'True'" text icon color="grey darken-1" ripple
-                @click="deleteProgramDlg(program.name)">
-                <v-icon>delete</v-icon>
+              </v-list-item-header>
+              <v-list-item-avatar end>
+              <v-btn v-if="program.default != 'True'" @click="deleteProgramDlg(program.name)">
+                <v-icon icon="mdi-delete"></v-icon>
               </v-btn>
+              </v-list-item-avatar>
             </v-list-item>
           </v-list>
           <v-card-actions>
@@ -115,18 +118,16 @@
         </v-card>
       </v-dialog>
       <!-- Save Program -->
-      <v-dialog v-model="save" max-width="430">
-        <v-card>
+      <v-dialog v-model="save">
+        <v-card style="width: 400px;">
           <v-card-title class="headline">
             {{ $t("message.save_as") }}
           </v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
             <v-card-text>
-              <v-text-field v-model="newProgramName" v-bind:label="$t('message.save_as')" v-if="save" onClick="this.select()"
-                v-on:keyup.enter="saveProgramAs(), save = false" v-on:keyup.esc="save = false" autofocus>
+              <v-text-field v-model="newProgramName" v-bind:label="$t('message.save_as')" v-if="save">
               </v-text-field>
             </v-card-text>
+          <v-card-actions>
             <v-btn color="red darken-1" text="text" @click="save = false">
               {{ $t("message.cancel") }}
             </v-btn>
@@ -300,6 +301,7 @@
 <script>
 import 'prismjs';
 import 'prismjs/components/prism-python.js';
+import Prism from 'vue-prism-component';
 import sidebar from './Sidebar';
 import BlocklyWorkspace from './BlocklyWorkspace';
 
@@ -308,7 +310,7 @@ export default {
   components: {
     sidebar,
     BlocklyWorkspace,
-    Prism: () => import('vue-prism-component')
+    Prism,
   },
   data: () => ({
     cssProps: {
