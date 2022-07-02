@@ -1,12 +1,19 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import 'material-design-icons-iconfont/dist/material-design-icons.css'; // Ensure you are using css-loader
+// Vuetify
+import { createVuetify } from 'vuetify';
+// import 'material-design-icons-iconfont/dist/material-design-icons.css'; // Ensure you are using css-loader
 import '@mdi/font/css/materialdesignicons.css';
+// import 'vuetify/styles';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+/* eslint-disable new-cap */
+export default new createVuetify({
+  components,
+  directives,
   icons: {
-    iconfont: 'mdi',
+    defaultSet: 'mdi',
   },
+  theme: {
+    // defaultTheme: 'dark'
+  }
 });

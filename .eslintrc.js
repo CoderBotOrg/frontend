@@ -18,7 +18,7 @@ module.exports = {
   ],
 
   "parserOptions": {
-    "parser": "babel-eslint"
+    "parser": "@babel/eslint-parser"
   },
 
   "rules": {
@@ -36,7 +36,11 @@ module.exports = {
     "vue/valid-v-for": "off",
     "no-plusplus": "off",
     "global-require": "off",
-    "import/no-dynamic-require": "off"
+    "import/no-dynamic-require": "off",
+    "vue/no-v-for-template-key": "off",
+    "vue/multi-word-component-names": ["error", {
+      "ignores": ["Activity", "Control", "Gallery", "Landing", "Settings", "Sidebar"]
+    }]
   },
 
   plugins: [

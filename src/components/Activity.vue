@@ -15,16 +15,16 @@
         <template v-if="status == 200">
           <template v-for="button in activity.buttons">
             <template v-if="button.type == 'text'">
-              <v-btn @click="_self[button.action]()" text>
-                <v-icon>{{ button.icon }}</v-icon>
-                {{ button.label }}
+              <v-btn @click="this[button.action]()">
+                <v-icon :icon="button.icon"></v-icon>
+                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
               </v-btn>
             </template>
             <template v-else>
-              <v-btn @click="_self[button.action]()" style="height: 70%" :color="button.colorBtn"
+              <v-btn @click="this[button.action]()" style="height: 70%" :color="button.colorBtn"
                 :class="button.colorText">
-                {{ button.label }}
-                <v-icon right dark>{{ button.icon }}</v-icon>
+                <v-icon :icon="button.icon"></v-icon>
+                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
               </v-btn>
             </template>
             &nbsp;&nbsp;
@@ -32,7 +32,7 @@
         </template>
         <!-- If the API is not responding, show an error icon -->
         <v-btn @click="dialog = true" icon v-if="status != 200">
-          <v-icon>error</v-icon>
+          <v-icon icon="mdi-error"></v-icon>
         </v-btn>
       </v-app-bar>
       <!-- Page content -->
@@ -42,6 +42,7 @@
           ref="workspace"
           :settings="settings"
           :toolbox="toolbox"
+          :theme="theme.global.name.value"
           @workspace-changed="onWorkspaceChanged()"
         >
         </blockly-workspace>
@@ -51,8 +52,8 @@
       <!-- When the selection is completed, the result is then handled by importProgram -->
       <!--   Dialogs   -->
       <!-- Runtime -->
-      <v-dialog v-model="runtimeDialog" width="500">
-        <v-card>
+      <v-dialog v-model="runtimeDialog">
+        <v-card style="width:500px;">
           <v-card-title class="headline grey lighten-2" primary-title>
             {{ $t("message.program_status_title") }}
             <v-spacer></v-spacer>
@@ -97,13 +98,16 @@
           </v-card-title>
           <v-list>
             <v-list-item v-for="program in programList" :key="program.el" @click="{}">
+              <v-list-item-header>
               <v-list-item-title ripple @click="loadProgram(program.name)">
                 {{ program.name }}
               </v-list-item-title>
-              <v-btn v-if="program.default != 'True'" text icon color="grey darken-1" ripple
-                @click="deleteProgramDlg(program.name)">
-                <v-icon>delete</v-icon>
+              </v-list-item-header>
+              <v-list-item-avatar end>
+              <v-btn v-if="program.default != 'True'" @click="deleteProgramDlg(program.name)">
+                <v-icon icon="mdi-delete"></v-icon>
               </v-btn>
+              </v-list-item-avatar>
             </v-list-item>
           </v-list>
           <v-card-actions>
@@ -115,18 +119,16 @@
         </v-card>
       </v-dialog>
       <!-- Save Program -->
-      <v-dialog v-model="save" max-width="430">
-        <v-card>
+      <v-dialog v-model="save">
+        <v-card style="width: 400px;">
           <v-card-title class="headline">
             {{ $t("message.save_as") }}
           </v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
             <v-card-text>
-              <v-text-field v-model="newProgramName" v-bind:label="$t('message.save_as')" v-if="save" onClick="this.select()"
-                v-on:keyup.enter="saveProgramAs(), save = false" v-on:keyup.esc="save = false" autofocus>
+              <v-text-field v-model="newProgramName" v-bind:label="$t('message.save_as')" v-if="save">
               </v-text-field>
             </v-card-text>
+          <v-card-actions>
             <v-btn color="red darken-1" text="text" @click="save = false">
               {{ $t("message.cancel") }}
             </v-btn>
@@ -151,14 +153,14 @@
         </v-card>
       </v-dialog>
       <!-- Overwrite error -->
-      <v-dialog v-model="CannotOverwrite" max-width="290">
+      <v-dialog v-model="cannotOverwrite" max-width="290">
         <v-card>
           <v-card-title class="headline">Error</v-card-title>
           <v-card-text>
             {{ $t("message.cannot_overwrite_default_program") }}
           </v-card-text>
           <v-card-actions>
-            <v-btn color="green darken-1" text="text" @click="CannotOverwrite = false, save = true">
+            <v-btn color="green darken-1" text="text" @click="cannotOverwrite = false, save = true">
               {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
@@ -300,6 +302,8 @@
 <script>
 import 'prismjs';
 import 'prismjs/components/prism-python.js';
+import Prism from 'vue-prism-component';
+import { useTheme } from 'vuetify';
 import sidebar from './Sidebar';
 import BlocklyWorkspace from './BlocklyWorkspace';
 
@@ -308,7 +312,14 @@ export default {
   components: {
     sidebar,
     BlocklyWorkspace,
-    Prism: () => import('vue-prism-component')
+    Prism,
+  },
+  setup() {
+    return {
+      theme: useTheme(),
+      CB: process.env.CB_ENDPOINT + process.env.APIv2,
+      CBv1: process.env.CB_ENDPOINT,
+    };
   },
   data: () => ({
     cssProps: {
@@ -327,12 +338,9 @@ export default {
     tabs: null,
     dialog: false,
     dialogCode: false,
-    CB: process.env.CB_ENDPOINT + process.env.APIv2,
-    CBv1: process.env.CB_ENDPOINT,
     status: null,
     info: null,
     code: '',
-    workspace: null,
     toolbox: null,
     generalDialog: false,
     generalDialogText: null,
@@ -350,7 +358,7 @@ export default {
     webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
     runtimeDialog: false,
     isDefault: '',
-    CannotOverwrite: false,
+    cannotOverwrite: false,
     defaultProgramName: '',
     overwrite: true,
     overwriteDialog: false,
@@ -368,14 +376,14 @@ export default {
     },
     remainingCapacity() {
       return this.$refs.workspace.remainingCapacity();
-    }
+    },
   },
   mounted() {
     this.settings = this.$store.getters.settings;
     // Get the activity
     let activityName = this.$route.params.name;
     let activityDefault = false;
-    if (this.$router.path == '/program') {
+    if (this.$router.name == 'program') {
       activityName = this.$route.params.name;
       activityDefault = true;
     }
@@ -384,6 +392,7 @@ export default {
       if (this.activity.uiLang != 'browser') {
         this.$i18n.locale = this.activity.uiLang;
       }
+      this.theme.global.name.value = this.activity.theme != 'dark' ? 'light' : 'dark';
       this.settings.maxBlocks = this.activity.maxBlocks;
       this.updateCssProps();
 
@@ -523,7 +532,7 @@ export default {
     saveProgramAs() {
       if (this.newProgramName != '') {
         if (this.isDefault == 'True' && this.programName == this.newProgramName) {
-          this.CannotOverwrite = true;
+          this.cannotOverwrite = true;
           console.log('error');
         } else {
           this.defaultProgramName = this.programName;
@@ -547,7 +556,7 @@ export default {
             } else {
               this.$data.programName = this.$data.defaultProgramName;
               this.$data.defaultProgramName = '';
-              this.$data.CannotOverwrite = true;
+              this.$data.cannotOverwrite = true;
             }
           } else {
             this.$data.isDefault = '';

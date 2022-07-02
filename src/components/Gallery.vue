@@ -8,7 +8,7 @@
       </v-app-bar>
       <v-main>
         <v-layout>
-          <v-flex xs12 sm8 offset-sm2>
+          <v-col xs12 sm8 offset-sm2>
             <template v-if="photos.length == 0">
               <br>
               <h3>{{ $t("message.gallery_empty") }}</h3>
@@ -16,21 +16,25 @@
             <template v-else>
               <v-container grid-list-sm fluid>
                 <v-layout row wrap>
-                  <v-flex v-for="n in photos.length" :key="n" xs3 d-flex>
+                  <v-col v-for="n in photos.length" :key="n" xs3 d-flex>
                     <v-card
                       class="mx-auto my-12"
                       max-width="256"
                       >
                       <a class="text-decoration-none" @click="photo=photos[n-1]; gallery_detail=true">
                       <v-img v-if="photos[n-1].type=='jpg'" :src="CBv1+'/photos/'+photos[n-1].thumbName" class="grey lighten-2">
-                        <v-layout slot="placeholder" fill-height align-center justify-center ma-2>
+                        <template v-slot:placeholder>
+                        <v-row class="fill-height ma-0" align="center" justify="center">
                           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                        </v-layout>
+                        </v-row>
+                        </template>
                       </v-img>
                       <v-img v-else-if="photos[n-1].type=='mp4'" :src="CBv1+'/photos/'+photos[n-1].thumbName" class="grey lighten-2">
-                        <v-layout slot="placeholder" fill-height align-center justify-center ma-0>
+                        <template v-slot:placeholder>
+                        <v-row class="fill-height ma-0" align="center" justify="center">
                           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                        </v-layout>
+                        </v-row>
+                        </template>
                       </v-img>
                       <v-card-title class="subheading">
                         {{ photos[n-1].name }}
@@ -43,26 +47,25 @@
                         </v-btn>
                       </v-card-actions>
                     </v-card>
-                  </v-flex>
+                  </v-col>
                 </v-layout>
               </v-container>
               <v-dialog v-model="gallery_detail">
-                <v-card class="mx-auto my-12" max-width="640">
+                <v-card class="mx-auto my-12" style="width: 640px;">
                   <v-card-title class="text-h5 grey lighten-2">
                     {{ photo.name }}
                   </v-card-title>
+                  <v-card-text>
                   <v-img v-if="photo.type=='jpg'" height="100%" :src="CBv1+'/photos/'+photo.fileName" class="grey lighten-2" ref="photo" @click="getPixelColor">
-                    <v-layout slot="placeholder" align-center justify-center ma-0>
+                  <template v-slot:placeholder>
+                    <v-row class="fill-height ma-0" align="center" justify="center">
                       <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-layout>
+                    </v-row>
+                    </template>
                   </v-img>
                   <video v-else-if="photo.type=='mp4'" controls autoplay :src="CBv1+'/photos/'+photo.fileName"/>
+                  </v-card-text>
                   <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-text-field v-if="get_pixel_color" v-model="pixel_color" v-bind:label="$t('message.gallery_pixel_color')"
-                      readonly
-                    >
-                    </v-text-field>
                     <v-btn-toggle
                       v-model="get_pixel_color"
                     >
@@ -80,6 +83,10 @@
                     >
                       {{ $t("message.close") }}
                     </v-btn>
+                    <v-text-field v-if="get_pixel_color" v-model="pixel_color" v-bind:label="$t('message.gallery_pixel_color')"
+                      readonly
+                    >
+                    </v-text-field>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -114,7 +121,7 @@
               </v-dialog>
 
             </template>
-          </v-flex>
+          </v-col>
         </v-layout>
       </v-main>
     </v-app>

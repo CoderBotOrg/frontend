@@ -6,24 +6,25 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title class="title" v-if="!saved"><div>{{ $t("message.activity_new") }} {{prefix}} {{activity.name}}</div></v-app-bar-title>
         <v-app-bar-title class="title" v-else><div>{{ $t("message.activity_edit") }} {{prefix}} {{activity.name}}</div></v-app-bar-title>
-        <v-spacer></v-spacer>
         <v-btn text @click="save()">
           <v-icon>save</v-icon>
           {{ $t("message.save") }}
         </v-btn>
-        <v-tabs slot="extension" v-model="tab" centered slider-color="white">
-          <v-tab v-for="item in tabs" :key="item">
-            {{ item }}
-          </v-tab>
-        </v-tabs>
+        <template v-slot:extension>
+          <v-tabs v-model="tab" align-with-title>
+            <v-tab v-for="item in tabs" :key="item.key" :value="item.key">
+              {{ item.value }}
+            </v-tab>
+          </v-tabs>
+        </template>
       </v-app-bar>
       <v-main>
-        <v-tabs-items v-model="tab">
-          <v-tab-item>
+        <v-window v-model="tab">
+          <v-window-item key="general" value="general">
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
                 <!-- Column A -->
-                <v-flex xs12 md6 offset-md3>
+                <v-col xs12 md6 offset-md3>
                   <p style="text-align: left">
                     <v-alert :value="true" type="info" style="font-size:16px">
                       {{ $t("message.activity_tip_1") }}
@@ -32,23 +33,23 @@
                   <h3 class="text-xs-left">{{ $t("message.activity_data") }} </h3>
                   <v-card>
                     <v-form class="cardContent">
-                      <v-text-field v-model="activity.name" label="Nome" required
-                        @input="$v.activity.name.$touch"
-                        v-bind:error-messages="$v.activity.name.$error == true ? $t('message.validation_alphanum') : null"
+                      <v-text-field v-model="activity.name" v-bind:label="$t('message.activity_name')" required
+                        @input="v$.activity.name.$touch"
+                        v-bind:error-messages="v$.activity.name.$error == true ? $t('message.validation_alphanum') : ''"
                       ></v-text-field>
                       <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')"
-                        @input="$v.activity.description.$touch"
-                        v-bind:error-messages="$v.activity.description.$error == true ? $t('message.validation_alphanum') : null"
+                        @input="v$.activity.description.$touch"
+                        v-bind:error-messages="v$.activity.description.$error == true ? $t('message.validation_alphanum') : ''"
                       >
                       </v-text-field>
                       <v-select v-model="activity.defaultView" :items="viste"
                         v-bind:label="$t('message.activity_predefined_view')" required
-                        @input="$v.activity.defaultView.$touch"
+                        @input="v$.activity.defaultView.$touch"
                       ></v-select>
                       <v-checkbox
                         v-model="activity.default"
                         v-bind:label="$t('message.activity_default')"
-                        @input="$v.activity.default.$touch"
+                        @input="v$.activity.default.$touch"
                       ></v-checkbox>
                     </v-form>
                   </v-card>
@@ -61,14 +62,16 @@
 										-->
                       <v-switch v-bind:label="$t('message.activity_caps_only')" v-model="activity.capsSwitch">
                       </v-switch>
+                      <v-switch v-bind:label="$t('message.activity_theme')" v-model="activity.theme" value="dark">
+                      </v-switch>
                       <!--
 											<v-layout row wrap>
-												<v-flex>
+												<v-col>
 													<v-switch :label="`Modalità Daltonici`" v-model="daltonicSwitch"></v-switch>
-												</v-flex>
-												<v-flex>
+												</v-col>
+												<v-col>
 													<v-select v-if="daltonicSwitch" v-model="daltonic" :items="daltonicModes" label="Tipo daltonismo" required></v-select>
-												</v-flex>
+												</v-col>
 											</v-layout>
 										-->
                     </div>
@@ -80,7 +83,7 @@
                       <span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
                       <v-radio-group v-model="activity.bodyFont" column
                         v-bind:label="$t('message.activity_predefined_view')" required
-                        @change="$v.activity.bodyFont.$touch"
+                        @change="v$.activity.bodyFont.$touch"
                       >
                         <v-radio label="Roboto" value="Roboto"></v-radio>
                         <v-radio label="Open Sans" value="opensans"></v-radio>
@@ -97,7 +100,7 @@
                     <div class="cardContent">
                       <span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
                       <v-radio-group v-model="activity.codeFont" column
-                        @change="$v.activity.codeFont.$touch"
+                        @change="v$.activity.codeFont.$touch"
                       >
                         <v-radio label="Ubuntu Mono" value="ubuntumono"></v-radio>
                         <v-radio label="Roboto Mono" value="robotomono"></v-radio>
@@ -110,10 +113,10 @@
 										<div class="cardContent">
 											<v-select v-model="activity.uiLang"
                         :items="langs"
-                        item-text="text"
+                        item-title="text"
                         item-value="key"
                         v-bind:label="$t('message.activity_locale')" required
-                        @change="$v.activity.uiLang.$touch"
+                        @change="v$.activity.uiLang.$touch"
                       ></v-select>
 										</div>
 									</v-card>
@@ -123,26 +126,26 @@
                     <div class="cardContent">
                       <v-layout row wrap>
                         <!--
-												<v-flex>
+												<v-col>
 													<v-checkbox v-model="activity.availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
-												</v-flex>
-												<v-flex>
+												</v-col>
+												<v-col>
 													<v-checkbox v-model="activity.availableViews" label="Editor Python" value="python"></v-checkbox>
-												</v-flex>
+												</v-col>
                         -->
-                        <v-flex>
+                        <v-col>
                           <v-checkbox v-model="activity.autoRecVideo"
                             v-bind:label="$t('message.activity_auto_rec_video')"
-                            @input="$v.activity.autoRecVideo.$touch"
+                            @input="v$.activity.autoRecVideo.$touch"
                           ></v-checkbox>
-                        </v-flex>
-                        <v-flex>
+                        </v-col>
+                        <v-col>
                           <v-text-field v-model="activity.maxBlocks"
                             v-bind:label="$t('message.activity_blocks_max_blocks')"
-                            @input="$v.activity.maxBlocks.$touch"
-                            v-bind:error-messages="$v.activity.maxBlocks.$error == true ? $t('message.validation_integer_positive') : null"
+                            @input="v$.activity.maxBlocks.$touch"
+                            v-bind:error-messages="v$.activity.maxBlocks.$error == true ? $t('message.validation_integer_positive') : ''"
                             ></v-text-field>
-                        </v-flex>
+                        </v-col>
                       </v-layout>
                     </div>
                   </v-card>
@@ -152,90 +155,106 @@
 										<div class="cardContent">
 											<v-switch color="orange darken-3" :label="`Abilità funzionalità sperimentali`" v-model="experimental"></v-switch>
 											<v-layout row wrap>
-												<v-flex>
+												<v-col>
 													<v-switch v-if="experimental" :label="`Cronologia Modifiche`" v-model="editHistory"></v-switch>
-												</v-flex>
-												<v-flex>
+												</v-col>
+												<v-col>
 													<v-switch v-if="editHistory" :label="`Permetti navigazione nella cronologia modifiche`" v-model="navHistory"></v-switch>
-												</v-flex>
+												</v-col>
 											</v-layout>
 											<v-switch v-if="experimental" :label="`Esecuzione passo passo`" v-model="stepbystep"></v-switch>
 											<v-switch disabled v-if="experimental" :label="`Realtà Aumentata`" v-model="ar"></v-switch>
 										</div>
 									</v-card>
 								-->
-                </v-flex>
+                </v-col>
               </v-layout>
             </v-container>
-          </v-tab-item>
-          <v-tab-item>
-            <v-container grid-list-md text-xs-center>
-              <v-flex xs12 md8 offset-md2>
-                <v-flex>
+          </v-window-item>
+          <v-window-item key="toolbar" value="toolbar">
+            <v-container>
+              <v-row>
+                <v-col>
                   <h3> {{ $t("message.activity_toolbar_preview") }} </h3>
                   <v-app-bar>
                     <v-app-bar-nav-icon v-if="activity.drawerEnabled"></v-app-bar-nav-icon>
                     <v-app-bar-title v-if="activity.showName">{{ activity.name || $t("message.activity_name")}}
                     </v-app-bar-title>
-                    <v-spacer></v-spacer>
                     <template v-for="button in activity.buttons">
-                      <v-btn style="height: 70%" :color="button.colorBtn" :class="button.colorText">
-                        {{ button.label }}
-                        <v-icon right dark>{{ button.icon }}</v-icon>
+                      <v-btn :color="button.colorBtn" :class="button.colorText">
+                        <v-icon :icon="button.icon"></v-icon>
+                        <span v-if="activity.showButtonLabel">{{ button.label }}</span>
                       </v-btn>
                       &nbsp;&nbsp;
                     </template>
                   </v-app-bar>
-                  <br>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <v-switch v-bind:label="$t('message.activity_lateral_menu_icon')" v-model="activity.drawerEnabled"
-                    @change="$v.activity.drawerEnabled.$touch"
+                    @change="v$.activity.drawerEnabled.$touch"
                   >
                   </v-switch>
                   <v-switch v-bind:label="$t('message.activity_name')" v-model="activity.showName"
-                    @change="$v.activity.showName.$touch"
+                    @change="v$.activity.showName.$touch"
                   ></v-switch>
-                  <br>
+                  <v-switch v-bind:label="$t('message.activity_toolbar_buttons_show_label')" v-model="activity.showButtonLabel"
+                    @change="v$.activity.showButtonLabel.$touch"
+                  ></v-switch>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <h3> {{ $t("message.activity_toolbar_buttons") }} </h3>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <v-btn @click="addButton()" outlined color="green">
-                    <v-icon>add</v-icon> {{ $t("message.activity_toolbar_buttons_add") }}
+                    <v-icon icon="mdi-add"></v-icon> {{ $t("message.activity_toolbar_buttons_add") }}
                   </v-btn>
+                </v-col>
+                <v-col>
                   <v-btn @click="restoreDefaults()" outlined color="blue">
-                    <v-icon>undo</v-icon> {{ $t("message.activity_toolbar_buttons_predefined") }}
+                    <v-icon icon="mdi-undo"></v-icon> {{ $t("message.activity_toolbar_buttons_predefined") }}
                   </v-btn>
+                </v-col>
+                <v-col>
                   <v-btn @click="removeAll()" outlined color="red">
-                    <v-icon>clear</v-icon> {{ $t("message.activity_toolbar_buttons_remove_all") }}
+                    <v-icon icon="mdi-clear"></v-icon> {{ $t("message.activity_toolbar_buttons_remove_all") }}
                   </v-btn>
-                  <br><br>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
                   <div v-for="button, i in activity.buttons" :key="button.id">
                     <h3>Pulsante {{i + 1}}
-                      <v-btn @click="removeButton(i)" text icon v-if="!button.notErasable">
-                        <v-icon>clear</v-icon>
+                      <v-btn @click="removeButton(i)" v-if="!button.notErasable">
+                        <v-icon icon="mdi-close"></v-icon> {{ $t("message.activity_toolbar_buttons_remove") }}
                       </v-btn>
                     </h3>
                     <v-card>
                       <div class="cardContent">
                         <span class="grey--text text--darken-2" v-if="button.notErasable">
                           {{ $t("message.activity_toolbar_buttons_cannot_remove_run") }} </span>
-                        <v-text-field v-model="button.label" v-bind:label="$t('message.activity_label')"></v-text-field>
+                        <v-text-field v-model="button.label" :label="$t('message.activity_label')"></v-text-field>
                         <v-select v-model="button.action" :items="actions" v-bind:label="$t('message.activity_action')"
-                          :disabled="button.notErasable">
+                          :disabled="button.notErasable" item-title="text" item-value="value">
                         </v-select>
-                        <v-select :items="textColors" v-model="button.colorText"
+                        <v-select :items="textColors" v-model="button.colorText" item-title="text" item-value="value"
                           v-bind:label="$t('message.activity_text_color')"></v-select>
                         <v-layout row wrap>
-                          <v-flex xs4 style="text-align: left">
-                            <span style="vertical-align: 55%"> {{ $t("message.activity_toolbar_buttons_color") }}
-                              &nbsp;&nbsp;</span>
-                            <div style="display:inline-block">
-                              <swatches popover-to="left" v-model="button.colorBtn"></swatches>
-                            </div>
-                          </v-flex>
-                          <v-flex xs4 style="text-align: left">
+                          <v-col xs4 style="text-align: left">
+                              <div> {{ $t("message.activity_toolbar_buttons_color") }} </div>
+                              <v-btn large :color="button.colorBtn" @click="b=i; colorPicker=true;"></v-btn>
+                          </v-col>
+                          <v-col xs4 style="text-align: left">
                             {{ $t("message.activity_toolbar_buttons_icon") }} <v-btn style="margin:0" large text
                               @click="b=i; iconPicker=true;" color="black">
                               <v-icon large color="black">{{ button.icon }}</v-icon>
                             </v-btn>
-                          </v-flex>
+                          </v-col>
                         </v-layout>
                         <v-divider></v-divider>
                         <br>
@@ -245,21 +264,33 @@
                         </v-btn>
                       </div>
                     </v-card>
-                    <br>
                   </div>
-                </v-flex>
-              </v-flex>
+                </v-col>
+              </v-row>
             </v-container>
+            <v-dialog v-model="colorPicker" max-width="600px">
+              <v-card>
+                <v-card-title class="headline">{{ $t("message.activity_toolbar_buttons_color_select") }}</v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-color-picker class="ma-2" v-model="activity.buttons[b].colorBtn" :swatches="swatches" show-swatches></v-color-picker>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn @click="colorPicker = false">{{ $t("message.close") }}</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
             <v-dialog v-model="iconPicker" max-width="600px">
               <v-card>
                 <v-card-title class="headline">{{ $t("message.activity_toolbar_buttons_icon_select") }}</v-card-title>
                 <v-card-text>
                   <v-container>
                     <v-layout row wrap>
-                      <template v-for="icon, i in iconList">
-                        <v-flex xs1 :key="icon.id">
+                      <template v-for="icon, i in iconList" :key="icon.id">
+                        <v-col xs1>
                           <v-icon large @click="activity.buttons[b].icon=icon; iconPicker = false">{{ icon }}</v-icon>
-                        </v-flex>
+                        </v-col>
                         <template v-if="i%10==0">
                           <br :key="i">
                         </template>
@@ -269,11 +300,11 @@
                 </v-card-text>
               </v-card>
             </v-dialog>
-          </v-tab-item>
-          <v-tab-item>
+          </v-window-item>
+          <v-window-item key="runtime" value="runtime">
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
-                <v-flex xs12 md6 offset-md3>
+                <v-col xs12 md6 offset-md3>
                   <h3 class="text-xs-left">{{ $t("message.activity_views_title") }}</h3>
                   <v-card>
                     <v-form class="cardContent">
@@ -284,17 +315,17 @@
                       </v-switch>
                     </v-form>
                   </v-card>
-                </v-flex>
+                </v-col>
               </v-layout>
             </v-container>
-          </v-tab-item>
-					<v-tab-item>
+          </v-window-item>
+					<v-window-item key="toolbox" value="toolbox">
 						<toolbox-editor
             v-model="activity.toolbox"
             :toolbox_in="activity.toolbox"
             />
-					</v-tab-item>
-        </v-tabs-items>
+					</v-window-item>
+        </v-window>
       </v-main>
       <!-- Confirm exit dialog -->
       <v-dialog v-model="confirm_exit_dialog" max-width="290">
@@ -321,12 +352,12 @@
   </div>
 </template>
 <script>
-import Swatches from 'vue-swatches';
-import 'vue-swatches/dist/vue-swatches.css';
+import useVuelidate from '@vuelidate/core';
+// import VSwatches from 'vue3-swatches';
 
 import {
-  alphaNum, integer,
-} from 'vuelidate/lib/validators';
+  alphaNum, integer, minValue,
+} from '@vuelidate/validators';
 
 // import wsFactory from '../components/wsFactory';
 import sidebar from '../components/Sidebar';
@@ -335,12 +366,15 @@ import ToolboxEditor from '../components/ToolboxEditor';
 export default {
   name: 'ActivityEditor',
   components: {
-    Swatches,
+    // VSwatches,
     sidebar,
     ToolboxEditor
   },
+  setup() {
+    return { v$: useVuelidate() };
+  },
   beforeRouteLeave(to, from, next) {
-    if (this.$v.$anyDirty) {
+    if (this.v$.$anyDirty) {
       this.router_next = next;
       this.confirm_exit_dialog = true;
     } else {
@@ -390,43 +424,43 @@ export default {
       saved: false,
       CB: process.env.CB_ENDPOINT + process.env.APIv2,
       snackbar: false,
+      colorPicker: false,
       iconPicker: false,
       iconList: [
-        'play_arrow',
-        'pause',
-        'stop',
-        'save',
-        'autorenew',
-        'build',
-        'check_circle',
-        'camera',
-        'code',
-        'help',
-        'done',
-        'eject',
-        'extension',
-        'face',
-        'favorite',
-        'help',
-        'home',
-        'hourglass_empty',
-        'info',
-        'language',
-        'query_builder',
-        'question_answer',
-        'search',
-        'settings',
-        'stars',
-        'games',
-        'loop',
-        'replay',
-        'volume_down',
-        'volume_mute',
-        'volume_off',
-        'volume_up',
-        'clear',
-        'block',
-        'add'
+        'mdi-play',
+        'mdi-pause',
+        'mdi-stop',
+        'mdi-close',
+        'mdi-content-save',
+        'mdi-content-save-edit',
+        'mdi-autorenew',
+        'mdi-wrench',
+        'mdi-check-circle',
+        'mdi-camera',
+        'mdi-code-braces',
+        'mdi-help',
+        'mdi-check',
+        'mdi-eject',
+        'mdi-toy-brick',
+        'mdi-emoticon',
+        'mdi-star',
+        'mdi-home',
+        'mdi-timer-sand',
+        'mdi-information',
+        'mdi-translate',
+        'mdi-chat-question',
+        'mdi-book-search',
+        'mdi-cog',
+        'mdi-star-circle',
+        'mdi-gamepad',
+        'mdi-refresh',
+        'mdi-replay',
+        'mdi-volume-low',
+        'mdi-volume-mute',
+        'mdi-volume-high',
+        'mdi-close-circle',
+        'mdi-cancel',
+        'mdi-plus'
       ],
       snackbarText: '',
       b: 0,
@@ -434,6 +468,7 @@ export default {
         stock: null,
         default: null,
         uiLang: null,
+        theme: null,
         defaultView: null,
         exec: {
           camera: true,
@@ -442,6 +477,7 @@ export default {
         name: null,
         drawerEnabled: true,
         showName: true,
+        showButtonLabel: true,
         buttons: null,
         description: null,
         fontSize: 'Medio',
@@ -463,11 +499,11 @@ export default {
       ],
       textColors: [
         {
-          text: 'Bianco',
+          text: this.$i18n.t('message.activity_button_text_white'),
           value: 'white--text',
         },
         {
-          text: 'Nero',
+          text: this.$i18n.t('message.activity_button_text_black'),
           value: 'black--text',
         },
       ],
@@ -531,10 +567,10 @@ export default {
       stepbystep: false,
       tab: null,
       tabs: [
-        this.$i18n.t('message.activity_tabs_general'),
-        this.$i18n.t('message.activity_tabs_toolbar'),
-        this.$i18n.t('message.activity_tabs_runtime'),
-        this.$i18n.t('message.activity_tabs_toolbox')
+        { key: 'general', value: this.$i18n.t('message.activity_tabs_general') },
+        { key: 'toolbar', value: this.$i18n.t('message.activity_tabs_toolbar') },
+        { key: 'runtime', value: this.$i18n.t('message.activity_tabs_runtime') },
+        { key: 'toolbox', value: this.$i18n.t('message.activity_tabs_toolbox') }
       ],
       ar: false,
       // drawer: null,
@@ -569,6 +605,7 @@ export default {
         defaultView: { },
         drawerEnabled: { },
         showName: { },
+        showButtonLabel: { },
         buttons: { },
         fontSize: { },
         capsSwitch: { },
@@ -578,13 +615,12 @@ export default {
         autoRecVideo: { },
         name: { required: true, alphaNum },
         description: { },
-        maxBlocks: { integer, minValue: 0 },
+        maxBlocks: { integer, minValue: minValue(0) }
       },
     };
   },
   mounted() {
     if (this.$route.params.name) {
-      console.log('Loading activity', this.$route.params.name);
       this.saved = true;
       this.$coderbot.loadActivity(this.$route.params.name, false).then((activity) => {
         this.activity = activity.data;
@@ -612,7 +648,7 @@ export default {
           this.snackbarText = this.$i18n.t('message.activity_saved');
           this.snackbar = true;
           this.saved = true;
-          this.$v.$reset();
+          this.v$.$reset();
         });
       } else {
         this.snackbarText = this.$i18n.t('message.activity_save_error');
@@ -645,49 +681,49 @@ export default {
       this.activity.buttons = [
         {
           action: 'clearProgramDlg',
-          icon: 'clear',
+          icon: 'mdi-close',
           label: this.$i18n.t('message.activity_program_clear'),
           type: 'text',
         },
         {
           action: 'saveProgram',
-          icon: 'save',
+          icon: 'mdi-content-save',
           label: this.$i18n.t('message.activity_program_save'),
           type: 'text',
         },
         {
           action: 'toggleSaveAs',
-          icon: 'edit',
+          icon: 'mdi-content-save-edit',
           label: this.$i18n.t('message.activity_program_save_as'),
           type: 'text',
         },
         {
           action: 'loadProgramList',
-          icon: 'folder_open',
+          icon: 'mdi-folder-open',
           label: this.$i18n.t('message.activity_program_load'),
           type: 'text',
         },
         {
           action: 'runProgram',
-          icon: 'play_arrow',
+          icon: 'mdi-play',
           label: this.$i18n.t('message.activity_program_run'),
           type: 'text',
         },
         {
           action: 'getProgramCode',
-          icon: 'code',
+          icon: 'mdi-code-braces',
           label: this.$i18n.t('message.activity_program_show_code'),
           type: 'text',
         },
         {
           action: 'exportProgram',
-          icon: 'fa-file-export',
+          icon: 'mdi-export',
           label: this.$i18n.t('message.activity_program_export'),
           type: 'text',
         },
         {
           action: 'pickFile',
-          icon: 'fa-file-import',
+          icon: 'mdi-import',
           label: this.$i18n.t('message.activity_program_import'),
           type: 'text',
         }

@@ -10,6 +10,7 @@
 </template>
 <script>
 import * as Blockly from 'blockly/core';
+import DarkTheme from '@blockly/theme-dark';
 import 'blockly/blocks';
 import 'blockly/python';
 import * as blockly_it from 'blockly/msg/it';
@@ -23,7 +24,7 @@ import * as bot_fr from '../assets/js/blockly/bot_fr.json';
 
 import i18n from '../i18n/index';
 
-const locale = i18n.locale.substring(0, 2);
+const locale = i18n.global.locale.substring(0, 2);
 
 const coderbot_locales = {
   it: bot_it.default,
@@ -31,6 +32,7 @@ const coderbot_locales = {
   fr: bot_fr.default
 };
 
+/* eslint-disable no-import-assign */
 Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
 
 const blockly_locales = {
@@ -48,11 +50,18 @@ export default {
   props: [
     'settings',
     'toolbox',
+    'theme',
   ],
-  data: () => ({
-    workspace: null,
-    toolbox_kind: null
-  }),
+  setup() {
+    return {
+      workspace: null
+    };
+  },
+  data() {
+    return {
+      toolbox_kind: null
+    };
+  },
   watch: {
     // whenever settings changes, this function will run
     settings(newSettings, oldSettings) {
@@ -93,6 +102,7 @@ export default {
         {
           toolbox: this.toolbox,
           media: 'media/',
+          theme: this.theme == 'dark' ? DarkTheme : null,
           // TODO: Use values from fetched configuration!
           scrollbars: true,
           maxBlocks: settings.maxBlocks,
@@ -105,6 +115,7 @@ export default {
           },
         },
       );
+
       const {
         workspace
       } = this;
@@ -179,13 +190,13 @@ export default {
     addBlocks(blockTypes) {
       if (this.workspace) {
         this.workspace.clear();
-        let y = 0;
+        let y = 5;
         blockTypes.forEach((block) => {
           const parentBlock = this.workspace.newBlock(block);
           parentBlock.initSvg();
           parentBlock.render();
           parentBlock.moveTo(new Blockly.utils.Coordinate(5, y));
-          y += parentBlock.getHeightWidth().height + 10;
+          y += parentBlock.getHeightWidth().height + 20;
         });
       }
     },

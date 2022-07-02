@@ -1,7 +1,4 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-
-Vue.use(Vuex);
+import { createStore } from 'vuex';
 
 const state = {
   drawer: false,
@@ -83,7 +80,7 @@ const getters = {
 };
 const actions = {};
 
-export default new Vuex.Store({
+export default createStore({
   state,
   actions,
   mutations,

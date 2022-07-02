@@ -1,5 +1,5 @@
 // VueRouter
-import VueRouter from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 // Main components
 import i18n from '../i18n/index';
@@ -29,7 +29,7 @@ const routes = [
     path: '/control',
     component: control,
     meta: {
-      title: `CoderBot - ${i18n.t('message.control')}`,
+      title: `CoderBot - ${i18n.global.t('message.control')}`,
     }
   },
   {
@@ -37,7 +37,7 @@ const routes = [
     path: '/program',
     component: activity,
     meta: {
-      title: `CoderBot - ${i18n.t('message.program')}`,
+      title: `CoderBot - ${i18n.global.t('message.program')}`,
     }
   },
   {
@@ -45,7 +45,7 @@ const routes = [
     path: '/settings',
     component: settings,
     meta: {
-      title: `CoderBot - ${i18n.t('message.settings')}`,
+      title: `CoderBot - ${i18n.global.t('message.settings')}`,
     },
   },
   {
@@ -53,7 +53,7 @@ const routes = [
     path: '/gallery',
     component: gallery,
     meta: {
-      title: `CoderBot - ${i18n.t('message.gallery')}`,
+      title: `CoderBot - ${i18n.global.t('message.gallery')}`,
     }
   },
   // { path: '/help', component: help, meta: {title: 'CoderBot - Aiuto'}},
@@ -64,7 +64,7 @@ const routes = [
     path: '/activity/new',
     component: activityEditor,
     meta: {
-      title: `CoderBot - ${i18n.t('message.activity_new')}`
+      title: `CoderBot - ${i18n.global.t('message.activity_new')}`
     }
   },
   {
@@ -72,7 +72,7 @@ const routes = [
     path: '/activity/manage',
     component: activityList,
     meta: {
-      title: `CoderBot - ${i18n.t('message.activity_manage')}`
+      title: `CoderBot - ${i18n.global.t('message.activity_manage')}`
     }
   },
   {
@@ -80,7 +80,7 @@ const routes = [
     path: '/activity/edit/:name',
     component: activityEditor,
     meta: {
-      title: `CoderBot - ${i18n.t('message.activity_edit')}`
+      title: `CoderBot - ${i18n.global.t('message.activity_edit')}`
     }
   },
   {
@@ -88,12 +88,14 @@ const routes = [
     path: '/activity/open/:name',
     component: activity,
     meta: {
-      title: `CoderBot - ${i18n.t('message.activity_open')}`
+      title: `CoderBot - ${i18n.global.t('message.activity_open')}`
     }
   },
 ];
 
-const router = new VueRouter({
+/* eslint-disable new-cap */
+const router = new createRouter({
+  history: createWebHashHistory(),
   routes, // short for `routes: routes` (ES6)
 });
 
