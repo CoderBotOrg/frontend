@@ -46,7 +46,7 @@
                   <br>
                   <h3 class="text-xs-left"> {{ $t('message.settings_actions') }} </h3>
                   <v-card>
-                    <div class="cardContent text-xs-center">
+                    <div class="d-flex justify-space-around align-center">
                       <v-btn @click="shutdown" color="info">
                         <v-icon icon="mdi-power"></v-icon> {{ $t('message.settings_actions_off') }}
                       </v-btn>
@@ -56,26 +56,25 @@
                       <v-btn @click="restoreConfig" color="warning">
                         <v-icon icon="mdi-restore"></v-icon> {{ $t('message.settings_actions_reset') }}
                       </v-btn>
+                      <v-btn slot="activator" color="error" dark @click="dialog_reset = true">
+                        <v-icon icon="mdi-store-cog"></v-icon> {{ $t('message.settings_actions_reset_factory') }}
+                      </v-btn>
+                      <v-btn slot="activator" color="warning" dark @click="dialog_logs = true">
+                        <v-icon icon="mdi-format-list-text"></v-icon> {{ $t('message.settings_actions_show_logs') }}
+                      </v-btn>
                       <!-- ** Restore button + dialog box** -->
-                      <v-dialog v-model="dialog" width="500">
-                        <!-- eslint-disable-next-line vue/no-unused-vars -->
-                        <template v-slot:activator="data">
-                          <v-btn slot="activator" color="error" dark>
-                            <v-icon icon="mdi-store-cog"></v-icon> {{ $t('message.settings_actions_reset_factory') }}
-                          </v-btn>
+                      <v-dialog v-model="dialog_reset" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
                               <h3>CoderBot - {{ $t('message.settings_actions_reset_factory_title') }}</h3>
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_reset_factory_text_1') }}
-                              <br>
-                              <h3><b>{{ $t('message.settings_actions_reset_factory_text_1') }}</b></h3>
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
                               <v-spacer></v-spacer>
-                              <v-btn color="primary" @click="dialog = false">
+                              <v-btn color="primary" @click="dialog_reset = false">
                                 {{ $t('message.cancel') }}
                               </v-btn>
                               <v-btn color="error" @click="restore">
@@ -83,15 +82,9 @@
                               </v-btn>
                             </v-card-actions>
                           </v-card>
-                        </template>
                       </v-dialog>
                       <!-- Logs -->
                       <v-dialog v-model="dialog_logs" width="700">
-                        <!-- eslint-disable-next-line vue/no-unused-vars -->
-                        <template v-slot:activator="data">
-                          <v-btn slot="activator" color="warning" dark>
-                            <v-icon icon="mdi-format-list-text"></v-icon> {{ $t('message.settings_actions_show_logs') }}
-                          </v-btn>
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
                               <h3>CoderBot - {{ $t('message.settings_actions_show_logs_title') }}</h3>
@@ -109,12 +102,14 @@
                               </v-btn>
                             </v-card-actions>
                           </v-card>
-                        </template>
                       </v-dialog>
                     </div>
                   </v-card>
-                  <h3 class="text-xs-left"> {{ $t('message.settings_actions_update_title') }} </h3>
+                  <br>
                   <v-card>
+                    <v-card-title>
+                      <h3 class="text-xs-left"> {{ $t('message.settings_actions_update_title') }} </h3>
+                    </v-card-title>
                     <div class="cardContent">
                       <template v-if="updateStatus==1">
                         {{ $t('message.settings_update_upload') }}
@@ -133,10 +128,11 @@
                       </template>
                     </div>
                   </v-card>
-                  <br/><br/>
-                  <br><br>
-                  <h3 class="text-xs-left">{{ $t('message.settings_admin_password_title') }}</h3>
+                  <br>
                   <v-card>
+                    <v-card-title>
+                      <h3 class="text-xs-left">{{ $t('message.settings_admin_password_title') }}</h3>
+                    </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.adminPassword"
                         v-bind:label="$t('message.settings_admin_password')"
@@ -153,8 +149,10 @@
               <v-layout row wrap>
                 <!-- Column A -->
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t('message.settings_movement_control') }}</h3>
                   <v-card>
+                    <v-card-title>
+                      <h3 class="text-xs-left">{{ $t('message.settings_movement_control') }}</h3>
+                    </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.ctrlFwdSpeed"
                         v-bind:label="$t('message.settings_movement_control_forward_speed')"
@@ -178,9 +176,11 @@
                       />
                     </div>
                   </v-card>
-                  <br><br>
-                  <h3 class="text-xs-left">{{ $t('message.settings_movement_program') }}</h3>
+                  <br>
                   <v-card>
+                    <v-card-title>
+                      <h3 class="text-xs-left">{{ $t('message.settings_movement_program') }}</h3>
+                    </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.moveFwdSpeed"
                         v-bind:label="$t('message.settings_movement_program_forward_speed')"
@@ -204,9 +204,11 @@
                       />
                     </div>
                   </v-card>
-                  <br><br>
-                  <h3 class="text-xs-left">{{ $t('message.settings_movement_parameters') }}</h3>
+                  <br>
                   <v-card>
+                    <v-card-title>
+                      <h3 class="text-xs-left">{{ $t('message.settings_movement_parameters') }}</h3>
+                    </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.motorMode"
                         v-bind:label="$t('message.settings_movement_parameters_mode')"
@@ -237,8 +239,10 @@
               <v-layout row wrap>
                 <!-- Column A -->
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t('message.settings_camera_title') }}</h3>
                   <v-card>
+                    <v-card-title>
+                      <h3 class="text-xs-left">{{ $t('message.settings_camera_title') }}</h3>
+                    </v-card-title>
                     <div class="cardContent">
                       <v-select
                         v-model="settings.camera_exposure_mode"
@@ -270,9 +274,11 @@
                       />
                     </div>
                   </v-card>
-                  <br><br>
-                  <h3 class="text-xs-left">{{ $t('message.settings_camera_cv_title') }}</h3>
+                  <br>
                   <v-card>
+                    <v-card-title>
+                      <h3 class="text-xs-left">{{ $t('message.settings_camera_cv_title') }}</h3>
+                    </v-card-title>
                     <div class="cardContent">
                       {{ $t("message.settings_camera_cv_image_factor") }}:
                       <span v-text="settings.cv_image_factor"></span>
@@ -317,8 +323,10 @@
               <v-layout row wrap>
                 <!-- Column A -->
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t('message.settings_sounds_title') }}</h3>
                   <v-card>
+                  <v-card-title>
+                    <h3 class="text-xs-left">{{ $t('message.settings_sounds_title') }}</h3>
+                  </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.startSound" v-bind:label="$t('message.settings_sounds_start')"
                         @input="v$.settings.startSound.$touch"
@@ -340,8 +348,10 @@
               <v-layout row wrap>
                 <!-- Column A -->
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t('message.settings_button_title') }}</h3>
                   <v-card>
+                  <v-card-title>
+                    <h3 class="text-xs-left">{{ $t('message.settings_button_title') }}</h3>
+                  </v-card-title>
                     <div class="cardContent">
                       <v-radio-group v-model="settings.btnFun" column
                       >
@@ -351,8 +361,10 @@
                     </div>
                   </v-card>
                   <br>
-                  <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
                   <v-card>
+                  <v-card-title>
+                    <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
+                  </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.startupProgram" v-bind:label="$t('message.settings_load_at_start_title')"
                         @input="v$.settings.startupProgram.$touch"
@@ -367,8 +379,10 @@
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
                   <v-card>
+                  <v-card-title>
+                    <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
+                  </v-card-title>
                     <div class="cardContent">
                       <v-radio-group v-model="settings.wifiMode" column
                         @change="v$.settings.wifiMode.$touch"
@@ -414,9 +428,10 @@
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap align-center>
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t('message.settings_component_test_title') }}</h3>
                   <v-card>
-
+                  <v-card-title>
+                    <h3 class="text-xs-left">{{ $t('message.settings_component_test_title') }}</h3>
+                  </v-card-title>
                     <div class="cardContent">
                       <div id='test_array'>
                         <!-- SONAR -->
@@ -567,8 +582,10 @@
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap align-center>
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">{{ $t('message.settings_audio_title') }}</h3>
                   <v-card>
+                  <v-card-title>
+                    <h3 class="text-xs-left">{{ $t('message.settings_audio_title') }}</h3>
+                  </v-card-title>
                     <div class="cardContent">
                       {{ $t('message.settings_audio_volume') }}
                       <v-text-field v-model="settings.audioLevel" v-bind:label="$t('message.settings_audio_volume')"
@@ -580,29 +597,34 @@
               </v-layout>
             </v-container>
           </v-window-item>
-
           <!-- PACKAGE MANAGER -->
           <v-window-item>
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap align-center>
                 <v-col xs12 md6 offset-md3>
+                  <v-card>
+                  <v-card-title>
                   <h3 class="text-xs-left">{{ $t('message.settings_music_packages_title') }}</h3>
                   <br>
-                  <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_installed') }}</h3>
-                  <v-card v-for="pkgnames in settings.packagesInstalled" v-bind:key="pkgnames.key">
+                  <h4 class="text-xs-left"> {{ $t('message.settings_music_packages_installed') }}</h4>
+                  </v-card-title>
+                  <v-card-text v-for="pkgnames in settings.packagesInstalled" v-bind:key="pkgnames.key">
                     <div class="cardContent">
-                      <li> nome: <b>{{pkgnames[0][0]}}</b> {{ $t('message.settings_music_packages_type') }} <b>{{pkgnames[1]}} </b><span
+                      <b>{{pkgnames[0][0]}}</b> {{ $t('message.settings_music_packages_type') }} <b>{{pkgnames[1]}} </b><span
                           style="display: flex; justify-content: flex-end">
                           <v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
                             <v-icon icon="mdi-delete"></v-icon> {{ $t('message.settings_music_packages_remove') }}
                           </v-btn>
                         </span>
-                      </li>
                     </div>
+                  </v-card-text>
                   </v-card>
                   <br>
                   <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
                   <v-card>
+                  <v-card-title>
+                    <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
+                  </v-card-title>
                     <div class="cardContent">
                       <template v-if="updateStatus==1">
                         <b>{{ $t('message.settings_music_package_installed') }}</b>
@@ -958,7 +980,7 @@ export default {
       formdata: null,
       files: null,
       status: null,
-      dialog: false,
+      dialog_reset: false,
       dialog_logs: false,
       lastCommit: process.env.lastCommit,
       CB: process.env.CB_ENDPOINT + process.env.APIv2,
