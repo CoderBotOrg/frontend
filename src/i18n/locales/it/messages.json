@@ -171,6 +171,7 @@
     "settings_update_upload": "Caricamento del file:",
     "settings_update_select_file": "Seleziona il pacchetto di aggiornamento",
     "settings_update_text_1": "CoderBot verrà riavviato per applicare l'aggiornamento.",
+    "settings_hardware_version": "Versione scheda di controllo",
     "settings_movement_control": "Parametri modalità controllo",
     "settings_movement_program": "In modalità programmazione",
     "settings_movement_control_forward_speed": "Velocità spostamento",

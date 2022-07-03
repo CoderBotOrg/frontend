@@ -350,6 +350,22 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
+                    <h3 class="text-xs-left">{{ $t('message.settings_hardware_version') }}</h3>
+                  </v-card-title>
+                    <div class="cardContent">
+                      <v-select
+                        v-model="settings.hardwareVersion"
+                        :items="hardware_version_items"
+                        item-title="text"
+                        item-value="key"
+                        v-bind:label="$t('message.settings_hardware_version')"
+                        single-line
+                      />
+                    </div>
+                  </v-card>
+                  <br>
+                  <v-card>
+                  <v-card-title>
                     <h3 class="text-xs-left">{{ $t('message.settings_button_title') }}</h3>
                   </v-card-title>
                     <div class="cardContent">
@@ -715,7 +731,9 @@ export default {
   },
   name: 'Settings',
   setup() {
-    return { v$: useVuelidate() };
+    return {
+      v$: useVuelidate(),
+    };
   },
   mounted() {
     this.pollStatus();
@@ -892,7 +910,7 @@ export default {
       if (this.v$.$invalid) {
         this.snackText = this.$i18n.t('message.settings_errors');
         this.snackbar = true;
-        console.log(this.$v);
+        console.log(this.v$);
       } else {
         /* eslint-disable func-names, object-shorthand, prefer-arrow-callback */
         const needRestart = this.needRestart();
@@ -952,6 +970,7 @@ export default {
         cbName: true,
         btnFun: true,
         audioLevel: true,
+        hardwareVersion: true,
         moveFwdElapse: false,
         moveFwdSpeed: false,
         moveTurnElapse: false,
@@ -1015,6 +1034,7 @@ export default {
         wifiSSID: null,
         wifiPsw: null,
 
+        hardwareVersion: null,
         audioLevel: null,
         moveFwdElapse: null,
         moveFwdSpeed: null,
@@ -1040,6 +1060,12 @@ export default {
       },
       drawer: null,
       tab: null,
+      cnnModels: [],
+      dirty: false,
+      confirm_exit_dialog: null,
+      router_next: null,
+      adminPassword: null,
+      adminPassword_dialog: true,
       tabs: [
         this.$i18n.t('message.settings_tabs_general'),
         this.$i18n.t('message.settings_tabs_movement'),
@@ -1059,20 +1085,15 @@ export default {
         { text: 'Anti shake', key: 'antishake' },
         { text: 'Very long', key: 'verylong' }
       ],
-      cnnModels: [],
-      dirty: false,
-      confirm_exit_dialog: null,
-      router_next: null,
-      adminPassword: null,
-      adminPassword_dialog: true,
+      hardware_version_items: [
+        { key: '4', text: '4.0 (legacy)' },
+        { key: '5', text: '5.0 (latest)' }
+      ]
     };
   },
   validations() {
     return {
       settings: {
-        ctrl_hud_image: {
-          alpha
-        },
         cv_image_factor: {
           required: true
         },
@@ -1117,6 +1138,9 @@ export default {
         },
         cnn_default_model: {
           required
+        },
+        hardwareVersion: {
+          required,
         },
         wifiMode: {
           required,
