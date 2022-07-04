@@ -890,7 +890,7 @@ export default {
           // handle error
           console.log(error);
           if (this.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_online');
+            this.snackText = this.$i18n.t('message.coderbot_status_offline');
             this.snackbar = true;
           }
           this.status = 0;
