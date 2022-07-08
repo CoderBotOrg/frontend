@@ -43,3 +43,5 @@ Another build value you may want to edit it's `assetsPublicPath` in `config/inde
 ## Acknowledgments
 
 I'd like to sincere thank [uki](https://uki.nz/cv), cb109, Kael, ivansieder, Lloyd for helping me with vuejs/vuex/vuetify/javascript and providing appreciated insights and context.
+
+
