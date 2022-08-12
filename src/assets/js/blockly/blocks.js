@@ -1127,10 +1127,10 @@ Blockly.Blocks.coderbot_event_generator = {
 
 let coderbot_generator_id = 1;
 Blockly.Python.coderbot_event_generator = function (block) {
-  const INDENT_saved = Blockly.Generator.INDENT;
-  Blockly.Generator.INDENT = Blockly.Generator.INDENT + Blockly.Generator.INDENT;
+  const INDENT_saved = Blockly.Python.INDENT;
+  Blockly.Python.INDENT = Blockly.Python.INDENT + Blockly.Python.INDENT;
   const statements_event_generator = Blockly.Python.statementToCode(block, 'generator_statements');
-  Blockly.Generator.INDENT = INDENT_saved;
+  Blockly.Python.INDENT = INDENT_saved;
   const code = `def event_generator_${coderbot_generator_id}():\n${
     INDENT_saved}while True:\n${
     INDENT_saved}${INDENT_saved}get_prog_eng().check_end()\n${
@@ -1160,7 +1160,7 @@ Blockly.Python.coderbot_event_listener = function (block) {
   const event_topic = block.getFieldValue('event_topic');
   const event_statements = Blockly.Python.statementToCode(block, 'event_statements');
   const code = `def event_listener_${coderbot_listener_id}(message):\n${
-    Blockly.Generator.INDENT}event_data = json.loads(message)\n${
+    Blockly.Python.INDENT}event_data = json.loads(message)\n${
     event_statements}\n` +
     `get_event().register_event_listener('${event_topic}', event_listener_${coderbot_listener_id})`;
   coderbot_listener_id++;
