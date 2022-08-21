@@ -4,13 +4,13 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 // Main components
 import i18n from '../i18n/index';
 
-import landing from '../components/Landing';
-import control from '../components/Control';
-import activityEditor from '../components/ActivityEditor';
-import settings from '../components/Settings';
-import gallery from '../components/Gallery';
-import activityList from '../components/ActivityList';
-import activity from '../components/Activity';
+import landing from '../components/Landing.vue';
+import control from '../components/Control.vue';
+import activityEditor from '../components/ActivityEditor.vue';
+import settings from '../components/Settings.vue';
+import gallery from '../components/Gallery.vue';
+import activityList from '../components/ActivityList.vue';
+import activity from '../components/Activity.vue';
 // import help from '../components/Help'
 // import credits from '../components/Credits'
 

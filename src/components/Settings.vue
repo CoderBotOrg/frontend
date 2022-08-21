@@ -723,7 +723,7 @@ import {
   required, alpha, integer, decimal, between, minValue, maxValue
 } from '@vuelidate/validators';
 
-import sidebar from '../components/Sidebar';
+import sidebar from './Sidebar.vue';
 
 export default {
   components: {
@@ -1002,8 +1002,6 @@ export default {
       dialog_reset: false,
       dialog_logs: false,
       lastCommit: process.env.lastCommit,
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
-      CBv1: process.env.CB_ENDPOINT,
       snackbar: null,
       snackText: null,
       fileName: '',

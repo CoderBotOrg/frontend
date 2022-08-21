@@ -45,6 +45,8 @@ import CoderBot from './common/coderbot';
 const $axios = axios.create();
 const $coderbot = new CoderBot(process.env.CB_ENDPOINT, process.env.APIv1, process.env.APIv2, $axios, store);
 
+console.log(process.env.CB_ENDPOINT);
+
 // this will block until CoderBot returns several configuration data.
 $coderbot.load().then(() => {
   console.log('config loaded');

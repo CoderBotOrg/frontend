@@ -128,7 +128,7 @@
   </div>
 </template>
 <script>
-import sidebar from '../components/Sidebar';
+import sidebar from './Sidebar.vue';
 
 export default {
   components: {

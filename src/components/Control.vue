@@ -127,9 +127,7 @@
   </v-app>
 </template>
 <script>
-import sidebar from '../components/Sidebar';
-
-console.log(process.env.CB_ENDPOINT + process.env.APIv1);
+import sidebar from './Sidebar.vue';
 
 export default {
   components: {
@@ -138,16 +136,8 @@ export default {
   name: 'Control',
   methods: {
     say() {
-      const {
-        CBv1
-      } = this;
-      const axios = this.$axios;
-      axios.get(`${CBv1}/bot`, {
-        params: {
-          cmd: 'say',
-          param1: this.ttstext
-        }
-      }).then(() => {
+      this.$coderbot.speak(text=this.ttstext)
+      .then(() => {
         this.ttsBtnEnabled = false;
         this.ttsdialog = false;
         this.snackText = this.$i18n.t('message.control_speaking');
@@ -158,15 +148,8 @@ export default {
       });
     },
     takePhoto() {
-      const {
-        CBv1
-      } = this;
-      const axios = this.$axios;
-      axios.get(`${CBv1}/bot`, {
-        params: {
-          cmd: 'take_photo'
-        }
-      }).then(() => {
+      this.$coderbot.takePhoto()
+      .then(() => {
         this.snackText = this.$i18n.t('message.control_photo_taken');
         this.snackbar = true;
         this.photoBtnEnabled = false;
@@ -176,15 +159,8 @@ export default {
       });
     },
     play_note() {
-      const {
-        CBv1
-      } = this;
-      const axios = this.$axios;
-      axios.get(`${CBv1}/bot`, {
-        params: {
-          cmd: 'play_note'
-        }
-      }).then(() => {
+        this.$coderbot.playNote()
+        .then(() => {
         this.ttsBtnEnabled = false;
         this.ttsdialog = false;
         this.snackText = this.$i18n.t('message.control_sount_playing');
@@ -200,15 +176,8 @@ export default {
       else this.stopVideoRecording();
     },
     recordVideo() {
-      const {
-        CBv1
-      } = this;
-      const axios = this.$axios;
-      axios.get(`${CBv1}/bot`, {
-        params: {
-          cmd: 'video_rec'
-        }
-      }).then(() => {
+      this.$coderbot.recVideo()
+      .then(() => {
         this.snackText = this.$i18n.t('message.control_video_rec_started');
         this.snackbar = true;
         this.photoBtnEnabled = false;
@@ -218,15 +187,8 @@ export default {
       });
     },
     stopVideoRecording() {
-      const {
-        CBv1
-      } = this;
-      const axios = this.$axios;
-      axios.get(`${CBv1}/bot`, {
-        params: {
-          cmd: 'video_stop'
-        }
-      }).then(() => {
+        this.$coderbot.stopVideo()
+        .then(() => {
         this.snackText = this.$i18n.t('message.control_video_rec_stopped');
         this.snackbar = true;
         this.videoBtn.enabled = false;
@@ -240,11 +202,7 @@ export default {
       });
     },
     pollStatus() {
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
-      axios.get(`${CB}/status`)
+      this.$coderbot.status()
         .then((response) => {
           if (this.status == 0 && response.status) {
             this.snackText = this.$i18n.t('message.coderbot_status_online');
@@ -271,52 +229,44 @@ export default {
     },
     move(direction) {
       this.pressDuration = performance.now();
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
       if (direction == 0) {
         // UP, move forward
-        axios.post(`${CB}/move`, {
-          speed: 100,
-          elapse: -1,
-          distance: 0,
-        }).catch((error) => {
+        this.$coderbot.move(
+          speed=  100,
+          elapse=  -1,
+          distance= 0)
+        .catch((error) => {
           console.log(`move error: ${error}`);
         });
       } else if (direction == 1) {
         // RIGHT, turn right
-        axios.post(`${CB}/turn`, {
-          speed: -80,
-          elapse: -1,
-        }).catch((error) => {
+        this.$coderbot.turn(
+          speed= -80,
+          elapse= -1)
+        .catch((error) => {
           console.log(`turn error: ${error}`);
         });
       } else if (direction == 2) {
         // LEFT, turn left
-        axios.post(`${CB}/turn`, {
-          speed: 80,
-          elapse: -1,
-        }).catch((error) => {
+        this.$coderbot.turn(
+          speed= 80,
+          elapse= -1)
+        .catch((error) => {
           console.log(`turn error: ${error}`);
         });
       } else if (direction == 3) {
         // DOWN, move backwards
-        axios.post(`${CB}/move`, {
-          speed: -100,
-          elapse: -1,
-          distance: 0,
-        }).catch((error) => {
+        this.$coderbot.move(
+          speed=   -100,
+          elapse=  -1,
+          distance= 0)
+        .catch((error) => {
           console.log(`move error: ${error}`);
         });
       }
     },
     stop() {
       console.log('stopping');
-      const axios = this.$axios;
-      const {
-        CB
-      } = this;
       let {
         pressDuration
       } = this;
@@ -327,12 +277,14 @@ export default {
       if (pressDuration < 500) {
         console.log('Too fast, postponing it by', delay, 'ms..');
         setTimeout(() => {
-          axios.post(`${CB}/stop`).catch((error) => {
+          this.$coderbot.stop()
+          .catch((error) => {
             console.log(`stopping error: ${error}`);
           });
         }, delay);
       } else {
-        axios.post(`${CB}/stop`).catch((error) => {
+        this.$coderbot.stop()
+        .catch((error) => {
           console.log(`stop error: ${error}`);
         });
       }
@@ -344,9 +296,7 @@ export default {
       ttsdialog: false,
       snackText: null,
       snackbar: false,
-      webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
-      CBv1: process.env.CB_ENDPOINT + process.env.APIv1,
+      webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv2}/video/stream`,
       status: null,
       pressDuration: null,
       ttsBtnEnabled: true,

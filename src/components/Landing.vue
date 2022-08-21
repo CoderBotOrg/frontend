@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import sidebar from '../components/Sidebar';
+import sidebar from './Sidebar.vue';
 import image_1 from '../assets/images/coderbot_wide1.jpg';
 import image_2 from '../assets/images/coderbot_wide3.jpg';
 // import image_3 from '../assets/images/coderbot_wide4.jpg';

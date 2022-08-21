@@ -12,9 +12,10 @@ module.exports = {
 
   "extends": [
     "plugin:vue/base",
-    "plugin:vue/essential",
+    "plugin:vue/vue3-essential",
     "eslint:recommended",
     'airbnb-base',
+
   ],
 
   "parserOptions": {

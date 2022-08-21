@@ -360,8 +360,8 @@ import {
 } from '@vuelidate/validators';
 
 // import wsFactory from '../components/wsFactory';
-import sidebar from '../components/Sidebar';
-import ToolboxEditor from '../components/ToolboxEditor';
+import sidebar from './Sidebar.vue';
+import ToolboxEditor from './ToolboxEditor.vue';
 
 export default {
   name: 'ActivityEditor',

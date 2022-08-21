@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-Blockly = require('blockly');
+import Blockly from 'blockly';
 
 Blockly.HSV_SATURATION = 0.9;
 Blockly.HSV_VALUE = 0.7;
@@ -26,6 +26,8 @@ const sbsPrefix = '';
 
 Blockly.Blocks.CoderBotSettings = {};
 
+import imgRepeat from '@/assets/images/blocks/loop_repeat.png';
+
 Blockly.Blocks.coderbot_basic_repeat = {
   /**
    * Block for repeat n times (internal number).
@@ -35,7 +37,7 @@ Blockly.Blocks.coderbot_basic_repeat = {
     this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
     this.setColour(120);
     const di = this.appendDummyInput();
-    di.appendField(new Blockly.FieldImage('/static/images/blocks/loop_repeat.png', 32, 32, '*'));
+    di.appendField(new Blockly.FieldImage(imgRepeat, 32, 32, '*'));
     di.appendField(new Blockly.FieldTextInput('10',
       Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
     const si = this.appendStatementInput('DO');
@@ -58,13 +60,15 @@ Blockly.Python.coderbot_basic_repeat = function (block) {
   return code;
 };
 
+import imgMoveFwd from '@/assets/images/blocks/move_forward.png';
+
 Blockly.Blocks.coderbot_basic_moveForward = {
   // Block for moving forward.
   init() {
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
     this.setColour(40);
     const di = this.appendDummyInput();
-    di.appendField(new Blockly.FieldImage('/static/images/blocks/move_forward.png', 32, 32, '*'));
+    di.appendField(new Blockly.FieldImage(imgMoveFwd, 32, 32, '*'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('CoderBot_moveForwardTooltip');
@@ -79,13 +83,15 @@ Blockly.Python.coderbot_basic_moveForward = function (block) {
   return `${sbsPrefix}get_bot().forward(speed=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_SPEED}, elapse=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE})\n`;
 };
 
+import imgMoveBack from '@/assets/images/blocks/move_backward.png';
+
 Blockly.Blocks.coderbot_basic_moveBackward = {
   // Block for moving forward.
   init() {
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
     this.setColour(40);
     const di = this.appendDummyInput();
-    di.appendField(new Blockly.FieldImage('/static/images/blocks/move_backward.png', 32, 32, '*'));
+    di.appendField(new Blockly.FieldImage(imgMoveBack, 32, 32, '*'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('CoderBot_moveBackwardTooltip');
@@ -100,13 +106,15 @@ Blockly.Python.coderbot_basic_moveBackward = function (block) {
   return `${sbsPrefix}get_bot().backward(speed=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_SPEED}, elapse=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE})\n`;
 };
 
+import imgMoveLeft from '@/assets/images/blocks/move_left.png';
+
 Blockly.Blocks.coderbot_basic_turnLeft = {
   // Block for turning left.
   init() {
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
     this.setColour(40);
     const di = this.appendDummyInput();
-    di.appendField(new Blockly.FieldImage('/static/images/blocks/move_left.png', 32, 32, '*'));
+    di.appendField(new Blockly.FieldImage(imgMoveLeft, 32, 32, '*'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_turnTooltip'));
@@ -124,13 +132,15 @@ Blockly.Python.coderbot_basic_turnLeft = function (block) {
   return `${sbsPrefix}get_bot().left(speed=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED}, elapse=${Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE})\n`;
 };
 
+import imgMoveRight from '@/assets/images/blocks/move_right.png';
+
 Blockly.Blocks.coderbot_basic_turnRight = {
   // Block for turning right.
   init() {
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
     this.setColour(40);
     const di = this.appendDummyInput();
-    di.appendField(new Blockly.FieldImage('/static/images/blocks/move_right.png', 32, 32, '*'));
+    di.appendField(new Blockly.FieldImage(imgMoveRight, 32, 32, '*'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_turnTooltip'));
@@ -213,6 +223,9 @@ Blockly.Python['coderbot_move_servo'] = function(block) {
   var code = "get_bot().servo(servo=" + servo + ", angle=" + angle + ")\n";
   return code;
 };
+
+import imgSay from '@/assets/images/blocks/say.png';
+
 Blockly.Blocks.coderbot_basic_audio_say = {
   // Block for text to speech.
   init() {
@@ -220,7 +233,7 @@ Blockly.Blocks.coderbot_basic_audio_say = {
     this.setColour(220);
     const vi = this.appendValueInput('TEXT');
     vi.setCheck(['String', 'Number', 'Date']);
-    vi.appendField(new Blockly.FieldImage('/static/images/blocks/say.png', 32, 32, '*'));
+    vi.appendField(new Blockly.FieldImage(imgSay, 32, 32, '*'));
     vi.appendField(new Blockly.FieldDropdown([
       [Blockly.Msg.CODERBOT_LOCALE_EN, 'en'],
       [Blockly.Msg.CODERBOT_LOCALE_IT, 'it'],
@@ -252,20 +265,10 @@ Blockly.Blocks.coderbot_repeat = {
     this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
     this.setColour(120);
     const di = this.appendDummyInput();
-    if (Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL.indexOf('basic') >= 0) {
-      di.appendField(new Blockly.FieldImage('/static/images/blocks/loop_repeat.png', 32, 32, '*'));
-    } else {
-      di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT);
-    }
+    di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT);
     di.appendField(new Blockly.FieldTextInput('10',
       Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES');
-    if (Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL.indexOf('basic') < 0) {
-      di.appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES);
-    }
     const si = this.appendStatementInput('DO');
-    if (Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL.indexOf('basic') < 0) {
-      si.appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-    }
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_REPEAT_TOOLTIP);
@@ -726,13 +729,15 @@ Blockly.Python.coderbot_camera_photoTake = function (block) {
   return `${sbsPrefix}get_cam().photo_take()\n`;
 };
 
+import imgPhotoTake from '@/assets/images/blocks/photo_take.png';
+
 Blockly.Blocks.coderbot_basic_camera_photoTake = {
   // Block for taking a picture.
   init() {
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Turn');
     this.setColour(120);
     const di = this.appendDummyInput();
-    di.appendField(new Blockly.FieldImage('/static/images/blocks/photo_take.png', 32, 32, '*'));
+    di.appendField(new Blockly.FieldImage(imgPhotoTake, 32, 32, '*'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_PhotoTooltip'));
@@ -763,6 +768,8 @@ Blockly.Python.coderbot_camera_videoRec = function (block) {
   return `${sbsPrefix}get_cam().video_rec()\n`;
 };
 
+import imgVideoRec from '@/assets/images/blocks/video_rec.png';
+
 Blockly.Blocks.coderbot_basic_camera_videoRec = {
   // Block for recording a video (start).
   init() {
@@ -770,7 +777,7 @@ Blockly.Blocks.coderbot_basic_camera_videoRec = {
     this.setColour(120);
 
     const di = this.appendDummyInput();
-    di.appendField(new Blockly.FieldImage('/static/images/blocks/video_rec.png', 32, 32, '*'));
+    di.appendField(new Blockly.FieldImage(imgVideoRec, 32, 32, '*'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_VideoTooltip'));
@@ -801,6 +808,8 @@ Blockly.Python.coderbot_camera_videoStop = function (block) {
   return `${sbsPrefix}get_cam().video_stop()\n`;
 };
 
+import imgVideoStop from '@/assets/images/blocks/video_stop.png';
+
 Blockly.Blocks.coderbot_basic_camera_videoStop = {
   // Block for recording a video (stop).
   init() {
@@ -808,7 +817,7 @@ Blockly.Blocks.coderbot_basic_camera_videoStop = {
     this.setColour(120);
 
     const di = this.appendDummyInput();
-    di.appendField(Blockly.Msg.CODERBOT_VIDEO_STOP);
+    di.appendField(new Blockly.FieldImage(imgVideoStop, 32, 32, '*'));
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(('CoderBot_VideoTooltip'));
@@ -1365,11 +1374,13 @@ Blockly.Blocks.coderbot_audio_listen = {
   },
 };
 
+import imgMusicNote from '@/assets/images/blocks/musical_note.png';
+
 Blockly.Blocks.coderbot_music_note_basic = {
   init() {
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_CENTRE)
-      .appendField(new Blockly.FieldImage('/static/images/blocks/musical_note.png', 30, 30, {
+      .appendField(new Blockly.FieldImage(imgMusicNote, 30, 30, {
         alt: 'note',
         flipRtl: 'FALSE'
       }))
@@ -1403,7 +1414,7 @@ Blockly.Python.coderbot_music_note_basic = function (block) {
 Blockly.Blocks.coderbot_animal_verse_basic = {
   init() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldImage('/static/images/blocks/animal.png', 30, 30, {
+      .appendField(new Blockly.FieldImage(imgMusicAnimal, 30, 30, {
         alt: '*',
         flipRtl: 'FALSE'
       }))
@@ -1424,10 +1435,12 @@ Blockly.Python.coderbot_animal_verse_basic = function (block) {
   return code;
 };
 
+import imgMusicPause from '@/assets/images/blocks/pause_symbol.png';
+
 Blockly.Blocks.coderbot_music_pause_basic = {
   init() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldImage('/static/images/blocks/pause_symbol.png', 30, 30, {
+      .appendField(new Blockly.FieldImage(imgMusicPause, 30, 30, {
         alt: '*',
         flipRtl: 'FALSE'
       }))
@@ -1449,7 +1462,7 @@ Blockly.Python.coderbot_music_pause_basic = function (block) {
 Blockly.Blocks.coderbot_music_note_std = {
   init() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldImage('/static/images/blocks/musical_note.png', 30, 30, {
+      .appendField(new Blockly.FieldImage(imgMusicNote, 30, {
         alt: 'note',
         flipRtl: 'FALSE'
       }))
@@ -1494,10 +1507,12 @@ Blockly.Python.coderbot_music_note_std = function (block) {
   return code;
 };
 
+import imgMusicAnimal from '@/assets/images/blocks/animal.png';
+
 Blockly.Blocks.coderbot_animal_verse_std = {
   init() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldImage('/static/images/blocks/animal.png', 30, 30, {
+      .appendField(new Blockly.FieldImage(imgMusicAnimal, 30, 30, {
         alt: 'note',
         flipRtl: 'FALSE'
       }))
@@ -1545,7 +1560,7 @@ Blockly.Python.coderbot_animal_verse_std = function (block) {
 Blockly.Blocks.coderbot_music_pause_std = {
   init() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldImage('/static/images/blocks/pause_symbol.png', 30, 30, {
+      .appendField(new Blockly.FieldImage(imgMusicPause, 30, 30, {
         alt: '*',
         flipRtl: 'FALSE'
       }))

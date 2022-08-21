@@ -98,16 +98,14 @@
           </v-card-title>
           <v-list>
             <v-list-item v-for="program in programList" :key="program.el" @click="{}">
-              <v-list-item-header>
               <v-list-item-title ripple @click="loadProgram(program.name)">
                 {{ program.name }}
               </v-list-item-title>
-              </v-list-item-header>
-              <v-list-item-avatar end>
+            <template v-slot:prepend>
               <v-btn v-if="program.default != 'True'" @click="deleteProgramDlg(program.name)">
                 <v-icon icon="mdi-delete"></v-icon>
               </v-btn>
-              </v-list-item-avatar>
+            </template>
             </v-list-item>
           </v-list>
           <v-card-actions>
@@ -304,8 +302,8 @@ import 'prismjs';
 import 'prismjs/components/prism-python.js';
 import Prism from 'vue-prism-component';
 import { useTheme } from 'vuetify';
-import sidebar from './Sidebar';
-import BlocklyWorkspace from './BlocklyWorkspace';
+import sidebar from './Sidebar.vue';
+import BlocklyWorkspace from './BlocklyWorkspace.vue';
 
 export default {
   name: 'Activity',
@@ -317,8 +315,6 @@ export default {
   setup() {
     return {
       theme: useTheme(),
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
-      CBv1: process.env.CB_ENDPOINT,
     };
   },
   data: () => ({
@@ -396,15 +392,7 @@ export default {
       this.settings.maxBlocks = this.activity.maxBlocks;
       this.updateCssProps();
 
-      let toolboxJSON = null;
-      if (this.activity.toolbox == null) {
-        const toolboxLevel = this.settings.progLevel;
-        // Decode it and get the clean serialized XML as plain string
-        toolboxJSON = require(`../assets/toolbox_${toolboxLevel}.json`);
-      } else {
-        toolboxJSON = this.activity.toolbox;
-      }
-      this.toolbox = toolboxJSON;
+      this.toolbox = this.activity.toolbox;
     });
 
     this.status = null;
