@@ -1001,7 +1001,7 @@ export default {
       status: null,
       dialog_reset: false,
       dialog_logs: false,
-      lastCommit: process.env.lastCommit,
+      lastCommit: 'N/A',
       snackbar: null,
       snackText: null,
       fileName: '',

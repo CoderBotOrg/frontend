@@ -2,7 +2,7 @@
   "name": "frontend-vite",
   "version": "0.0.0",
   "scripts": {
-    "dev": "NODE_ENV=development vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "",

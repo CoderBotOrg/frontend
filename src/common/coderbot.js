@@ -2,8 +2,8 @@ import i18n from '../i18n/index';
 import * as toolbox_full from '../assets/toolbox_adv.json';
 
 class CoderBot {
-  constructor(CB, APIv1, APIv2, axios, store) {
-    this.CB = CB + APIv2;
+  constructor(CB, axios, store) {
+    this.CB = CB + '/v1';
     this.$axios = axios;
     this.$store = store;
     this.$i18n = i18n;
@@ -362,16 +362,16 @@ class CoderBot {
 
   move(speed, elapse, distance) {
     return this.$axios.post(`${this.CB}/control/move`, {
-      speed: speed,
-      elapse: elapse,
-      distance: distance
+      speed,
+      elapse,
+      distance
     });
   }
 
   turn(speed, elapse) {
     return this.$axios.post(`${this.CB}/control/turn`, {
-      speed: speed,
-      elapse: elapse
+      speed,
+      elapse
     });
   }
 
@@ -386,7 +386,7 @@ class CoderBot {
   }
 
   takePhoto() {
-    return this.$axios.post(`${this.CB}/photos/take`);
+    return this.$axios.post(`${this.CB}/photos`);
   }
 
   recVideo() {
@@ -396,6 +396,23 @@ class CoderBot {
   stopVideo() {
     return this.$axios.post(`${this.CB}/video/stop`);
   }
+
+  streamVideoURL() {
+    return `${this.CB}/video/stream`;
+  }
+
+  getPhotos() {
+    return this.$axios.get(`${this.CB}/photos`);
+  }
+
+  deletePhoto(name) {
+    return this.$axios.delete(`${this.CB}/photos${name}`);
+  }
+
+  getPhotoURL(name) {
+    return `${this.CB}/video/stream`;
+  }
+
 }
 
 export default CoderBot;

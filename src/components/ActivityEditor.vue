@@ -422,7 +422,6 @@ export default {
   data() {
     return {
       saved: false,
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
       snackbar: false,
       colorPicker: false,
       iconPicker: false,

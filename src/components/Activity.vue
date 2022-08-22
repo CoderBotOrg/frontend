@@ -351,7 +351,7 @@ export default {
     invalidName: false,
     del: false,
     clear: false,
-    webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
+    webcamStream: null,
     runtimeDialog: false,
     isDefault: '',
     cannotOverwrite: false,
@@ -375,6 +375,7 @@ export default {
     },
   },
   mounted() {
+    this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
     // Get the activity
     let activityName = this.$route.params.name;

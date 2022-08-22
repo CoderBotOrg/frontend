@@ -136,39 +136,39 @@ export default {
   name: 'Control',
   methods: {
     say() {
-      this.$coderbot.speak(text=this.ttstext)
-      .then(() => {
-        this.ttsBtnEnabled = false;
-        this.ttsdialog = false;
-        this.snackText = this.$i18n.t('message.control_speaking');
-        this.snackbar = true;
-        setTimeout(() => {
-          this.ttsBtnEnabled = true;
-        }, this.ttstext.length * 200);
-      });
+      this.$coderbot.speak(text = this.ttstext)
+        .then(() => {
+          this.ttsBtnEnabled = false;
+          this.ttsdialog = false;
+          this.snackText = this.$i18n.t('message.control_speaking');
+          this.snackbar = true;
+          setTimeout(() => {
+            this.ttsBtnEnabled = true;
+          }, this.ttstext.length * 200);
+        });
     },
     takePhoto() {
       this.$coderbot.takePhoto()
-      .then(() => {
-        this.snackText = this.$i18n.t('message.control_photo_taken');
-        this.snackbar = true;
-        this.photoBtnEnabled = false;
-        setTimeout(() => {
-          this.photoBtnEnabled = true;
-        }, 1000);
-      });
+        .then(() => {
+          this.snackText = this.$i18n.t('message.control_photo_taken');
+          this.snackbar = true;
+          this.photoBtnEnabled = false;
+          setTimeout(() => {
+            this.photoBtnEnabled = true;
+          }, 1000);
+        });
     },
     play_note() {
-        this.$coderbot.playNote()
+      this.$coderbot.playNote()
         .then(() => {
-        this.ttsBtnEnabled = false;
-        this.ttsdialog = false;
-        this.snackText = this.$i18n.t('message.control_sount_playing');
-        this.snackbar = true;
-        setTimeout(() => {
-          this.ttsBtnEnabled = true;
-        }, 800);
-      });
+          this.ttsBtnEnabled = false;
+          this.ttsdialog = false;
+          this.snackText = this.$i18n.t('message.control_sount_playing');
+          this.snackbar = true;
+          setTimeout(() => {
+            this.ttsBtnEnabled = true;
+          }, 800);
+        });
     },
 
     videoHandler() {
@@ -177,29 +177,29 @@ export default {
     },
     recordVideo() {
       this.$coderbot.recVideo()
-      .then(() => {
-        this.snackText = this.$i18n.t('message.control_video_rec_started');
-        this.snackbar = true;
-        this.photoBtnEnabled = false;
-        this.videoBtn.text = this.$i18n.t('message.control_video_rec_started');
-        this.videoBtn.icon = 'stop';
-        this.videoBtn.action = 'stop';
-      });
+        .then(() => {
+          this.snackText = this.$i18n.t('message.control_video_rec_started');
+          this.snackbar = true;
+          this.photoBtnEnabled = false;
+          this.videoBtn.text = this.$i18n.t('message.control_video_rec_started');
+          this.videoBtn.icon = 'stop';
+          this.videoBtn.action = 'stop';
+        });
     },
     stopVideoRecording() {
-        this.$coderbot.stopVideo()
+      this.$coderbot.stopVideo()
         .then(() => {
-        this.snackText = this.$i18n.t('message.control_video_rec_stopped');
-        this.snackbar = true;
-        this.videoBtn.enabled = false;
-        this.videoBtn.action = 'record';
-        setTimeout(() => {
-          this.videoBtn.enabled = true;
-          this.videoBtn.text = this.$i18n.t('message.control_video_rec');
-          this.videoBtn.icon = 'video-box';
-          this.photoBtnEnabled = true;
-        }, 1000);
-      });
+          this.snackText = this.$i18n.t('message.control_video_rec_stopped');
+          this.snackbar = true;
+          this.videoBtn.enabled = false;
+          this.videoBtn.action = 'record';
+          setTimeout(() => {
+            this.videoBtn.enabled = true;
+            this.videoBtn.text = this.$i18n.t('message.control_video_rec');
+            this.videoBtn.icon = 'video-box';
+            this.photoBtnEnabled = true;
+          }, 1000);
+        });
     },
     pollStatus() {
       this.$coderbot.status()
@@ -232,37 +232,41 @@ export default {
       if (direction == 0) {
         // UP, move forward
         this.$coderbot.move(
-          speed=  100,
-          elapse=  -1,
-          distance= 0)
-        .catch((error) => {
-          console.log(`move error: ${error}`);
-        });
+          speed = 100,
+          elapse = -1,
+          distance = 0
+        )
+          .catch((error) => {
+            console.log(`move error: ${error}`);
+          });
       } else if (direction == 1) {
         // RIGHT, turn right
         this.$coderbot.turn(
-          speed= -80,
-          elapse= -1)
-        .catch((error) => {
-          console.log(`turn error: ${error}`);
-        });
+          speed = -80,
+          elapse = -1
+        )
+          .catch((error) => {
+            console.log(`turn error: ${error}`);
+          });
       } else if (direction == 2) {
         // LEFT, turn left
         this.$coderbot.turn(
-          speed= 80,
-          elapse= -1)
-        .catch((error) => {
-          console.log(`turn error: ${error}`);
-        });
+          speed = 80,
+          elapse = -1
+        )
+          .catch((error) => {
+            console.log(`turn error: ${error}`);
+          });
       } else if (direction == 3) {
         // DOWN, move backwards
         this.$coderbot.move(
-          speed=   -100,
-          elapse=  -1,
-          distance= 0)
-        .catch((error) => {
-          console.log(`move error: ${error}`);
-        });
+          speed = -100,
+          elapse = -1,
+          distance = 0
+        )
+          .catch((error) => {
+            console.log(`move error: ${error}`);
+          });
       }
     },
     stop() {
@@ -278,15 +282,15 @@ export default {
         console.log('Too fast, postponing it by', delay, 'ms..');
         setTimeout(() => {
           this.$coderbot.stop()
-          .catch((error) => {
-            console.log(`stopping error: ${error}`);
-          });
+            .catch((error) => {
+              console.log(`stopping error: ${error}`);
+            });
         }, delay);
       } else {
         this.$coderbot.stop()
-        .catch((error) => {
-          console.log(`stop error: ${error}`);
-        });
+          .catch((error) => {
+            console.log(`stop error: ${error}`);
+          });
       }
     },
   },
@@ -296,7 +300,7 @@ export default {
       ttsdialog: false,
       snackText: null,
       snackbar: false,
-      webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv2}/video/stream`,
+      webcamStream: this.$coderbot.streamVideoURL(),
       status: null,
       pressDuration: null,
       ttsBtnEnabled: true,

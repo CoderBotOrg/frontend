@@ -43,9 +43,8 @@ import CoderBot from './common/coderbot';
 // https://github.com/axios/axios/issues/350#issuecomment-227270046
 
 const $axios = axios.create();
-const $coderbot = new CoderBot(process.env.CB_ENDPOINT, process.env.APIv1, process.env.APIv2, $axios, store);
-
-console.log(process.env.CB_ENDPOINT);
+const CB_ENDPOINT = import.meta.env.DEV == true ? 'http://localhost:8090' : 'http://localhost:8090';
+const $coderbot = new CoderBot(CB_ENDPOINT, $axios, store);
 
 // this will block until CoderBot returns several configuration data.
 $coderbot.load().then(() => {

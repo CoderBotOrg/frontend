@@ -22,14 +22,14 @@
                       max-width="256"
                       >
                       <a class="text-decoration-none" @click="photo=photos[n-1]; gallery_detail=true">
-                      <v-img v-if="photos[n-1].type=='jpg'" :src="CBv1+'/photos/'+photos[n-1].thumbName" class="grey lighten-2">
+                      <v-img v-if="photos[n-1].type=='jpg'" :src="getPhotoURL(photos[n-1].thumbName)" class="grey lighten-2">
                         <template v-slot:placeholder>
                         <v-row class="fill-height ma-0" align="center" justify="center">
                           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                         </v-row>
                         </template>
                       </v-img>
-                      <v-img v-else-if="photos[n-1].type=='mp4'" :src="CBv1+'/photos/'+photos[n-1].thumbName" class="grey lighten-2">
+                      <v-img v-else-if="photos[n-1].type=='mp4'" :src="getPhotoURL(photos[n-1].thumbName)" class="grey lighten-2">
                         <template v-slot:placeholder>
                         <v-row class="fill-height ma-0" align="center" justify="center">
                           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -56,14 +56,14 @@
                     {{ photo.name }}
                   </v-card-title>
                   <v-card-text>
-                  <v-img v-if="photo.type=='jpg'" height="100%" :src="CBv1+'/photos/'+photo.fileName" class="grey lighten-2" ref="photo" @click="getPixelColor">
+                  <v-img v-if="photo.type=='jpg'" height="100%" :src="getPhotoURL(photos[n-1].thumbName)" class="grey lighten-2" ref="photo" @click="getPixelColor">
                   <template v-slot:placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
                       <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                     </v-row>
                     </template>
                   </v-img>
-                  <video v-else-if="photo.type=='mp4'" controls autoplay :src="CBv1+'/photos/'+photo.fileName"/>
+                  <video v-else-if="photo.type=='mp4'" controls autoplay :src="getPhotoURL(photo.fileName)"/>
                   </v-card-text>
                   <v-card-actions>
                     <v-btn-toggle
@@ -140,12 +140,8 @@ export default {
   },
   methods: {
     getPhotos() {
-      const axios = this.$axios;
-      const {
-        CBv1
-      } = this;
       this.photos = [];
-      axios.get(`${CBv1}/photos`)
+      this.$coderbot.getPhotos()
         .then((response) => {
           response.data.forEach((element) => {
             this.photos.push(
@@ -160,12 +156,11 @@ export default {
           this.photo = {};
         });
     },
+    getPhotoURL(name) {
+      return this.$coderbot.getPhotoURL(name);
+    },
     deletePhoto(name) {
-      const axios = this.$axios;
-      const {
-        CBv1
-      } = this;
-      axios.delete(`${CBv1}/photos/${name}`)
+      this.$coderbot.deletePhoto(name)
         .then(() => {
           this.getPhotos();
         });
@@ -198,8 +193,6 @@ export default {
   },
   data() {
     return {
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
-      CBv1: process.env.CB_ENDPOINT + process.env.APIv1,
       photos: [],
       drawer: null,
       l: null,
