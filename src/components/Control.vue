@@ -232,9 +232,9 @@ export default {
       if (direction == 0) {
         // UP, move forward
         this.$coderbot.move(
-          speed = 100,
-          elapse = -1,
-          distance = 0
+          100, // speed
+          -1,  // elapse
+          null    // distance
         )
           .catch((error) => {
             console.log(`move error: ${error}`);
@@ -242,8 +242,8 @@ export default {
       } else if (direction == 1) {
         // RIGHT, turn right
         this.$coderbot.turn(
-          speed = -80,
-          elapse = -1
+          -80, // speed
+          -1   // elapse
         )
           .catch((error) => {
             console.log(`turn error: ${error}`);
@@ -251,8 +251,8 @@ export default {
       } else if (direction == 2) {
         // LEFT, turn left
         this.$coderbot.turn(
-          speed = 80,
-          elapse = -1
+          80, // speed
+          -1   // elapse
         )
           .catch((error) => {
             console.log(`turn error: ${error}`);
@@ -260,9 +260,9 @@ export default {
       } else if (direction == 3) {
         // DOWN, move backwards
         this.$coderbot.move(
-          speed = -100,
-          elapse = -1,
-          distance = 0
+          -100, // speed
+          -1,  // elapse
+          null    // distance
         )
           .catch((error) => {
             console.log(`move error: ${error}`);

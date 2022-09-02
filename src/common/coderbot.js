@@ -109,7 +109,7 @@ class CoderBot {
   async loadMusicPackages() {
     const result = await this.$axios.get(`${this.CB}/music/packages`);
     const packagesInstalled = [];
-    const music_packages = JSON.parse(result.data);
+    const music_packages = result.data;
     const musicInstruments = [];
     const musicAnimals = [];
     Object.entries(music_packages).forEach((key) => {
@@ -132,7 +132,7 @@ class CoderBot {
   async loadCNNModels() {
     const result = await this.$axios.get(`${this.CB}/cnnmodels`);
     const cnnModels = [];
-    const cnn_models = JSON.parse(result.data);
+    const cnn_models = result.data;
     Object.entries(cnn_models).forEach((entry) => {
       const model_key = entry[0];
       // const model_data = entry[1];
@@ -306,9 +306,7 @@ class CoderBot {
   }
 
   saveActivity(an_activity) {
-    return this.$axios.post(`${this.CB}/activities`, {
-      activity: an_activity
-    });
+    return this.$axios.post(`${this.CB}/activities`, an_activity);
   }
 
   saveProgram(overwrite, name, dom_code, code, is_default) {
@@ -322,7 +320,7 @@ class CoderBot {
   }
 
   listPrograms() {
-    return this.$axios.get(`${this.CB}/programs/list`);
+    return this.$axios.get(`${this.CB}/programs`);
   }
 
   loadProgram(name) {
@@ -335,17 +333,16 @@ class CoderBot {
     });
   }
 
-  runProgram(name, dom_code, code, options) {
+  runProgram(name, code, options) {
     return this.$axios.post(`${this.CB}/programs/${name}/run`, {
       name: 'run program',
-      dom_code,
-      code,
-      options
+      code: code,
+      options: options
     });
   }
 
   stopProgram(name) {
-    return this.$axios.post(`${this.CB}/programs/${name}/end`);
+    return this.$axios.patch(`${this.CB}/programs/${name}/stop`, {});
   }
 
   programStatus(name) {
@@ -362,16 +359,16 @@ class CoderBot {
 
   move(speed, elapse, distance) {
     return this.$axios.post(`${this.CB}/control/move`, {
-      speed,
-      elapse,
-      distance
+      speed: speed,
+      elapse: elapse,
+      distance: distance
     });
   }
 
   turn(speed, elapse) {
     return this.$axios.post(`${this.CB}/control/turn`, {
-      speed,
-      elapse
+      speed: speed,
+      elapse: elapse
     });
   }
 

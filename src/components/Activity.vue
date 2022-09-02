@@ -315,33 +315,33 @@ export default {
   setup() {
     return {
       theme: useTheme(),
+      settings: null,
+      cssProps: {
+        '--bodyFont': 'Roboto',
+        '--codeFont': 'Ubuntu Mono',
+      },
+      experimental: 0,
+      webcamStream: null,
+      isDefault: '',
     };
   },
   data: () => ({
-    cssProps: {
-      '--bodyFont': 'Roboto',
-      '--codeFont': 'Ubuntu Mono',
-    },
-    activityStyle: null,
     activity: {
       exec: {},
     },
+    toolbox: null,
+    dialog: false,
+    dialogCode: false,
     log: null,
-    settings: null,
     snackText: null,
     snackbar: false,
     drawer: false,
-    tabs: null,
-    dialog: false,
-    dialogCode: false,
     status: null,
     info: null,
     code: '',
-    toolbox: null,
     generalDialog: false,
     generalDialogText: null,
     generalDialogTitle: null,
-    experimental: 0,
     execMode: 'fullExec', // can be 'fullExec' or 'stepByStep',
     carica: false,
     programList: '',
@@ -351,9 +351,7 @@ export default {
     invalidName: false,
     del: false,
     clear: false,
-    webcamStream: null,
     runtimeDialog: false,
-    isDefault: '',
     cannotOverwrite: false,
     defaultProgramName: '',
     overwrite: true,
@@ -641,8 +639,8 @@ export default {
       if (this.status) {
         // POST /program/save
         const options = this.activity;
-        const { dom_code, code } = this.$refs.workspace.getProgramData();
-        this.$coderbot.execProgram(dom_code, code, options).then(() => {
+        const { code } = this.$refs.workspace.getProgramData();
+        this.$coderbot.runProgram(this.programName, code, options).then(() => {
           this.runtimeDialog = true;
           setTimeout(() => {
             this.updateExecStatus();
