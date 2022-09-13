@@ -18,31 +18,31 @@
         </v-col>
         <br>
         <div style="font-size: 18px;"> {{ $t("message.choose_action") }} </div>
-        <v-container>
-          <v-row>
+        <v-container align="center">
+          <v-row >
             <v-col>
-              <v-btn color="indigo" to="/program">
+              <v-btn color="indigo" size="large" to="/program" class="md4">
                 <v-icon icon="mdi-flip-to-front"></v-icon>{{ $t("message.program") }}
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-btn color="indigo" target="_blank" href="/docs">
+              <v-btn color="indigo" size="large" target="_blank" href="/docs">
                 <v-icon icon="mdi-help"></v-icon>{{ $t("message.docs") }}
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-btn color="indigo" to="/control">
+              <v-btn color="indigo" size="large" to="/control">
                 <v-icon icon="mdi-gamepad"></v-icon>{{ $t("message.control") }}
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-btn color="indigo" to="/settings">
+              <v-btn color="indigo" size="large" to="/settings">
                 <v-icon icon="mdi-cog"></v-icon>{{ $t("message.settings") }}
               </v-btn>
             </v-col>

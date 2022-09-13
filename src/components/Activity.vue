@@ -638,9 +638,9 @@ export default {
     runProgram() {
       if (this.status) {
         // POST /program/save
-        const options = this.activity;
         const { code } = this.$refs.workspace.getProgramData();
-        this.$coderbot.runProgram(this.programName, code, options).then(() => {
+        const programName = this.programName != '' ? this.programName : 'untitled';
+        this.$coderbot.runProgram(programName, code).then(() => {
           this.runtimeDialog = true;
           setTimeout(() => {
             this.updateExecStatus();

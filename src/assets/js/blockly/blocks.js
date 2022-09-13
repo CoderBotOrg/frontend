@@ -989,25 +989,27 @@ Blockly.Blocks.coderbot_adv_findText = {
     this.appendDummyInput()
       .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_FIND)
       .appendField(new Blockly.FieldDropdown([
-        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHA, 'alpha'],
-        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_NUM, 'num'],
-        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ALPHANUM, 'alphanum'],
-        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_UNSPEC, 'unspec'],
+        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ENG, 'eng'],
+        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_ITA, 'ita'],
+        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_SPA, 'spa'],
+        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_FRE, 'fra'],
+        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_DEU, 'deu'],
+        [Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_ACCEPT_UNSPEC, ''],
       ]), 'ACCEPT')
-      .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_COLOR);
-    this.appendValueInput('COLOR')
-      .setCheck(['Colour', 'String']);
+      .appendField(Blockly.Msg.CODERBOT_SENSOR_FINDTEXT_TIMEOUT);
+    this.appendValueInput('TIMEOUT')
+      .setCheck('Number');
     this.setInputsInline(true);
-    this.setOutput(true, ['Number', 'Array']);
+    this.setOutput(true, ['String']);
     this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
   },
 };
 
 Blockly.Python.coderbot_adv_findText = function (block) {
   // Boolean values true and false.
-  const accept = block.getFieldValue('ACCEPT');
-  const color = Blockly.Python.valueToCode(block, 'COLOR', Blockly.Python.ORDER_NONE);
-  const code = `get_cam().find_text(accept="${accept}", back_color=${color})`;
+  const lang = block.getFieldValue('ACCEPT');
+  const timeout = Blockly.Python.valueToCode(block, 'TIMEOUT', Blockly.Python.ORDER_NONE);
+  const code = `get_cam().find_text(lang="${lang}", timeout=${timeout})`;
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

@@ -333,11 +333,10 @@ class CoderBot {
     });
   }
 
-  runProgram(name, code, options) {
+  runProgram(name, code) {
     return this.$axios.post(`${this.CB}/programs/${name}/run`, {
-      name: 'run program',
+      name: name,
       code: code,
-      options: options
     });
   }
 
