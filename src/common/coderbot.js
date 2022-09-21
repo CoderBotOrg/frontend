@@ -3,7 +3,7 @@ import * as toolbox_full from '../assets/toolbox_adv.json';
 
 class CoderBot {
   constructor(CB, axios, store) {
-    this.CB = CB + '/v1';
+    this.CB = CB + '/api/v1';
     this.$axios = axios;
     this.$store = store;
     this.$i18n = i18n;
