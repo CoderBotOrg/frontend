@@ -375,14 +375,15 @@ class CoderBot {
     return this.$axios.post(`${this.CB}/control/stop`);
   }
 
-  speak(text) {
+  speak(text, locale) {
     return this.$axios.post(`${this.CB}/control/speak`, {
-      param1: text
+      text: text,
+      locale: locale
     });
   }
 
   takePhoto() {
-    return this.$axios.post(`${this.CB}/photos`);
+    return this.$axios.post(`${this.CB}/media`);
   }
 
   recVideo() {
@@ -398,15 +399,15 @@ class CoderBot {
   }
 
   getPhotos() {
-    return this.$axios.get(`${this.CB}/photos`);
+    return this.$axios.get(`${this.CB}/media`);
   }
 
   deletePhoto(name) {
-    return this.$axios.delete(`${this.CB}/photos${name}`);
+    return this.$axios.delete(`${this.CB}/media/${name}`);
   }
 
   getPhotoURL(name) {
-    return `${this.CB}/video/stream`;
+    return `${this.CB}/media/${name}`;
   }
 
 }

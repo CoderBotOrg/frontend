@@ -102,7 +102,7 @@
                 {{ program.name }}
               </v-list-item-title>
             <template v-slot:prepend>
-              <v-btn v-if="program.default != 'True'" @click="deleteProgramDlg(program.name)">
+              <v-btn v-if="program.default" @click="deleteProgramDlg(program.name)">
                 <v-icon icon="mdi-delete"></v-icon>
               </v-btn>
             </template>

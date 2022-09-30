@@ -136,7 +136,7 @@ export default {
   name: 'Control',
   methods: {
     say() {
-      this.$coderbot.speak(text = this.ttstext)
+      this.$coderbot.speak(this.ttstext, this.$i18n.locale)
         .then(() => {
           this.ttsBtnEnabled = false;
           this.ttsdialog = false;

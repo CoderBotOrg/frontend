@@ -42,8 +42,8 @@
                       </a>
                       <v-card-actions>
                         <v-btn
-                          v-on:click="photo=photos[n-1]; confirmDeleteDlg=true" text icon color="red lighten-2">
-                          <v-icon>delete</v-icon>
+                          v-on:click="photo=photos[n-1]; confirmDeleteDlg=true">
+                          <v-icon class="white--text" icon="mdi-delete"></v-icon>
                         </v-btn>
                       </v-card-actions>
                     </v-card>
@@ -56,7 +56,7 @@
                     {{ photo.name }}
                   </v-card-title>
                   <v-card-text>
-                  <v-img v-if="photo.type=='jpg'" height="100%" :src="getPhotoURL(photos[n-1].thumbName)" class="grey lighten-2" ref="photo" @click="getPixelColor">
+                  <v-img v-if="photo.type=='jpg'" height="100%" :src="getPhotoURL(photo.fileName)" class="grey lighten-2" ref="photo" @click="getPixelColor">
                   <template v-slot:placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
                       <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
