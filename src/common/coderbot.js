@@ -306,6 +306,10 @@ class CoderBot {
   }
 
   saveActivity(an_activity) {
+    // defaults requird by API
+    an_activity.description = an_activity.description == null ? '' : an_activity.description;
+    an_activity.default = an_activity.default == null ? false : an_activity.default;
+    an_activity.stock = an_activity.stock == null ? false : an_activity.stock;
     return this.$axios.post(`${this.CB}/activities`, an_activity);
   }
 

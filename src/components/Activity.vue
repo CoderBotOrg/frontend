@@ -413,7 +413,6 @@ export default {
   methods: {
     updateCssProps() {
       // (Re)Compute the CSS variables from the activity definition, then update them
-      console.log('Computing CSS Props');
       const {
         bodyFont
       } = this.activity;
@@ -444,7 +443,6 @@ export default {
         '--codeFont': fontFamilyCode,
         '--transform': textTransform,
       };
-      console.log('Computed CSS props:', this.cssProps);
     },
 
     onWorkspaceChanged() {

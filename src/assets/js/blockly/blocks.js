@@ -1302,7 +1302,7 @@ Blockly.Python.coderbot_audio_record = function (block) {
   const elapse = Blockly.Python.valueToCode(block, 'ELAPSE',
     Blockly.Python.ORDER_NONE) || '\'\'';
   const code = `get_audio().record_to_file(filename=${filename}, elapse=${elapse})\n`;
-  return [code, Blockly.Python.ORDER_ATOMIC];
+  return code;
 };
 
 Blockly.Blocks.coderbot_audio_play = {
