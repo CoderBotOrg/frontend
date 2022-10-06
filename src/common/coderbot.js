@@ -314,7 +314,7 @@ class CoderBot {
   }
 
   saveProgram(overwrite, name, dom_code, code, is_default) {
-    return this.$axios.post(`${this.CB}/saveProgram`, {
+    return this.$axios.post(`${this.CB}/programs`, {
       overwrite,
       name,
       dom_code,
@@ -332,9 +332,7 @@ class CoderBot {
   }
 
   deleteProgram(name) {
-    return this.$axios.delete(`${this.CB}/programs/${name}`, {
-      name,
-    });
+    return this.$axios.delete(`${this.CB}/programs/${name}`);
   }
 
   runProgram(name, code) {

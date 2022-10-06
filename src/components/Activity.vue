@@ -91,8 +91,8 @@
         </v-card>
       </v-dialog>
       <!-- Load Program -->
-      <v-dialog v-model="carica" max-width="290">
-        <v-card>
+      <v-dialog v-model="carica" max-width="600">
+        <v-card width="480">
           <v-card-title class="headline">
             {{ $t("message.program_list") }}
           </v-card-title>
@@ -101,11 +101,11 @@
               <v-list-item-title ripple @click="loadProgram(program.name)">
                 {{ program.name }}
               </v-list-item-title>
-            <template v-slot:prepend>
-              <v-btn v-if="program.default" @click="deleteProgramDlg(program.name)">
-                <v-icon icon="mdi-delete"></v-icon>
-              </v-btn>
-            </template>
+              <template v-slot:append>
+                <v-btn v-if="!program.default" @click="deleteProgramDlg(program.name)">
+                  <v-icon icon="mdi-delete"></v-icon>
+                </v-btn>
+              </template>
             </v-list-item>
           </v-list>
           <v-card-actions>
@@ -217,7 +217,7 @@
               {{ $t("message.no") }}
             </v-btn>
             <v-btn color="green darken-1" text="text"
-              @click="del = false, carica = false, deleteProgram(newProgramName)">
+              @click="del = false, carica = false, deleteProgram(programName)">
               {{ $t("message.yes") }}
             </v-btn>
           </v-card-actions>
@@ -586,7 +586,8 @@ export default {
     },
 
     deleteProgramDlg(program) {
-      this.$data.newProgramName = program;
+      console.log(program)
+      this.$data.programName = program;
       this.$data.del = true;
     },
 
@@ -594,7 +595,7 @@ export default {
       if (this.$data.programName == program) {
         this.$data.programName = '';
         this.$data.code = '';
-        this.$data.workspace.clear();
+        this.$refs.workspace.clear();
       }
       console.log('delete');
       this.$coderbot.deleteProgram(program).then(() => {

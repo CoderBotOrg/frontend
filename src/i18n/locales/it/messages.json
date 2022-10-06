@@ -27,7 +27,7 @@
     "overwrite": "Sovrascrivi",
     "program_exists_overwrite": "Esiste già un programma con nome : \"{programName}\" vuoi sovrascriverlo?",
     "delete": "Cancella",
-    "delete_sure": "Sei sicuro di voler cancellare: \"{newProgramName}\"?",
+    "delete_sure": "Sei sicuro di voler cancellare: \"{programName}\"?",
     "clear_sure": "Sei sicuro di voler pulire lo spazio di lavoro?",
     "coderbot_status": "Stato del CoderBot",
     "activity_new": "Nuova Attività",

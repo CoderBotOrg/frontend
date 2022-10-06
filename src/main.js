@@ -61,5 +61,6 @@ $coderbot.load().then(() => {
   app.mount('#app');
   app.defaultTheme = 'dark';
 }).catch((errors) => {
+  console.log('oops');
   console.error(errors);
 });
