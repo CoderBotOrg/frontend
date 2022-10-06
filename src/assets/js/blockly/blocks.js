@@ -16,6 +16,8 @@
  */
 
 import Blockly from 'blockly';
+import {pythonGenerator} from 'blockly/python';
+Blockly.Python = pythonGenerator;
 
 Blockly.HSV_SATURATION = 0.9;
 Blockly.HSV_VALUE = 0.7;
