@@ -37,6 +37,7 @@ import App from './App.vue';
 import router from './routes';
 
 import CoderBot from './common/coderbot';
+import WifiConnect from './common/wifi_connect';
 
 // Utilities
 // This is to serialize parameters to send them as URLencoded
@@ -44,6 +45,7 @@ import CoderBot from './common/coderbot';
 
 const $axios = axios.create();
 const $coderbot = new CoderBot(import.meta.env.VITE_CB_ENDPOINT, $axios, store);
+const $wifi_connect = new WifiConnect(import.meta.env.VITE_CB_ENDPOINT, $axios);
 
 // this will block until CoderBot returns several configuration data.
 $coderbot.load().then(() => {
@@ -58,6 +60,7 @@ $coderbot.load().then(() => {
 
   app.config.globalProperties.$axios = $axios;
   app.config.globalProperties.$coderbot = $coderbot;
+  app.config.globalProperties.$wifi_connect = $wifi_connect;
   app.mount('#app');
   app.defaultTheme = 'dark';
 }).catch((errors) => {

@@ -406,9 +406,26 @@
                         <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client"></v-radio>
                         <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap">
                         </v-radio>
-                        <v-text-field v-model="settings.wifiSSID" v-bind:label="$t('message.settings_network_ssid')"></v-text-field>
-                        <v-text-field v-model="settings.wifiPsw" v-bind:label="$t('message.settings_network_password')"></v-text-field>
                       </v-radio-group>
+                      <div v-if="settings.wifiMode=='client'">
+                        <v-select 
+                        :disabled="settings.wifiMode!='client'"
+                        v-model="settings.wifiSSID"
+                        :items="networks"
+                        item-title="ssid"
+                        item-value="ssid"
+                        v-bind:label="$t('message.settings_network_ssid')"
+                        single-line
+                        >
+                        </v-select>
+                        <v-text-field 
+                        :disabled="settings.wifiMode!='client'"
+                        v-model="settings.wifiPsw"
+                        :append-icon="wifi_pwd_show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="wifi_pwd_show ? 'text' : 'password'"
+                        @click:append="wifi_pwd_show = !wifi_pwd_show"
+                         v-bind:label="$t('message.settings_network_password')"></v-text-field>
+                      </div>
                       <!--v-card-actions>
                         <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
                         <v-dialog v-model="dialog" max-width="290">
@@ -733,6 +750,18 @@ export default {
   setup() {
     return {
       v$: useVuelidate(),
+      cameraExposureModes: [
+        { text: 'Auto', key: 'auto' },
+        { text: 'Sports', key: 'sports' },
+        { text: 'Night', key: 'night' },
+        { text: 'Fixed FPS', key: 'fixedfps' },
+        { text: 'Anti shake', key: 'antishake' },
+        { text: 'Very long', key: 'verylong' }
+      ],
+      hardware_version_items: [
+        { key: '4', text: '4.0 (legacy)' },
+        { key: '5', text: '5.0 (latest)' }
+      ],
     };
   },
   mounted() {
@@ -747,6 +776,9 @@ export default {
     this.cb.info = this.$store.getters.info;
     this.cb.status = this.$store.getters.status;
     this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
+    this.$wifi_connect.networks().then((result) => {
+      this.networks = result.data;
+    });
   },
   beforeRouteLeave(to, from, next) {
     if (this.v$.$anyDirty) {
@@ -781,7 +813,6 @@ export default {
         this.uploadCompleted = true;
         this.uploadInProgress = false;
         this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_1');
-        console.dir(result.data);
         if (this.updateStatus == 2) {
           this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_2');
         }
@@ -803,7 +834,6 @@ export default {
       this.$$coderbot.updateFromPackage(this.formdata, config).then((result) => {
         this.uploadCompleted = true;
         this.uploadInProgress = false;
-        console.dir(result.data);
         this.updateStatusText = this.$i18n.t('message.settings_packages_text_1');
       });
     },
@@ -910,7 +940,6 @@ export default {
       if (this.v$.$invalid) {
         this.snackText = this.$i18n.t('message.settings_errors');
         this.snackbar = true;
-        console.log(this.v$);
       } else {
         /* eslint-disable func-names, object-shorthand, prefer-arrow-callback */
         const needRestart = this.needRestart();
@@ -930,24 +959,23 @@ export default {
           console.log('set dirty false');
         });
         if (this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty) {
-          this.$coderbot.saveWifiParams(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
-            .then(() => {
-              console.log('Sent');
-              this.snackText = this.$i18n.t('message.settings_network_updated');
-              this.snackbar = true;
-            });
+          if(this.settings.wifiMode=="client") {
+            this.$wifi_connect.connect(this.settings.wifiSSID, "", this.settings.wifiPsw)
+              .then(() => {
+                console.log('connect Sent');
+                this.snackText = this.$i18n.t('message.settings_network_updated');
+                this.snackbar = true;
+              });
+          } else {
+            this.$wifi_connect.disconnect(this.settings.wifiSSID)
+              .then(() => {
+                console.log('disconnect Sent');
+                this.snackText = this.$i18n.t('message.settings_network_updated');
+                this.snackbar = true;
+              });
+          }
         }
       }
-    },
-    saveWifi() {
-      // Send post with URL encoded parameters
-      this.$coderbot.saveWifiParams(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
-        .then(() => {
-          console.log('Sent');
-          this.snackText = this.$i18n.t('message.settings_network_updated');
-          this.snackbar = true;
-        });
-      console.log(`save wifi config - ssid: ${this.settings.wifiSSID}  pwd: ${this.settings.wifiPsw}`);
     },
     toggleSidebar() {
       const currentStatus = this.$store.getters.drawerStatus;
@@ -1075,18 +1103,8 @@ export default {
         this.$i18n.t('message.settings_tabs_audio'),
         this.$i18n.t('message.settings_tabs_music_packages')
       ],
-      cameraExposureModes: [
-        { text: 'Auto', key: 'auto' },
-        { text: 'Sports', key: 'sports' },
-        { text: 'Night', key: 'night' },
-        { text: 'Fixed FPS', key: 'fixedfps' },
-        { text: 'Anti shake', key: 'antishake' },
-        { text: 'Very long', key: 'verylong' }
-      ],
-      hardware_version_items: [
-        { key: '4', text: '4.0 (legacy)' },
-        { key: '5', text: '5.0 (latest)' }
-      ]
+      networks: [],
+      wifi_pwd_show: false,
     };
   },
   validations() {

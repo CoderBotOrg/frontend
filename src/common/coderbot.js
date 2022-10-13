@@ -187,7 +187,7 @@ class CoderBot {
 
   async saveSettings(settings) {
     /* eslint-enable */
-    const legacySettings = new URLSearchParams({
+    const legacySettings = {
       ctrl_hud_image: settings.ctrl_hud_image,
       cv_image_factor: settings.cv_image_factor,
       camera_color_object_size_max: settings.camera_color_object_size_max,
@@ -224,10 +224,9 @@ class CoderBot {
       audio_volume_level: settings.audioLevel,
       admin_password: settings.adminPassword,
       hardware_version: settings.hardwareVersion,
-
-    });
+    };
     this.$store.commit('setSettings', settings);
-    return this.$axios.post(`${this.CB}/system/config`, legacySettings);
+    return this.$axios.put(`${this.CB}/settings`, legacySettings);
   }
 
   reboot() {
@@ -272,15 +271,6 @@ class CoderBot {
     return this.$axios.post(`${this.CB}/testCoderbot`, {
       params: checkedTests
     });
-  }
-
-  saveWifiParams(wifiMode, wifiSSID, wifiPsw) {
-    const valuesAsString = new URLSearchParams({
-      wifi_mode: wifiMode,
-      wifi_ssid: wifiSSID,
-      wifi_psk: wifiPsw,
-    });
-    return this.$axios.post(`${this.CB}/system/settings/wifi`, valuesAsString);
   }
 
   updatePackages(formdata) {
