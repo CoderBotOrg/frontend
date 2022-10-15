@@ -108,29 +108,6 @@
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left"> {{ $t('message.settings_actions_update_title') }} </h3>
-                    </v-card-title>
-                    <div class="cardContent">
-                      <template v-if="updateStatus==1">
-                        {{ $t('message.settings_update_upload') }}
-                        <h3>{{ counter }} %</h3>
-                        <br>
-                        {{ updateStatusText }}
-                      </template>
-                      <template v-if="updateStatus==2">
-                      </template>
-                      <template v-if="updateStatus==0">
-                        <v-text-field v-bind:label="$t('message.settings_update_upload')" @click='pickFile' v-model='fileName'
-                          prepend-icon='attach_file'></v-text-field>
-                        <input type="file" style="display: none" ref="file" @change="onFilePicked">
-                        <template v-if="this.fileObj">{{ $t('message.settings_update_text') }}<br></template>
-                        <v-btn v-if="this.fileObj" @click="upload" color="error">{{ $t('message.ok') }}</v-btn>
-                      </template>
-                    </div>
-                  </v-card>
-                  <br>
-                  <v-card>
-                    <v-card-title>
                       <h3 class="text-xs-left">{{ $t('message.settings_admin_password_title') }}</h3>
                     </v-card-title>
                     <div class="cardContent">
