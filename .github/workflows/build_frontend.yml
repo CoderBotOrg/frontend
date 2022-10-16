@@ -26,7 +26,7 @@ jobs:
     - name: Archive dist
       uses: actions/upload-artifact@v3
       with:
-        name: frontend-dist
+        name: dist
         path: dist
 
   release-frontend:
@@ -55,8 +55,8 @@ jobs:
     - name: Download dist artifact
       uses: actions/download-artifact@v3
       with:
-        name: frontend-dist 
-        path: frontend/dist
+        name: dist 
+        path: dist
     - run: wget https://github.com/CoderBotOrg/docs/releases/download/v0.1/docs.tgz
     - run: mkdir -p cb_docs
     - run: tar xzf docs.tgz -C cb_docs
