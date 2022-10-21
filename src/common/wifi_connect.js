@@ -1,25 +1,42 @@
 class WifiConnect {
   constructor(CB, axios) {
-    this.CB = CB + '/wifi';
+    this.CB = CB + '/wifi/v1';
     this.$axios = axios;
   }
 
   networks() {
-    return this.$axios.get(`${this.CB}/networks`);
+    return this.$axios.get(`${this.CB}/list_access_points`);
   }
 
-  connect(ssid, identity, passphrase) {
+  connect(ssid, conn_type, username, password) {
     return this.$axios.post(`${this.CB}/connect`, {
       ssid: ssid,
-      identity: identity,
-      passphrase: passphrase,
+      conn_type: conn_type,
+      username: username,
+      password: password,
     });
   }
 
-  disconnect(ssid) {
-    return this.$axios.post(`${this.CB}/disconnect`, {
-      ssid: ssid,
+  disconnect() {
+    return this.$axios.post(`${this.CB}/forget`, {
+      all_networks: true
     });
+  }
+
+  set_hotspot_ssid(ssid) {
+    return this.$axios.post(`${this.CB}/sset_hotspot_ssid`, {
+      ssid: ssid
+    });
+  }
+
+  set_hotspot_password(password) {
+    return this.$axios.post(`${this.CB}/set_hotspot_password`, {
+      ssid: password
+    });
+  }
+
+  connection_status() {
+    return this.$axios.get(`${this.CB}/connection_status`);
   }
 }
 

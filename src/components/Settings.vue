@@ -396,6 +396,12 @@
                         >
                         </v-select>
                         <v-text-field 
+                        v-if="network_require_user()"
+                        :disabled="settings.wifiMode!='client'"
+                        v-model="settings.wifiUser"
+                        :type="text"
+                         v-bind:label="$t('message.settings_network_user')"></v-text-field>
+                        <v-text-field 
                         :disabled="settings.wifiMode!='client'"
                         v-model="settings.wifiPsw"
                         :append-icon="wifi_pwd_show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -765,6 +771,12 @@ export default {
       next();
     }
   },
+  computed: {
+    network_require_user() {
+      const network = this.networks.find(item => { return item.ssid==this.v$.settings.wifiSSID });
+      return network.conn_type == "ENTERPRISE";
+    }
+  },
   methods: {
     pickFile() {
       this.$refs.file.click();
@@ -937,14 +949,15 @@ export default {
         });
         if (this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty) {
           if(this.settings.wifiMode=="client") {
-            this.$wifi_connect.connect(this.settings.wifiSSID, "", this.settings.wifiPsw)
+            const network = this.networks.find(item => { return item.ssid==this.v$.settings.wifiSSID });
+            this.$wifi_connect.connect(network.ssid, network.conn_type, this.settings.wifiUser, this.settings.wifiPsw)
               .then(() => {
                 console.log('connect Sent');
                 this.snackText = this.$i18n.t('message.settings_network_updated');
                 this.snackbar = true;
               });
           } else {
-            this.$wifi_connect.disconnect(this.settings.wifiSSID)
+            this.$wifi_connect.disconnect()
               .then(() => {
                 console.log('disconnect Sent');
                 this.snackText = this.$i18n.t('message.settings_network_updated');
@@ -1035,6 +1048,7 @@ export default {
         btnFun: null,
         wifiMode: 'ap',
         wifiSSID: null,
+        wifiUser: null,
         wifiPsw: null,
 
         hardwareVersion: null,
