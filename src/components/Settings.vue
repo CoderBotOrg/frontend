@@ -376,18 +376,23 @@
                   <v-card-title>
                     <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
                   </v-card-title>
+                    <div>
+                      <v-chip v-if="wifi_status.wifi" prepend-icon="mdi-wifi">Wifi</v-chip>
+                      <v-chip v-if="wifi_status.internet" prepend-icon="mdi-web">Internet</v-chip>
+                    </div>
                     <div class="cardContent">
                       <v-radio-group v-model="settings.wifiMode" column
                         @change="v$.settings.wifiMode.$touch"
                       >
+                        <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap"></v-radio>
                         <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client"></v-radio>
-                        <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap">
-                        </v-radio>
+
                       </v-radio-group>
                       <div v-if="settings.wifiMode=='client'">
                         <v-select 
                         :disabled="settings.wifiMode!='client'"
                         v-model="settings.wifiSSID"
+                        @change="v$.settings.wifiSSID.$touch"
                         :items="networks"
                         item-title="ssid"
                         item-value="ssid"
@@ -396,18 +401,19 @@
                         >
                         </v-select>
                         <v-text-field 
-                        v-if="network_require_user()"
+                        v-if="network_require_user"
                         :disabled="settings.wifiMode!='client'"
                         v-model="settings.wifiUser"
-                        :type="text"
-                         v-bind:label="$t('message.settings_network_user')"></v-text-field>
+                        @change="v$.settings.wifiUser.$touch"
+                        v-bind:label="$t('message.settings_network_username')"></v-text-field>
                         <v-text-field 
                         :disabled="settings.wifiMode!='client'"
                         v-model="settings.wifiPsw"
+                        @change="v$.settings.wifiPsw.$touch"
                         :append-icon="wifi_pwd_show ? 'mdi-eye' : 'mdi-eye-off'"
                         :type="wifi_pwd_show ? 'text' : 'password'"
                         @click:append="wifi_pwd_show = !wifi_pwd_show"
-                         v-bind:label="$t('message.settings_network_password')"></v-text-field>
+                        v-bind:label="$t('message.settings_network_password')"></v-text-field>
                       </div>
                       <!--v-card-actions>
                         <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
@@ -432,6 +438,22 @@
                         </v-dialog>
                       </v-card-actions-->
                     </div>
+                    <template>
+                      <div class="text-center">
+                        <v-dialog
+                          v-model="wifi_overlay"
+                          persistent
+                        >
+                          <v-card>
+                            <v-card-text>
+                              <div class="text-center">
+                                {{ $t('message.settings_network_wait') }}
+                              </div>
+                            </v-card-text>
+                          </v-card>
+                        </v-dialog>
+                      </div>
+                    </template>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -760,7 +782,7 @@ export default {
     this.cb.status = this.$store.getters.status;
     this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
     this.$wifi_connect.networks().then((result) => {
-      this.networks = result.data;
+     this.networks = result.data.ssids;
     });
   },
   beforeRouteLeave(to, from, next) {
@@ -773,8 +795,8 @@ export default {
   },
   computed: {
     network_require_user() {
-      const network = this.networks.find(item => { return item.ssid==this.v$.settings.wifiSSID });
-      return network.conn_type == "ENTERPRISE";
+      const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
+      return network && network.conn_type == "ENTERPRISE";
     }
   },
   methods: {
@@ -914,6 +936,9 @@ export default {
           }
           this.status = 0;
         });
+        this.$wifi_connect.status().then((result) => {
+          this.wifi_status = result.data;
+        });
     },
     deletePkg(pkgNameID) {
       this.$coderbot.deleteMusicPackage(pkgNameID).then(() => {
@@ -949,21 +974,31 @@ export default {
         });
         if (this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty) {
           if(this.settings.wifiMode=="client") {
-            const network = this.networks.find(item => { return item.ssid==this.v$.settings.wifiSSID });
-            this.$wifi_connect.connect(network.ssid, network.conn_type, this.settings.wifiUser, this.settings.wifiPsw)
-              .then(() => {
-                console.log('connect Sent');
-                this.snackText = this.$i18n.t('message.settings_network_updated');
-                this.snackbar = true;
+            const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
+            if(network != null) {
+              this.wifi_overlay = true;
+              this.$wifi_connect.disconnect().then((result) => {
+                setTimeout(() => {
+                  this.$wifi_connect.connect(network.ssid, network.conn_type, this.settings.wifiUser, this.settings.wifiPsw)
+                    .then((result) => {
+                      this.snackText = this.$i18n.t('message.settings_network_updated');
+                      this.snackbar = true;
+                      this.wifi_overlay = false;
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                      this.wifi_overlay = false;
+                    });
+                  }, 10000);
+              })
+              .catch((error) => {
+                console.error(error);  
+                this.wifi_overlay = false;
               });
-          } else {
-            this.$wifi_connect.disconnect()
-              .then(() => {
-                console.log('disconnect Sent');
-                this.snackText = this.$i18n.t('message.settings_network_updated');
-                this.snackbar = true;
-              });
+            }
           }
+        } else {
+          this.$wifi_connect.disconnect().then((result) => {});
         }
       }
     },
@@ -1095,7 +1130,9 @@ export default {
         this.$i18n.t('message.settings_tabs_music_packages')
       ],
       networks: [],
+      wifi_status: null,
       wifi_pwd_show: false,
+      wifi_overlay: false,
     };
   },
   validations() {
@@ -1155,6 +1192,8 @@ export default {
         },
         wifiSSID: {
           required,
+        },
+        wifiUser: {
         },
         wifiPsw: {
           required,

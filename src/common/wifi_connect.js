@@ -9,12 +9,13 @@ class WifiConnect {
   }
 
   connect(ssid, conn_type, username, password) {
-    return this.$axios.post(`${this.CB}/connect`, {
+    let data = {
       ssid: ssid,
       conn_type: conn_type,
       username: username,
       password: password,
-    });
+    };
+    return this.$axios.post(`${this.CB}/connect`, data);
   }
 
   disconnect() {
@@ -35,7 +36,7 @@ class WifiConnect {
     });
   }
 
-  connection_status() {
+  status() {
     return this.$axios.get(`${this.CB}/connection_status`);
   }
 }
