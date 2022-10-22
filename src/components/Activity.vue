@@ -12,28 +12,22 @@
         <v-spacer></v-spacer>
         <v-chip class="ma-2" v-if="activity.maxBlocks > 0" label>{{ $t("message.activity_program_remaining_blocks") }}: {{ remainingCapacity }}</v-chip>
         <!-- If the API is available, show the desired buttons -->
-        <template v-if="status == 200">
-          <template v-for="button in activity.buttons">
-            <template v-if="button.type == 'text'">
-              <v-btn @click="this[button.action]()">
-                <v-icon :icon="button.icon"></v-icon>
-                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
-              </v-btn>
-            </template>
-            <template v-else>
-              <v-btn @click="this[button.action]()" style="height: 70%" :color="button.colorBtn"
-                :class="button.colorText">
-                <v-icon :icon="button.icon"></v-icon>
-                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
-              </v-btn>
-            </template>
-            &nbsp;&nbsp;
+        <template v-for="button in activity.buttons">
+          <template v-if="button.type == 'text'">
+            <v-btn @click="this[button.action]()">
+              <v-icon :icon="button.icon"></v-icon>
+              <span v-if="activity.showButtonLabel">{{ button.label }}</span>
+            </v-btn>
           </template>
+          <template v-else>
+            <v-btn @click="this[button.action]()" style="height: 70%" :color="button.colorBtn"
+              :class="button.colorText">
+              <v-icon :icon="button.icon"></v-icon>
+              <span v-if="activity.showButtonLabel">{{ button.label }}</span>
+            </v-btn>
+          </template>
+          &nbsp;&nbsp;
         </template>
-        <!-- If the API is not responding, show an error icon -->
-        <v-btn @click="dialog = true" icon v-if="status != 200">
-          <v-icon icon="mdi-error"></v-icon>
-        </v-btn>
       </v-app-bar>
       <!-- Page content -->
       <v-main>
@@ -239,21 +233,6 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <!-- Status -->
-      <v-dialog v-model="dialog" max-width="290">
-        <v-card>
-          <v-card-title class="headline">{{ $t("message.coderbot_status") }}</v-card-title>
-          <v-card-text>
-            {{ statusText }}
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text="text" @click="dialog = false">
-              {{ $t("message.ok") }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
       <!-- Generic dialog -->
       <v-dialog v-model="generalDialog" max-width="290">
         <v-card>
@@ -336,8 +315,6 @@ export default {
     snackText: null,
     snackbar: false,
     drawer: false,
-    status: null,
-    info: null,
     code: '',
     generalDialog: false,
     generalDialogText: null,
@@ -362,12 +339,6 @@ export default {
     program_status: null
   }),
   computed: {
-    statusText() {
-      if (this.status) {
-        return this.$i18n.t('message.coderbot_status_online');
-      }
-      return this.$i18n.t('message.coderbot_status_offline');
-    },
     remainingCapacity() {
       return this.$refs.workspace.remainingCapacity();
     },
@@ -393,14 +364,6 @@ export default {
 
       this.toolbox = this.activity.toolbox;
     });
-
-    this.status = null;
-    this.pollStatus();
-
-    // Start the polling
-    setInterval(() => {
-      this.pollStatus();
-    }, 1000);
   },
   beforeRouteLeave(to, from, next) {
     if (this.dirty) {
@@ -603,53 +566,21 @@ export default {
       });
     },
 
-    pollStatus() {
-      this.$coderbot.status()
-        .then((response) => {
-          // If the reconnection happened while in this component, send a notification
-          if (this.status == 0 && response.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_online');
-            this.snackbar = true;
-          }
-          this.statusData = response.data;
-          this.status = response.status;
-        });
-      this.$coderbot.info()
-        .then((response) => {
-          this.info = response.data;
-        })
-        .catch((error) => {
-          console.log(`pollStatus error: ${error}`);
-          // If the disconnection happened while in this component, send a notification
-          if (this.status) {
-            this.snackText = this.$i18n.t('coderbot_offline_2');
-            this.snackbar = true;
-          }
-          this.status = 0;
-        });
-    },
-
     getProgramCode() {
       this.code = this.$refs.workspace.getProgramCode();
       this.dialogCode = true;
     },
 
     runProgram() {
-      if (this.status) {
-        // POST /program/save
-        const { code } = this.$refs.workspace.getProgramData();
-        const programName = this.programName != '' ? this.programName : 'untitled';
-        this.$coderbot.runProgram(programName, code).then(() => {
-          this.runtimeDialog = true;
-          setTimeout(() => {
-            this.updateExecStatus();
-          }, 1000);
-        });
-      } else {
-        this.generalDialog = true;
-        this.generalDialogTitle = this.$i18n.t('error');
-        this.generalDialogText = this.$i18n.t('coderbot_offline_3');
-      }
+      // POST /program/save
+      const { code } = this.$refs.workspace.getProgramData();
+      const programName = this.programName != '' ? this.programName : 'untitled';
+      this.$coderbot.runProgram(programName, code).then(() => {
+        this.runtimeDialog = true;
+        setTimeout(() => {
+          this.updateExecStatus();
+        }, 1000);
+      });
     },
 
     stopProgram() {

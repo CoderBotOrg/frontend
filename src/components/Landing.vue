@@ -82,23 +82,7 @@ export default {
       ],
       drawer: null,
       source: null,
-      msg: 'Welcome to Your Vue.js App',
     };
   },
 };
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.logo {
-  font-size: 80px;
-  font-family: 'Overpass Mono';
-  font-weight: 600;
-  letter-spacing: -5px;
-  background-color: #070300;
-  color: transparent;
-  text-shadow: 3px 3px 3px rgba(255, 255, 255, 0.25);
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  background-clip: text;
-}
-</style>

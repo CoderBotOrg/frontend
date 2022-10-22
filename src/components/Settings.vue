@@ -53,7 +53,7 @@
                       <v-btn @click="reboot" color="info">
                         <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_restart') }}
                       </v-btn>
-                      <v-btn @click="restoreConfig" color="warning">
+                      <v-btn @click="restoreSettings" color="warning">
                         <v-icon icon="mdi-restore"></v-icon> {{ $t('message.settings_actions_reset') }}
                       </v-btn>
                       <v-btn slot="activator" color="error" dark @click="dialog_reset = true">
@@ -77,7 +77,7 @@
                               <v-btn color="primary" @click="dialog_reset = false">
                                 {{ $t('message.cancel') }}
                               </v-btn>
-                              <v-btn color="error" @click="restore">
+                              <v-btn color="error" @click="reset">
                                 <b>{{ $t('message.settings_actions_reset_factory_restore') }}</b>
                               </v-btn>
                             </v-card-actions>
@@ -794,7 +794,6 @@ export default {
     this.$coderbot.listPrograms()
       .then((response) => {
         this.programList = response.data;
-        console.log(this.programList);
       });
   },
   beforeRouteLeave(to, from, next) {
@@ -883,7 +882,7 @@ export default {
       rawFile.send(null);
       */
     },
-    restoreConfig() {
+    restoreSettings() {
       this.$coderbot.restoreSettings()
         .then(() => {
           this.snackText = this.$i18n.t('message.settings_packages_reset_complete');
@@ -901,7 +900,7 @@ export default {
         this.cb.logs.runningTest = false;
       });
     },
-    restore() {
+    reset() {
       this.$coderbot.reset()
         .then(() => {
           this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');

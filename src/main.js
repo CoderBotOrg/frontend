@@ -48,21 +48,21 @@ const $coderbot = new CoderBot(import.meta.env.VITE_CB_ENDPOINT, $axios, store);
 const $wifi_connect = new WifiConnect(import.meta.env.VITE_CB_ENDPOINT, $axios);
 
 // this will block until CoderBot returns several configuration data.
+/* eslint-disable no-new */
+const app = createApp(App);
+// Configuration
+app.use(router);
+app.use(vuetify);
+app.use(store);
+app.use(i18n);
+
+app.config.globalProperties.$axios = $axios;
+app.config.globalProperties.$coderbot = $coderbot;
+app.config.globalProperties.$wifi_connect = $wifi_connect;
+app.mount('#app');
+app.defaultTheme = 'dark';
 $coderbot.load().then(() => {
   console.log('config loaded');
-  /* eslint-disable no-new */
-  const app = createApp(App);
-  // Configuration
-  app.use(router);
-  app.use(vuetify);
-  app.use(store);
-  app.use(i18n);
-
-  app.config.globalProperties.$axios = $axios;
-  app.config.globalProperties.$coderbot = $coderbot;
-  app.config.globalProperties.$wifi_connect = $wifi_connect;
-  app.mount('#app');
-  app.defaultTheme = 'dark';
 }).catch((errors) => {
   console.log('oops');
   console.error(errors);

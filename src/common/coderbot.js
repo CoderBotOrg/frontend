@@ -229,6 +229,14 @@ class CoderBot {
     return this.$axios.put(`${this.CB}/settings`, legacySettings);
   }
 
+  reset() {
+    return this.$axios.post(`${this.CB}}/system/reset`);
+  }
+
+  restart() {
+    return this.$axios.post(`${this.CB}}/system/restart`);
+  }
+
   reboot() {
     return this.$axios.post(`${this.CB}/system/reboot`);
   }
@@ -261,10 +269,6 @@ class CoderBot {
 
   updateFromPackage(formdata, config) {
     return this.$axios.post(`${this.CB}/updateFromPackage`, formdata, config);
-  }
-
-  reset() {
-    return this.$axios.post(`${this.CB}/reset`);
   }
 
   test(checkedTests) {

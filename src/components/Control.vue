@@ -4,104 +4,89 @@
     <v-app-bar color="indigo" dark fixed app>
       <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
       <v-app-bar-title class="title"><div>CoderBot</div></v-app-bar-title>
-      <template v-if="status != 200">
-        <v-btn text>
-          <v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
-        </v-btn>
-        <v-btn @click="dialog = true" icon>
-          <v-icon>error</v-icon>
-        </v-btn>
-      </template>
     </v-app-bar>
     <v-main>
-      <template v-if="status == 200">
-        <v-container>
-          <v-row no-gutters>
-            <v-col cols="8">
-              <v-img :src="webcamStream" style="width: 640px;"/>
-            </v-col>
-            <v-col cols="4">
-              <v-container class="d-flex align-center flex-column">
-                <v-row>
-                  <v-col class="d-flex align-center flex-column">
-                    <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(0)"
-                      v-on:mouseup="stop()">
-                      <v-icon icon="mdi-arrow-up"></v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(1)"
-                      v-on:mouseup="stop()">
-                      <v-icon icon="mdi-arrow-left"></v-icon>
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn large color="indigo" class="white--text jp-btn" v-on:mousedown="move(2)"
-                      v-on:mouseup="stop()">
-                      <v-icon icon="mdi-arrow-right"></v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(3)"
-                      v-on:mouseup="stop()">
-                      <v-icon icon="mdi-arrow-down"></v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <br/>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-btn color="indigo" v-on:click="ttsdialog = true" class="controlBtn"
-                      :disabled="!ttsBtnEnabled">
-                      {{ $t("message.control_speak") }}
-                      <v-icon icon="mdi-bullhorn-variant"></v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col class="d-flex align-center flex-column">
-                    <v-btn color="indigo" class="controlBtn" v-on:click="takePhoto()"
-                      :disabled="!photoBtnEnabled">
-                      {{ $t("message.control_photo_take") }}
-                      <v-icon icon="mdi-camera"></v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col class="d-flex align-center flex-column">
-                    <v-btn color="indigo" class="controlBtn" v-on:click="videoHandler()"
-                      :disabled="!videoBtn.enabled">
-                      {{ videoBtn.text }}
-                      <v-icon dark>mdi-{{ videoBtn.icon }}</v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col class="d-flex align-center flex-column">
-                    <v-btn color="indigo" class="controlBtn" to="/gallery">
-                      {{ $t("message.control_photo_gallery") }}
-                      <v-icon icon="mdi-image-multiple"></v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-col>
-          </v-row>
-        </v-container>
-      </template>
-      <template v-else>
-        <br>
-        {{ $t("message.coderbot_status_offline_1") }}<br>
-        <v-icon large icon="mdi-signal_wifi_off"></v-icon>
-      </template>
+      <v-container>
+        <v-row no-gutters>
+          <v-col cols="8">
+            <v-img :src="webcamStream" style="width: 640px;"/>
+          </v-col>
+          <v-col cols="4">
+            <v-container class="d-flex align-center flex-column">
+              <v-row>
+                <v-col class="d-flex align-center flex-column">
+                  <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(0)"
+                    v-on:mouseup="stop()">
+                    <v-icon icon="mdi-arrow-up"></v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(1)"
+                    v-on:mouseup="stop()">
+                    <v-icon icon="mdi-arrow-left"></v-icon>
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn large color="indigo" class="white--text jp-btn" v-on:mousedown="move(2)"
+                    v-on:mouseup="stop()">
+                    <v-icon icon="mdi-arrow-right"></v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(3)"
+                    v-on:mouseup="stop()">
+                    <v-icon icon="mdi-arrow-down"></v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <br/>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn color="indigo" v-on:click="ttsdialog = true" class="controlBtn"
+                    :disabled="!ttsBtnEnabled">
+                    {{ $t("message.control_speak") }}
+                    <v-icon icon="mdi-bullhorn-variant"></v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="d-flex align-center flex-column">
+                  <v-btn color="indigo" class="controlBtn" v-on:click="takePhoto()"
+                    :disabled="!photoBtnEnabled">
+                    {{ $t("message.control_photo_take") }}
+                    <v-icon icon="mdi-camera"></v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="d-flex align-center flex-column">
+                  <v-btn color="indigo" class="controlBtn" v-on:click="videoHandler()"
+                    :disabled="!videoBtn.enabled">
+                    {{ videoBtn.text }}
+                    <v-icon dark>mdi-{{ videoBtn.icon }}</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="d-flex align-center flex-column">
+                  <v-btn color="indigo" class="controlBtn" to="/gallery">
+                    {{ $t("message.control_photo_gallery") }}
+                    <v-icon icon="mdi-image-multiple"></v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-main>
     <v-snackbar v-model="snackbar">
       {{ snackText }}
@@ -201,28 +186,6 @@ export default {
           }, 1000);
         });
     },
-    pollStatus() {
-      this.$coderbot.status()
-        .then((response) => {
-          if (this.status == 0 && response.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_online');
-            this.snackbar = true;
-          }
-
-          this.statusData = response.data;
-          this.status = response.status;
-        })
-        .catch((error) => {
-          // handle error
-          console.log(`pollStatus error: ${error}`);
-
-          if (this.status) {
-            this.snackText = this.$i18n.t('message.coderbot_offline_2');
-            this.snackbar = true;
-          }
-          this.status = 0;
-        });
-    },
     toggleSidebar() {
       const currentStatus = this.$store.getters.drawerStatus;
       this.$store.commit('toggleDrawer', !currentStatus);
@@ -301,7 +264,6 @@ export default {
       snackText: null,
       snackbar: false,
       webcamStream: this.$coderbot.streamVideoURL(),
-      status: null,
       pressDuration: null,
       ttsBtnEnabled: true,
       photoBtnEnabled: true,
@@ -315,10 +277,6 @@ export default {
     };
   },
   mounted() {
-    this.pollStatus();
-    setInterval(() => {
-      this.pollStatus();
-    }, 1000);
   },
 };
 </script>
