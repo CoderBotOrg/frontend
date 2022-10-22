@@ -359,9 +359,16 @@
                     <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
                   </v-card-title>
                     <div class="cardContent">
-                      <v-text-field v-model="settings.startupProgram" v-bind:label="$t('message.settings_load_at_start_title')"
-                        @input="v$.settings.startupProgram.$touch"
-                      />
+                      <v-select 
+                        :disabled="settings.wifiMode!='client'"
+                        v-model="settings.startupProgram"
+                        @change="v$.settings.startupProgram.$touch"
+                        :items="programList"
+                        item-title="name"
+                        v-bind:label="$t('message.settings_load_at_start_title')"
+                        single-line
+                        >
+                      </v-select>
                     </div>
                   </v-card>
                 </v-col>
@@ -784,6 +791,11 @@ export default {
     this.$wifi_connect.networks().then((result) => {
      this.networks = result.data.ssids;
     });
+    this.$coderbot.listPrograms()
+      .then((response) => {
+        this.programList = response.data;
+        console.log(this.programList);
+      });
   },
   beforeRouteLeave(to, from, next) {
     if (this.v$.$anyDirty) {
@@ -1133,6 +1145,7 @@ export default {
       wifi_status: null,
       wifi_pwd_show: false,
       wifi_overlay: false,
+      programList: [],
     };
   },
   validations() {
