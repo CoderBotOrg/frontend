@@ -239,11 +239,11 @@ class CoderBot {
   }
 
   reset() {
-    return this.$axios.post(`${this.CB}}/system/reset`);
+    return this.$axios.post(`${this.CB}/system/reset`);
   }
 
   restart() {
-    return this.$axios.post(`${this.CB}}/system/restart`);
+    return this.$axios.post(`${this.CB}/system/restart`);
   }
 
   reboot() {
@@ -273,7 +273,7 @@ class CoderBot {
   }
 
   restoreSettings() {
-    return this.$axios.post(`${this.CB}/restoreSettings`);
+    return this.$axios.post(`${this.CB}/settings/restore`);
   }
 
   updateFromPackage(formdata, config) {
