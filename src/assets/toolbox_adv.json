@@ -1016,10 +1016,13 @@
           "kind": "block",
           "type": "coderbot_adv_findText",
           "inputs": {
-            "COLOR": {
+            "TIMEOUT": {
               "shadow": {
                 "kind": "block",
-                "type": "colour_picker"
+                "type": "math_number",
+                "fields": {
+                  "NUM": 0
+                }
               }
             }
           }
@@ -1078,7 +1081,27 @@
         },
         {
           "kind": "block",
-          "type": "coderbot_audio_record"
+          "type": "coderbot_audio_record",
+          "inputs": {
+            "FILENAME": {
+              "shadow": {
+                "kind": "block",
+                "type": "text",
+                "fields": {
+                  "TEXT": "sound"
+                }
+              }
+            },
+            "ELAPSE": {
+              "shadow": {
+                "kind": "block",
+                "type": "math_number",
+                "fields": {
+                  "NUM": 2
+                }
+              }
+            }
+          }
         },
         {
           "kind": "block",

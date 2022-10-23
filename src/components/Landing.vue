@@ -18,31 +18,31 @@
         </v-col>
         <br>
         <div style="font-size: 18px;"> {{ $t("message.choose_action") }} </div>
-        <v-container>
-          <v-row>
+        <v-container align="center">
+          <v-row >
             <v-col>
-              <v-btn color="indigo" to="/program">
+              <v-btn color="indigo" size="large" to="/program" class="md4">
                 <v-icon icon="mdi-flip-to-front"></v-icon>{{ $t("message.program") }}
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-btn color="indigo" target="_blank" href="/docs">
+              <v-btn color="indigo" size="large" target="_blank" href="/docs">
                 <v-icon icon="mdi-help"></v-icon>{{ $t("message.docs") }}
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-btn color="indigo" to="/control">
+              <v-btn color="indigo" size="large" to="/control">
                 <v-icon icon="mdi-gamepad"></v-icon>{{ $t("message.control") }}
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-btn color="indigo" to="/settings">
+              <v-btn color="indigo" size="large" to="/settings">
                 <v-icon icon="mdi-cog"></v-icon>{{ $t("message.settings") }}
               </v-btn>
             </v-col>
@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import sidebar from '../components/Sidebar';
+import sidebar from './Sidebar.vue';
 import image_1 from '../assets/images/coderbot_wide1.jpg';
 import image_2 from '../assets/images/coderbot_wide3.jpg';
 // import image_3 from '../assets/images/coderbot_wide4.jpg';
@@ -82,23 +82,7 @@ export default {
       ],
       drawer: null,
       source: null,
-      msg: 'Welcome to Your Vue.js App',
     };
   },
 };
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.logo {
-  font-size: 80px;
-  font-family: 'Overpass Mono';
-  font-weight: 600;
-  letter-spacing: -5px;
-  background-color: #070300;
-  color: transparent;
-  text-shadow: 3px 3px 3px rgba(255, 255, 255, 0.25);
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  background-clip: text;
-}
-</style>

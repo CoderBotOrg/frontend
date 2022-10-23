@@ -6,17 +6,10 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title class="title"><div>{{ $t("message.settings_title") }}</div></v-app-bar-title>
         <v-spacer></v-spacer>
-        <template v-if="status == 200">
-          <v-btn text @click="save">
-            <v-icon icon="mdi-content-save"></v-icon>
-            {{ $t('message.save') }}
-          </v-btn>
-        </template>
-        <template v-else>
-          <v-btn text>
-            <v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
-          </v-btn>
-        </template>
+        <v-btn text @click="save">
+          <v-icon icon="mdi-content-save"></v-icon>
+          {{ $t('message.save') }}
+        </v-btn>
         <template v-slot:extension>
           <v-tabs slot="extension" v-model="tab" centered slider-color="white">
             <v-tab v-for="item in tabs" :key="item">
@@ -53,7 +46,7 @@
                       <v-btn @click="reboot" color="info">
                         <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_restart') }}
                       </v-btn>
-                      <v-btn @click="restoreConfig" color="warning">
+                      <v-btn @click="restoreSettings" color="warning">
                         <v-icon icon="mdi-restore"></v-icon> {{ $t('message.settings_actions_reset') }}
                       </v-btn>
                       <v-btn slot="activator" color="error" dark @click="dialog_reset = true">
@@ -77,7 +70,7 @@
                               <v-btn color="primary" @click="dialog_reset = false">
                                 {{ $t('message.cancel') }}
                               </v-btn>
-                              <v-btn color="error" @click="restore">
+                              <v-btn color="error" @click="reset">
                                 <b>{{ $t('message.settings_actions_reset_factory_restore') }}</b>
                               </v-btn>
                             </v-card-actions>
@@ -103,29 +96,6 @@
                             </v-card-actions>
                           </v-card>
                       </v-dialog>
-                    </div>
-                  </v-card>
-                  <br>
-                  <v-card>
-                    <v-card-title>
-                      <h3 class="text-xs-left"> {{ $t('message.settings_actions_update_title') }} </h3>
-                    </v-card-title>
-                    <div class="cardContent">
-                      <template v-if="updateStatus==1">
-                        {{ $t('message.settings_update_upload') }}
-                        <h3>{{ counter }} %</h3>
-                        <br>
-                        {{ updateStatusText }}
-                      </template>
-                      <template v-if="updateStatus==2">
-                      </template>
-                      <template v-if="updateStatus==0">
-                        <v-text-field v-bind:label="$t('message.settings_update_upload')" @click='pickFile' v-model='fileName'
-                          prepend-icon='attach_file'></v-text-field>
-                        <input type="file" style="display: none" ref="file" @change="onFilePicked">
-                        <template v-if="this.fileObj">{{ $t('message.settings_update_text') }}<br></template>
-                        <v-btn v-if="this.fileObj" @click="upload" color="error">{{ $t('message.ok') }}</v-btn>
-                      </template>
                     </div>
                   </v-card>
                   <br>
@@ -382,9 +352,15 @@
                     <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
                   </v-card-title>
                     <div class="cardContent">
-                      <v-text-field v-model="settings.startupProgram" v-bind:label="$t('message.settings_load_at_start_title')"
-                        @input="v$.settings.startupProgram.$touch"
-                      />
+                      <v-select 
+                        v-model="settings.startupProgram"
+                        @change="v$.settings.startupProgram.$touch"
+                        :items="programList"
+                        item-title="name"
+                        v-bind:label="$t('message.settings_load_at_start_title')"
+                        single-line
+                        >
+                      </v-select>
                     </div>
                   </v-card>
                 </v-col>
@@ -399,16 +375,43 @@
                   <v-card-title>
                     <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
                   </v-card-title>
+                    <div>
+                      <v-chip v-if="wifi_status.wifi" prepend-icon="mdi-wifi">Wifi</v-chip>
+                      <v-chip v-if="wifi_status.internet" prepend-icon="mdi-web">Internet</v-chip>
+                    </div>
                     <div class="cardContent">
                       <v-radio-group v-model="settings.wifiMode" column
-                        @change="v$.settings.wifiMode.$touch"
                       >
-                        <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client"></v-radio>
-                        <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap">
-                        </v-radio>
-                        <v-text-field v-model="settings.wifiSSID" v-bind:label="$t('message.settings_network_ssid')"></v-text-field>
-                        <v-text-field v-model="settings.wifiPsw" v-bind:label="$t('message.settings_network_password')"></v-text-field>
+                        <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap" @change="v$.settings.wifiMode.$touch"></v-radio>
+                        <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client" @change="v$.settings.wifiMode.$touch"></v-radio>
                       </v-radio-group>
+                      <div v-if="settings.wifiMode=='client'">
+                        <v-select 
+                        :disabled="settings.wifiMode!='client'"
+                        v-model="settings.wifiSSID"
+                        @change="v$.settings.wifiSSID.$touch"
+                        :items="networks"
+                        item-title="ssid"
+                        item-value="ssid"
+                        v-bind:label="$t('message.settings_network_ssid')"
+                        single-line
+                        >
+                        </v-select>
+                        <v-text-field 
+                        v-if="network_require_user"
+                        :disabled="settings.wifiMode!='client'"
+                        v-model="settings.wifiUser"
+                        @change="v$.settings.wifiUser.$touch"
+                        v-bind:label="$t('message.settings_network_username')"></v-text-field>
+                        <v-text-field 
+                        :disabled="settings.wifiMode!='client'"
+                        v-model="settings.wifiPsw"
+                        @change="v$.settings.wifiPsw.$touch"
+                        :append-icon="wifi_pwd_show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="wifi_pwd_show ? 'text' : 'password'"
+                        @click:append="wifi_pwd_show = !wifi_pwd_show"
+                        v-bind:label="$t('message.settings_network_password')"></v-text-field>
+                      </div>
                       <!--v-card-actions>
                         <v-btn color="primary" @click.stop="dialog = true" block>Salva</v-btn>
                         <v-dialog v-model="dialog" max-width="290">
@@ -723,7 +726,7 @@ import {
   required, alpha, integer, decimal, between, minValue, maxValue
 } from '@vuelidate/validators';
 
-import sidebar from '../components/Sidebar';
+import sidebar from './Sidebar.vue';
 
 export default {
   components: {
@@ -733,13 +736,23 @@ export default {
   setup() {
     return {
       v$: useVuelidate(),
+      cameraExposureModes: [
+        { text: 'Auto', key: 'auto' },
+        { text: 'Sports', key: 'sports' },
+        { text: 'Night', key: 'night' },
+        { text: 'Fixed FPS', key: 'fixedfps' },
+        { text: 'Anti shake', key: 'antishake' },
+        { text: 'Very long', key: 'verylong' }
+      ],
+      hardware_version_items: [
+        { key: '4', text: '4.0 (legacy)' },
+        { key: '5', text: '5.0 (latest)' }
+      ],
     };
   },
   mounted() {
-    this.pollStatus();
-    setInterval(() => {
-      this.pollStatus();
-    }, 1000);
+    this.pollWifiStatus()
+    setInterval(() => { this.pollWifiStatus(); }, 1000);
     this.getInfoAndStatus();
     this.prepopulate();
     this.settings.packagesInstalled = this.$store.getters.musicPackages;
@@ -747,6 +760,13 @@ export default {
     this.cb.info = this.$store.getters.info;
     this.cb.status = this.$store.getters.status;
     this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
+    this.$wifi_connect.networks().then((result) => {
+      this.networks = result.data.ssids;
+    });
+    this.$coderbot.listPrograms()
+      .then((response) => {
+        this.programList = response.data;
+      });
   },
   beforeRouteLeave(to, from, next) {
     if (this.v$.$anyDirty) {
@@ -754,6 +774,12 @@ export default {
       this.confirm_exit_dialog = true;
     } else {
       next();
+    }
+  },
+  computed: {
+    network_require_user() {
+      const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
+      return network && network.conn_type == "ENTERPRISE";
     }
   },
   methods: {
@@ -781,7 +807,6 @@ export default {
         this.uploadCompleted = true;
         this.uploadInProgress = false;
         this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_1');
-        console.dir(result.data);
         if (this.updateStatus == 2) {
           this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_2');
         }
@@ -803,7 +828,6 @@ export default {
       this.$$coderbot.updateFromPackage(this.formdata, config).then((result) => {
         this.uploadCompleted = true;
         this.uploadInProgress = false;
-        console.dir(result.data);
         this.updateStatusText = this.$i18n.t('message.settings_packages_text_1');
       });
     },
@@ -830,7 +854,12 @@ export default {
       rawFile.send(null);
       */
     },
-    restoreConfig() {
+    pollWifiStatus() {
+      this.$wifi_connect.status().then((result) => {
+        this.wifi_status = result.data;
+      });
+    },
+    restoreSettings() {
       this.$coderbot.restoreSettings()
         .then(() => {
           this.snackText = this.$i18n.t('message.settings_packages_reset_complete');
@@ -848,7 +877,7 @@ export default {
         this.cb.logs.runningTest = false;
       });
     },
-    restore() {
+    reset() {
       this.$coderbot.reset()
         .then(() => {
           this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');
@@ -874,28 +903,6 @@ export default {
       // Get bot info and status
       return this.$coderbot.getInfoAndStatus();
     },
-    pollStatus() {
-      this.getInfoAndStatus()
-        .then((response) => {
-          if (this.status == 0 && response.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_online');
-            this.snackbar = true;
-            this.getInfoAndStatus();
-            this.prepopulate();
-          }
-          this.status = this.$store.getters.status != null ? 200 : 500;
-          this.cb.logs.log = this.$store.getters.status.log;
-        })
-        .catch((error) => {
-          // handle error
-          console.log(error);
-          if (this.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_offline');
-            this.snackbar = true;
-          }
-          this.status = 0;
-        });
-    },
     deletePkg(pkgNameID) {
       this.$coderbot.deleteMusicPackage(pkgNameID).then(() => {
         console.log('Pacchetto rimosso');
@@ -910,7 +917,6 @@ export default {
       if (this.v$.$invalid) {
         this.snackText = this.$i18n.t('message.settings_errors');
         this.snackbar = true;
-        console.log(this.v$);
       } else {
         /* eslint-disable func-names, object-shorthand, prefer-arrow-callback */
         const needRestart = this.needRestart();
@@ -929,25 +935,30 @@ export default {
           this.v$.settings.$reset();
           console.log('set dirty false');
         });
+        console.log("wifi dirty state: ", this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty);
         if (this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty) {
-          this.$coderbot.saveWifiParams(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
-            .then(() => {
-              console.log('Sent');
-              this.snackText = this.$i18n.t('message.settings_network_updated');
-              this.snackbar = true;
+          if(this.settings.wifiMode=="client") {
+            const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
+            if(network != null) {
+              console.log("connecting");
+              this.$wifi_connect.connect(network.ssid, network.conn_type, this.settings.wifiUser, this.settings.wifiPsw)
+                .then((result) => {
+                  console.log("connected: ", result.data);
+                  this.snackText = this.$i18n.t('message.settings_network_updated');
+                  this.snackbar = true;
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            }
+          } else {
+            console.log("disconnecting");
+            this.$wifi_connect.disconnect().then((result) => {
+              console.log("disconnected: ", result.data);
             });
+          }
         }
       }
-    },
-    saveWifi() {
-      // Send post with URL encoded parameters
-      this.$coderbot.saveWifiParams(this.settings.wifiMode, this.settings.wifiSSID, this.settings.wifiPsw)
-        .then(() => {
-          console.log('Sent');
-          this.snackText = this.$i18n.t('message.settings_network_updated');
-          this.snackbar = true;
-        });
-      console.log(`save wifi config - ssid: ${this.settings.wifiSSID}  pwd: ${this.settings.wifiPsw}`);
     },
     toggleSidebar() {
       const currentStatus = this.$store.getters.drawerStatus;
@@ -998,12 +1009,9 @@ export default {
     return {
       formdata: null,
       files: null,
-      status: null,
       dialog_reset: false,
       dialog_logs: false,
-      lastCommit: process.env.lastCommit,
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
-      CBv1: process.env.CB_ENDPOINT,
+      lastCommit: 'N/A',
       snackbar: null,
       snackText: null,
       fileName: '',
@@ -1032,6 +1040,7 @@ export default {
         btnFun: null,
         wifiMode: 'ap',
         wifiSSID: null,
+        wifiUser: null,
         wifiPsw: null,
 
         hardwareVersion: null,
@@ -1065,7 +1074,7 @@ export default {
       confirm_exit_dialog: null,
       router_next: null,
       adminPassword: null,
-      adminPassword_dialog: true,
+      adminPassword_dialog: false,
       tabs: [
         this.$i18n.t('message.settings_tabs_general'),
         this.$i18n.t('message.settings_tabs_movement'),
@@ -1077,18 +1086,10 @@ export default {
         this.$i18n.t('message.settings_tabs_audio'),
         this.$i18n.t('message.settings_tabs_music_packages')
       ],
-      cameraExposureModes: [
-        { text: 'Auto', key: 'auto' },
-        { text: 'Sports', key: 'sports' },
-        { text: 'Night', key: 'night' },
-        { text: 'Fixed FPS', key: 'fixedfps' },
-        { text: 'Anti shake', key: 'antishake' },
-        { text: 'Very long', key: 'verylong' }
-      ],
-      hardware_version_items: [
-        { key: '4', text: '4.0 (legacy)' },
-        { key: '5', text: '5.0 (latest)' }
-      ]
+      networks: [],
+      wifi_status: null,
+      wifi_pwd_show: false,
+      programList: [],
     };
   },
   validations() {
@@ -1148,6 +1149,8 @@ export default {
         },
         wifiSSID: {
           required,
+        },
+        wifiUser: {
         },
         wifiPsw: {
           required,

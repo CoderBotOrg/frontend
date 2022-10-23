@@ -30,18 +30,15 @@
                   </span>
                   <template v-for="activity in activityList" :key="activity.el">
                     <v-list-item link>
-                      <v-list-item-header @click="goToActivity(activity.name)">
+                      <div @click="goToActivity(activity.name)">
                       <v-list-item-title>
                         {{ activity.name }}
                       </v-list-item-title>
                       <v-list-item-subtitle>
                         {{ activity.description }}
                       </v-list-item-subtitle>
-                      </v-list-item-header>
-                      <v-list-item-avatar>
-                        <v-icon v-if="activity.default" icon="mdi-star"></v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-avatar>
+                      </div>
+                      <template v-slot:append>
                       <v-btn color="grey" variant="text" v-if="activity.stock!=true" ripple @click="confirmDeleteDlg = true">
                         <v-icon icon="mdi-delete"></v-icon>
                             <v-row justify="center">
@@ -76,12 +73,13 @@
                               </v-dialog>
                             </v-row>
                       </v-btn>
-                      </v-list-item-avatar>
-                      <v-list-item-avatar>
                       <v-btn variant="text" ripple :href="'#/activity/edit/'+activity.name">
                         <v-icon icon="mdi-pencil"></v-icon>
                       </v-btn>
-                      </v-list-item-avatar>
+                      </template>
+                      <template v-slot:prepend>
+                        <v-icon v-if="activity.default" icon="mdi-star"></v-icon>
+                      </template>
                     </v-list-item>
                   </template>
                 </v-list>
@@ -100,7 +98,7 @@
   </div>
 </template>
 <script>
-import sidebar from '../components/Sidebar';
+import sidebar from './Sidebar.vue';
 
 export default {
   components: {
@@ -133,7 +131,6 @@ export default {
   },
   data() {
     return {
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
       activityList: null,
       drawer: null,
       source: null,

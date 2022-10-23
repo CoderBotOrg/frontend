@@ -42,7 +42,7 @@
                         v-bind:error-messages="v$.activity.description.$error == true ? $t('message.validation_alphanum') : ''"
                       >
                       </v-text-field>
-                      <v-select v-model="activity.defaultView" :items="viste"
+                      <v-select v-model="activity.defaultView" :items="views"
                         v-bind:label="$t('message.activity_predefined_view')" required
                         @input="v$.activity.defaultView.$touch"
                       ></v-select>
@@ -360,8 +360,8 @@ import {
 } from '@vuelidate/validators';
 
 // import wsFactory from '../components/wsFactory';
-import sidebar from '../components/Sidebar';
-import ToolboxEditor from '../components/ToolboxEditor';
+import sidebar from './Sidebar.vue';
+import ToolboxEditor from './ToolboxEditor.vue';
 
 export default {
   name: 'ActivityEditor',
@@ -422,7 +422,6 @@ export default {
   data() {
     return {
       saved: false,
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
       snackbar: false,
       colorPicker: false,
       iconPicker: false,
@@ -575,21 +574,16 @@ export default {
       ar: false,
       // drawer: null,
       source: null,
-      viste: [
+      views: [
         {
-          text: this.$i18n.t('message.activity_views_program'),
+          title: this.$i18n.t('message.activity_views_program'),
           value: 'blocks'
-        },
+        }/*,
         {
-          text: this.$i18n.t('message.activity_views_runtime'),
+          title: this.$i18n.t('message.activity_views_runtime'),
           value: 'exec',
           disabled: true
-        },
-        {
-          text: this.$i18n.t('message.activity_views_python'),
-          value: 'python',
-          disabled: true
-        },
+        },*/
       ],
       confirm_exit_dialog: null,
       route_next: null,
@@ -622,7 +616,7 @@ export default {
   mounted() {
     if (this.$route.params.name) {
       this.saved = true;
-      this.$coderbot.loadActivity(this.$route.params.name, false).then((activity) => {
+      this.$coderbot.loadActivity(this.$route.params.name, null).then((activity) => {
         this.activity = activity.data;
         if (this.activity.toolbox == null) {
           this.activity.toolbox = {

@@ -37,29 +37,38 @@ import App from './App.vue';
 import router from './routes';
 
 import CoderBot from './common/coderbot';
+import WifiConnect from './common/wifi_connect';
 
 // Utilities
 // This is to serialize parameters to send them as URLencoded
 // https://github.com/axios/axios/issues/350#issuecomment-227270046
 
 const $axios = axios.create();
-const $coderbot = new CoderBot(process.env.CB_ENDPOINT, process.env.APIv1, process.env.APIv2, $axios, store);
+const $coderbot = new CoderBot(import.meta.env.VITE_CB_ENDPOINT, $axios, store);
+const $wifi_connect = new WifiConnect(import.meta.env.VITE_CB_ENDPOINT, $axios);
 
 // this will block until CoderBot returns several configuration data.
-$coderbot.load().then(() => {
-  console.log('config loaded');
-  /* eslint-disable no-new */
-  const app = createApp(App);
-  // Configuration
-  app.use(router);
-  app.use(vuetify);
-  app.use(store);
-  app.use(i18n);
+/* eslint-disable no-new */
+const app = createApp(App);
+// Configuration
+app.use(router);
+app.use(vuetify);
+app.use(store);
+app.use(i18n);
 
-  app.config.globalProperties.$axios = $axios;
-  app.config.globalProperties.$coderbot = $coderbot;
-  app.mount('#app');
-  app.defaultTheme = 'dark';
-}).catch((errors) => {
-  console.error(errors);
-});
+app.config.globalProperties.$axios = $axios;
+app.config.globalProperties.$coderbot = $coderbot;
+app.config.globalProperties.$wifi_connect = $wifi_connect;
+app.mount('#app');
+app.defaultTheme = 'dark';
+
+function loadConfig() {
+  $coderbot.load().then(() => {
+    console.log('config loaded');
+    $coderbot.setConfigLoaded(true);
+  }).catch((errors) => {
+    console.log('error loading config: ', errors);
+    setTimeout(loadConfig, 1000);
+  });  
+}
+loadConfig();

@@ -27,18 +27,18 @@
               @click="onChangeCategory(i)"
               >
               <template v-slot:append>
-                <v-list-item-avatar>
+                <span>
                 <v-icon @click="editCategory(i)" icon=mdi-pencil></v-icon>
-                </v-list-item-avatar>
-                <v-list-item-avatar>
+                </span>
+                <span>
                 <v-icon @click="upCategory(i)" icon="mdi-arrow-up"></v-icon>
-                </v-list-item-avatar>
-                <v-list-item-avatar>
+                </span>
+                <span>
                 <v-icon @click="downCategory(i)" icon="mdi-arrow-down"></v-icon>
-                </v-list-item-avatar>
-                <v-list-item-avatar>
+                </span>
+                <span>
                 <v-icon @click="deleteCategory(i)" icon="mdi-delete"></v-icon>
-                </v-list-item-avatar>
+                </span>
               </template>
             </v-list-item>
           <!--/v-list-group-->
@@ -78,6 +78,7 @@
 </template>
 <script>
 import BlocklyWorkspace from './BlocklyWorkspace.vue';
+import * as toolbox_full from '@/assets/toolbox_adv.json';
 
 const categoryToolbox = 'categoryToolbox';
 const flyoutToolbox = 'flyoutToolbox';
@@ -88,8 +89,6 @@ export default {
   },
   props: ['toolbox_in'],
   data: () => ({
-    CB: process.env.CB_ENDPOINT + process.env.APIv2,
-    CBv1: process.env.CB_ENDPOINT,
     toolbox_editor: null,
     in_changing_category: false,
     settings: {},
@@ -111,7 +110,6 @@ export default {
   beforeCreate() {
   },
   mounted() {
-    const toolbox_full = require('../assets/toolbox_adv.json');
     // i18n toolbox categories
     toolbox_full.contents.forEach((item) => {
       if (item.name.startsWith('message.')) {
@@ -126,10 +124,7 @@ export default {
     }
 
     // Get the legacy configuration and initialize Blockly
-    this.$axios.get(`${this.CBv1}/config`)
-      .then((response) => {
-        this.settings = { ...this.settings, ...response.data };
-      });
+    this.settings = this.settings = this.$store.getters.settings;
   },
   beforeRouteLeave(to, from, next) {
     if (this.workspace.dirty) {

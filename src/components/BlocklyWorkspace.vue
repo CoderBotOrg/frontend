@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import * as Blockly from 'blockly/core';
+import Blockly from 'blockly';
 import DarkTheme from '@blockly/theme-dark';
 import 'blockly/blocks';
 import 'blockly/python';
@@ -32,7 +32,6 @@ const coderbot_locales = {
   fr: bot_fr.default
 };
 
-/* eslint-disable no-import-assign */
 Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
 
 const blockly_locales = {

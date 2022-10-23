@@ -1,12 +1,13 @@
 import i18n from '../i18n/index';
+import * as toolbox_full from '../assets/toolbox_adv.json';
 
 class CoderBot {
-  constructor(CB, APIv1, APIv2, axios, store) {
-    this.CB = CB + APIv2;
-    this.CBv1 = CB + APIv1;
+  constructor(CB, axios, store) {
+    this.CB = CB + '/api/v1';
     this.$axios = axios;
     this.$store = store;
     this.$i18n = i18n;
+    this.config_loaded = false;
     this.initActivity();
   }
 
@@ -17,10 +18,17 @@ class CoderBot {
     return Promise.all([p1, p2, p3]);
   }
 
+  setConfigLoaded(status) {
+    this.config_loaded = status;
+  }
+
+  getConfigLoaded() {
+    return this.config_loaded;
+  }
+
   initActivity() {
     this.loadActivity(null, true).then((activity) => {
       if (activity.data == '') {
-        const toolbox_full = require('../assets/toolbox_adv.json');
         const defaultActivity = {
           stock: true,
           default: true,
@@ -108,9 +116,9 @@ class CoderBot {
   }
 
   async loadMusicPackages() {
-    const result = await this.$axios.get(`${this.CB}/listMusicPackages`);
+    const result = await this.$axios.get(`${this.CB}/music/packages`);
     const packagesInstalled = [];
-    const music_packages = JSON.parse(result.data);
+    const music_packages = result.data;
     const musicInstruments = [];
     const musicAnimals = [];
     Object.entries(music_packages).forEach((key) => {
@@ -131,9 +139,9 @@ class CoderBot {
   }
 
   async loadCNNModels() {
-    const result = await this.$axios.get(`${this.CB}/listCNNModels`);
+    const result = await this.$axios.get(`${this.CB}/cnnmodels`);
     const cnnModels = [];
-    const cnn_models = JSON.parse(result.data);
+    const cnn_models = result.data;
     Object.entries(cnn_models).forEach((entry) => {
       const model_key = entry[0];
       // const model_data = entry[1];
@@ -143,7 +151,7 @@ class CoderBot {
   }
 
   async loadSettings() {
-    const result = await this.$axios.get(`${this.CBv1}/config`);
+    const result = await this.$axios.get(`${this.CB}/settings`);
     // handle success
     const data = {};
     const remoteConfig = result.data;
@@ -188,7 +196,7 @@ class CoderBot {
 
   async saveSettings(settings) {
     /* eslint-enable */
-    const legacySettings = new URLSearchParams({
+    const legacySettings = {
       ctrl_hud_image: settings.ctrl_hud_image,
       cv_image_factor: settings.cv_image_factor,
       camera_color_object_size_max: settings.camera_color_object_size_max,
@@ -225,34 +233,33 @@ class CoderBot {
       audio_volume_level: settings.audioLevel,
       admin_password: settings.adminPassword,
       hardware_version: settings.hardwareVersion,
-
-    });
+    };
     this.$store.commit('setSettings', settings);
-    return this.$axios.post(`${this.CBv1}/config`, legacySettings);
+    return this.$axios.put(`${this.CB}/settings`, legacySettings);
+  }
+
+  reset() {
+    return this.$axios.post(`${this.CB}/system/reset`);
+  }
+
+  restart() {
+    return this.$axios.post(`${this.CB}/system/restart`);
   }
 
   reboot() {
-    return this.$axios.get(`${this.CBv1}/bot`, {
-      params: {
-        cmd: 'reboot'
-      }
-    });
+    return this.$axios.post(`${this.CB}/system/reboot`);
   }
 
   halt() {
-    return this.$axios.get(`${this.CBv1}/bot`, {
-      params: {
-        cmd: 'halt'
-      }
-    });
+    return this.$axios.post(`${this.CB}/system/halt`);
   }
 
   getInfoAndStatus() {
-    const p1 = this.$axios.get(`${this.CB}/status`)
+    const p1 = this.$axios.get(`${this.CB}/system/status`)
       .then((response) => {
         this.$store.commit('setStatus', response.data);
       });
-    const p2 = this.$axios.get(`${this.CB}/info`)
+    const p2 = this.$axios.get(`${this.CB}/system/info`)
       .then((response) => {
         this.$store.commit('setInfo', response.data);
       });
@@ -266,15 +273,11 @@ class CoderBot {
   }
 
   restoreSettings() {
-    return this.$axios.post(`${this.CB}/restoreSettings`);
+    return this.$axios.post(`${this.CB}/settings/restore`);
   }
 
   updateFromPackage(formdata, config) {
     return this.$axios.post(`${this.CB}/updateFromPackage`, formdata, config);
-  }
-
-  reset() {
-    return this.$axios.post(`${this.CB}/reset`);
   }
 
   test(checkedTests) {
@@ -283,46 +286,38 @@ class CoderBot {
     });
   }
 
-  saveWifiParams(wifiMode, wifiSSID, wifiPsw) {
-    const valuesAsString = new URLSearchParams({
-      wifi_mode: wifiMode,
-      wifi_ssid: wifiSSID,
-      wifi_psk: wifiPsw,
-    });
-    return this.$axios.post(`${this.CBv1}/wifi`, valuesAsString);
-  }
-
   updatePackages(formdata) {
     return this.$axios.post(`${this.CB}/updatePackages`, formdata);
   }
 
   loadActivity(activityName, activityDefault) {
-    return this.$axios.get(`${this.CB}/loadActivity`, {
+    return this.$axios.get(`${this.CB}/activities/${activityName}`, {
       params: {
-        name: activityName,
         default: activityDefault
       },
     });
   }
 
   getActivities() {
-    return this.$axios.get(`${this.CB}/listActivities`);
+    return this.$axios.get(`${this.CB}/activities`);
   }
 
   deleteActivity(name) {
-    return this.$axios.post(`${this.CB}/deleteActivity`, {
+    return this.$axios.delete(`${this.CB}/activities/${name}`, {
       name,
     });
   }
 
   saveActivity(an_activity) {
-    return this.$axios.post(`${this.CB}/saveActivity`, {
-      activity: an_activity
-    });
+    // defaults requird by API
+    an_activity.description = an_activity.description == null ? '' : an_activity.description;
+    an_activity.default = an_activity.default == null ? false : an_activity.default;
+    an_activity.stock = an_activity.stock == null ? false : an_activity.stock;
+    return this.$axios.post(`${this.CB}/activities`, an_activity);
   }
 
   saveProgram(overwrite, name, dom_code, code, is_default) {
-    return this.$axios.post(`${this.CB}/saveProgram`, {
+    return this.$axios.post(`${this.CB}/programs`, {
       overwrite,
       name,
       dom_code,
@@ -332,47 +327,94 @@ class CoderBot {
   }
 
   listPrograms() {
-    return this.$axios.get(`${this.CB}/list`);
+    return this.$axios.get(`${this.CB}/programs`);
   }
 
   loadProgram(name) {
-    return this.$axios.get(`${this.CB}/load`, {
-      params: {
-        name
-      },
-    });
+    return this.$axios.get(`${this.CB}/programs/${name}`);
   }
 
   deleteProgram(name) {
-    return this.$axios.post(`${this.CB}/delete`, {
-      name,
+    return this.$axios.delete(`${this.CB}/programs/${name}`);
+  }
+
+  runProgram(name, code) {
+    return this.$axios.post(`${this.CB}/programs/${name}/run`, {
+      name: name,
+      code: code,
     });
+  }
+
+  stopProgram(name) {
+    return this.$axios.patch(`${this.CB}/programs/${name}/stop`, {});
+  }
+
+  programStatus(name) {
+    return this.$axios.get(`${this.CB}/programs/${name}/status`);
   }
 
   status() {
-    return this.$axios.get(`${this.CB}/status`);
+    return this.$axios.get(`${this.CB}/system/status`);
   }
 
   info() {
-    return this.$axios.get(`${this.CB}/info`);
+    return this.$axios.get(`${this.CB}/system/info`);
   }
 
-  execProgram(dom_code, code, options) {
-    return this.$axios.post(`${this.CB}/exec`, {
-      name: 'run program',
-      dom_code,
-      code,
-      options
+  move(speed, elapse, distance) {
+    return this.$axios.post(`${this.CB}/control/move`, {
+      speed: speed,
+      elapse: elapse,
+      distance: distance
     });
   }
 
-  stopProgram() {
-    return this.$axios.post(`${this.CBv1}/program/end`);
+  turn(speed, elapse) {
+    return this.$axios.post(`${this.CB}/control/turn`, {
+      speed: speed,
+      elapse: elapse
+    });
   }
 
-  programStatus() {
-    return this.$axios.get(`${this.CBv1}/program/status`);
+  stop() {
+    return this.$axios.post(`${this.CB}/control/stop`);
   }
+
+  speak(text, locale) {
+    return this.$axios.post(`${this.CB}/control/speak`, {
+      text: text,
+      locale: locale
+    });
+  }
+
+  takePhoto() {
+    return this.$axios.post(`${this.CB}/media`);
+  }
+
+  recVideo() {
+    return this.$axios.post(`${this.CB}/video/rec`);
+  }
+
+  stopVideo() {
+    return this.$axios.post(`${this.CB}/video/stop`);
+  }
+
+  streamVideoURL() {
+    return `${this.CB}/video/stream`;
+  }
+
+  getPhotos() {
+    return this.$axios.get(`${this.CB}/media`);
+  }
+
+  deletePhoto(name) {
+    return this.$axios.delete(`${this.CB}/media/${name}`);
+  }
+
+  getPhotoURL(name) {
+    return `${this.CB}/media/${name}`;
+  }
+
 }
 
 export default CoderBot;

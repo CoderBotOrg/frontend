@@ -12,28 +12,22 @@
         <v-spacer></v-spacer>
         <v-chip class="ma-2" v-if="activity.maxBlocks > 0" label>{{ $t("message.activity_program_remaining_blocks") }}: {{ remainingCapacity }}</v-chip>
         <!-- If the API is available, show the desired buttons -->
-        <template v-if="status == 200">
-          <template v-for="button in activity.buttons">
-            <template v-if="button.type == 'text'">
-              <v-btn @click="this[button.action]()">
-                <v-icon :icon="button.icon"></v-icon>
-                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
-              </v-btn>
-            </template>
-            <template v-else>
-              <v-btn @click="this[button.action]()" style="height: 70%" :color="button.colorBtn"
-                :class="button.colorText">
-                <v-icon :icon="button.icon"></v-icon>
-                <span v-if="activity.showButtonLabel">{{ button.label }}</span>
-              </v-btn>
-            </template>
-            &nbsp;&nbsp;
+        <template v-for="button in activity.buttons">
+          <template v-if="button.type == 'text'">
+            <v-btn @click="this[button.action]()">
+              <v-icon :icon="button.icon"></v-icon>
+              <span v-if="activity.showButtonLabel">{{ button.label }}</span>
+            </v-btn>
           </template>
+          <template v-else>
+            <v-btn @click="this[button.action]()" style="height: 70%" :color="button.colorBtn"
+              :class="button.colorText">
+              <v-icon :icon="button.icon"></v-icon>
+              <span v-if="activity.showButtonLabel">{{ button.label }}</span>
+            </v-btn>
+          </template>
+          &nbsp;&nbsp;
         </template>
-        <!-- If the API is not responding, show an error icon -->
-        <v-btn @click="dialog = true" icon v-if="status != 200">
-          <v-icon icon="mdi-error"></v-icon>
-        </v-btn>
       </v-app-bar>
       <!-- Page content -->
       <v-main>
@@ -91,23 +85,21 @@
         </v-card>
       </v-dialog>
       <!-- Load Program -->
-      <v-dialog v-model="carica" max-width="290">
-        <v-card>
+      <v-dialog v-model="carica" max-width="600">
+        <v-card width="480">
           <v-card-title class="headline">
             {{ $t("message.program_list") }}
           </v-card-title>
           <v-list>
             <v-list-item v-for="program in programList" :key="program.el" @click="{}">
-              <v-list-item-header>
               <v-list-item-title ripple @click="loadProgram(program.name)">
                 {{ program.name }}
               </v-list-item-title>
-              </v-list-item-header>
-              <v-list-item-avatar end>
-              <v-btn v-if="program.default != 'True'" @click="deleteProgramDlg(program.name)">
-                <v-icon icon="mdi-delete"></v-icon>
-              </v-btn>
-              </v-list-item-avatar>
+              <template v-slot:append>
+                <v-btn v-if="!program.default" @click="deleteProgramDlg(program.name)">
+                  <v-icon icon="mdi-delete"></v-icon>
+                </v-btn>
+              </template>
             </v-list-item>
           </v-list>
           <v-card-actions>
@@ -219,7 +211,7 @@
               {{ $t("message.no") }}
             </v-btn>
             <v-btn color="green darken-1" text="text"
-              @click="del = false, carica = false, deleteProgram(newProgramName)">
+              @click="del = false, carica = false, deleteProgram(programName)">
               {{ $t("message.yes") }}
             </v-btn>
           </v-card-actions>
@@ -236,21 +228,6 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" text="text" @click="dialogCode = false">
-              {{ $t("message.ok") }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <!-- Status -->
-      <v-dialog v-model="dialog" max-width="290">
-        <v-card>
-          <v-card-title class="headline">{{ $t("message.coderbot_status") }}</v-card-title>
-          <v-card-text>
-            {{ statusText }}
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text="text" @click="dialog = false">
               {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
@@ -304,8 +281,8 @@ import 'prismjs';
 import 'prismjs/components/prism-python.js';
 import Prism from 'vue-prism-component';
 import { useTheme } from 'vuetify';
-import sidebar from './Sidebar';
-import BlocklyWorkspace from './BlocklyWorkspace';
+import sidebar from './Sidebar.vue';
+import BlocklyWorkspace from './BlocklyWorkspace.vue';
 
 export default {
   name: 'Activity',
@@ -317,35 +294,31 @@ export default {
   setup() {
     return {
       theme: useTheme(),
-      CB: process.env.CB_ENDPOINT + process.env.APIv2,
-      CBv1: process.env.CB_ENDPOINT,
+      settings: null,
+      cssProps: {
+        '--bodyFont': 'Roboto',
+        '--codeFont': 'Ubuntu Mono',
+      },
+      experimental: 0,
+      webcamStream: null,
+      isDefault: '',
     };
   },
   data: () => ({
-    cssProps: {
-      '--bodyFont': 'Roboto',
-      '--codeFont': 'Ubuntu Mono',
-    },
-    activityStyle: null,
     activity: {
       exec: {},
     },
+    toolbox: null,
+    dialog: false,
+    dialogCode: false,
     log: null,
-    settings: null,
     snackText: null,
     snackbar: false,
     drawer: false,
-    tabs: null,
-    dialog: false,
-    dialogCode: false,
-    status: null,
-    info: null,
     code: '',
-    toolbox: null,
     generalDialog: false,
     generalDialogText: null,
     generalDialogTitle: null,
-    experimental: 0,
     execMode: 'fullExec', // can be 'fullExec' or 'stepByStep',
     carica: false,
     programList: '',
@@ -355,9 +328,7 @@ export default {
     invalidName: false,
     del: false,
     clear: false,
-    webcamStream: `${process.env.CB_ENDPOINT + process.env.APIv1}/video/stream`,
     runtimeDialog: false,
-    isDefault: '',
     cannotOverwrite: false,
     defaultProgramName: '',
     overwrite: true,
@@ -368,17 +339,12 @@ export default {
     program_status: null
   }),
   computed: {
-    statusText() {
-      if (this.status) {
-        return this.$i18n.t('message.coderbot_status_online');
-      }
-      return this.$i18n.t('message.coderbot_status_offline');
-    },
     remainingCapacity() {
       return this.$refs.workspace.remainingCapacity();
     },
   },
   mounted() {
+    this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
     // Get the activity
     let activityName = this.$route.params.name;
@@ -396,24 +362,8 @@ export default {
       this.settings.maxBlocks = this.activity.maxBlocks;
       this.updateCssProps();
 
-      let toolboxJSON = null;
-      if (this.activity.toolbox == null) {
-        const toolboxLevel = this.settings.progLevel;
-        // Decode it and get the clean serialized XML as plain string
-        toolboxJSON = require(`../assets/toolbox_${toolboxLevel}.json`);
-      } else {
-        toolboxJSON = this.activity.toolbox;
-      }
-      this.toolbox = toolboxJSON;
+      this.toolbox = this.activity.toolbox;
     });
-
-    this.status = null;
-    this.pollStatus();
-
-    // Start the polling
-    setInterval(() => {
-      this.pollStatus();
-    }, 1000);
   },
   beforeRouteLeave(to, from, next) {
     if (this.dirty) {
@@ -426,7 +376,6 @@ export default {
   methods: {
     updateCssProps() {
       // (Re)Compute the CSS variables from the activity definition, then update them
-      console.log('Computing CSS Props');
       const {
         bodyFont
       } = this.activity;
@@ -457,7 +406,6 @@ export default {
         '--codeFont': fontFamilyCode,
         '--transform': textTransform,
       };
-      console.log('Computed CSS props:', this.cssProps);
     },
 
     onWorkspaceChanged() {
@@ -601,7 +549,8 @@ export default {
     },
 
     deleteProgramDlg(program) {
-      this.$data.newProgramName = program;
+      console.log(program)
+      this.$data.programName = program;
       this.$data.del = true;
     },
 
@@ -609,38 +558,12 @@ export default {
       if (this.$data.programName == program) {
         this.$data.programName = '';
         this.$data.code = '';
-        this.$data.workspace.clear();
+        this.$refs.workspace.clear();
       }
       console.log('delete');
       this.$coderbot.deleteProgram(program).then(() => {
         console.log('deleted');
       });
-    },
-
-    pollStatus() {
-      this.$coderbot.status()
-        .then((response) => {
-          // If the reconnection happened while in this component, send a notification
-          if (this.status == 0 && response.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_online');
-            this.snackbar = true;
-          }
-          this.statusData = response.data;
-          this.status = response.status;
-        });
-      this.$coderbot.info()
-        .then((response) => {
-          this.info = response.data;
-        })
-        .catch((error) => {
-          console.log(`pollStatus error: ${error}`);
-          // If the disconnection happened while in this component, send a notification
-          if (this.status) {
-            this.snackText = this.$i18n.t('coderbot_offline_2');
-            this.snackbar = true;
-          }
-          this.status = 0;
-        });
     },
 
     getProgramCode() {
@@ -649,21 +572,15 @@ export default {
     },
 
     runProgram() {
-      if (this.status) {
-        // POST /program/save
-        const options = this.activity;
-        const { dom_code, code } = this.$refs.workspace.getProgramData();
-        this.$coderbot.execProgram(dom_code, code, options).then(() => {
-          this.runtimeDialog = true;
-          setTimeout(() => {
-            this.updateExecStatus();
-          }, 1000);
-        });
-      } else {
-        this.generalDialog = true;
-        this.generalDialogTitle = this.$i18n.t('error');
-        this.generalDialogText = this.$i18n.t('coderbot_offline_3');
-      }
+      // POST /program/save
+      const { code } = this.$refs.workspace.getProgramData();
+      const programName = this.programName != '' ? this.programName : 'untitled';
+      this.$coderbot.runProgram(programName, code).then(() => {
+        this.runtimeDialog = true;
+        setTimeout(() => {
+          this.updateExecStatus();
+        }, 1000);
+      });
     },
 
     stopProgram() {
