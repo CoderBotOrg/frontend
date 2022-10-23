@@ -61,9 +61,14 @@ app.config.globalProperties.$coderbot = $coderbot;
 app.config.globalProperties.$wifi_connect = $wifi_connect;
 app.mount('#app');
 app.defaultTheme = 'dark';
-$coderbot.load().then(() => {
-  console.log('config loaded');
-}).catch((errors) => {
-  console.log('oops');
-  console.error(errors);
-});
+
+function loadConfig() {
+  $coderbot.load().then(() => {
+    console.log('config loaded');
+    $coderbot.setConfigLoaded(true);
+  }).catch((errors) => {
+    console.log('error loading config: ', errors);
+    setTimeout(loadConfig, 1000);
+  });  
+}
+loadConfig();

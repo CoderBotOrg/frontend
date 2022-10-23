@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       drawer: null,
-      status: null,
+      status: 200,
       dialog: true,
       carouselItems: [
         {

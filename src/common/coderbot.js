@@ -7,6 +7,7 @@ class CoderBot {
     this.$axios = axios;
     this.$store = store;
     this.$i18n = i18n;
+    this.config_loaded = false;
     this.initActivity();
   }
 
@@ -15,6 +16,14 @@ class CoderBot {
     const p2 = this.loadMusicPackages();
     const p3 = this.loadCNNModels();
     return Promise.all([p1, p2, p3]);
+  }
+
+  setConfigLoaded(status) {
+    this.config_loaded = status;
+  }
+
+  getConfigLoaded() {
+    return this.config_loaded;
   }
 
   initActivity() {

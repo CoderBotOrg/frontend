@@ -6,17 +6,10 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title class="title"><div>{{ $t("message.settings_title") }}</div></v-app-bar-title>
         <v-spacer></v-spacer>
-        <template v-if="status == 200">
-          <v-btn text @click="save">
-            <v-icon icon="mdi-content-save"></v-icon>
-            {{ $t('message.save') }}
-          </v-btn>
-        </template>
-        <template v-else>
-          <v-btn text>
-            <v-progress-circular :size="30" :width="2" indeterminate></v-progress-circular>
-          </v-btn>
-        </template>
+        <v-btn text @click="save">
+          <v-icon icon="mdi-content-save"></v-icon>
+          {{ $t('message.save') }}
+        </v-btn>
         <template v-slot:extension>
           <v-tabs slot="extension" v-model="tab" centered slider-color="white">
             <v-tab v-for="item in tabs" :key="item">
@@ -360,7 +353,6 @@
                   </v-card-title>
                     <div class="cardContent">
                       <v-select 
-                        :disabled="settings.wifiMode!='client'"
                         v-model="settings.startupProgram"
                         @change="v$.settings.startupProgram.$touch"
                         :items="programList"
@@ -393,7 +385,6 @@
                       >
                         <v-radio v-bind:label="$t('message.settings_network_mode_ap')" value="ap"></v-radio>
                         <v-radio v-bind:label="$t('message.settings_network_mode_client')" value="client"></v-radio>
-
                       </v-radio-group>
                       <div v-if="settings.wifiMode=='client'">
                         <v-select 
@@ -777,10 +768,8 @@ export default {
     };
   },
   mounted() {
-    this.pollStatus();
-    setInterval(() => {
-      this.pollStatus();
-    }, 1000);
+    this.pollWifiStatus()
+    setInterval(() => { this.pollWifiStatus(); }, 1000);
     this.getInfoAndStatus();
     this.prepopulate();
     this.settings.packagesInstalled = this.$store.getters.musicPackages;
@@ -789,7 +778,7 @@ export default {
     this.cb.status = this.$store.getters.status;
     this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
     this.$wifi_connect.networks().then((result) => {
-     this.networks = result.data.ssids;
+      this.networks = result.data.ssids;
     });
     this.$coderbot.listPrograms()
       .then((response) => {
@@ -882,6 +871,11 @@ export default {
       rawFile.send(null);
       */
     },
+    pollWifiStatus() {
+      this.$wifi_connect.status().then((result) => {
+        this.wifi_status = result.data;
+      });
+    },
     restoreSettings() {
       this.$coderbot.restoreSettings()
         .then(() => {
@@ -926,31 +920,6 @@ export default {
       // Get bot info and status
       return this.$coderbot.getInfoAndStatus();
     },
-    pollStatus() {
-      this.getInfoAndStatus()
-        .then((response) => {
-          if (this.status == 0 && response.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_online');
-            this.snackbar = true;
-            this.getInfoAndStatus();
-            this.prepopulate();
-          }
-          this.status = this.$store.getters.status != null ? 200 : 500;
-          this.cb.logs.log = this.$store.getters.status.log;
-        })
-        .catch((error) => {
-          // handle error
-          console.log(error);
-          if (this.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_offline');
-            this.snackbar = true;
-          }
-          this.status = 0;
-        });
-        this.$wifi_connect.status().then((result) => {
-          this.wifi_status = result.data;
-        });
-    },
     deletePkg(pkgNameID) {
       this.$coderbot.deleteMusicPackage(pkgNameID).then(() => {
         console.log('Pacchetto rimosso');
@@ -988,28 +957,23 @@ export default {
             const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
             if(network != null) {
               this.wifi_overlay = true;
-              this.$wifi_connect.disconnect().then((result) => {
-                setTimeout(() => {
-                  this.$wifi_connect.connect(network.ssid, network.conn_type, this.settings.wifiUser, this.settings.wifiPsw)
-                    .then((result) => {
-                      this.snackText = this.$i18n.t('message.settings_network_updated');
-                      this.snackbar = true;
-                      this.wifi_overlay = false;
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                      this.wifi_overlay = false;
-                    });
-                  }, 10000);
-              })
-              .catch((error) => {
-                console.error(error);  
-                this.wifi_overlay = false;
-              });
+              this.$wifi_connect.connect(network.ssid, network.conn_type, this.settings.wifiUser, this.settings.wifiPsw)
+                .then((result) => {
+                  this.snackText = this.$i18n.t('message.settings_network_updated');
+                  this.snackbar = true;
+                  this.wifi_overlay = false;
+                })
+                .catch((error) => {
+                  console.error(error);
+                  this.wifi_overlay = false;
+                });
             }
+          } else {
+            console.log("disconnecting")
+            this.$wifi_connect.disconnect().then((result) => {
+              console.log(result);
+            });
           }
-        } else {
-          this.$wifi_connect.disconnect().then((result) => {});
         }
       }
     },
@@ -1062,7 +1026,6 @@ export default {
     return {
       formdata: null,
       files: null,
-      status: null,
       dialog_reset: false,
       dialog_logs: false,
       lastCommit: 'N/A',
@@ -1128,7 +1091,7 @@ export default {
       confirm_exit_dialog: null,
       router_next: null,
       adminPassword: null,
-      adminPassword_dialog: true,
+      adminPassword_dialog: false,
       tabs: [
         this.$i18n.t('message.settings_tabs_general'),
         this.$i18n.t('message.settings_tabs_movement'),
