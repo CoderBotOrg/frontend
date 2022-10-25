@@ -46,19 +46,11 @@
                       <v-btn color="info" @click="dialog_reboot=true">
                         <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_restart') }}
                       </v-btn>
-<<<<<<< HEAD
                       <v-btn color="warning" @click="dialog_restore=true">
-                        <v-icon icon="mdi-restore"></v-icon> {{ $t('message.settings_actions_reset') }}
-                      </v-btn>
-                      <v-btn slot="activator" color="error" dark @click="dialog_reset=true">
-                        <v-icon icon="mdi-store-cog"></v-icon> {{ $t('message.settings_actions_reset_factory') }}
-=======
-                      <v-btn @click="restoreConfig" color="warning">
                         <v-icon icon="mdi-restore"></v-icon> {{ $t('message.settings_actions_restore') }}
                       </v-btn>
-                      <v-btn slot="activator" color="error" dark @click="dialog_reset = true">
+                      <v-btn slot="activator" color="error" dark @click="dialog_reset=true">
                         <v-icon icon="mdi-store-cog"></v-icon> {{ $t('message.settings_actions_reset') }}
->>>>>>> aedc603 (wip #92)
                       </v-btn>
                       <!-- ** Restore button + dialog box** -->
                       <v-dialog v-model="dialog_shutdown" width="500">
