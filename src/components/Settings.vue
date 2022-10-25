@@ -40,29 +40,86 @@
                   <h3 class="text-xs-left"> {{ $t('message.settings_actions') }} </h3>
                   <v-card>
                     <div class="d-flex justify-space-around align-center">
-                      <v-btn @click="shutdown" color="info">
-                        <v-icon icon="mdi-power"></v-icon> {{ $t('message.settings_actions_off') }}
+                      <v-btn color="info" @click="dialog_shutdown=true">
+                        <v-icon icon="mdi-power"></v-icon> {{ $t('message.settings_actions_halt') }}
                       </v-btn>
-                      <v-btn @click="reboot" color="info">
+                      <v-btn color="info" @click="dialog_reboot=true">
                         <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_restart') }}
                       </v-btn>
-                      <v-btn @click="restoreSettings" color="warning">
+                      <v-btn color="warning" @click="dialog_restore=true">
                         <v-icon icon="mdi-restore"></v-icon> {{ $t('message.settings_actions_reset') }}
                       </v-btn>
-                      <v-btn slot="activator" color="error" dark @click="dialog_reset = true">
+                      <v-btn slot="activator" color="error" dark @click="dialog_reset=true">
                         <v-icon icon="mdi-store-cog"></v-icon> {{ $t('message.settings_actions_reset_factory') }}
                       </v-btn>
-                      <v-btn slot="activator" color="warning" dark @click="dialog_logs = true">
-                        <v-icon icon="mdi-format-list-text"></v-icon> {{ $t('message.settings_actions_show_logs') }}
-                      </v-btn>
                       <!-- ** Restore button + dialog box** -->
+                      <v-dialog v-model="dialog_shutdown" width="500">
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2" primary-title>
+                              <h3>CoderBot - {{ $t('message.settings_actions_halt_title') }}</h3>
+                            </v-card-title>
+                            <v-card-text>
+                              {{ $t('message.settings_actions_halt_text_1') }}
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" @click="dialog_shutdown=false">
+                                {{ $t('message.cancel') }}
+                              </v-btn>
+                              <v-btn color="error" @click="reboot">
+                                <b>{{ $t('message.settings_actions_halt') }}</b>
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialog_reboot" width="500">
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2" primary-title>
+                              <h3>CoderBot - {{ $t('message.settings_actions_reboot_title') }}</h3>
+                            </v-card-title>
+                            <v-card-text>
+                              {{ $t('message.settings_actions_reboot_text_1') }}
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" @click="dialog_reboot=false">
+                                {{ $t('message.cancel') }}
+                              </v-btn>
+                              <v-btn color="error" @click="reboot">
+                                <b>{{ $t('message.settings_actions_reboot') }}</b>
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialog_restore" width="500">
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2" primary-title>
+                              <h3>CoderBot - {{ $t('message.settings_actions_restore_title') }}</h3>
+                            </v-card-title>
+                            <v-card-text>
+                              {{ $t('message.settings_actions_restore_text_1') }}
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" @click="dialog_restore = false">
+                                {{ $t('message.cancel') }}
+                              </v-btn>
+                              <v-btn color="error" @click="reset">
+                                <b>{{ $t('message.settings_actions_restore') }}</b>
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                      </v-dialog>
                       <v-dialog v-model="dialog_reset" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_reset_factory_title') }}</h3>
+                              <h3>CoderBot - {{ $t('message.settings_actions_reset_title') }}</h3>
                             </v-card-title>
                             <v-card-text>
-                              {{ $t('message.settings_actions_reset_factory_text_1') }}
+                              {{ $t('message.settings_actions_reset_text_1') }}
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
@@ -71,27 +128,7 @@
                                 {{ $t('message.cancel') }}
                               </v-btn>
                               <v-btn color="error" @click="reset">
-                                <b>{{ $t('message.settings_actions_reset_factory_restore') }}</b>
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                      </v-dialog>
-                      <!-- Logs -->
-                      <v-dialog v-model="dialog_logs" width="700">
-                          <v-card>
-                            <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_show_logs_title') }}</h3>
-                            </v-card-title>
-                            <div class="cardContent">
-                              <div v-for="value, key in cb.logs.log" :key="key">
-                                {{ value }}
-                              </div>
-                            </div>
-                            <v-divider></v-divider>
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn color="primary" @click="dialog_logs = false">
-                                {{ $t('message.close') }}
+                                <b>{{ $t('message.settings_actions_reset_do') }}</b>
                               </v-btn>
                             </v-card-actions>
                           </v-card>
@@ -1009,8 +1046,10 @@ export default {
     return {
       formdata: null,
       files: null,
+      dialog_shutdown: false,
+      dialog_reboot: false,
+      dialog_restore: false,
       dialog_reset: false,
-      dialog_logs: false,
       lastCommit: 'N/A',
       snackbar: null,
       snackText: null,
