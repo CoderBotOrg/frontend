@@ -200,7 +200,7 @@ export default {
       }
     },
     getProgramData() {
-      const xml_code = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      const xml_code = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
       const dom_code = Blockly.Xml.domToText(xml_code);
       window.LoopTrap = 1000;
       Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';

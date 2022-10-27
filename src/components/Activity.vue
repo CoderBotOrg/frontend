@@ -46,8 +46,8 @@
       <!-- When the selection is completed, the result is then handled by importProgram -->
       <!--   Dialogs   -->
       <!-- Runtime -->
-      <v-dialog v-model="runtimeDialog">
-        <v-card style="width:500px;">
+      <v-dialog v-model="runtimeDialog" width="480">
+        <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>
             {{ $t("message.program_status_title") }}
             <v-spacer></v-spacer>
@@ -85,8 +85,8 @@
         </v-card>
       </v-dialog>
       <!-- Load Program -->
-      <v-dialog v-model="carica" max-width="600">
-        <v-card width="480">
+      <v-dialog v-model="carica" width="600">
+        <v-card>
           <v-card-title class="headline">
             {{ $t("message.program_list") }}
           </v-card-title>
@@ -111,8 +111,8 @@
         </v-card>
       </v-dialog>
       <!-- Save Program -->
-      <v-dialog v-model="save">
-        <v-card style="width: 400px;">
+      <v-dialog v-model="save" width="480">
+        <v-card>
           <v-card-title class="headline">
             {{ $t("message.save_as") }}
           </v-card-title>
@@ -131,7 +131,7 @@
         </v-card>
       </v-dialog>
       <!-- Name error -->
-      <v-dialog v-model="invalidName" max-width="290">
+      <v-dialog v-model="invalidName" width="290">
         <v-card>
           <v-card-title class="headline">Error</v-card-title>
           <v-card-text>
@@ -145,7 +145,7 @@
         </v-card>
       </v-dialog>
       <!-- Overwrite error -->
-      <v-dialog v-model="cannotOverwrite" max-width="290">
+      <v-dialog v-model="cannotOverwrite" width="290">
         <v-card>
           <v-card-title class="headline">Error</v-card-title>
           <v-card-text>
@@ -159,7 +159,7 @@
         </v-card>
       </v-dialog>
       <!-- Ask for overwrite -->
-      <v-dialog v-model="overwriteDialog" max-width="500">
+      <v-dialog v-model="overwriteDialog" width="480">
         <v-card>
           <v-card-title class="headline">
             {{ $t("message.overwrite") }}
@@ -171,14 +171,14 @@
             <v-btn color="red darken-1" text="text" @click="overwriteDialog = false, save = true">
               {{ $t("message.no") }}
             </v-btn>
-            <v-btn color="green darken-1" text="text" @click="overwrite = 1, overwriteDialog = false, saveProgram()">
+            <v-btn color="green darken-1" text="text" @click="overwrite = true, overwriteDialog = false, saveProgram()">
               {{ $t("message.yes") }}
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
       <!-- Clear Program -->
-      <v-dialog v-model="clear" max-width="500">
+      <v-dialog v-model="clear" width="480">
         <v-card>
           <v-card-title class="headline">
             {{ $t("message.delete") }}
@@ -198,7 +198,7 @@
         </v-card>
       </v-dialog>
       <!-- Delete Program -->
-      <v-dialog v-model="del" max-width="500">
+      <v-dialog v-model="del">
         <v-card>
           <v-card-title class="headline">
             {{ $t("message.delete") }}
@@ -220,7 +220,7 @@
       <!-- Show Code -->
       <v-dialog v-model="dialogCode">
         <v-card>
-          <v-card-title class="headline">Codice</v-card-title>
+          <v-card-title class="headline">{{ $t("message.program_code") }}</v-card-title>
           <v-card-text class="text-xs-left">
             <prism language="python">{{ code }} </prism>
           </v-card-text>
@@ -468,7 +468,7 @@ export default {
           this.$refs.workspace.loadProgram(importedProgram.dom_code);
         });
       } else {
-        console.log('Something went wrong importing');
+        console.error('Something went wrong importing');
       }
     },
 
@@ -481,7 +481,7 @@ export default {
       if (this.newProgramName != '') {
         if (this.isDefault == 'True' && this.programName == this.newProgramName) {
           this.cannotOverwrite = true;
-          console.log('error');
+          console.error('error');
         } else {
           this.defaultProgramName = this.programName;
           this.programName = this.newProgramName;
@@ -497,20 +497,21 @@ export default {
     saveProgram() {
       if (this.programName != '') {
         const data = this.getProgramData();
-        this.$coderbot.saveProgram(this.$data.overwrite, data.name, data.dom_code, data.code, '').then((prog_data) => {
-          if (prog_data.data == 'defaultOverwrite' || prog_data.data == 'askOverwrite') {
-            if (prog_data.data == 'askOverwrite') {
-              this.$data.overwriteDialog = true;
-            } else {
-              this.$data.programName = this.$data.defaultProgramName;
-              this.$data.defaultProgramName = '';
-              this.$data.cannotOverwrite = true;
-            }
+        this.$coderbot.saveProgram(this.$data.overwrite, data.name, data.dom_code, data.code, false).then((prog_data) => {
+          if (prog_data.data == 'askOverwrite') {
+            this.$data.overwriteDialog = true;
           } else {
             this.$data.isDefault = '';
             this.$data.overwrite = true;
             console.log('saved');
             this.dirty = false;
+          }
+        }).catch((error) => {
+          if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
+            console.warn('trying to overwrite a default program');
+            this.$data.programName = this.$data.defaultProgramName;
+              this.$data.defaultProgramName = '';
+              this.$data.cannotOverwrite = true;
           }
         });
       } else {
@@ -549,7 +550,6 @@ export default {
     },
 
     deleteProgramDlg(program) {
-      console.log(program)
       this.$data.programName = program;
       this.$data.del = true;
     },
@@ -560,9 +560,8 @@ export default {
         this.$data.code = '';
         this.$refs.workspace.clear();
       }
-      console.log('delete');
       this.$coderbot.deleteProgram(program).then(() => {
-        console.log('deleted');
+        console.info('deleted');
       });
     },
 
@@ -573,6 +572,7 @@ export default {
 
     runProgram() {
       // POST /program/save
+      console.info("Startin program");
       const { code } = this.$refs.workspace.getProgramData();
       const programName = this.programName != '' ? this.programName : 'untitled';
       this.$coderbot.runProgram(programName, code).then(() => {
@@ -584,7 +584,7 @@ export default {
     },
 
     stopProgram() {
-      console.log('Stopping');
+      console.info('Stopping program');
       this.$coderbot.stopProgram();
     },
 

@@ -22,6 +22,7 @@
     "program_status_title": "Stato Esecuzione",
     "program_running": "In esecuzione",
     "program_completed": "Completato",
+    "program_code": "Codice",
     "program_name_must_be_filled": "Il nome del programma non può essere vuoto.",
     "cannot_overwrite_default_program": "Impossibile sovrascrivere un programma di default, cambiare il nome.",
     "overwrite": "Sovrascrivi",

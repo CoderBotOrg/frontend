@@ -317,7 +317,7 @@ class CoderBot {
   }
 
   saveProgram(overwrite, name, dom_code, code, is_default) {
-    return this.$axios.post(`${this.CB}/programs`, {
+    return this.$axios.put(`${this.CB}/programs/${name}`, {
       overwrite,
       name,
       dom_code,
