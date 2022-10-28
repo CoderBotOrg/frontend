@@ -71,4 +71,8 @@ function loadConfig() {
     setTimeout(loadConfig, 1000);
   });  
 }
+$coderbot.getInfoAndStatus();
+setInterval(() => { 
+  $coderbot.getInfoAndStatus();
+}, 1000);
 loadConfig();

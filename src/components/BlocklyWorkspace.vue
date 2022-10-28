@@ -85,8 +85,6 @@ export default {
       /* eslint-enable */
     }
   },
-  mounted() {
-  },
   methods: {
     initBlockly(settings) {
       // Extend the default blocks set

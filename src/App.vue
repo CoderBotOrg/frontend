@@ -1,11 +1,10 @@
 <template>
  <div id="app">
-  <template v-if="status == 200">
+  <template v-if="online">
   <router-view />
   </template>
   <template v-else>
     <v-app id="inspire">
-      <sidebar></sidebar>
       <v-app-bar color="indigo" dark fixed app>
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
         <v-app-bar-title class="title"><div>CoderBot</div></v-app-bar-title>
@@ -43,55 +42,25 @@
 </template>
 <script>
 import image_1 from './assets/images/coderbot_wide1.jpg';
-import image_2 from './assets/images/coderbot_wide3.jpg';
 
 export default {
   data() {
     return {
-      drawer: null,
-      status: 200,
+      status: this.$store.getters.status,
       dialog: true,
       carouselItems: [
         {
           src: image_1,
         },
-        {
-          src: image_2,
-        }
       ],
     };
   },
+  computed: {
+    online() {
+      return this.$store.getters.status != {};
+    }
+  }, 
   name: 'App',
-  mounted() {
-    this.pollStatus();
-    setInterval(() => {
-      this.pollStatus();
-    }, 1000);
-  },
-  methods: {
-    pollStatus() {
-      this.$coderbot.status()
-        .then((response) => {
-          if (this.status == 0 && response.status) {
-            this.snackText = this.$i18n.t('message.coderbot_status_online');
-            this.snackbar = true;
-          }
-
-          this.statusData = response.data;
-          this.status = response.status;
-        })
-        .catch((error) => {
-          // handle error
-          console.log(`pollStatus error: ${error}`);
-
-          if (this.status) {
-            this.snackText = this.$i18n.t('message.coderbot_offline_2');
-            this.snackbar = true;
-          }
-          this.status = 0;
-        });
-      }
-  }
 };
 
 </script>

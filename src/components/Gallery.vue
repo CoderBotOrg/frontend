@@ -135,7 +135,7 @@ export default {
     sidebar
   },
   name: 'Gallery',
-  mounted() {
+  onMmounted() {
     this.getPhotos();
   },
   methods: {

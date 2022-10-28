@@ -106,10 +106,7 @@ export default {
     category_dialog: null,
     category_index: null
   }),
-
-  beforeCreate() {
-  },
-  mounted() {
+  mmounted() {
     // i18n toolbox categories
     toolbox_full.contents.forEach((item) => {
       if (item.name.startsWith('message.')) {

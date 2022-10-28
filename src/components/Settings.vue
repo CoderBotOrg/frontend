@@ -25,25 +25,19 @@
               <v-layout row wrap>
                 <!-- Column A -->
                 <v-col xs12 md6 offset-md3>
-                  <h3 class="text-xs-left">Stato </h3>
                   <v-card>
-                    <div class="cardContent">
-                      <div v-for="(value, key) in cb.status" :key="key">
-                        <div v-if="key != 'log'">
-                          {{ key }}: <code>{{ value }}</code>
-                        </div>
-                      </div>
-                      <br>
-                    </div>
-                  </v-card>
-                  <br>
-                  <h3 class="text-xs-left"> {{ $t('message.settings_actions') }} </h3>
-                  <v-card>
+                    <v-card-title>
+                      {{ $t('message.settings_actions') }}
+                    </v-card-title>
+                    <v-card-text>
                     <div class="d-flex justify-space-around align-center">
                       <v-btn color="info" @click="dialog_shutdown=true">
                         <v-icon icon="mdi-power"></v-icon> {{ $t('message.settings_actions_halt') }}
                       </v-btn>
                       <v-btn color="info" @click="dialog_reboot=true">
+                        <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_reboot') }}
+                      </v-btn>
+                      <v-btn color="info" @click="dialog_restart=true">
                         <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_restart') }}
                       </v-btn>
                       <v-btn color="warning" @click="dialog_restore=true">
@@ -69,6 +63,26 @@
                               </v-btn>
                               <v-btn color="error" @click="reboot">
                                 <b>{{ $t('message.settings_actions_halt') }}</b>
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                      </v-dialog>
+                      <v-dialog v-model="dialog_restart" width="500">
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2" primary-title>
+                              <h3>CoderBot - {{ $t('message.settings_actions_restart_title') }}</h3>
+                            </v-card-title>
+                            <v-card-text>
+                              {{ $t('message.settings_actions_restart_text_1') }}
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" @click="dialog_restart=false">
+                                {{ $t('message.cancel') }}
+                              </v-btn>
+                              <v-btn color="error" @click="reboot">
+                                <b>{{ $t('message.settings_actions_restart') }}</b>
                               </v-btn>
                             </v-card-actions>
                           </v-card>
@@ -134,17 +148,49 @@
                           </v-card>
                       </v-dialog>
                     </div>
+                    </v-card-text>
                   </v-card>
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_admin_password_title') }}</h3>
+                      {{ $t('message.settings_admin_password_title') }}
                     </v-card-title>
-                    <div class="cardContent">
+                  <v-card-text>
                       <v-text-field v-model="settings.adminPassword"
                         v-bind:label="$t('message.settings_admin_password')"
                         @input="v$.settings.motorMode.$touch"
                       />
+                  </v-card-text>
+                  </v-card>
+                  <v-card>
+                    <v-card-title>
+                      {{ $t('message.settings_general_info') }}
+                    </v-card-title>
+                    <div class="cardContent">
+                      <v-expansion-panels>
+                        <v-expansion-panel
+                          :title="$t('message.settings_status')"
+                        >
+                          <v-expansion-panel-text>
+                            <div v-for="(value, key) in cb.status" :key="key">
+                              <div v-if="key != 'log'">
+                                {{ key }}: <code>{{ value }}</code>
+                              </div>
+                            </div>
+                          </v-expansion-panel-text>
+                        </v-expansion-panel>
+                        <v-expansion-panel
+                         :title="$t('message.settings_info')"
+                          >
+                          <v-expansion-panel-text>
+                            <div v-for="(value, key) in cb.info" :key="key">
+                              <div v-if="key != 'log'">
+                                {{ key }}: <code>{{ value }}</code>
+                              </div>
+                            </div>
+                          </v-expansion-panel-text>
+                          </v-expansion-panel>
+                      </v-expansion-panels>
                     </div>
                   </v-card>
                 </v-col>
@@ -790,19 +836,14 @@ export default {
   mounted() {
     this.pollWifiStatus()
     setInterval(() => { this.pollWifiStatus(); }, 1000);
-    this.getInfoAndStatus();
-    this.prepopulate();
-    this.settings.packagesInstalled = this.$store.getters.musicPackages;
-    this.settings.cnnModels = this.$store.getters.cnnModels;
-    this.cb.info = this.$store.getters.info;
-    this.cb.status = this.$store.getters.status;
-    this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
+    setTimeout(() => {this.prepopulate()}, 1000);
     this.$wifi_connect.networks().then((result) => {
       this.networks = result.data.ssids;
     });
     this.$coderbot.listPrograms()
       .then((response) => {
-        this.programList = response.data;
+        this.programList = [{name:"", code:"", dom_code:"", default: false}];
+        this.programList = this.programList.concat(response.data);
       });
   },
   beforeRouteLeave(to, from, next) {
@@ -936,10 +977,6 @@ export default {
         this.snackbar = true;
       });
     },
-    getInfoAndStatus() {
-      // Get bot info and status
-      return this.$coderbot.getInfoAndStatus();
-    },
     deletePkg(pkgNameID) {
       this.$coderbot.deleteMusicPackage(pkgNameID).then(() => {
         console.log('Pacchetto rimosso');
@@ -949,6 +986,9 @@ export default {
     },
     prepopulate() {
       this.settings = this.$store.getters.settings;
+      this.cb.status = this.$store.getters.status;
+      this.cb.info = this.$store.getters.info;
+      this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
     },
     save() {
       if (this.v$.$invalid) {
@@ -972,7 +1012,6 @@ export default {
           this.v$.settings.$reset();
           console.log('set dirty false');
         });
-        console.log("wifi dirty state: ", this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty);
         if (this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty) {
           if(this.settings.wifiMode=="client") {
             const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
@@ -1048,6 +1087,7 @@ export default {
       files: null,
       dialog_shutdown: false,
       dialog_reboot: false,
+      dialog_restart: false,
       dialog_restore: false,
       dialog_reset: false,
       lastCommit: 'N/A',
@@ -1100,11 +1140,11 @@ export default {
         startupProgram: null,
         progLevel: null,
         adminPassword: null,
+        packagesInstalled: [],
       },
       cb: {
-        logs: {
-          log: []
-        }
+        info: {},
+        status: {},
       },
       drawer: null,
       tab: null,
