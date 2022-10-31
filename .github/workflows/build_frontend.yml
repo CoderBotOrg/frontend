@@ -28,6 +28,7 @@ jobs:
           start: npm start
 
   build:
+    runs-on: ubuntu-latest
     needs: test
     steps:
     - uses: actions/checkout@v3
