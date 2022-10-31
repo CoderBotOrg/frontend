@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Docker login
-        run: docker login -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
+        run: docker login ghcr.io -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
       - name: Run stub
         run: docker run -dp 8080:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
       # Install NPM dependencies, cache them correctly
