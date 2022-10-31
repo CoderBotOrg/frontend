@@ -1,9 +1,10 @@
 {
-  "name": "frontend-vite",
-  "version": "0.0.0",
+  "name": "frontend",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build-test": "vite build --mode=test",
     "preview": "vite preview",
     "test": "",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"

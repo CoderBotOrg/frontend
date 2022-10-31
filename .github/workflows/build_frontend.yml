@@ -14,7 +14,7 @@ jobs:
       - name: Docker login
         run: docker login ghcr.io -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
       - name: Run stub
-        run: docker run -dp 8080:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
+        run: docker run -dp 5000:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Wait for stub to be ready
@@ -22,7 +22,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
-          build: npm run build
+          build: npm run build-test
           start: npm run preview
       - name: Clean up
         run: docker stop backend-stub && docker rm backend-stub
