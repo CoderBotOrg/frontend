@@ -22,14 +22,14 @@
                 </v-alert>
               </p>
               <v-card>
-                <v-list>
+                <v-list id="activity_list">
                   <span v-if="activityList == null || activityList == [] || activityList.length == 0">
                   <i18n-t keypath="message.activity_list_text_2" tag="label" for="message.activity_list_create">
                     <a href="#/activity/new">{{ $t("message.activity_list_create") }}</a>
                   </i18n-t>
                   </span>
                   <template v-for="activity in activityList" :key="activity.el">
-                    <v-list-item link>
+                    <v-list-item link :id="activity.name">
                       <div @click="goToActivity(activity.name)">
                       <v-list-item-title>
                         {{ activity.name }}
