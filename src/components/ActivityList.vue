@@ -65,6 +65,7 @@
                                       color="green darken-1"
                                       text
                                       @click="confirmDeleteDlg = false; deleteActivity(activity.name)"
+                                      id="confirmDeleteDlg_ok"
                                     >
                                       {{ $t("message.ok") }}
                                     </v-btn>
