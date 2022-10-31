@@ -1,11 +1,12 @@
 {
-  "name": "frontend-vite",
-  "version": "0.0.0",
+  "name": "frontend",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build-test": "vite build --mode=test",
     "preview": "vite preview",
-    "test": "",
+    "test": "vite --mode=test",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
@@ -18,8 +19,9 @@
     "blockly": "^9.0.1",
     "core-js": "^3.23.3",
     "material-design-icons-iconfont": "^6.7.0",
+    "open-dyslexic": "^1.0.3",
     "prismjs": "^1.28.0",
-    "stylus-loader": "^3.0.2",
+    "stylus-loader": "^4.0.0",
     "typeface-fira-mono": "^1.1.13",
     "typeface-open-sans": "^1.1.13",
     "typeface-overpass": "^1.1.13",
@@ -33,11 +35,15 @@
     "vue-i18n": "^9.2.2",
     "vue-prism-component": "^2.0.0",
     "vue-router": "^4.1.6",
-    "vuetify": "^3.0.0-beta.15",
+    "vuetify": "^3.0.0",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.10.0",
+    "vite-plugin-istanbul": "^3.0.2",
     "@vitejs/plugin-vue": "^3.1.2",
+    "stylus": "0.59.0",
+    "cypress": "^10.11.0",
     "eslint": "^8.21.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",

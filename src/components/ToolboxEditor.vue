@@ -43,8 +43,8 @@
             </v-list-item>
           <!--/v-list-group-->
         </v-list>
-        <v-btn @click="addCategory()">{{ $t('message.activity_toolbox_category_add') }}</v-btn>
-        <v-btn @click="addAllCategories()">{{ $t('message.activity_toolbox_category_add_all') }}</v-btn>
+        <v-btn @click="addCategory()" id="add_category">{{ $t('message.activity_toolbox_category_add') }}</v-btn>
+        <v-btn @click="addAllCategories()" id="add_category_all">{{ $t('message.activity_toolbox_category_add_all') }}</v-btn>
       </v-col>
       <v-col class="pa-2 fill-height">
         <blockly-workspace
@@ -59,7 +59,7 @@
       <v-card>
         <v-card-title class="headline">{{ $t("message.activity_category_title") }}</v-card-title>
         <v-card-text>
-          <v-text-field v-model="category.name" v-bind:label="$t('message.activity_category_name')"></v-text-field>
+          <v-text-field v-model="category.name" v-bind:label="$t('message.activity_category_name')" id="category_name"></v-text-field>
           <v-color-picker
             dot-size="29"
             hide-canvas
@@ -70,7 +70,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn @click="category_dialog = false">{{ $t("message.cancel") }}</v-btn>
-          <v-btn @click="saveCategory()">{{ $t("message.ok") }}</v-btn>
+          <v-btn @click="saveCategory()" id="save_category">{{ $t("message.ok") }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -106,7 +106,7 @@ export default {
     category_dialog: null,
     category_index: null
   }),
-  mmounted() {
+  mounted() {
     // i18n toolbox categories
     toolbox_full.contents.forEach((item) => {
       if (item.name.startsWith('message.')) {

@@ -15,7 +15,7 @@
             <v-container class="d-flex align-center flex-column">
               <v-row>
                 <v-col class="d-flex align-center flex-column">
-                  <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(0)"
+                  <v-btn color="indigo" class="white--text jp-btn up" v-on:mousedown="move(0)"
                     v-on:mouseup="stop()">
                     <v-icon icon="mdi-arrow-up"></v-icon>
                   </v-btn>
@@ -23,13 +23,13 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(1)"
+                  <v-btn color="indigo" class="white--text jp-btn left" v-on:mousedown="move(1)"
                     v-on:mouseup="stop()">
                     <v-icon icon="mdi-arrow-left"></v-icon>
                   </v-btn>
                 </v-col>
                 <v-col>
-                  <v-btn large color="indigo" class="white--text jp-btn" v-on:mousedown="move(2)"
+                  <v-btn large color="indigo" class="white--text jp-btn right" v-on:mousedown="move(2)"
                     v-on:mouseup="stop()">
                     <v-icon icon="mdi-arrow-right"></v-icon>
                   </v-btn>
@@ -37,7 +37,7 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn color="indigo" class="white--text jp-btn" v-on:mousedown="move(3)"
+                  <v-btn color="indigo" class="white--text jp-btn down" v-on:mousedown="move(3)"
                     v-on:mouseup="stop()">
                     <v-icon icon="mdi-arrow-down"></v-icon>
                   </v-btn>
@@ -50,7 +50,7 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn color="indigo" v-on:click="ttsdialog = true" class="controlBtn"
+                  <v-btn color="indigo" v-on:click="ttsdialog = true" class="controlBtn speak"
                     :disabled="!ttsBtnEnabled">
                     {{ $t("message.control_speak") }}
                     <v-icon icon="mdi-bullhorn-variant"></v-icon>
@@ -59,7 +59,7 @@
               </v-row>
               <v-row>
                 <v-col class="d-flex align-center flex-column">
-                  <v-btn color="indigo" class="controlBtn" v-on:click="takePhoto()"
+                  <v-btn color="indigo" class="controlBtn photo" v-on:click="takePhoto()"
                     :disabled="!photoBtnEnabled">
                     {{ $t("message.control_photo_take") }}
                     <v-icon icon="mdi-camera"></v-icon>
@@ -68,7 +68,7 @@
               </v-row>
               <v-row>
                 <v-col class="d-flex align-center flex-column">
-                  <v-btn color="indigo" class="controlBtn" v-on:click="videoHandler()"
+                  <v-btn color="indigo" class="controlBtn video" v-on:click="videoHandler()"
                     :disabled="!videoBtn.enabled">
                     {{ videoBtn.text }}
                     <v-icon dark>mdi-{{ videoBtn.icon }}</v-icon>
@@ -77,7 +77,7 @@
               </v-row>
               <v-row>
                 <v-col class="d-flex align-center flex-column">
-                  <v-btn color="indigo" class="controlBtn" to="/gallery">
+                  <v-btn color="indigo" class="controlBtn gallery" to="/gallery">
                     {{ $t("message.control_photo_gallery") }}
                     <v-icon icon="mdi-image-multiple"></v-icon>
                   </v-btn>
@@ -94,18 +94,18 @@
         {{ $t("message.close") }}
       </v-btn>
     </v-snackbar>
-    <v-dialog v-model="ttsdialog" width="600px">
+    <v-dialog v-model="ttsdialog" width="600px" id="dialog_control_speak_title">
       <v-card>
         <v-card-title>
-          <span class="headline">{{ $t("message.gallery_empty") }}</span>
+          <span class="headline">{{ $t("message.control_speak_title") }}</span>
         </v-card-title>
         <v-card-text>
-          <v-text-field v-model="ttstext" v-bind:label="$t('message.control_text_to_speech')" solo></v-text-field>
+          <v-text-field v-model="ttstext" v-bind:label="$t('message.control_text_to_speech')" solo id="control_text_to_speech"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="gray darken-1" text="text" @click="ttsdialog=false">{{ $t("message.cancel") }}</v-btn>
-          <v-btn color="green darken-1" text="text" @click="say()">{{ $t("message.control_speak") }}</v-btn>
+          <v-btn color="green darken-1 ok" text="text" @click="say()">{{ $t("message.control_speak") }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

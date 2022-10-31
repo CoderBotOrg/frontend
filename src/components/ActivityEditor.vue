@@ -6,13 +6,13 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title class="title" v-if="!saved"><div>{{ $t("message.activity_new") }} {{prefix}} {{activity.name}}</div></v-app-bar-title>
         <v-app-bar-title class="title" v-else><div>{{ $t("message.activity_edit") }} {{prefix}} {{activity.name}}</div></v-app-bar-title>
-        <v-btn text @click="save()">
+        <v-btn text @click="save()" id="activity_save">
           <v-icon>save</v-icon>
           {{ $t("message.save") }}
         </v-btn>
         <template v-slot:extension>
           <v-tabs v-model="tab" align-with-title>
-            <v-tab v-for="item in tabs" :key="item.key" :value="item.key">
+            <v-tab v-for="item in tabs" :key="item.key" :value="item.key" :id="item.key">
               {{ item.value }}
             </v-tab>
           </v-tabs>
@@ -22,22 +22,29 @@
         <v-window v-model="tab">
           <v-window-item key="general" value="general">
             <v-container grid-list-md text-xs-center>
-              <v-layout row wrap>
+              <v-row>
                 <!-- Column A -->
-                <v-col xs12 md6 offset-md3>
+                <v-col>
                   <p style="text-align: left">
                     <v-alert :value="true" type="info" style="font-size:16px">
                       {{ $t("message.activity_tip_1") }}
                     </v-alert>
                   </p>
-                  <h3 class="text-xs-left">{{ $t("message.activity_data") }} </h3>
+                  </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col>
                   <v-card>
-                    <v-form class="cardContent">
-                      <v-text-field v-model="activity.name" v-bind:label="$t('message.activity_name')" required
+                    <v-card-title>
+                      {{ $t("message.activity_data") }}
+                    </v-card-title>
+                    <v-card-text>
+                    <v-form>
+                      <v-text-field v-model="activity.name" v-bind:label="$t('message.activity_name')" required id="name"
                         @input="v$.activity.name.$touch"
                         v-bind:error-messages="v$.activity.name.$error == true ? $t('message.validation_alphanum') : ''"
                       ></v-text-field>
-                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')"
+                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')" id="desc"
                         @input="v$.activity.description.$touch"
                         v-bind:error-messages="v$.activity.description.$error == true ? $t('message.validation_alphanum') : ''"
                       >
@@ -50,13 +57,20 @@
                         v-model="activity.default"
                         v-bind:label="$t('message.activity_default')"
                         @input="v$.activity.default.$touch"
+                        id="is_default"
                       ></v-checkbox>
                     </v-form>
+                  </v-card-text>
                   </v-card>
-                  <br><br>
-                  <h3 class="text-xs-left">{{ $t("message.activity_typography") }} </h3>
+                  </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col>
                   <v-card>
-                    <div class="cardContent">
+                    <v-card-title>
+                      {{ $t("message.activity_typography") }}
+                    </v-card-title>
+                    <v-card-text>
                       <!--
 											<v-select :items="fontSizeLabels" v-model="activity.fontSize" label="Grandezza testo"></v-select>
 										-->
@@ -74,12 +88,17 @@
 												</v-col>
 											</v-layout>
 										-->
-                    </div>
+                    </v-card-text>
                   </v-card>
-                  <br><br>
-                  <h3 class="text-xs-left">{{ $t("message.activity_typography_font_ui") }} </h3>
-                  <v-card>
-                    <div class="cardContent">
+                  </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col>
+                  <v-card id="card_font_ui">
+                    <v-card-title>
+                      {{ $t("message.activity_typography_font_ui") }}
+                    </v-card-title>
+                    <v-card-text>
                       <span v-bind:style="bodyUIstyleObj">Lorem ipsum dolor sit amet</span>
                       <v-radio-group v-model="activity.bodyFont" column
                         v-bind:label="$t('message.activity_predefined_view')" required
@@ -92,12 +111,17 @@
 												<v-radio label="Open-Dyslexic (Altà leggibilità, indicato per dislessia)" value="open-dys"></v-radio>
 											-->
                       </v-radio-group>
-                    </div>
+                    </v-card-text>
                   </v-card>
-                  <br><br>
-                  <h3 class="text-xs-left">{{ $t("message.activity_typography_font_editor") }}</h3>
-                  <v-card>
-                    <div class="cardContent">
+                  </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col>
+                  <v-card id="card_font_editor">
+                    <v-card-title>
+                      {{ $t("message.activity_typography_font_editor") }}
+                    </v-card-title>
+                    <v-card-text>
                       <span v-bind:style="codeUIstyleObj">function life() { return 42; }</span>
                       <v-radio-group v-model="activity.codeFont" column
                         @change="v$.activity.codeFont.$touch"
@@ -105,12 +129,17 @@
                         <v-radio label="Ubuntu Mono" value="ubuntumono"></v-radio>
                         <v-radio label="Roboto Mono" value="robotomono"></v-radio>
                       </v-radio-group>
-                    </div>
+                    </v-card-text>
                   </v-card>
-                  <br><br>
-									<h3 class="text-xs-left">{{ $t("message.activity_locale") }}</h3>
+                  </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col>
 									<v-card>
-										<div class="cardContent">
+                    <v-card-title>
+                      {{ $t("message.activity_locale") }}
+                    </v-card-title>
+										<v-card-text>
 											<v-select v-model="activity.uiLang"
                         :items="langs"
                         item-title="text"
@@ -118,12 +147,17 @@
                         v-bind:label="$t('message.activity_locale')" required
                         @change="v$.activity.uiLang.$touch"
                       ></v-select>
-										</div>
+										</v-card-text>
 									</v-card>
-									<br><br>
-                  <h3 class="text-xs-left">{{ $t("message.activity_programing_title") }}</h3>
+                  </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col>
                   <v-card>
-                    <div class="cardContent">
+                    <v-card-title>
+                      {{ $t("message.activity_programing_title") }}
+                    </v-card-title>
+                    <v-card-text>
                       <v-layout row wrap>
                         <!--
 												<v-col>
@@ -147,7 +181,7 @@
                             ></v-text-field>
                         </v-col>
                       </v-layout>
-                    </div>
+                    </v-card-text>
                   </v-card>
                   <!--
 									<h3 class="text-xs-left">Funzionalità sperimentali</h3>
@@ -168,7 +202,7 @@
 									</v-card>
 								-->
                 </v-col>
-              </v-layout>
+              </v-row>
             </v-container>
           </v-window-item>
           <v-window-item key="toolbar" value="toolbar">
@@ -185,7 +219,6 @@
                         <v-icon :icon="button.icon"></v-icon>
                         <span v-if="activity.showButtonLabel">{{ button.label }}</span>
                       </v-btn>
-                      &nbsp;&nbsp;
                     </template>
                   </v-app-bar>
                 </v-col>
@@ -227,15 +260,16 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
-                  <div v-for="button, i in activity.buttons" :key="button.id">
-                    <h3>Pulsante {{i + 1}}
-                      <v-btn @click="removeButton(i)" v-if="!button.notErasable">
-                        <v-icon icon="mdi-close"></v-icon> {{ $t("message.activity_toolbar_buttons_remove") }}
-                      </v-btn>
-                    </h3>
+                <v-col v-for="button, i in activity.buttons" :key="i" :id="'button_index_'+i">
                     <v-card>
-                      <div class="cardContent">
+                      <v-card-title>
+                      {{ $t("message.activity_toolbar_button") }} {{i + 1}}
+                      <v-btn :color="button.colorBtn" :class="button.colorText">
+                          {{ button.label }}
+                          <v-icon right dark>{{ button.icon }}</v-icon>
+                        </v-btn>
+                      </v-card-title>
+                      <v-card-text>
                         <span class="grey--text text--darken-2" v-if="button.notErasable">
                           {{ $t("message.activity_toolbar_buttons_cannot_remove_run") }} </span>
                         <v-text-field v-model="button.label" :label="$t('message.activity_label')"></v-text-field>
@@ -256,15 +290,13 @@
                             </v-btn>
                           </v-col>
                         </v-layout>
-                        <v-divider></v-divider>
-                        <br>
-                        <v-btn :color="button.colorBtn" :class="button.colorText">
-                          {{ button.label }}
-                          <v-icon right dark>{{ button.icon }}</v-icon>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-btn class="remove" @click="removeButton(i)" v-if="!button.notErasable">
+                          <v-icon icon="mdi-close"></v-icon> {{ $t("message.activity_toolbar_buttons_remove") }}
                         </v-btn>
-                      </div>
-                    </v-card>
-                  </div>
+                      </v-card-actions>
+                    </v-card>           
                 </v-col>
               </v-row>
             </v-container>
@@ -307,13 +339,15 @@
                 <v-col xs12 md6 offset-md3>
                   <h3 class="text-xs-left">{{ $t("message.activity_views_title") }}</h3>
                   <v-card>
-                    <v-form class="cardContent">
+                    <v-card-text>
+                    <v-form>
                       <v-switch v-bind:label='$t("message.activity_views_runtime_camera")'
                         v-model="activity.exec.camera"></v-switch>
                       <v-switch v-bind:label='$t("message.activity_views_runtime_log")'
                         v-model="activity.exec.log">
                       </v-switch>
                     </v-form>
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -466,7 +500,7 @@ export default {
       activity: {
         stock: null,
         default: null,
-        uiLang: null,
+        uiLang: "browser",
         theme: null,
         defaultView: null,
         exec: {
@@ -735,9 +769,5 @@ export default {
     border: 2px solid #73AD21;
     padding: 20px;
     width: 100px;
-  }
-
-  .cardContent {
-    padding: 16px;
   }
 </style>

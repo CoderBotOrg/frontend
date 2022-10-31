@@ -14,7 +14,7 @@
               <h3>{{ $t("message.gallery_empty") }}</h3>
             </template>
             <template v-else>
-              <v-container grid-list-sm fluid>
+              <v-container grid-list-sm fluid class="gallery">
                 <v-layout row wrap>
                   <v-col v-for="n in photos.length" :key="n" xs3 d-flex>
                     <v-card
@@ -22,14 +22,14 @@
                       max-width="256"
                       >
                       <a class="text-decoration-none" @click="photo=photos[n-1]; gallery_detail=true">
-                      <v-img v-if="photos[n-1].type=='jpg'" :src="getPhotoURL(photos[n-1].thumbName)" class="grey lighten-2">
+                      <v-img v-if="photos[n-1].type=='jpg'" :src="getMediaURL(photos[n-1].thumbName)" class="grey lighten-2">
                         <template v-slot:placeholder>
                         <v-row class="fill-height ma-0" align="center" justify="center">
                           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                         </v-row>
                         </template>
                       </v-img>
-                      <v-img v-else-if="photos[n-1].type=='mp4'" :src="getPhotoURL(photos[n-1].thumbName)" class="grey lighten-2">
+                      <v-img v-else-if="photos[n-1].type=='mp4'" :src="getMediaURL(photos[n-1].thumbName)" class="grey lighten-2">
                         <template v-slot:placeholder>
                         <v-row class="fill-height ma-0" align="center" justify="center">
                           <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -52,18 +52,18 @@
               </v-container>
               <v-dialog v-model="gallery_detail">
                 <v-card class="mx-auto my-12" style="width: 640px;">
-                  <v-card-title class="text-h5 grey lighten-2">
+                  <v-card-title class="text-h5 grey lighten-2 details">
                     {{ photo.name }}
                   </v-card-title>
                   <v-card-text>
-                  <v-img v-if="photo.type=='jpg'" height="100%" :src="getPhotoURL(photo.fileName)" class="grey lighten-2" ref="photo" @click="getPixelColor">
+                  <v-img v-if="photo.type=='jpg'" height="100%" :src="getMediaURL(photo.fileName)" class="grey lighten-2" ref="photo" @click="getPixelColor">
                   <template v-slot:placeholder>
                     <v-row class="fill-height ma-0" align="center" justify="center">
                       <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                     </v-row>
                     </template>
                   </v-img>
-                  <video v-else-if="photo.type=='mp4'" controls autoplay :src="getPhotoURL(photo.fileName)"/>
+                  <video v-else-if="photo.type=='mp4'" controls autoplay :src="getMediaURL(photo.fileName)"/>
                   </v-card-text>
                   <v-card-actions>
                     <v-btn-toggle
@@ -79,6 +79,7 @@
                     <v-btn
                       color="primary"
                       text
+                      class="ok"
                       @click="gallery_detail = false"
                     >
                       {{ $t("message.close") }}
@@ -95,7 +96,7 @@
                 persistent
                 max-width="290"
               >
-                <v-card>
+                <v-card id="gallery_photo_confirm_card">
                   <v-card-title class="text-h5">
                     {{ $t("message.gallery_photo_confirm_title") }}
                   </v-card-title>
@@ -112,7 +113,8 @@
                     <v-btn
                       color="green darken-1"
                       text
-                      @click="confirmDeleteDlg = false; deletePhoto(photo.fileName)"
+                      class="ok"
+                      @click="confirmDeleteDlg = false; deleteMedia(photo.fileName)"
                     >
                       {{ $t("message.ok") }}
                     </v-btn>
@@ -135,13 +137,13 @@ export default {
     sidebar
   },
   name: 'Gallery',
-  onMmounted() {
-    this.getPhotos();
+  mounted() {
+    this.getMediaList();
   },
   methods: {
-    getPhotos() {
+    getMediaList() {
       this.photos = [];
-      this.$coderbot.getPhotos()
+      this.$coderbot.getMediaList()
         .then((response) => {
           response.data.forEach((element) => {
             this.photos.push(
@@ -156,13 +158,13 @@ export default {
           this.photo = {};
         });
     },
-    getPhotoURL(name) {
-      return this.$coderbot.getPhotoURL(name);
+    getMediaURL(name) {
+      return this.$coderbot.getMediaURL(name);
     },
-    deletePhoto(name) {
-      this.$coderbot.deletePhoto(name)
+    deleteMedia(name) {
+      this.$coderbot.deleteMedia(name)
         .then(() => {
-          this.getPhotos();
+          this.getMediaList();
         });
     },
     toggleSidebar() {

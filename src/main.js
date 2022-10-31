@@ -20,8 +20,9 @@ import './main.styl';
 
 //			Fonts
 // UI
-import 'typeface-roboto';
+import 'open-dyslexic'; // includes OpenDyslexic and OpenDyslexicMono
 import 'typeface-open-sans';
+import 'typeface-roboto';
 // Monospaced
 import 'typeface-roboto-mono';
 import 'typeface-ubuntu-mono';
@@ -65,14 +66,13 @@ app.defaultTheme = 'dark';
 function loadConfig() {
   $coderbot.load().then(() => {
     console.log('config loaded');
-    $coderbot.setConfigLoaded(true);
   }).catch((errors) => {
     console.log('error loading config: ', errors);
     setTimeout(loadConfig, 1000);
   });  
 }
-$coderbot.getInfoAndStatus();
+$coderbot.getStatus();
 setInterval(() => { 
-  $coderbot.getInfoAndStatus();
+  $coderbot.getStatus();
 }, 1000);
 loadConfig();

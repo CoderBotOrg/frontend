@@ -6,20 +6,20 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title class="title"><div>{{ $t("message.settings_title") }}</div></v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-btn text @click="save">
+        <v-btn text @click="save" id="save">
           <v-icon icon="mdi-content-save"></v-icon>
           {{ $t('message.save') }}
         </v-btn>
-        <template v-slot:extension>
+        <template v-slot:extension v-if="!requirePassword">
           <v-tabs slot="extension" v-model="tab" centered slider-color="white">
-            <v-tab v-for="item in tabs" :key="item">
+            <v-tab v-for="(item, index) in tabs" :key="item" :id="index">
               {{ item }}
             </v-tab>
           </v-tabs>
         </template>
       </v-app-bar>
       <v-main>
-        <v-window v-model="tab">
+        <v-window v-model="tab" v-if="!requirePassword">
           <v-window-item>
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
@@ -50,7 +50,7 @@
                       <v-dialog v-model="dialog_shutdown" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_halt_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_halt_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_halt_text_1') }}
@@ -70,7 +70,7 @@
                       <v-dialog v-model="dialog_restart" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_restart_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_restart_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_restart_text_1') }}
@@ -90,7 +90,7 @@
                       <v-dialog v-model="dialog_reboot" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_reboot_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_reboot_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_reboot_text_1') }}
@@ -110,7 +110,7 @@
                       <v-dialog v-model="dialog_restore" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_restore_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_restore_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_restore_text_1') }}
@@ -130,7 +130,7 @@
                       <v-dialog v-model="dialog_reset" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_reset_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_reset_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_reset_text_1') }}
@@ -158,7 +158,12 @@
                   <v-card-text>
                       <v-text-field v-model="settings.adminPassword"
                         v-bind:label="$t('message.settings_admin_password')"
-                        @input="v$.settings.motorMode.$touch"
+                        @input="v$.settings.adminPassword.$touch"
+                        @update:focused="passwordVerified=true"
+                        id="settings_password"
+                        :append-icon="settings_password_show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="settings_password_show ? 'text' : 'password'"
+                        @click:append="settings_password_show = !settings_password_show"
                       />
                   </v-card-text>
                   </v-card>
@@ -204,73 +209,83 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_movement_control') }}</h3>
+                      {{ $t('message.settings_movement_control') }}
                     </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.ctrlFwdSpeed"
                         v-bind:label="$t('message.settings_movement_control_forward_speed')"
                         @input="v$.settings.ctrlFwdSpeed.$touch"
                         v-bind:error-messages="v$.settings.ctrlFwdSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_control_forward_speed"
                       />
                       <v-text-field v-model="settings.ctrlFwdElapse"
                         v-bind:label="$t('message.settings_movement_control_forward_elapse')"
                         @input="v$.settings.ctrlFwdElapse.$touch"
                         v-bind:error-messages="v$.settings.ctrlFwdElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_control_forward_elapse"
                       />
                       <v-text-field v-model="settings.ctrlTurnSpeed"
                         v-bind:label="$t('message.settings_movement_control_turn_speed')"
                         @input="v$.settings.ctrlTurnSpeed.$touch"
                         v-bind:error-messages="v$.settings.ctrlTurnSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_control_turn_speed"
                       />
                       <v-text-field v-model="settings.ctrlTurnElapse"
                         v-bind:label="$t('message.settings_movement_control_turn_elapse')"
                         @input="v$.settings.ctrlTurnElapse.$touch"
                         v-bind:error-messages="v$.settings.ctrlTurnElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_control_turn_elapse"
                       />
                     </div>
                   </v-card>
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_movement_program') }}</h3>
+                      {{ $t('message.settings_movement_program') }}
                     </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.moveFwdSpeed"
                         v-bind:label="$t('message.settings_movement_program_forward_speed')"
                         @input="v$.settings.moveFwdSpeed.$touch"
                         v-bind:error-messages="v$.settings.moveFwdSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_program_forward_speed"
                       />
                       <v-text-field v-model="settings.moveFwdElapse"
                         v-bind:label="$t('message.settings_movement_program_forward_elapse')"
                         @input="v$.settings.moveFwdElapse.$touch"
                         v-bind:error-messages="v$.settings.moveFwdElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_program_forward_elapse"
                       />
                       <v-text-field v-model="settings.moveTurnSpeed"
                         v-bind:label="$t('message.settings_movement_program_turn_speed')"
                         @input="v$.settings.moveTurnSpeed.$touch"
                         v-bind:error-messages="v$.settings.moveTurnSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_program_turn_speed"
                       />
                       <v-text-field v-model="settings.moveTurnElapse"
                         v-bind:label="$t('message.settings_movement_program_turn_elapse')"
                         @input="v$.settings.moveTurnElapse.$touch"
                         v-bind:error-messages="v$.settings.moveTurnElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_program_turn_elapse"
                       />
                     </div>
                   </v-card>
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_movement_parameters') }}</h3>
+                      {{ $t('message.settings_movement_parameters') }}
                     </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.motorMode"
                         v-bind:label="$t('message.settings_movement_parameters_mode')"
                         @input="v$.settings.motorMode.$touch"
+                        id="settings_movement_parameters_mode"
                       />
                       <v-text-field v-model="settings.trimFactor"
                         v-bind:label="$t('message.settings_movement_parameters_trim')"
                         @input="v$.settings.trimFactor.$touch"
                         v-bind:error-messages="v$.settings.trimFactor.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_parameters_trim"
                       />
                       <v-text-field v-model="settings.power[0]"
                         v-bind:label="$t('message.settings_movement_parameters_power_1')"
@@ -294,9 +309,9 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_camera_title') }}</h3>
+                      {{ $t('message.settings_camera_title') }}
                     </v-card-title>
-                    <div class="cardContent">
+                    <v-card-text>
                       <v-select
                         v-model="settings.camera_exposure_mode"
                         :items="cameraExposureModes"
@@ -304,39 +319,39 @@
                         item-value="key"
                         v-bind:label="$t('message.settings_camera_exposure_mode')"
                         single-line
-                        @select="v$.settings.camera_exposure_mode.$touch"
+                        @update:model-value="v$.settings.camera_exposure_mode.$touch"
                       ></v-select>
                       {{ $t("message.settings_camera_framerate") }}:
                       <span v-text="settings.camera_framerate"></span>
                       <v-slider v-model="settings.camera_framerate" min="5" max="30" step="5"
-                        @change="v$.settings.camera_framerate.$touch"
+                        @update:model-value="v$.settings.camera_framerate.$touch"
                       />
                       {{ $t("message.settings_camera_jpeg_bitrate") }}:
                       <span v-text="settings.camera_jpeg_bitrate"></span>
                       <v-slider v-model="settings.camera_jpeg_bitrate" min="1000000" max="10000000" step="1000000"
                         v-bind:label="$t('message.settings_camera_jpeg_bitrate')"
-                        @change="v$.settings.camera_jpeg_bitrate.$touch"
+                        @update:model-value="v$.settings.camera_jpeg_bitrate.$touch"
                         v-bind:error-messages="v$.settings.camera_jpeg_bitrate.$error == true ? $t('message.validation_integer') : ''"
                       />
                       {{ $t("message.settings_camera_jpeg_quality") }}:
                       <span v-text="settings.camera_jpeg_quality"></span>
                       <v-slider v-model="settings.camera_jpeg_quality" min="1" max="100" step="1"
                         v-bind:label="$t('message.settings_camera_jpeg_quality')"
-                        @change="v$.settings.camera_jpeg_quality.$touch"
+                        @update:model-value="v$.settings.camera_jpeg_quality.$touch"
                         v-bind:error-messages="v$.settings.camera_jpeg_quality.$error == true ? $t('message.validation_integer') : ''"
                       />
-                    </div>
+                    </v-card-text>
                   </v-card>
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_camera_cv_title') }}</h3>
+                      {{ $t('message.settings_camera_cv_title') }}
                     </v-card-title>
-                    <div class="cardContent">
+                    <v-card-text>
                       {{ $t("message.settings_camera_cv_image_factor") }}:
                       <span v-text="settings.cv_image_factor"></span>
                       <v-slider v-model="settings.cv_image_factor" min="1" max="4" step="1"
-                        @change="v$.settings.cv_image_factor.$touch"
+                        @update:model-value="v$.settings.cv_image_factor.$touch"
                       />
                       <v-text-field v-model="settings.camera_color_object_size_max"
                         @input="v$.settings.camera_color_object_size_max.$touch"
@@ -364,8 +379,8 @@
                         item-title="text"
                         item-value="key"
                         v-bind:label="$t('message.settings_camera_cnn_default_model')"
-                        @select="v$.settings.cnn_default_model.$touch" />
-                    </div>
+                        @update:model-value="v$.settings.cnn_default_model.$touch" />
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -377,10 +392,10 @@
                 <!-- Column A -->
                 <v-col xs12 md6 offset-md3>
                   <v-card>
-                  <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_sounds_title') }}</h3>
-                  </v-card-title>
-                    <div class="cardContent">
+                    <v-card-title>
+                      {{ $t('message.settings_sounds_title') }}
+                    </v-card-title>
+                    <v-card-text>
                       <v-text-field v-model="settings.startSound" v-bind:label="$t('message.settings_sounds_start')"
                         @input="v$.settings.startSound.$touch"
                       />
@@ -390,7 +405,7 @@
                       <v-text-field v-model="settings.shutterSound" v-bind:label="$t('message.settings_sounds_shutter')"
                         @input="v$.settings.shutterSound.$touch"
                       />
-                    </div>
+                   </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -403,9 +418,9 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_hardware_version') }}</h3>
+                    {{ $t('message.settings_hardware_version') }}
                   </v-card-title>
-                    <div class="cardContent">
+                  <v-card-text>
                       <v-select
                         v-model="settings.hardwareVersion"
                         :items="hardware_version_items"
@@ -414,37 +429,35 @@
                         v-bind:label="$t('message.settings_hardware_version')"
                         single-line
                       />
-                    </div>
+                    </v-card-text>
                   </v-card>
-                  <br>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_button_title') }}</h3>
+                    {{ $t('message.settings_button_title') }}
                   </v-card-title>
-                    <div class="cardContent">
+                  <v-card-text>
                       <v-radio-group v-model="settings.btnFun" column
                       >
                         <v-radio v-bind:label="$t('message.settings_button_none')" value="none"/>
                         <v-radio v-bind:label="$t('message.settings_button_startstop')" value="startstop" />
                       </v-radio-group>
-                    </div>
+                    </v-card-text>
                   </v-card>
-                  <br>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
+                    {{ $t('message.settings_load_at_start_title') }}
                   </v-card-title>
-                    <div class="cardContent">
+                  <v-card-text>
                       <v-select 
                         v-model="settings.startupProgram"
-                        @change="v$.settings.startupProgram.$touch"
+                        @update:model-value="v$.settings.startupProgram.$touch"
                         :items="programList"
                         item-title="name"
                         v-bind:label="$t('message.settings_load_at_start_title')"
                         single-line
                         >
                       </v-select>
-                    </div>
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -456,7 +469,7 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
+                    {{ $t('message.settings_network_title') }}
                   </v-card-title>
                     <div>
                       <v-chip v-if="wifi_status.wifi" prepend-icon="mdi-wifi">Wifi</v-chip>
@@ -472,7 +485,7 @@
                         <v-select 
                         :disabled="settings.wifiMode!='client'"
                         v-model="settings.wifiSSID"
-                        @change="v$.settings.wifiSSID.$touch"
+                        @update:model-value@update:model-value="v$.settings.wifiSSID.$touch"
                         :items="networks"
                         item-title="ssid"
                         item-value="ssid"
@@ -532,7 +545,7 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_component_test_title') }}</h3>
+                    {{ $t('message.settings_component_test_title') }}
                   </v-card-title>
                     <div class="cardContent">
                       <div id='test_array'>
@@ -686,7 +699,7 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_audio_title') }}</h3>
+                    {{ $t('message.settings_audio_title') }}
                   </v-card-title>
                     <div class="cardContent">
                       {{ $t('message.settings_audio_volume') }}
@@ -706,28 +719,24 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                  <h3 class="text-xs-left">{{ $t('message.settings_music_packages_title') }}</h3>
-                  <br>
                   <h4 class="text-xs-left"> {{ $t('message.settings_music_packages_installed') }}</h4>
                   </v-card-title>
-                  <v-card-text v-for="pkgnames in settings.packagesInstalled" v-bind:key="pkgnames.key">
-                    <div class="cardContent">
-                      <b>{{pkgnames[0][0]}}</b> {{ $t('message.settings_music_packages_type') }} <b>{{pkgnames[1]}} </b><span
-                          style="display: flex; justify-content: flex-end">
-                          <v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
-                            <v-icon icon="mdi-delete"></v-icon> {{ $t('message.settings_music_packages_remove') }}
-                          </v-btn>
-                        </span>
-                    </div>
+                  <v-card-text>
+                  <div v-for="pkgnames in musicPackages" v-bind:key="pkgnames[0]">
+                    <b>{{pkgnames[0][0]}}</b> {{ $t('message.settings_music_packages_type') }} <b>{{pkgnames[1]}} </b><span
+                        style="display: flex; justify-content: flex-end">
+                        <v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                          <v-icon icon="mdi-delete"></v-icon> {{ $t('message.settings_music_packages_remove') }}
+                        </v-btn>
+                      </span>
+                  </div>
                   </v-card-text>
                   </v-card>
-                  <br>
-                  <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
                   <v-card>
-                  <v-card-title>
-                    <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
-                  </v-card-title>
-                    <div class="cardContent">
+                    <v-card-title>
+                       {{ $t('message.settings_music_packages_add') }} 
+                    </v-card-title>
+                    <v-card-text>
                       <template v-if="updateStatus==1">
                         <b>{{ $t('message.settings_music_package_installed') }}</b>
                         <br>
@@ -747,7 +756,7 @@
                         <template v-if="this.fileObj">{{ $t('message.settings_music_packages_install_confirm_text') }}<br></template>
                         <v-btn v-if="this.fileObj" @click="uploadPackage" color="error">{{ $t('message.settings_music_packages_install_confirm') }}</v-btn>
                       </template>
-                    </div>
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -756,12 +765,17 @@
         </v-window>
       </v-main>
       <!-- Admin password dialog -->
-      <v-dialog v-model="adminPassword_dialog" max-width="290" persistent>
+      <v-dialog v-model="requirePassword" max-width="290" persistent>
         <v-card>
           <v-card-title class="headline">{{ $t("message.settings_admin_password_verify_title") }}</v-card-title>
           <v-card-text>
             {{ $t("message.settings_admin_password_verify") }}
             <v-text-field v-model="adminPassword"
+            id="settings_password_verify"
+            :append-icon="settings_password_verify_show ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="settings_password_verify_show ? 'text' : 'password'"
+            @click:append="settings_password_verify_show = !settings_password_verify_show"
+            v-bind:error-messages="passwordIncorrect == true ? $t('message.settings_admin_password_incorrect') : ''"
             />
           </v-card-text>
           <v-card-actions>
@@ -769,14 +783,15 @@
             <v-btn color="green darken-1" text="text" @click="adminPassword_dialog=false; $router.go(-1);">
               {{ $t("message.cancel") }}
             </v-btn>
-            <v-btn color="green darken-1" text="text" @click="checkAdminPassword()">
+            <v-btn color="green darken-1" text="text" @click="checkAdminPassword()"
+            id="settings_password_verify_ok">
               {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
       <!-- Confirm exit dialog -->
-      <v-dialog v-model="confirm_exit_dialog" max-width="290">
+      <v-dialog v-model="confirm_exit_dialog" max-width="290" id="confirm_exit_dialog">
         <v-card>
           <v-card-title class="headline">{{ $t("message.confirm") }}</v-card-title>
           <v-card-text>
@@ -834,9 +849,9 @@ export default {
     };
   },
   mounted() {
-    this.pollWifiStatus()
-    setInterval(() => { this.pollWifiStatus(); }, 1000);
-    setTimeout(() => {this.prepopulate()}, 1000);
+    this.inteval_wifi = setInterval(() => {this.pollWifiStatus()}, 1000);
+    this.inteval_info = setInterval(() => {this.pollInfo()}, 1000);
+    this.prepopulate();
     this.$wifi_connect.networks().then((result) => {
       this.networks = result.data.ssids;
     });
@@ -845,6 +860,11 @@ export default {
         this.programList = [{name:"", code:"", dom_code:"", default: false}];
         this.programList = this.programList.concat(response.data);
       });
+    this.musicPackages = this.$store.getters.musicPackages;
+  },
+  unmounted() {
+    clearInterval(this.inteval_wifi);
+    clearInterval(this.inteval_info);
   },
   beforeRouteLeave(to, from, next) {
     if (this.v$.$anyDirty) {
@@ -858,7 +878,11 @@ export default {
     network_require_user() {
       const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
       return network && network.conn_type == "ENTERPRISE";
+    },
+    requirePassword() {
+      return this.settings.adminPassword != null && this.settings.adminPassword != '' && !this.passwordVerified;
     }
+
   },
   methods: {
     pickFile() {
@@ -913,7 +937,7 @@ export default {
       window.location.reload();
       /*
       readTextFile
-      this.packagesInstalled = packageList
+      this.musicPackages = packageList
       this.$http.get('vue/index.html#/settings').then((results) => {
             console.log(results.data.data);
             }, (results) => {
@@ -936,6 +960,9 @@ export default {
       this.$wifi_connect.status().then((result) => {
         this.wifi_status = result.data;
       });
+    },
+    pollInfo() {
+      this.$coderbot.getInfo();
     },
     restoreSettings() {
       this.$coderbot.restoreSettings()
@@ -961,7 +988,6 @@ export default {
           this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');
           this.snackbar = true;
           this.prepopulate();
-          setTimeout(() => this.dialog.close(), 5000);
           this.dialog = false;
         });
     },
@@ -988,7 +1014,6 @@ export default {
       this.settings = this.$store.getters.settings;
       this.cb.status = this.$store.getters.status;
       this.cb.info = this.$store.getters.info;
-      this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
     },
     save() {
       if (this.v$.$invalid) {
@@ -1077,7 +1102,10 @@ export default {
     },
     checkAdminPassword() {
       if (this.settings.adminPassword == this.adminPassword) {
-        this.adminPassword_dialog = false;
+        this.passwordVerified = true;
+        this.passwordIncorrect = false;
+      } else {
+        this.passwordIncorrect = true;
       }
     }
   },
@@ -1140,8 +1168,8 @@ export default {
         startupProgram: null,
         progLevel: null,
         adminPassword: null,
-        packagesInstalled: [],
       },
+      musicPackages: null,
       cb: {
         info: {},
         status: {},
@@ -1169,6 +1197,12 @@ export default {
       wifi_status: null,
       wifi_pwd_show: false,
       programList: [],
+      settings_password_show: false,
+      settings_password_verify_show: false,
+      passwordVerified: false,
+      passwordIncorrect: false,
+      interval_wifi: null,
+      interval_info: null,
     };
   },
   validations() {
@@ -1297,7 +1331,9 @@ export default {
         startupProgram: {
         },
         progLevel: {
-        }
+        },
+        adminPassword: {
+        },
       },
     };
   },
