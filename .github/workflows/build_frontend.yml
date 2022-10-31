@@ -12,8 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: run stub
-        run: docker login -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
-        run: docker run -dp 8080:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
+      - run: docker login -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
+      - run: docker run -dp 8080:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Wait for stub to be ready
