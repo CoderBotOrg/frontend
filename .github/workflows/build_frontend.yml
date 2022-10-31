@@ -14,7 +14,7 @@ jobs:
           registry: ghcr.io
           username: previ
           password: ${{ secrets.GHCR_BACKEND_STUB_RO }}
-          image: coderbotorg/backend:stub-latest
+          image: ghcr.io/coderbotorg/backend:stub-latest
       - name: Checkout
         uses: actions/checkout@v3
       # Install NPM dependencies, cache them correctly
