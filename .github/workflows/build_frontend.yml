@@ -9,14 +9,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: addnab/docker-run-action@v3
-        with:
-          registry: ghcr.io
-          username: previ
-          password: ${{ secrets.GHCR_BACKEND_STUB_RO }}
-          image: ghcr.io/coderbotorg/backend:stub-latest
       - name: Checkout
         uses: actions/checkout@v3
+      - name: run stub
+        run: docker login -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
+        run: docker run -dp 8080:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Wait for stub to be ready
@@ -26,6 +23,8 @@ jobs:
         with:
           build: npm run build
           start: npm run preview
+      - name: Clean up
+        run: docker stop backend-stub && docker rm backend-stub
 
   build:
     runs-on: ubuntu-latest
