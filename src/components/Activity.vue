@@ -294,17 +294,17 @@ export default {
   setup() {
     return {
       theme: useTheme(),
-      settings: null,
       cssProps: {
         '--bodyFont': 'Roboto',
         '--codeFont': 'Ubuntu Mono',
       },
       experimental: 0,
-      webcamStream: null,
       isDefault: '',
     };
   },
   data: () => ({
+    settings: {},
+    webcamStream: null,
     activity: {
       exec: {},
     },
@@ -343,10 +343,9 @@ export default {
       return this.$refs.workspace.remainingCapacity();
     },
   },
-  mounted() {
+  mounted() { 
     this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
-    // Get the activity
     let activityName = this.$route.params.name;
     let activityDefault = false;
     if (this.$router.name == 'program') {

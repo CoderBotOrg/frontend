@@ -1,6 +1,7 @@
 describe('activities page', () => {
   it('loads the default activity', () => {
     cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()  
     cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#activity_list').should('exist')
@@ -14,6 +15,7 @@ describe('activities page', () => {
 
   it('creates a new activity', () => {
     cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist')
     cy.get('button.v-app-bar-nav-icon').click()  
     cy.get('a.v-list-item[href*="activity/manage"]').click()
@@ -40,6 +42,7 @@ describe('activities page', () => {
   })
   it('deletes an existing activity', () => {
     cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist')
     cy.get('button.v-app-bar-nav-icon').click()  
     cy.get('a[href*="activity/manage"]').click()

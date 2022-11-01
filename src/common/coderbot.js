@@ -18,14 +18,6 @@ class CoderBot {
     return Promise.all([p1, p2, p3]);
   }
 
-  setConfigLoaded(status) {
-    this.config_loaded = status;
-  }
-
-  getConfigLoaded() {
-    return this.config_loaded;
-  }
-
   initActivity() {
     this.loadActivity(null, true).then((activity) => {
       if (activity.data == '') {

@@ -1,8 +1,10 @@
 describe('load homepage', () => {
-  it('checks sidebar contents', () => {
+  it('checks tabs', () => {
     cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
     cy.get('a.v-list-item[href*="/settings"]').click()
+    cy.get('#app').click()
     cy.get('button#0').should('exist')
     cy.get('button#1').should('exist')
     cy.get('button#2').should('exist')
@@ -12,5 +14,26 @@ describe('load homepage', () => {
     cy.get('button#6').should('exist')
     cy.get('button#7').should('exist')
     cy.get('button#8').should('exist')
+  })
+
+  it('checks password', () => {
+    cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
+    cy.get('button.v-app-bar-nav-icon').should('exist').click()
+    cy.get('a.v-list-item[href*="/settings"]').click()
+    cy.get('#app').click()
+    cy.get('button#0').should('exist')
+    cy.get('button#0').click()
+    cy.get('#settings_password').type('secret')
+    cy.get('#save').should('exist')
+    cy.get('#save').click()
+    cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
+    cy.get('button.v-app-bar-nav-icon').should('exist').click()
+    cy.get('a.v-list-item[href*="/settings"]').click()
+    cy.get('#settings_password_verify').should('exist')
+    cy.get('#settings_password_verify').type('secret')
+    cy.get('#settings_password_verify_ok').click()
+    cy.get('button#0').should('exist')
   })
 })

@@ -65,7 +65,6 @@ app.defaultTheme = 'dark';
 function loadConfig() {
   $coderbot.load().then(() => {
     console.log('config loaded');
-    $coderbot.setConfigLoaded(true);
   }).catch((errors) => {
     console.log('error loading config: ', errors);
     setTimeout(loadConfig, 1000);

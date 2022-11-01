@@ -1,6 +1,7 @@
 describe('load homepage', () => {
   it('checks toolbar bar contents', () => {
     cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
     cy.get('a.v-list-item[href*="/program"]').should('exist')
     cy.get('a.v-list-item[href*="/program"]').click()
@@ -17,6 +18,7 @@ describe('load homepage', () => {
 
   it('checks blockly loades', () => {
     cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
     cy.get('a.v-list-item[href*="/program"]').should('exist')
     cy.get('a.v-list-item[href*="/program"]').click()
@@ -28,6 +30,7 @@ describe('load homepage', () => {
 
   it('loads an existing program', () => {
     cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
     cy.get('a.v-list-item[href*="/program"]').should('exist')
     cy.get('a.v-list-item[href*="/program"]').click()
