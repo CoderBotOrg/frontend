@@ -6,20 +6,20 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title class="title"><div>{{ $t("message.settings_title") }}</div></v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-btn text @click="save">
+        <v-btn text @click="save" id="save">
           <v-icon icon="mdi-content-save"></v-icon>
           {{ $t('message.save') }}
         </v-btn>
-        <template v-slot:extension>
+        <template v-slot:extension v-if="!requirePassword">
           <v-tabs slot="extension" v-model="tab" centered slider-color="white">
-            <v-tab v-for="item in tabs" :key="item">
+            <v-tab v-for="(item, index) in tabs" :key="item" :id="index">
               {{ item }}
             </v-tab>
           </v-tabs>
         </template>
       </v-app-bar>
       <v-main>
-        <v-window v-model="tab">
+        <v-window v-model="tab" v-if="!requirePassword">
           <v-window-item>
             <v-container grid-list-md text-xs-center>
               <v-layout row wrap>
@@ -158,7 +158,12 @@
                   <v-card-text>
                       <v-text-field v-model="settings.adminPassword"
                         v-bind:label="$t('message.settings_admin_password')"
-                        @input="v$.settings.motorMode.$touch"
+                        @input="v$.settings.adminPassword.$touch"
+                        @update:focused="passwordVerified=true"
+                        id="settings_password"
+                        :append-icon="settings_password_show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="settings_password_show ? 'text' : 'password'"
+                        @click:append="settings_password_show = !settings_password_show"
                       />
                   </v-card-text>
                   </v-card>
@@ -706,28 +711,24 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                  <h3 class="text-xs-left">{{ $t('message.settings_music_packages_title') }}</h3>
-                  <br>
                   <h4 class="text-xs-left"> {{ $t('message.settings_music_packages_installed') }}</h4>
                   </v-card-title>
-                  <v-card-text v-for="pkgnames in settings.packagesInstalled" v-bind:key="pkgnames.key">
-                    <div class="cardContent">
-                      <b>{{pkgnames[0][0]}}</b> {{ $t('message.settings_music_packages_type') }} <b>{{pkgnames[1]}} </b><span
-                          style="display: flex; justify-content: flex-end">
-                          <v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
-                            <v-icon icon="mdi-delete"></v-icon> {{ $t('message.settings_music_packages_remove') }}
-                          </v-btn>
-                        </span>
-                    </div>
+                  <v-card-text>
+                  <div v-for="pkgnames in musicPackages" v-bind:key="pkgnames[0]">
+                    <b>{{pkgnames[0][0]}}</b> {{ $t('message.settings_music_packages_type') }} <b>{{pkgnames[1]}} </b><span
+                        style="display: flex; justify-content: flex-end">
+                        <v-btn @click="deletePkg(pkgnames[0][1])" color="red" dark>
+                          <v-icon icon="mdi-delete"></v-icon> {{ $t('message.settings_music_packages_remove') }}
+                        </v-btn>
+                      </span>
+                  </div>
                   </v-card-text>
                   </v-card>
-                  <br>
-                  <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
                   <v-card>
-                  <v-card-title>
-                    <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
-                  </v-card-title>
-                    <div class="cardContent">
+                    <v-card-title>
+                      <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
+                    </v-card-title>
+                    <v-card-text>
                       <template v-if="updateStatus==1">
                         <b>{{ $t('message.settings_music_package_installed') }}</b>
                         <br>
@@ -747,7 +748,7 @@
                         <template v-if="this.fileObj">{{ $t('message.settings_music_packages_install_confirm_text') }}<br></template>
                         <v-btn v-if="this.fileObj" @click="uploadPackage" color="error">{{ $t('message.settings_music_packages_install_confirm') }}</v-btn>
                       </template>
-                    </div>
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -756,12 +757,17 @@
         </v-window>
       </v-main>
       <!-- Admin password dialog -->
-      <v-dialog v-model="adminPassword_dialog" max-width="290" persistent>
+      <v-dialog v-model="requirePassword" max-width="290" persistent>
         <v-card>
           <v-card-title class="headline">{{ $t("message.settings_admin_password_verify_title") }}</v-card-title>
           <v-card-text>
             {{ $t("message.settings_admin_password_verify") }}
             <v-text-field v-model="adminPassword"
+            id="settings_password_verify"
+            :append-icon="settings_password_verify_show ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="settings_password_verify_show ? 'text' : 'password'"
+            @click:append="settings_password_verify_show = !settings_password_verify_show"
+            v-bind:error-messages="passwordIncorrect == true ? $t('message.settings_admin_password_incorrect') : ''"
             />
           </v-card-text>
           <v-card-actions>
@@ -769,7 +775,8 @@
             <v-btn color="green darken-1" text="text" @click="adminPassword_dialog=false; $router.go(-1);">
               {{ $t("message.cancel") }}
             </v-btn>
-            <v-btn color="green darken-1" text="text" @click="checkAdminPassword()">
+            <v-btn color="green darken-1" text="text" @click="checkAdminPassword()"
+            id="settings_password_verify_ok">
               {{ $t("message.ok") }}
             </v-btn>
           </v-card-actions>
@@ -836,7 +843,7 @@ export default {
   mounted() {
     this.pollWifiStatus()
     setInterval(() => { this.pollWifiStatus(); }, 1000);
-    setTimeout(() => {this.prepopulate()}, 1000);
+    this.prepopulate();
     this.$wifi_connect.networks().then((result) => {
       this.networks = result.data.ssids;
     });
@@ -845,6 +852,7 @@ export default {
         this.programList = [{name:"", code:"", dom_code:"", default: false}];
         this.programList = this.programList.concat(response.data);
       });
+    this.musicPackages = this.$store.getters.musicPackages;
   },
   beforeRouteLeave(to, from, next) {
     if (this.v$.$anyDirty) {
@@ -858,7 +866,11 @@ export default {
     network_require_user() {
       const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
       return network && network.conn_type == "ENTERPRISE";
+    },
+    requirePassword() {
+      return this.settings.adminPassword != null && this.settings.adminPassword != '' && !this.passwordVerified;
     }
+
   },
   methods: {
     pickFile() {
@@ -913,7 +925,7 @@ export default {
       window.location.reload();
       /*
       readTextFile
-      this.packagesInstalled = packageList
+      this.musicPackages = packageList
       this.$http.get('vue/index.html#/settings').then((results) => {
             console.log(results.data.data);
             }, (results) => {
@@ -961,7 +973,6 @@ export default {
           this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');
           this.snackbar = true;
           this.prepopulate();
-          setTimeout(() => this.dialog.close(), 5000);
           this.dialog = false;
         });
     },
@@ -988,7 +999,6 @@ export default {
       this.settings = this.$store.getters.settings;
       this.cb.status = this.$store.getters.status;
       this.cb.info = this.$store.getters.info;
-      this.adminPassword_dialog = this.settings.adminPassword != null && this.settings.adminPassword != '';
     },
     save() {
       if (this.v$.$invalid) {
@@ -1077,7 +1087,10 @@ export default {
     },
     checkAdminPassword() {
       if (this.settings.adminPassword == this.adminPassword) {
-        this.adminPassword_dialog = false;
+        this.passwordVerified = true;
+        this.passwordIncorrect = false;
+      } else {
+        this.passwordIncorrect = true;
       }
     }
   },
@@ -1140,8 +1153,8 @@ export default {
         startupProgram: null,
         progLevel: null,
         adminPassword: null,
-        packagesInstalled: [],
       },
+      musicPackages: null,
       cb: {
         info: {},
         status: {},
@@ -1169,6 +1182,10 @@ export default {
       wifi_status: null,
       wifi_pwd_show: false,
       programList: [],
+      settings_password_show: false,
+      settings_password_verify_show: false,
+      passwordVerified: false,
+      passwordIncorrect: false,
     };
   },
   validations() {
@@ -1297,7 +1314,9 @@ export default {
         startupProgram: {
         },
         progLevel: {
-        }
+        },
+        adminPassword: {
+        },
       },
     };
   },

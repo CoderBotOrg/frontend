@@ -6,13 +6,13 @@
         <v-app-bar-nav-icon @click.stop="toggleSidebar()"></v-app-bar-nav-icon>
         <v-app-bar-title class="title" v-if="!saved"><div>{{ $t("message.activity_new") }} {{prefix}} {{activity.name}}</div></v-app-bar-title>
         <v-app-bar-title class="title" v-else><div>{{ $t("message.activity_edit") }} {{prefix}} {{activity.name}}</div></v-app-bar-title>
-        <v-btn text @click="save()">
+        <v-btn text @click="save()" id="save">
           <v-icon>save</v-icon>
           {{ $t("message.save") }}
         </v-btn>
         <template v-slot:extension>
           <v-tabs v-model="tab" align-with-title>
-            <v-tab v-for="item in tabs" :key="item.key" :value="item.key">
+            <v-tab v-for="item in tabs" :key="item.key" :value="item.key" :id="item.key">
               {{ item.value }}
             </v-tab>
           </v-tabs>
@@ -33,11 +33,11 @@
                   <h3 class="text-xs-left">{{ $t("message.activity_data") }} </h3>
                   <v-card>
                     <v-form class="cardContent">
-                      <v-text-field v-model="activity.name" v-bind:label="$t('message.activity_name')" required
+                      <v-text-field v-model="activity.name" v-bind:label="$t('message.activity_name')" required id="name"
                         @input="v$.activity.name.$touch"
                         v-bind:error-messages="v$.activity.name.$error == true ? $t('message.validation_alphanum') : ''"
                       ></v-text-field>
-                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')"
+                      <v-text-field v-model="activity.description" v-bind:label="$t('message.activity_description')" id="desc"
                         @input="v$.activity.description.$touch"
                         v-bind:error-messages="v$.activity.description.$error == true ? $t('message.validation_alphanum') : ''"
                       >

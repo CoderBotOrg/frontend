@@ -18,14 +18,6 @@ class CoderBot {
     return Promise.all([p1, p2, p3]);
   }
 
-  setConfigLoaded(status) {
-    this.config_loaded = status;
-  }
-
-  getConfigLoaded() {
-    return this.config_loaded;
-  }
-
   initActivity() {
     this.loadActivity(null, true).then((activity) => {
       if (activity.data == '') {
@@ -259,7 +251,7 @@ class CoderBot {
       .then((response) => {
         this.$store.commit('setStatus', response.data);
       }).catch((error) => {
-        this.$store.commit('setStatus', {status: "offline"});
+        this.$store.commit('setStatus', {});
       });
     const p2 = this.$axios.get(`${this.CB}/system/info`)
       .then((response) => {

@@ -13,28 +13,21 @@
         <v-container class="d-flex align-center flex-column">
         <div style="font-size: 24px;"> {{ $t("message.welcome") }} </div>
         <div class="logo">CoderBot</div>
-        <v-col xs12 md8 offset-md2>
-          <v-carousel hide-delimiters>
-            <v-carousel-item v-for="(item,i) in carouselItems" :key="i" :src="item.src">
-            </v-carousel-item>
-          </v-carousel>
-        </v-col>
+          <p class="text-center">
+            {{ $t("message.coderbot_status_offline_1") }}
+            <v-icon icon="mdi-wifi-off"></v-icon>
+          </p>
+          <p class="text-center">
+            <v-progress-circular indeterminate :size="64" :width="4"></v-progress-circular>
+          </p>
         </v-container>
       </v-main>
     </v-app> 
     <v-row justify="center">
       <v-dialog
-        v-model="dialog"
+        v-model="wait_long"
         persistent
       >
-        <v-card>
-          <v-card-text>
-            <p class="text-center">
-            {{ $t("message.coderbot_status_offline_1") }}
-            <v-icon large icon="mdi-wifi-off"></v-icon>
-          </p>
-          </v-card-text>
-        </v-card>
       </v-dialog>
     </v-row>
   </template>
@@ -44,10 +37,11 @@
 import image_1 from './assets/images/coderbot_wide1.jpg';
 
 export default {
+  name: 'App',
   data() {
     return {
       status: this.$store.getters.status,
-      dialog: true,
+      wait_long: false,
       carouselItems: [
         {
           src: image_1,
@@ -57,10 +51,10 @@ export default {
   },
   computed: {
     online() {
-      return this.$store.getters.status != {};
+      return (this.$store.getters.status != null &&
+             this.$store.getters.settings != null);
     }
-  }, 
-  name: 'App',
+  }
 };
 
 </script>

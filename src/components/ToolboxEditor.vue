@@ -43,8 +43,8 @@
             </v-list-item>
           <!--/v-list-group-->
         </v-list>
-        <v-btn @click="addCategory()">{{ $t('message.activity_toolbox_category_add') }}</v-btn>
-        <v-btn @click="addAllCategories()">{{ $t('message.activity_toolbox_category_add_all') }}</v-btn>
+        <v-btn @click="addCategory()" id="add_category">{{ $t('message.activity_toolbox_category_add') }}</v-btn>
+        <v-btn @click="addAllCategories()" id="add_category_all">{{ $t('message.activity_toolbox_category_add_all') }}</v-btn>
       </v-col>
       <v-col class="pa-2 fill-height">
         <blockly-workspace

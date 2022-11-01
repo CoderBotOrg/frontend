@@ -14,7 +14,7 @@
         <!-- If the API is available, show the desired buttons -->
         <template v-for="button in activity.buttons">
           <template v-if="button.type == 'text'">
-            <v-btn @click="this[button.action]()">
+            <v-btn @click="this[button.action]()" :id="button.action">
               <v-icon :icon="button.icon"></v-icon>
               <span v-if="activity.showButtonLabel">{{ button.label }}</span>
             </v-btn>
@@ -294,17 +294,17 @@ export default {
   setup() {
     return {
       theme: useTheme(),
-      settings: null,
       cssProps: {
         '--bodyFont': 'Roboto',
         '--codeFont': 'Ubuntu Mono',
       },
       experimental: 0,
-      webcamStream: null,
       isDefault: '',
     };
   },
   data: () => ({
+    settings: {},
+    webcamStream: null,
     activity: {
       exec: {},
     },
@@ -343,10 +343,9 @@ export default {
       return this.$refs.workspace.remainingCapacity();
     },
   },
-  mounted() {
+  mounted() { 
     this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
-    // Get the activity
     let activityName = this.$route.params.name;
     let activityDefault = false;
     if (this.$router.name == 'program') {
