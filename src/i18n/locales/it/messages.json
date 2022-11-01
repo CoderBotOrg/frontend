@@ -288,6 +288,7 @@
     "settings_admin_password_verify": "Inserire la password di amministrazione.",
     "settings_admin_password_title": "Password di amministrazione.",
     "settings_admin_password": "password",
+    "settings_admin_password_incorrect": "Password non corretta.",
     "validation_integer": "Inserire un numero intero (1234)",
     "validation_decimal": "Inserire un numero decimale (12.34)",
     "validation_integer_positive": "Inserire un numero intero maggiore o uguale a 0",

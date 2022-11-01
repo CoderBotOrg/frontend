@@ -1,5 +1,8 @@
 describe('load homepage', () => {
   it('checks tabs', () => {
+    cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
+      req.reply({"wifi": false, "internet": true})
+    })
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
@@ -17,6 +20,9 @@ describe('load homepage', () => {
   })
 
   it('checks password', () => {
+    cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
+      req.reply({"wifi": false, "internet": true})
+    })
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()

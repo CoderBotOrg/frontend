@@ -767,6 +767,7 @@
             :append-icon="settings_password_verify_show ? 'mdi-eye' : 'mdi-eye-off'"
             :type="settings_password_verify_show ? 'text' : 'password'"
             @click:append="settings_password_verify_show = !settings_password_verify_show"
+            v-bind:error-messages="passwordIncorrect == true ? $t('message.settings_admin_password_incorrect') : ''"
             />
           </v-card-text>
           <v-card-actions>
@@ -1087,6 +1088,9 @@ export default {
     checkAdminPassword() {
       if (this.settings.adminPassword == this.adminPassword) {
         this.passwordVerified = true;
+        this.passwordIncorrect = false;
+      } else {
+        this.passwordIncorrect = true;
       }
     }
   },
@@ -1181,6 +1185,7 @@ export default {
       settings_password_show: false,
       settings_password_verify_show: false,
       passwordVerified: false,
+      passwordIncorrect: false,
     };
   },
   validations() {
