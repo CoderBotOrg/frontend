@@ -23,7 +23,7 @@ describe('load homepage', () => {
   })
 
   it('checks password', () => {
-    cy.intercept('http://localhost:5000/api/v1/system/info', (req) => {
+    cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
       req.reply({"wifi": false, "internet": true})
     })
     cy.intercept('http://localhost:5000/wifi/v1/list_access_points', (req) => {
