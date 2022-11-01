@@ -3,6 +3,22 @@ describe('load homepage', () => {
     cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
       req.reply({"wifi": false, "internet": true})
     })
+    cy.intercept('http://localhost:5000/api/v1/system/status', (req) => {
+      req.reply({
+        "internet_status": true,
+        "temp": "30.0'C\n",
+        "uptime": " 01:00:00 up 00:10,  0 users,  load average: 1.0, 1.0, 1.0"
+      })
+    })
+    cy.intercept('http://localhost:5000/api/v1/system/status', (req) => {
+      req.reply({
+        "coderbot_version": "branch-gitsha",
+        "kernel": "os version",
+        "release_commit": "gitsha",
+        "serial": "serial",
+        "update_status": "Idle"
+      })
+    })
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
@@ -20,8 +36,24 @@ describe('load homepage', () => {
   })
 
   it('checks password', () => {
-    cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
+    cy.intercept('http://localhost:5000/api/v1/system/info', (req) => {
       req.reply({"wifi": false, "internet": true})
+    })
+    cy.intercept('http://localhost:5000/api/v1/system/status', (req) => {
+      req.reply({
+        "internet_status": true,
+        "temp": "30.0'C\n",
+        "uptime": " 01:00:00 up 00:10,  0 users,  load average: 1.0, 1.0, 1.0"
+      })
+    })
+    cy.intercept('http://localhost:5000/api/v1/system/status', (req) => {
+      req.reply({
+        "coderbot_version": "branch-gitsha",
+        "kernel": "os version",
+        "release_commit": "gitsha",
+        "serial": "serial",
+        "update_status": "Idle"
+      })
     })
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
