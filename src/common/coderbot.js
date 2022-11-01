@@ -259,7 +259,7 @@ class CoderBot {
       .then((response) => {
         this.$store.commit('setStatus', response.data);
       }).catch((error) => {
-        this.$store.commit('setStatus', {status: "offline"});
+        this.$store.commit('setStatus', {});
       });
     const p2 = this.$axios.get(`${this.CB}/system/info`)
       .then((response) => {

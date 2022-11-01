@@ -1,9 +1,8 @@
 describe('activities page', () => {
-  it('loada the default activity', () => {
+  it('loads the default activity', () => {
     cy.visit('http://localhost:8080')
-    cy.get('button.v-app-bar-nav-icon').should('exist')
-    cy.get('button.v-app-bar-nav-icon').click()  
-    cy.get('a[href*="activity/manage"]').click()
+    cy.get('button.v-app-bar-nav-icon').should('exist').click()  
+    cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#activity_list').should('exist')
     cy.get('div#default').should('exist')
     cy.get('div#default i.mdi-star').should('exist')
@@ -17,10 +16,10 @@ describe('activities page', () => {
     cy.visit('http://localhost:8080')
     cy.get('button.v-app-bar-nav-icon').should('exist')
     cy.get('button.v-app-bar-nav-icon').click()  
-    cy.get('a[href*="activity/manage"]').click()
+    cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#app').click()
-    cy.get('a[href*="activity/new"]').should('exist')
-    cy.get('a[href*="activity/new"]').click()
+    cy.get('a.v-btn[href*="activity/new"]').should('exist')
+    cy.get('a.v-btn[href*="activity/new"]').click()
     cy.get('input#name').should('exist')
     cy.get('input#desc').should('exist')
     cy.get('input#name').type("test-activity-name")

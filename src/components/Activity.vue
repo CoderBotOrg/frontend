@@ -14,7 +14,7 @@
         <!-- If the API is available, show the desired buttons -->
         <template v-for="button in activity.buttons">
           <template v-if="button.type == 'text'">
-            <v-btn @click="this[button.action]()">
+            <v-btn @click="this[button.action]()" :id="button.action">
               <v-icon :icon="button.icon"></v-icon>
               <span v-if="activity.showButtonLabel">{{ button.label }}</span>
             </v-btn>

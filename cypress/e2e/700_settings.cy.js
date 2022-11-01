@@ -1,0 +1,16 @@
+describe('load homepage', () => {
+  it('checks sidebar contents', () => {
+    cy.visit('http://localhost:8080')
+    cy.get('button.v-app-bar-nav-icon').should('exist').click()
+    cy.get('a.v-list-item[href*="/settings"]').click()
+    cy.get('button#0').should('exist')
+    cy.get('button#1').should('exist')
+    cy.get('button#2').should('exist')
+    cy.get('button#3').should('exist')
+    cy.get('button#4').should('exist')
+    cy.get('button#5').should('exist')
+    cy.get('button#6').should('exist')
+    cy.get('button#7').should('exist')
+    cy.get('button#8').should('exist')
+  })
+})

@@ -12,7 +12,7 @@
         </v-btn>
         <template v-slot:extension>
           <v-tabs slot="extension" v-model="tab" centered slider-color="white">
-            <v-tab v-for="item in tabs" :key="item">
+            <v-tab v-for="(item, index) in tabs" :key="item" :id="index">
               {{ item }}
             </v-tab>
           </v-tabs>
