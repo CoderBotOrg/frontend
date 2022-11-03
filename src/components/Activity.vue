@@ -347,8 +347,8 @@ export default {
     this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
     let activityName = this.$route.params.name;
-    let activityDefault = false;
-    if (this.$router.name == 'program') {
+    let activityDefault = null;
+    if (this.$router.currentRoute.value.name == 'program') {
       activityName = this.$route.params.name;
       activityDefault = true;
     }
