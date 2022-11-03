@@ -251,13 +251,13 @@ class CoderBot {
       .then((response) => {
         this.$store.commit('setStatus', response.data);
       }).catch((error) => {
-        this.$store.commit('setStatus', {});
+        this.$store.commit('setStatus', null);
       });
     const p2 = this.$axios.get(`${this.CB}/system/info`)
       .then((response) => {
         this.$store.commit('setInfo', response.data);
       }).catch(error => {
-        this.$store.commit('setInfo', {});
+        this.$store.commit('setInfo', null);
       });
     return Promise.all([p1, p2]);
   }

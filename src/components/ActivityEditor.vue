@@ -50,6 +50,7 @@
                         v-model="activity.default"
                         v-bind:label="$t('message.activity_default')"
                         @input="v$.activity.default.$touch"
+                        id="is_default"
                       ></v-checkbox>
                     </v-form>
                   </v-card>
@@ -466,7 +467,7 @@ export default {
       activity: {
         stock: null,
         default: null,
-        uiLang: null,
+        uiLang: "browser",
         theme: null,
         defaultView: null,
         exec: {
