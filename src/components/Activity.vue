@@ -348,8 +348,8 @@ export default {
     this.settings = this.$store.getters.settings;
     // Get the activity
     let activityName = this.$route.params.name;
-    let activityDefault = false;
-    if (this.$router.name == 'program') {
+    let activityDefault = null;
+    if (this.$router.currentRoute.value.name == 'program') {
       activityName = this.$route.params.name;
       activityDefault = true;
     }
