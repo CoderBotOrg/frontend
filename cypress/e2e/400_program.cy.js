@@ -16,7 +16,7 @@ describe('load homepage', () => {
     cy.get('button#pickFile').should('exist')
   })
 
-  it('checks blockly loades', () => {
+  it('checks blockly loaded', () => {
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
@@ -44,4 +44,19 @@ describe('load homepage', () => {
     cy.get('button.text-green').should('exist')
     cy.get('button.text-green').click()
   })
+
+  it('create a new program, save it', () => {
+  })  
+
+  it('create a new program, save as new', () => {
+  })  
+
+  it('create a new program, save as existing, verify check confirm', () => {
+  })  
+
+  it('create a new program, save as existing default, verify not possiblr', () => {
+  })  
+
+  it('create a new program, run, stop, delete', () => {
+  })  
 })

@@ -42,6 +42,7 @@
     "activity_typography_font_ui": "Carattere tipografico dell'interfaccia",
     "activity_typography_font_editor": "Carattere tipografico del codice (valori, editor di codice)",
     "activity_toolbar_preview": "Anteprima Toolbar",
+    "activity_toolbar_button": "Pulsante",
     "activity_toolbar_buttons": "Modifica Pulsanti",
     "activity_toolbar_buttons_add": "Aggiungi",
     "activity_toolbar_buttons_predefined": "Predefinito",

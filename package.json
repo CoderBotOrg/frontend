@@ -30,6 +30,7 @@
     "typeface-roboto-mono": "^1.1.13",
     "typeface-space-mono": "^1.1.13",
     "typeface-ubuntu-mono": "^1.1.13",
+    "open-dyslexic": "^1.0.3",
     "vue": "^3.2.41",
     "vue-i18n": "^9.2.2",
     "vue-prism-component": "^2.0.0",

@@ -59,7 +59,7 @@
       <v-card>
         <v-card-title class="headline">{{ $t("message.activity_category_title") }}</v-card-title>
         <v-card-text>
-          <v-text-field v-model="category.name" v-bind:label="$t('message.activity_category_name')"></v-text-field>
+          <v-text-field v-model="category.name" v-bind:label="$t('message.activity_category_name')" id="category_name"></v-text-field>
           <v-color-picker
             dot-size="29"
             hide-canvas
@@ -70,7 +70,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn @click="category_dialog = false">{{ $t("message.cancel") }}</v-btn>
-          <v-btn @click="saveCategory()">{{ $t("message.ok") }}</v-btn>
+          <v-btn @click="saveCategory()" id="save_category">{{ $t("message.ok") }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

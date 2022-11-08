@@ -294,15 +294,15 @@ export default {
   setup() {
     return {
       theme: useTheme(),
-      cssProps: {
-        '--bodyFont': 'Roboto',
-        '--codeFont': 'Ubuntu Mono',
-      },
       experimental: 0,
       isDefault: '',
     };
   },
   data: () => ({
+    cssProps: {
+      '--bodyFont': 'Roboto',
+      '--codeFont': 'Ubuntu Mono',
+    },
     settings: {},
     webcamStream: null,
     activity: {

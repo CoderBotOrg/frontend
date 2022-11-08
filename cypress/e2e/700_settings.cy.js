@@ -48,4 +48,10 @@ describe('load homepage', () => {
     cy.get('#settings_password_verify_ok').click()
     cy.get('button#0').should('exist')
   })
+
+  it('modifies most settings, valid values, save', () => {
+  })
+
+  it('modifies most settings, invalid values, verify error message', () => {
+  })
 })
