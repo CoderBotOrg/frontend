@@ -179,7 +179,7 @@ describe('activities page', () => {
     cy.get('input#category_name').type("Test category")
     cy.get('button#save_category').click()
     cy.get('.v-list-item-title').contains('Test category').click()
-    cy.get('.blockly-toolbox-editor').find('#blockly-1').click()
+    cy.get('.blockly-toolbox-editor').find('#blockly-1').click({ force: true })
     cy.get('.blocklyDraggable').click({ force: true, multiple: true })
     cy.get('button#activity_save').click()
     cy.visit('http://localhost:8080')
