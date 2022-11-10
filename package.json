@@ -19,6 +19,7 @@
     "blockly": "^9.0.1",
     "core-js": "^3.23.3",
     "material-design-icons-iconfont": "^6.7.0",
+    "open-dyslexic": "^1.0.3",
     "prismjs": "^1.28.0",
     "stylus-loader": "^3.0.2",
     "typeface-fira-mono": "^1.1.13",
@@ -30,7 +31,6 @@
     "typeface-roboto-mono": "^1.1.13",
     "typeface-space-mono": "^1.1.13",
     "typeface-ubuntu-mono": "^1.1.13",
-    "open-dyslexic": "^1.0.3",
     "vue": "^3.2.41",
     "vue-i18n": "^9.2.2",
     "vue-prism-component": "^2.0.0",
@@ -39,6 +39,7 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.10.0",
     "@vitejs/plugin-vue": "^3.1.2",
     "cypress": "^10.11.0",
     "eslint": "^8.21.0",
