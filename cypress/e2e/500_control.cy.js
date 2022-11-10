@@ -6,4 +6,16 @@ describe('load homepage', () => {
     cy.get('a.v-list-item[href*="control"]').click()
     cy.get('img[src*="video/stream"]').should('exist')
   })
+
+  it('takes picture', () => {
+  })
+
+  it('say a phrase', () => {
+  })
+
+  it('record a video', () => {
+  })
+
+  it('opens gallery', () => {
+  })
 })

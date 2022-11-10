@@ -7,4 +7,16 @@ describe('load homepage', () => {
     cy.get('a.v-list-item[href*="/gallery"]').click()
     cy.get('h3').should('exist')
   })
+
+  it('checks photo exists, sees details', () => {
+  })
+
+  it('checks video exists, plays it', () => {
+  })
+
+  it('deletes existing photo', () => {
+  })
+
+  it('deletes existing vide', () => {
+  })
 })
