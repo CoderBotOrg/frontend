@@ -35,6 +35,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Clean up
         run: docker stop backend-stub && docker rm backend-stub
+      - name: Archive dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: coverage
 
   build:
     runs-on: ubuntu-latest
