@@ -46,7 +46,9 @@ describe('load homepage', () => {
     cy.get('#settings_password_verify').should('exist')
     cy.get('#settings_password_verify').type('secret')
     cy.get('#settings_password_verify_ok').click()
-    cy.get('button#0').should('exist')
+    cy.get('#app').click()
+    cy.get('#settings_password').clear()
+    cy.get('#save').click()
   })
 
   it('modifies most settings, valid values, save', () => {
