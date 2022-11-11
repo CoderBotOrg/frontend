@@ -20,8 +20,8 @@ jobs:
     - name: Cypress run
       uses: cypress-io/github-action@v4
       with:
-        build: npm run build-test
-        start: npm run preview
+        #build: npm run build-test
+        start: npm run test
         wait-on: 'http://localhost:5000/api/v1/openapi.json'
         wait-on-timeout: 60
         browser: chrome
@@ -33,9 +33,6 @@ jobs:
         # Recommended: pass the GitHub token lets this action correctly
         # determine the unique run id necessary to re-run the checks
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
-    - run: ls -la
-    - run: ls ./coverage
-    - run: ls ./.nyc_output
     - name: Clean up
       run: docker stop backend-stub && docker rm backend-stub
     - name: Archive coverage
