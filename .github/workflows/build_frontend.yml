@@ -32,7 +32,10 @@ jobs:
         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
         # Recommended: pass the GitHub token lets this action correctly
         # determine the unique run id necessary to re-run the checks
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+    - run: ls -la
+    - run: ls ./coverage
+    - run: ls ./.nyc_output
     - name: Clean up
       run: docker stop backend-stub && docker rm backend-stub
     - name: Archive coverage
