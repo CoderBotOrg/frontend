@@ -20,8 +20,9 @@ import './main.styl';
 
 //			Fonts
 // UI
-import 'typeface-roboto';
+import 'open-dyslexic'; // includes OpenDyslexic and OpenDyslexicMono
 import 'typeface-open-sans';
+import 'typeface-roboto';
 // Monospaced
 import 'typeface-roboto-mono';
 import 'typeface-ubuntu-mono';

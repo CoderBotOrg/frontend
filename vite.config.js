@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import EnvironmentPlugin from 'vite-plugin-environment';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import istanbul from 'vite-plugin-istanbul';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,6 +22,12 @@ export default defineConfig({
       //  By default, if you run the backend locally, it's available at localhost:5000
       VITE_CB_ENDPOINT: (process.env.NODE_ENV == 'development' ? 'http://localhost:8090' : 'http://localhost:8090'),
       // Legacy APIs
+    }),
+    istanbul({
+      include: 'src/*',
+      exclude: ['node_modules', 'test/'],
+      extension: [ '.js', '.ts', '.vue' ],
+      requireEnv: true,
     })],
   resolve: {
     alias: {

@@ -9,32 +9,37 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Docker login
-        run: docker login ghcr.io -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
-      - name: Run stub
-        run: docker run -dp 5000:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Cypress run
-        uses: cypress-io/github-action@v4
-        with:
-          build: npm run build-test
-          start: npm run preview
-          wait-on: 'http://localhost:5000/api/v1/openapi.json'
-          wait-on-timeout: 60
-          browser: chrome
-          record: true
-          parallel: true
-          group: 'UI - Chrome'
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Recommended: pass the GitHub token lets this action correctly
-          # determine the unique run id necessary to re-run the checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Clean up
-        run: docker stop backend-stub && docker rm backend-stub
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Docker login
+      run: docker login ghcr.io -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
+    - name: Run stub
+      run: docker run -dp 5000:5000 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
+    # Install NPM dependencies, cache them correctly
+    # and run all Cypress tests
+    - name: Cypress run
+      uses: cypress-io/github-action@v4
+      with:
+        #build: npm run build-test
+        start: npm run test
+        wait-on: 'http://localhost:5000/api/v1/openapi.json'
+        wait-on-timeout: 60
+        browser: chrome
+        record: true
+        parallel: true
+        group: 'UI - Chrome'
+      env:
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        # Recommended: pass the GitHub token lets this action correctly
+        # determine the unique run id necessary to re-run the checks
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+    - name: Clean up
+      run: docker stop backend-stub && docker rm backend-stub
+    - name: Archive coverage
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage
+        path: coverage
 
   build:
     runs-on: ubuntu-latest
