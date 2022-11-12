@@ -28,7 +28,6 @@ describe('load homepage', () => {
     cy.visit('http://localhost:8080')
     cy.get('a.v-btn[href*="/docs"]').invoke('removeAttr', 'target').click()
     cy.url().should('include', '/docs')
-    cy.url().should('include', '/docs')
     cy.visit('http://localhost:8080')
     cy.get('a.v-btn[href*="/control"]').click()
     cy.url().should('include', '/control')
