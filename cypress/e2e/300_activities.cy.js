@@ -199,5 +199,5 @@ describe('activities page', () => {
     cy.get('#app').click()
     cy.get('div#test-spec-activity-name').find('i.mdi-delete').click()
     cy.get('button#confirmDeleteDlg_ok').click({ force: true, multiple: true })
-  })  
+  })
 })
