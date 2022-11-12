@@ -50,7 +50,7 @@
                       <v-dialog v-model="dialog_shutdown" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_halt_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_halt_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_halt_text_1') }}
@@ -70,7 +70,7 @@
                       <v-dialog v-model="dialog_restart" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_restart_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_restart_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_restart_text_1') }}
@@ -90,7 +90,7 @@
                       <v-dialog v-model="dialog_reboot" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_reboot_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_reboot_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_reboot_text_1') }}
@@ -110,7 +110,7 @@
                       <v-dialog v-model="dialog_restore" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_restore_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_restore_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_restore_text_1') }}
@@ -130,7 +130,7 @@
                       <v-dialog v-model="dialog_reset" width="500">
                           <v-card>
                             <v-card-title class="headline grey lighten-2" primary-title>
-                              <h3>CoderBot - {{ $t('message.settings_actions_reset_title') }}</h3>
+                              CoderBot - {{ $t('message.settings_actions_reset_title') }}
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_reset_text_1') }}
@@ -209,73 +209,83 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_movement_control') }}</h3>
+                      {{ $t('message.settings_movement_control') }}
                     </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.ctrlFwdSpeed"
                         v-bind:label="$t('message.settings_movement_control_forward_speed')"
                         @input="v$.settings.ctrlFwdSpeed.$touch"
                         v-bind:error-messages="v$.settings.ctrlFwdSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_control_forward_speed"
                       />
                       <v-text-field v-model="settings.ctrlFwdElapse"
                         v-bind:label="$t('message.settings_movement_control_forward_elapse')"
                         @input="v$.settings.ctrlFwdElapse.$touch"
                         v-bind:error-messages="v$.settings.ctrlFwdElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_control_forward_elapse"
                       />
                       <v-text-field v-model="settings.ctrlTurnSpeed"
                         v-bind:label="$t('message.settings_movement_control_turn_speed')"
                         @input="v$.settings.ctrlTurnSpeed.$touch"
                         v-bind:error-messages="v$.settings.ctrlTurnSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_control_turn_speed"
                       />
                       <v-text-field v-model="settings.ctrlTurnElapse"
                         v-bind:label="$t('message.settings_movement_control_turn_elapse')"
                         @input="v$.settings.ctrlTurnElapse.$touch"
                         v-bind:error-messages="v$.settings.ctrlTurnElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_control_turn_elapse"
                       />
                     </div>
                   </v-card>
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_movement_program') }}</h3>
+                      {{ $t('message.settings_movement_program') }}
                     </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.moveFwdSpeed"
                         v-bind:label="$t('message.settings_movement_program_forward_speed')"
                         @input="v$.settings.moveFwdSpeed.$touch"
                         v-bind:error-messages="v$.settings.moveFwdSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_program_forward_speed"
                       />
                       <v-text-field v-model="settings.moveFwdElapse"
                         v-bind:label="$t('message.settings_movement_program_forward_elapse')"
                         @input="v$.settings.moveFwdElapse.$touch"
                         v-bind:error-messages="v$.settings.moveFwdElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_program_forward_elapse"
                       />
                       <v-text-field v-model="settings.moveTurnSpeed"
                         v-bind:label="$t('message.settings_movement_program_turn_speed')"
                         @input="v$.settings.moveTurnSpeed.$touch"
                         v-bind:error-messages="v$.settings.moveTurnSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_program_turn_speed"
                       />
                       <v-text-field v-model="settings.moveTurnElapse"
                         v-bind:label="$t('message.settings_movement_program_turn_elapse')"
                         @input="v$.settings.moveTurnElapse.$touch"
                         v-bind:error-messages="v$.settings.moveTurnElapse.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_program_turn_elapse"
                       />
                     </div>
                   </v-card>
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_movement_parameters') }}</h3>
+                      {{ $t('message.settings_movement_parameters') }}
                     </v-card-title>
                     <div class="cardContent">
                       <v-text-field v-model="settings.motorMode"
                         v-bind:label="$t('message.settings_movement_parameters_mode')"
                         @input="v$.settings.motorMode.$touch"
+                        id="settings_movement_parameters_mode"
                       />
                       <v-text-field v-model="settings.trimFactor"
                         v-bind:label="$t('message.settings_movement_parameters_trim')"
                         @input="v$.settings.trimFactor.$touch"
                         v-bind:error-messages="v$.settings.trimFactor.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_parameters_trim"
                       />
                       <v-text-field v-model="settings.power[0]"
                         v-bind:label="$t('message.settings_movement_parameters_power_1')"
@@ -299,9 +309,9 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_camera_title') }}</h3>
+                      {{ $t('message.settings_camera_title') }}
                     </v-card-title>
-                    <div class="cardContent">
+                    <v-card-text>
                       <v-select
                         v-model="settings.camera_exposure_mode"
                         :items="cameraExposureModes"
@@ -330,14 +340,14 @@
                         @change="v$.settings.camera_jpeg_quality.$touch"
                         v-bind:error-messages="v$.settings.camera_jpeg_quality.$error == true ? $t('message.validation_integer') : ''"
                       />
-                    </div>
+                    </v-card-text>
                   </v-card>
                   <br>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left">{{ $t('message.settings_camera_cv_title') }}</h3>
+                      {{ $t('message.settings_camera_cv_title') }}
                     </v-card-title>
-                    <div class="cardContent">
+                    <v-card-text>
                       {{ $t("message.settings_camera_cv_image_factor") }}:
                       <span v-text="settings.cv_image_factor"></span>
                       <v-slider v-model="settings.cv_image_factor" min="1" max="4" step="1"
@@ -370,7 +380,7 @@
                         item-value="key"
                         v-bind:label="$t('message.settings_camera_cnn_default_model')"
                         @select="v$.settings.cnn_default_model.$touch" />
-                    </div>
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -382,10 +392,10 @@
                 <!-- Column A -->
                 <v-col xs12 md6 offset-md3>
                   <v-card>
-                  <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_sounds_title') }}</h3>
-                  </v-card-title>
-                    <div class="cardContent">
+                    <v-card-title>
+                      {{ $t('message.settings_sounds_title') }}
+                    </v-card-title>
+                    <v-card-text>
                       <v-text-field v-model="settings.startSound" v-bind:label="$t('message.settings_sounds_start')"
                         @input="v$.settings.startSound.$touch"
                       />
@@ -395,7 +405,7 @@
                       <v-text-field v-model="settings.shutterSound" v-bind:label="$t('message.settings_sounds_shutter')"
                         @input="v$.settings.shutterSound.$touch"
                       />
-                    </div>
+                   </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -408,9 +418,9 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_hardware_version') }}</h3>
+                    {{ $t('message.settings_hardware_version') }}
                   </v-card-title>
-                    <div class="cardContent">
+                  <v-card-text>
                       <v-select
                         v-model="settings.hardwareVersion"
                         :items="hardware_version_items"
@@ -419,27 +429,25 @@
                         v-bind:label="$t('message.settings_hardware_version')"
                         single-line
                       />
-                    </div>
+                    </v-card-text>
                   </v-card>
-                  <br>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_button_title') }}</h3>
+                    {{ $t('message.settings_button_title') }}
                   </v-card-title>
-                    <div class="cardContent">
+                  <v-card-text>
                       <v-radio-group v-model="settings.btnFun" column
                       >
                         <v-radio v-bind:label="$t('message.settings_button_none')" value="none"/>
                         <v-radio v-bind:label="$t('message.settings_button_startstop')" value="startstop" />
                       </v-radio-group>
-                    </div>
+                    </v-card-text>
                   </v-card>
-                  <br>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_load_at_start_title') }}</h3>
+                    {{ $t('message.settings_load_at_start_title') }}
                   </v-card-title>
-                    <div class="cardContent">
+                  <v-card-text>
                       <v-select 
                         v-model="settings.startupProgram"
                         @change="v$.settings.startupProgram.$touch"
@@ -449,7 +457,7 @@
                         single-line
                         >
                       </v-select>
-                    </div>
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-layout>
@@ -461,7 +469,7 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_network_title') }}</h3>
+                    {{ $t('message.settings_network_title') }}
                   </v-card-title>
                     <div>
                       <v-chip v-if="wifi_status.wifi" prepend-icon="mdi-wifi">Wifi</v-chip>
@@ -537,7 +545,7 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_component_test_title') }}</h3>
+                    {{ $t('message.settings_component_test_title') }}
                   </v-card-title>
                     <div class="cardContent">
                       <div id='test_array'>
@@ -691,7 +699,7 @@
                 <v-col xs12 md6 offset-md3>
                   <v-card>
                   <v-card-title>
-                    <h3 class="text-xs-left">{{ $t('message.settings_audio_title') }}</h3>
+                    {{ $t('message.settings_audio_title') }}
                   </v-card-title>
                     <div class="cardContent">
                       {{ $t('message.settings_audio_volume') }}
@@ -726,7 +734,7 @@
                   </v-card>
                   <v-card>
                     <v-card-title>
-                      <h3 class="text-xs-left"> {{ $t('message.settings_music_packages_add') }} </h3>
+                       {{ $t('message.settings_music_packages_add') }} 
                     </v-card-title>
                     <v-card-text>
                       <template v-if="updateStatus==1">
