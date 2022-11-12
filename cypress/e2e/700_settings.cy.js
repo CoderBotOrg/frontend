@@ -50,10 +50,11 @@ describe('load homepage', () => {
     cy.get('#settings_password').clear()
     cy.get('#save').click()
   })
-
+  /*
   it('modifies most settings, valid values, save', () => {
   })
 
   it('modifies most settings, invalid values, verify error message', () => {
   })
+  */
 })
