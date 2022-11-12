@@ -52,6 +52,12 @@ describe('load homepage', () => {
   })
 
   it('modifies most settings, valid values, save', () => {
+    cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
+      req.reply({"wifi": false, "internet": true})
+    })
+    cy.intercept('http://localhost:5000/wifi/v1/list_access_points', (req) => {
+      req.reply({"ssids": [{"ssid": "wifi-home", "conn_type": "WPA2", "strength": 99}]})
+    })
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
@@ -67,6 +73,12 @@ describe('load homepage', () => {
     cy.get('input#settings_movement_program_turn_speed').clear().type('90')
     cy.get('input#settings_movement_program_turn_elapse').clear().type('1')
     cy.get('#save').click()
+    cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
+    cy.get('button.v-app-bar-nav-icon').should('exist').click()
+    cy.get('a.v-list-item[href*="/settings"]').click()
+    cy.get('#app').click()
+    cy.get('button#1').click()
     cy.get('input#settings_movement_control_forward_speed').should('have.value', '90')
     cy.get('input#settings_movement_control_forward_elapse').should('have.value', '1')
     cy.get('input#settings_movement_control_turn_speed').should('have.value', '90')
@@ -78,6 +90,12 @@ describe('load homepage', () => {
   })
 
   it('modifies most settings, invalid values, verify error message', () => {
+    cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
+      req.reply({"wifi": false, "internet": true})
+    })
+    cy.intercept('http://localhost:5000/wifi/v1/list_access_points', (req) => {
+      req.reply({"ssids": [{"ssid": "wifi-home", "conn_type": "WPA2", "strength": 99}]})
+    })
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
