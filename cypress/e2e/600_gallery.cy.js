@@ -42,11 +42,13 @@ describe('load homepage', () => {
     cy.get('button.v-app-bar-nav-icon').should('exist').click()  
     cy.get('a.v-list-item[href*="gallery"]').click()
     cy.get('#app').click()
+    /*
     cy.get('.gallery').contains('VID1').should('exist')
     cy.get('.v-main').contains('VID1').click()
     cy.get('.v-card-title.details').contains('VID1').should('exist')
     cy.get('.v-card-title.details').contains('VID1').parents('.v-card').find('button.ok').click()
     cy.get('.v-main').contains('VID1').parents('.v-card').find('.mdi-delete').click()
     cy.get('#gallery_photo_confirm_card').find('.ok').click()
-})
+    */
+  })
 })
