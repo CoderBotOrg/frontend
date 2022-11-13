@@ -105,4 +105,23 @@ describe('load homepage', () => {
     cy.get('input#settings_movement_control_forward_speed').clear().type('1000')
     cy.get('input#settings_movement_control_forward_speed').parents('.v-input').find('.v-messages')
   })
+
+  it('modifies some settings, leave page whithout saving, verify "dirty" message', () => {
+    cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
+      req.reply({"wifi": false, "internet": true})
+    })
+    cy.intercept('http://localhost:5000/wifi/v1/list_access_points', (req) => {
+      req.reply({"ssids": [{"ssid": "wifi-home", "conn_type": "WPA2", "strength": 99}]})
+    })
+    cy.visit('http://localhost:8080')
+    cy.get('.v-carousel').should('exist')
+    cy.get('button.v-app-bar-nav-icon').should('exist').click()
+    cy.get('a.v-list-item[href*="/settings"]').click()
+    cy.get('#app').click()
+    cy.get('button#1').click()
+    cy.get('input#settings_movement_control_forward_speed').clear().type('99')
+    cy.get('button.v-app-bar-nav-icon').should('exist').click()
+    cy.get('a.v-list-item[href*="/control"]').click()
+    cy.get('#confirm_exit_dialog').should('exist')
+  })
 })

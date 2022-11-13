@@ -319,25 +319,25 @@
                         item-value="key"
                         v-bind:label="$t('message.settings_camera_exposure_mode')"
                         single-line
-                        @select="v$.settings.camera_exposure_mode.$touch"
+                        @update:model-value="v$.settings.camera_exposure_mode.$touch"
                       ></v-select>
                       {{ $t("message.settings_camera_framerate") }}:
                       <span v-text="settings.camera_framerate"></span>
                       <v-slider v-model="settings.camera_framerate" min="5" max="30" step="5"
-                        @change="v$.settings.camera_framerate.$touch"
+                        @update:model-value="v$.settings.camera_framerate.$touch"
                       />
                       {{ $t("message.settings_camera_jpeg_bitrate") }}:
                       <span v-text="settings.camera_jpeg_bitrate"></span>
                       <v-slider v-model="settings.camera_jpeg_bitrate" min="1000000" max="10000000" step="1000000"
                         v-bind:label="$t('message.settings_camera_jpeg_bitrate')"
-                        @change="v$.settings.camera_jpeg_bitrate.$touch"
+                        @update:model-value="v$.settings.camera_jpeg_bitrate.$touch"
                         v-bind:error-messages="v$.settings.camera_jpeg_bitrate.$error == true ? $t('message.validation_integer') : ''"
                       />
                       {{ $t("message.settings_camera_jpeg_quality") }}:
                       <span v-text="settings.camera_jpeg_quality"></span>
                       <v-slider v-model="settings.camera_jpeg_quality" min="1" max="100" step="1"
                         v-bind:label="$t('message.settings_camera_jpeg_quality')"
-                        @change="v$.settings.camera_jpeg_quality.$touch"
+                        @update:model-value="v$.settings.camera_jpeg_quality.$touch"
                         v-bind:error-messages="v$.settings.camera_jpeg_quality.$error == true ? $t('message.validation_integer') : ''"
                       />
                     </v-card-text>
@@ -351,7 +351,7 @@
                       {{ $t("message.settings_camera_cv_image_factor") }}:
                       <span v-text="settings.cv_image_factor"></span>
                       <v-slider v-model="settings.cv_image_factor" min="1" max="4" step="1"
-                        @change="v$.settings.cv_image_factor.$touch"
+                        @update:model-value="v$.settings.cv_image_factor.$touch"
                       />
                       <v-text-field v-model="settings.camera_color_object_size_max"
                         @input="v$.settings.camera_color_object_size_max.$touch"
@@ -379,7 +379,7 @@
                         item-title="text"
                         item-value="key"
                         v-bind:label="$t('message.settings_camera_cnn_default_model')"
-                        @select="v$.settings.cnn_default_model.$touch" />
+                        @update:model-value="v$.settings.cnn_default_model.$touch" />
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -450,7 +450,7 @@
                   <v-card-text>
                       <v-select 
                         v-model="settings.startupProgram"
-                        @change="v$.settings.startupProgram.$touch"
+                        @update:model-value="v$.settings.startupProgram.$touch"
                         :items="programList"
                         item-title="name"
                         v-bind:label="$t('message.settings_load_at_start_title')"
@@ -485,7 +485,7 @@
                         <v-select 
                         :disabled="settings.wifiMode!='client'"
                         v-model="settings.wifiSSID"
-                        @change="v$.settings.wifiSSID.$touch"
+                        @update:model-value@update:model-value="v$.settings.wifiSSID.$touch"
                         :items="networks"
                         item-title="ssid"
                         item-value="ssid"
@@ -791,7 +791,7 @@
         </v-card>
       </v-dialog>
       <!-- Confirm exit dialog -->
-      <v-dialog v-model="confirm_exit_dialog" max-width="290">
+      <v-dialog v-model="confirm_exit_dialog" max-width="290" id="confirm_exit_dialog">
         <v-card>
           <v-card-title class="headline">{{ $t("message.confirm") }}</v-card-title>
           <v-card-text>
@@ -849,8 +849,8 @@ export default {
     };
   },
   mounted() {
-    this.pollWifiStatus()
-    setInterval(() => { this.pollWifiStatus(); }, 1000);
+    this.inteval_wifi = setInterval(() => {this.pollWifiStatus()}, 1000);
+    this.inteval_info = setInterval(() => {this.pollInfo()}, 1000);
     this.prepopulate();
     this.$wifi_connect.networks().then((result) => {
       this.networks = result.data.ssids;
@@ -861,6 +861,10 @@ export default {
         this.programList = this.programList.concat(response.data);
       });
     this.musicPackages = this.$store.getters.musicPackages;
+  },
+  unmounted() {
+    clearInterval(this.inteval_wifi);
+    clearInterval(this.inteval_info);
   },
   beforeRouteLeave(to, from, next) {
     if (this.v$.$anyDirty) {
@@ -956,6 +960,9 @@ export default {
       this.$wifi_connect.status().then((result) => {
         this.wifi_status = result.data;
       });
+    },
+    pollInfo() {
+      this.$coderbot.getInfo();
     },
     restoreSettings() {
       this.$coderbot.restoreSettings()
@@ -1194,6 +1201,8 @@ export default {
       settings_password_verify_show: false,
       passwordVerified: false,
       passwordIncorrect: false,
+      interval_wifi: null,
+      interval_info: null,
     };
   },
   validations() {
