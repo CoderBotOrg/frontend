@@ -246,20 +246,24 @@ class CoderBot {
     return this.$axios.post(`${this.CB}/system/halt`);
   }
 
-  getInfoAndStatus() {
+  getStatus() {
     const p1 = this.$axios.get(`${this.CB}/system/status`)
       .then((response) => {
         this.$store.commit('setStatus', response.data);
       }).catch((error) => {
         this.$store.commit('setStatus', null);
       });
+    return Promise.all([p1]);
+  }
+
+  getInfo() {
     const p2 = this.$axios.get(`${this.CB}/system/info`)
       .then((response) => {
         this.$store.commit('setInfo', response.data);
       }).catch(error => {
         this.$store.commit('setInfo', null);
       });
-    return Promise.all([p1, p2]);
+    return Promise.all([p2]);
   }
 
   deleteMusicPackage(pkgNameID) {
@@ -399,15 +403,15 @@ class CoderBot {
     return `${this.CB}/video/stream`;
   }
 
-  getPhotos() {
+  getMediaList() {
     return this.$axios.get(`${this.CB}/media`);
   }
 
-  deletePhoto(name) {
+  deleteMedia(name) {
     return this.$axios.delete(`${this.CB}/media/${name}`);
   }
 
-  getPhotoURL(name) {
+  getMediaURL(name) {
     return `${this.CB}/media/${name}`;
   }
 

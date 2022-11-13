@@ -105,10 +105,12 @@ export default {
           maxBlocks: settings.maxBlocks,
           zoom: {
             controls: true,
-            wheel: false,
+            wheel: true,
             startScale: 1.0,
-            maxScale: 1.5,
-            minScale: 0.2,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2,
+            pinch: true
           },
         },
       );
