@@ -124,4 +124,11 @@ describe('load homepage', () => {
     cy.get('a.v-list-item[href*="/control"]').click()
     cy.get('#confirm_exit_dialog').should('exist')
   })
+  /*
+  it('modifies most settings, valid values, save', () => {
+  })
+
+  it('modifies most settings, invalid values, verify error message', () => {
+  })
+  */
 })

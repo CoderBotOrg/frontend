@@ -182,5 +182,5 @@ describe('load homepage', () => {
     cy.get('button#loadProgramList').click()
     cy.contains('test_sonars').click()
     cy.get('button#exportProgram').click()
-  })
+  })  
 })
