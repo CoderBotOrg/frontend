@@ -46,7 +46,7 @@
       <!-- When the selection is completed, the result is then handled by importProgram -->
       <!--   Dialogs   -->
       <!-- Runtime -->
-      <v-dialog v-model="runtimeDialog" width="480">
+      <v-dialog v-model="runtimeDialog" width="480" persistent>
         <v-card id="card_program_runtime">
           <v-card-title class="headline grey lighten-2" primary-title>
             {{ $t("message.program_status_title") }}

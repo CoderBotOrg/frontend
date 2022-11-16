@@ -34,11 +34,11 @@
                       <v-btn color="info" @click="dialog_shutdown=true">
                         <v-icon icon="mdi-power"></v-icon> {{ $t('message.settings_actions_halt') }}
                       </v-btn>
-                      <v-btn color="info" @click="dialog_reboot=true">
-                        <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_reboot') }}
-                      </v-btn>
                       <v-btn color="info" @click="dialog_restart=true">
                         <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_restart') }}
+                      </v-btn>
+                      <v-btn color="info" @click="dialog_reboot=true">
+                        <v-icon icon="mdi-restart"></v-icon> {{ $t('message.settings_actions_reboot') }}
                       </v-btn>
                       <v-btn color="warning" @click="dialog_restore=true">
                         <v-icon icon="mdi-restore"></v-icon> {{ $t('message.settings_actions_restore') }}
@@ -54,6 +54,7 @@
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_halt_text_1') }}
+                              {{ $t('message.settings_actions_halt_text_2') }}
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
@@ -62,7 +63,7 @@
                                 {{ $t('message.cancel') }}
                               </v-btn>
                               <v-btn color="error" @click="reboot">
-                                <b>{{ $t('message.settings_actions_halt') }}</b>
+                                {{ $t('message.settings_actions_halt') }}
                               </v-btn>
                             </v-card-actions>
                           </v-card>
@@ -74,6 +75,7 @@
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_restart_text_1') }}
+                              {{ $t('message.settings_actions_restart_text_2') }}
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
@@ -94,6 +96,7 @@
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_reboot_text_1') }}
+                              {{ $t('message.settings_actions_reboot_text_2') }}
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
@@ -114,6 +117,7 @@
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_restore_text_1') }}
+                              {{ $t('message.settings_actions_restore_text_2') }}
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
@@ -121,7 +125,7 @@
                               <v-btn color="primary" @click="dialog_restore = false">
                                 {{ $t('message.cancel') }}
                               </v-btn>
-                              <v-btn color="error" @click="reset">
+                              <v-btn color="error" @click="restoreSettings">
                                 <b>{{ $t('message.settings_actions_restore') }}</b>
                               </v-btn>
                             </v-card-actions>
@@ -134,6 +138,7 @@
                             </v-card-title>
                             <v-card-text>
                               {{ $t('message.settings_actions_reset_text_1') }}
+                              {{ $t('message.settings_actions_reset_text_2') }}
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
@@ -985,20 +990,22 @@ export default {
     reset() {
       this.$coderbot.reset()
         .then(() => {
+          this.dialog_restore = false;
           this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');
           this.snackbar = true;
           this.prepopulate();
-          this.dialog = false;
         });
     },
     shutdown() {
       this.$coderbot.halt().then(function success() {
+        this.dialog_shutdown = false;
         this.snackText = this.$i18n.t('message.coderbot_status_shutting_down');
         this.snackbar = true;
       });
     },
     reboot() {
       this.$coderbot.reboot().then(function success() {
+        this.dialog_reboot = false;
         this.snackText = this.$i18n.t('message.coderbot_status_restart_start');
         this.snackbar = true;
       });
