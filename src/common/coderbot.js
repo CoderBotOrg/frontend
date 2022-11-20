@@ -165,8 +165,9 @@ class CoderBot {
     data.wifiMode = remoteConfig.wifi_mode;
     data.wifiSSID = remoteConfig.wifi_ssid;
     data.wifiPsw = remoteConfig.wifi_psk;
-    data.motorMode = remoteConfig.move_motor_mode;
     data.trimFactor = remoteConfig.move_motor_trim;
+    data.motorMinPower = remoteConfig.motor_min_power;
+    data.motorMaxPower = remoteConfig.motor_max_power;
     data.startSound = remoteConfig.sound_start;
     data.stopSound = remoteConfig.sound_stop;
     data.shutterSound = remoteConfig.sound_shutter;
@@ -207,8 +208,9 @@ class CoderBot {
       move_power_angle_2: settings.power[1],
       move_power_angle_3: settings.power[2],
       button_func: settings.btnFun,
-      move_motor_mode: settings.motorMode,
       move_motor_trim: settings.trimFactor,
+      motor_min_power: settings.motorMinPower,
+      motor_max_power: settings.motorMaxPower,
       sound_start: settings.startSound,
       sound_stop: settings.stopSound,
       sound_shutter: settings.shutterSound,
