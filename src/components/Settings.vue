@@ -1401,7 +1401,7 @@ export default {
           required,
           integer,
           minValue: 0,
-          maxValue: maxValue(100)
+          maxValue: maxValue(300)
         },
         pidSampleTime: {
           required,
@@ -1410,18 +1410,15 @@ export default {
         },
         pidKP: {
           required,
-          decimal,
-          minValue: 0,
+          decimal
         },
         pidKD: {
           required,
-          decimal,
-          minValue: 0,
+          decimal
         },
         pidKI: {
           required,
-          decimal,
-          minValue: 0,
+          decimal
         },
         trimFactor: {
           required,
