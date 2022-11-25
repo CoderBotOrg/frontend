@@ -147,11 +147,10 @@ export default {
       Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_FW_DEF_ELAPSE = settings.moveFwdElapse; // to check
       Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_SPEED = settings.moveTurnSpeed;
       Blockly.Blocks.CoderBotSettings.CODERBOT_MOV_TR_DEF_ELAPSE = settings.moveTurnElapse; // to check
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MOTION = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MPU = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_ENCODER_AVAILABLE = true; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MOTION = settings.movementUseMotion; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MOVE_MPU = settings.movementUseMPU; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_ENCODER_AVAILABLE = settings.movementUseEncoder; // should come from config
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_LEVEL = settings.progLevel;
-
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SCROLLBARS = true; // to check
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_MAXBLOCKS = -1;
       Blockly.Blocks.CoderBotSettings.CODERBOT_PROG_SAVEONRUN = true; // to check
@@ -160,8 +159,8 @@ export default {
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_SPEED = settings.ctrlTurnSpeed;
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_TR_ELAPSE = settings.ctrlTurnElapse; // to check
       Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_COUNTER = true; // to check, never used
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MOTION = false; // should come from config
-      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MPU = false; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MOTION = settings.movementUseMotion; // should come from config
+      Blockly.Blocks.CoderBotSettings.CODERBOT_CTRL_MOVE_MPU = settings.movementUseMPU; // should come from config
       Blockly.Blocks.CoderBotSettings.CODERBOT_CNN_MODEL_LIST = [
         ['generic_fast_low', 'generic_fast_low'],
         ['generic_slow_high', 'generic_slow_high'],

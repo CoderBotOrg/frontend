@@ -504,6 +504,8 @@ Blockly.Blocks.coderbot_adv_move_distance = {
     const ACTIONS = [
       [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
       [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD'],
+      [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT, 'LEFT'],
+      [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT, 'RIGHT'],
     ];
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
     this.setColour(40);
@@ -523,6 +525,8 @@ Blockly.Blocks.coderbot_adv_move_distance = {
       const TOOLTIPS = {
         FORWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD,
         BACKWARD: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD,
+        LEFT: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT,
+        RIGHT: Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT,
       };
       return TOOLTIPS[mode] + Blockly.Msg.CODERBOT_MOVE_ADV_TIP_TAIL;
     });
@@ -539,12 +543,19 @@ Blockly.Python.coderbot_adv_move_distance = function (block) {
   const OPERATORS = {
     FORWARD: ['forward'],
     BACKWARD: ['backward'],
+    LEFT: ['motor_control'],
+    RIGHT: ['motor_control'],
   };
   const tuple = OPERATORS[block.getFieldValue('ACTION')];
   const action = tuple[0];
   const speed = 100;
   const distance = Blockly.Python.valueToCode(block, 'DISTANCE', Blockly.Python.ORDER_NONE);
-  const code = `${sbsPrefix}get_bot().${action}(speed=${speed}, distance=${distance})\n`;
+  let code = '';
+  if(action == 'motor_control') {
+    code = `${sbsPrefix}get_bot().motor_control(speed_left=${speed}, speed_right=-${speed}, target_distance=${distance})\n`;
+  } else {
+    code = `${sbsPrefix}get_bot().${action}(speed=${speed}, distance=${distance})\n`;
+  }
   return code;
 };
 
@@ -555,6 +566,8 @@ Blockly.Blocks.coderbot_adv_move_speed_distance = {
     const ACTIONS = [
       [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_FORWARD, 'FORWARD'],
       [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_BACKWARD, 'BACKWARD'],
+      [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_LEFT, 'LEFT'],
+      [Blockly.Msg.CODERBOT_MOVE_ADV_TIP_RIGHT, 'RIGHT'],
     ];
     this.setHelpUrl('http://code.google.com/p/blockly/wiki/Move');
     this.setColour(40);
@@ -590,12 +603,19 @@ Blockly.Python.coderbot_adv_move_speed_distance = function (block) {
   const OPERATORS = {
     FORWARD: ['forward'],
     BACKWARD: ['backward'],
+    LEFT: ['motor_control'],
+    RIGHT: ['motor_control'],
   };
   const tuple = OPERATORS[block.getFieldValue('ACTION')];
   const action = tuple[0];
   const speed = Blockly.Python.valueToCode(block, 'SPEED', Blockly.Python.ORDER_NONE);
   const distance = Blockly.Python.valueToCode(block, 'DISTANCE', Blockly.Python.ORDER_NONE);
-  const code = `${sbsPrefix}get_bot().${action}(speed=${speed}, distance=${distance})\n`;
+  let code = '';
+  if(action == 'motor_control') {
+    code = `${sbsPrefix}get_bot().motor_control(speed_left=${speed}, speed_right=-${speed}, target_distance=${distance})\n`;
+  } else {
+    code = `${sbsPrefix}get_bot().${action}(speed=${speed}, distance=${distance})\n`;
+  }
   return code;
 };
 

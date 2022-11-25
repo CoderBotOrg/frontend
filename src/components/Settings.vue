@@ -310,6 +310,45 @@
                 <v-col cols="6">
                   <v-card>
                     <v-card-title>
+                      {{ $t('message.settings_movement_parameters_pid') }}
+                    </v-card-title>
+                    <v-card-title>
+                      <v-text-field v-model="settings.pidMaxSpeed"
+                        v-bind:label="$t('message.settings_movement_parameters_pid_max_speed')"
+                        @input="v$.settings.pidMaxSpeed.$touch"
+                        v-bind:error-messages="v$.settings.pidMaxSpeed.$error == true ? $t('message.validation_integer') : ''"
+                        id="settings_movement_parameters_pid_max_speed"
+                      />
+                      <v-text-field v-model="settings.pidSampleTime"
+                        v-bind:label="$t('message.settings_movement_parameters_pid_sample_rate')"
+                        @input="v$.settings.pidSampleTime.$touch"
+                        v-bind:error-messages="v$.settings.pidSampleTime.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_parameters_pid_sample_rate"
+                      />
+                      <v-text-field v-model="settings.pidKP"
+                        v-bind:label="$t('message.settings_movement_parameters_pid_kp')"
+                        @input="v$.settings.pidKP.$touch"
+                        v-bind:error-messages="v$.settings.pidKP.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_parameters_pid_kp"
+                      />
+                      <v-text-field v-model="settings.pidKD"
+                        v-bind:label="$t('message.settings_movement_parameters_pid_kd')"
+                        @input="v$.settings.pidKD.$touch"
+                        v-bind:error-messages="v$.settings.pidKD.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_parameters_pid_kd"
+                      />
+                      <v-text-field v-model="settings.pidKI"
+                        v-bind:label="$t('message.settings_movement_parameters_pid_ki')"
+                        @input="v$.settings.pidKI.$touch"
+                        v-bind:error-messages="v$.settings.pidKI.$error == true ? $t('message.validation_decimal') : ''"
+                        id="settings_movement_parameters_pid_ki"
+                      />
+                    </v-card-title>
+                  </v-card>
+                </v-col>
+                <v-col cols="6">
+                  <v-card>
+                    <v-card-title>
                       {{ $t('message.settings_motion_parameters') }}
                     </v-card-title>
                     <v-card-text>
@@ -878,9 +917,8 @@ export default {
     };
   },
   mounted() {
-    this.inteval_wifi = setInterval(() => {this.pollWifiStatus()}, 1000);
-    this.inteval_info = setInterval(() => {this.pollInfo()}, 1000);
-    this.prepopulate();
+    this.interval_wifi = setInterval(() => {this.pollWifiStatus()}, 1000);
+    this.interval_info = setInterval(() => {this.pollInfo()}, 1000);
     this.$wifi_connect.networks().then((result) => {
       this.networks = result.data.ssids;
     });
@@ -892,8 +930,8 @@ export default {
     this.musicPackages = this.$store.getters.musicPackages;
   },
   unmounted() {
-    clearInterval(this.inteval_wifi);
-    clearInterval(this.inteval_info);
+    clearInterval(this.interval_wifi);
+    clearInterval(this.interval_info);
   },
   beforeRouteLeave(to, from, next) {
     if (this.v$.$anyDirty) {
@@ -992,13 +1030,15 @@ export default {
     },
     pollInfo() {
       this.$coderbot.getInfo();
+      this.settings = this.$store.getters.settings;
+      this.cb.status = this.$store.getters.status;
+      this.cb.info = this.$store.getters.info;
     },
     restoreSettings() {
       this.$coderbot.restoreSettings()
         .then(() => {
           this.snackText = this.$i18n.t('message.settings_packages_reset_complete');
           this.snackbar = true;
-          this.prepopulate();
         });
     },
     runTests() {
@@ -1007,30 +1047,28 @@ export default {
         this.cb.logs.test = response.data;
         this.snackText = 'Running tests';
         this.snackbar = true;
-        this.prepopulate();
         this.cb.logs.runningTest = false;
       });
     },
     reset() {
-      this.$coderbot.reset()
-        .then(() => {
-          this.dialog_restore = false;
-          this.snackText = this.$i18n.t('message.settings_packages_reset_text_1');
-          this.snackbar = true;
-          this.prepopulate();
-        });
+      this.$coderbot.reset().then(() => {
+        this.dialog_restore = false;
+        this.snackText = this.$i18n.t('message.settings_reset_text_1');
+        this.snackbar = true;
+      });
     },
     shutdown() {
-      this.$coderbot.halt().then(function success() {
+      this.$coderbot.halt().then(() => {
+        console.log(response);
         this.dialog_shutdown = false;
         this.snackText = this.$i18n.t('message.coderbot_status_shutting_down');
         this.snackbar = true;
       });
     },
     reboot() {
-      this.$coderbot.reboot().then(function success() {
+      this.$coderbot.reboot().then(() => {
         this.dialog_reboot = false;
-        this.snackText = this.$i18n.t('message.coderbot_status_restart_start');
+        this.snackText = this.$i18n.t('message.coderbot_status_rebooting');
         this.snackbar = true;
       });
     },
@@ -1040,11 +1078,6 @@ export default {
         this.snackText = this.$i18n.t('message.settings_music_package_removed');
         this.snackbar = true;
       });
-    },
-    prepopulate() {
-      this.settings = this.$store.getters.settings;
-      this.cb.status = this.$store.getters.status;
-      this.cb.info = this.$store.getters.info;
     },
     save() {
       if (this.v$.$invalid) {
@@ -1062,7 +1095,6 @@ export default {
         });
         this.$coderbot.saveSettings(this.settings).then(() => {
           console.log('Updated settings');
-          this.prepopulate();
           this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
           this.snackbar = true;
           this.v$.settings.$reset();
@@ -1125,6 +1157,11 @@ export default {
         ctrlTurnElapse: false,
         ctrlTurnSpeed: false,
         trimFactor: true,
+        pidKP: true,
+        pidKD: true,
+        pidKI: true,
+        pidMaxSpeed: true,
+        pidSampleTime: true,
         startSound: true,
         stopSound: true,
         shutterSound: true,
@@ -1193,6 +1230,11 @@ export default {
         ctrlTurnElapse: null,
         ctrlTurnSpeed: null,
         trimFactor: null,
+        pidKP: null,
+        pidKD: null,
+        pidKI: null,
+        pidMaxSpeed: null,
+        pidSampleTime: null,
         startSound: null,
         stopSound: null,
         shutterSound: null,
@@ -1354,6 +1396,32 @@ export default {
           integer,
           minValue: 0,
           maxValue: maxValue(100)
+        },
+        pidMaxSpeed: {
+          required,
+          integer,
+          minValue: 0,
+          maxValue: maxValue(100)
+        },
+        pidSampleTime: {
+          required,
+          decimal,
+          minValue: 0,
+        },
+        pidKP: {
+          required,
+          decimal,
+          minValue: 0,
+        },
+        pidKD: {
+          required,
+          decimal,
+          minValue: 0,
+        },
+        pidKI: {
+          required,
+          decimal,
+          minValue: 0,
         },
         trimFactor: {
           required,

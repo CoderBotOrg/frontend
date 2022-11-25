@@ -181,9 +181,18 @@ class CoderBot {
     data.ctrlFwdSpeed = remoteConfig.ctrl_fw_speed;
     data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse;
     data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed;
+    data.pidKP = remoteConfig.pid_kp
+    data.pidKD = remoteConfig.pid_kd;
+    data.pidKI = remoteConfig.pid_ki;
+    data.pidMaxSpeed = remoteConfig.pid_max_speed,
+    data.pidSampleTime = remoteConfig.pid_sample_time,
     data.audioLevel = remoteConfig.audio_volume_level;
     data.adminPassword = remoteConfig.admin_password;
     data.hardwareVersion = remoteConfig.hardware_version;
+    data.progScrollbars = remoteConfig.prog_scrollbars;
+    data.movementUseMPU = remoteConfig.movement_use_mpu;
+    data.movementUseMotion = remoteConfig.movement_use_motion;
+    data.movementUseEncoder = remoteConfig.movement_use_encoder;
     this.$store.commit('setSettings', data);
   }
 
@@ -220,6 +229,11 @@ class CoderBot {
       move_fw_speed: settings.moveFwdSpeed,
       move_tr_elapse: settings.moveTurnElapse,
       move_tr_speed: settings.moveTurnSpeed,
+      pid_kp: settings.pidKP,
+      pid_kd: settings.pidKP,
+      pid_ki: settings.pidKI,
+      pid_max_speed: settings.pidMaxSpeed,
+      pid_sample_time: settings.pidSampleTime,
       ctrl_fw_elapse: settings.ctrlFwdElapse,
       ctrl_fw_speed: settings.ctrlFwdSpeed,
       ctrl_tr_elapse: settings.ctrlTurnElapse,
@@ -227,6 +241,10 @@ class CoderBot {
       audio_volume_level: settings.audioLevel,
       admin_password: settings.adminPassword,
       hardware_version: settings.hardwareVersion,
+      prog_scrollbars: settings.progScrollbars,
+      movement_use_mpu: settings.movementUseMPU,
+      movement_use_motion: settings.movementUseMotion,
+      movement_use_encoder: settings.movementUseEncoder
     };
     this.$store.commit('setSettings', settings);
     return this.$axios.put(`${this.CB}/settings`, legacySettings);
@@ -371,10 +389,11 @@ class CoderBot {
     });
   }
 
-  turn(speed, elapse) {
+  turn(speed, elapse, distance) {
     return this.$axios.post(`${this.CB}/control/turn`, {
       speed: speed,
-      elapse: elapse
+      elapse: elapse,
+      distance: distance
     });
   }
 

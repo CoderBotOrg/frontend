@@ -206,7 +206,8 @@ export default {
         // RIGHT, turn right
         this.$coderbot.turn(
           -80, // speed
-          -1   // elapse
+          - 1, // elapse
+          null
         )
           .catch((error) => {
             console.log(`turn error: ${error}`);
@@ -215,7 +216,8 @@ export default {
         // LEFT, turn left
         this.$coderbot.turn(
           80, // speed
-          -1   // elapse
+          -1, // elapse
+          null
         )
           .catch((error) => {
             console.log(`turn error: ${error}`);
