@@ -230,7 +230,7 @@ class CoderBot {
       move_tr_elapse: settings.moveTurnElapse,
       move_tr_speed: settings.moveTurnSpeed,
       pid_kp: settings.pidKP,
-      pid_kd: settings.pidKP,
+      pid_kd: settings.pidKD,
       pid_ki: settings.pidKI,
       pid_max_speed: settings.pidMaxSpeed,
       pid_sample_time: settings.pidSampleTime,
