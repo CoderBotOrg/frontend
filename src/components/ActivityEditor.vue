@@ -135,24 +135,6 @@
                   </v-row>
                   <v-row>
                   <v-col>
-									<v-card>
-                    <v-card-title>
-                      {{ $t("message.activity_locale") }}
-                    </v-card-title>
-										<v-card-text>
-											<v-select v-model="activity.uiLang"
-                        :items="langs"
-                        item-title="text"
-                        item-value="key"
-                        v-bind:label="$t('message.activity_locale')" required
-                        @change="v$.activity.uiLang.$touch"
-                      ></v-select>
-										</v-card-text>
-									</v-card>
-                  </v-col>
-                  </v-row>
-                  <v-row>
-                  <v-col>
                   <v-card>
                     <v-card-title>
                       {{ $t("message.activity_programing_title") }}
@@ -500,7 +482,6 @@ export default {
       activity: {
         stock: null,
         default: null,
-        uiLang: "browser",
         theme: null,
         defaultView: null,
         exec: {
@@ -588,12 +569,6 @@ export default {
         'Protanomaly',
         'Protanopia',
       ],
-      langs: [
-        { key: 'browser', text: this.$i18n.t('message.activity_lang_browser') },
-        { key: 'it', text: this.$i18n.t('message.activity_lang_italian') },
-        { key: 'en', text: this.$i18n.t('message.activity_lang_english') },
-        { key: 'fr', text: this.$i18n.t('message.activity_lang_french') },
-      ],
       editHistory: false,
       navHistory: false,
       experimental: true,
@@ -629,7 +604,6 @@ export default {
     return {
       activity: {
         default: { },
-        uiLang: { },
         defaultView: { },
         drawerEnabled: { },
         showName: { },

@@ -354,9 +354,6 @@ export default {
     }
     this.$coderbot.loadActivity(activityName, activityDefault).then((activity) => {
       this.activity = activity.data;
-      if (this.activity.uiLang != 'browser') {
-        this.$i18n.locale = this.activity.uiLang;
-      }
       this.theme.global.name.value = this.activity.theme != 'dark' ? 'light' : 'dark';
       this.settings.maxBlocks = this.activity.maxBlocks;
       this.updateCssProps();
