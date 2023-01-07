@@ -593,6 +593,8 @@ export default {
         { key: 'it', text: this.$i18n.t('message.activity_lang_italian') },
         { key: 'en', text: this.$i18n.t('message.activity_lang_english') },
         { key: 'fr', text: this.$i18n.t('message.activity_lang_french') },
+        { key: 'es', text: this.$i18n.t('message.activity_lang_spanish') },
+        { key: 'de', text: this.$i18n.t('message.activity_lang_german') },
       ],
       editHistory: false,
       navHistory: false,
