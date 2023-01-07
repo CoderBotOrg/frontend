@@ -16,11 +16,15 @@ import 'blockly/python';
 import * as blockly_it from 'blockly/msg/it';
 import * as blockly_en from 'blockly/msg/en';
 import * as blockly_fr from 'blockly/msg/fr';
+import * as blockly_es from 'blockly/msg/es';
+import * as blockly_de from 'blockly/msg/de';
 
 import '../assets/js/blockly/blocks';
 import * as bot_it from '../assets/js/blockly/bot_it.json';
 import * as bot_en from '../assets/js/blockly/bot_en.json';
 import * as bot_fr from '../assets/js/blockly/bot_fr.json';
+import * as bot_es from '../assets/js/blockly/bot_es.json';
+import * as bot_de from '../assets/js/blockly/bot_de.json';
 
 import i18n from '../i18n/index';
 
@@ -29,7 +33,9 @@ const locale = i18n.global.locale.substring(0, 2);
 const coderbot_locales = {
   it: bot_it.default,
   en: bot_en.default,
-  fr: bot_fr.default
+  fr: bot_fr.default,
+  es: bot_es.default,
+  de: bot_de.default
 };
 
 Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
@@ -37,7 +43,9 @@ Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
 const blockly_locales = {
   it: blockly_it,
   en: blockly_en,
-  fr: blockly_fr
+  fr: blockly_fr,
+  es: blockly_es,
+  de: blockly_de
 };
 Blockly.setLocale(blockly_locales[locale]);
 
