@@ -3,6 +3,8 @@ import { createI18n } from 'vue-i18n';
 import * as it_messages from './locales/it/messages.json';
 import * as en_messages from './locales/en/messages.json';
 import * as fr_messages from './locales/fr/messages.json';
+import * as es_messages from './locales/es/messages.json';
+import * as de_messages from './locales/de/messages.json';
 
 const locales = {
   it: {
@@ -13,6 +15,12 @@ const locales = {
   },
   fr: {
     message: fr_messages.default,
+  },
+  es: {
+    message: es_messages.default,
+  },
+  de: {
+    message: de_messages.default,
   },
 };
 

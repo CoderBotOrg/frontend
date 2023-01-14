@@ -175,6 +175,22 @@
                   </v-card>
                 </v-col>
                 <v-col>
+                <v-card>
+                  <v-card-title>
+                    {{ $t("message.settings_locale") }}
+                  </v-card-title>
+                  <v-card-text>
+                    <v-select v-model="settings.locale"
+                      :items="langs"
+                      item-title="text"
+                      item-value="key"
+                      v-bind:label="$t('message.settings_locale')" required
+                      @change="v$.settings.locale.$touch"
+                    ></v-select>
+                  </v-card-text>
+                </v-card>
+                </v-col>
+                <v-col>
                   <v-card>
                     <v-card-title>
                       {{ $t('message.settings_general_info') }}
@@ -1081,6 +1097,7 @@ export default {
     },
     save() {
       if (this.v$.$invalid) {
+        console.log(this.v$)
         this.snackText = this.$i18n.t('message.settings_errors');
         this.snackbar = true;
       } else {
@@ -1241,6 +1258,7 @@ export default {
         startupProgram: null,
         progLevel: null,
         adminPassword: null,
+        locale: null
       },
       musicPackages: null,
       cb: {
@@ -1276,6 +1294,14 @@ export default {
       passwordIncorrect: false,
       interval_wifi: null,
       interval_info: null,
+      langs: [
+        { key: 'browser', text: this.$i18n.t('message.activity_lang_browser') },
+        { key: 'it', text: this.$i18n.t('message.activity_lang_italian') },
+        { key: 'en', text: this.$i18n.t('message.activity_lang_english') },
+        { key: 'fr', text: this.$i18n.t('message.activity_lang_french') },
+        { key: 'es', text: this.$i18n.t('message.activity_lang_spanish') },
+        { key: 'de', text: this.$i18n.t('message.activity_lang_german') },
+      ]
     };
   },
   validations() {
@@ -1436,6 +1462,8 @@ export default {
         },
         adminPassword: {
         },
+        locale: {
+        }
       },
     };
   },

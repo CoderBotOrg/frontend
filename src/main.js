@@ -52,6 +52,7 @@ const $wifi_connect = new WifiConnect(import.meta.env.VITE_CB_ENDPOINT, $axios);
 /* eslint-disable no-new */
 const app = createApp(App);
 // Configuration
+
 app.use(router);
 app.use(vuetify);
 app.use(store);
@@ -66,6 +67,9 @@ app.defaultTheme = 'dark';
 function loadConfig() {
   $coderbot.load().then(() => {
     console.log('config loaded');
+    if(store.getters.settings.locale != 'browser') {
+      i18n.global.locale = store.getters.settings.locale;
+    }
   }).catch((errors) => {
     console.log('error loading config: ', errors);
     setTimeout(loadConfig, 1000);

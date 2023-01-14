@@ -24,7 +24,6 @@ class CoderBot {
         const defaultActivity = {
           stock: true,
           default: true,
-          uiLang: 'browser',
           defaultView: null,
           exec: {
             camera: true,
@@ -193,6 +192,7 @@ class CoderBot {
     data.movementUseMPU = remoteConfig.movement_use_mpu;
     data.movementUseMotion = remoteConfig.movement_use_motion;
     data.movementUseEncoder = remoteConfig.movement_use_encoder;
+    data.locale = remoteConfig.locale;
     this.$store.commit('setSettings', data);
   }
 
@@ -244,7 +244,8 @@ class CoderBot {
       prog_scrollbars: settings.progScrollbars,
       movement_use_mpu: settings.movementUseMPU,
       movement_use_motion: settings.movementUseMotion,
-      movement_use_encoder: settings.movementUseEncoder
+      movement_use_encoder: settings.movementUseEncoder,
+      locale: settings.locale
     };
     this.$store.commit('setSettings', settings);
     return this.$axios.put(`${this.CB}/settings`, legacySettings);
