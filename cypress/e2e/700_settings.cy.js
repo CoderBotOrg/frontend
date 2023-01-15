@@ -29,6 +29,7 @@ describe('load homepage', () => {
     cy.intercept('http://localhost:5000/wifi/v1/list_access_points', (req) => {
       req.reply({"ssids": [{"ssid": "wifi-home", "conn_type": "WPA2", "strength": 99}]})
     })
+    cy.wait(500);
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist').click()
