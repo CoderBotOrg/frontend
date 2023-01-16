@@ -36,6 +36,7 @@ describe('load homepage', () => {
     cy.get('#app').click()
     cy.get('button#0').should('exist')
     cy.get('button#0').click()
+    cy.get('#settings_password').should('exist')
     cy.get('#settings_password').type('secret')
     cy.get('#save').should('exist')
     cy.get('#save').click()
