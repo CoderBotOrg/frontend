@@ -87,7 +87,7 @@ jobs:
       with:
         name: dist 
         path: dist
-    - run: wget https://github.com/CoderBotOrg/docs/releases/download/v0.1/docs.tgz
+    - run: wget https://github.com/CoderBotOrg/docs/releases/download/v0.2/docs.tgz
     - run: mkdir -p cb_docs
     - run: tar xzf docs.tgz -C cb_docs
     - run: rm docs.tgz
