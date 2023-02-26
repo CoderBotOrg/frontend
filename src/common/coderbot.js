@@ -129,6 +129,15 @@ class CoderBot {
     this.$store.commit('setMusicAnimals', musicAnimals);
   }
 
+  async uploadMusicPackage(formdata) {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+    };
+    return await this.$axios.post(`${this.CB}/music/packages`, formdata, config);
+  }
+
   async loadCNNModels() {
     const result = await this.$axios.get(`${this.CB}/cnnmodels`);
     const cnnModels = [];
@@ -288,9 +297,7 @@ class CoderBot {
   }
 
   deleteMusicPackage(pkgNameID) {
-    return this.$axios.post(`${this.CB}/deleteMusicPackage`, {
-      package_name: pkgNameID,
-    });
+    return this.$axios.delete(`${this.CB}/music/packages/${pkgNameID}`);
   }
 
   restoreSettings() {
@@ -302,8 +309,9 @@ class CoderBot {
   }
 
   test(checkedTests) {
-    return this.$axios.post(`${this.CB}/testCoderbot`, {
-      params: checkedTests
+    console.log(checkedTests);
+    return this.$axios.post(`${this.CB}/system/test`, {
+      tests: checkedTests
     });
   }
 

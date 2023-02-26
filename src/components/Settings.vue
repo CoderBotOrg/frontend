@@ -628,148 +628,31 @@
               <v-row row wrap align-center>
                 <v-col >
                   <v-card>
-                  <v-card-title>
-                    {{ $t('message.settings_component_test_title') }}
-                  </v-card-title>
+                    <v-card-title>
+                      {{ $t('message.settings_component_test_title') }}
+                    </v-card-title>
                     <v-card-text>
-                      <div id='test_array'>
-                        <!-- SONAR -->
+                      <div id='test_array' v-for="test in tests">
                         <v-row row wrap justify-center>
-                          <!-- switch -->
                           <v-col xs12 offset-md2 md5>
-                            <v-switch v-bind:label="$t('message.settings_component_test_sonar')" value="sonar" v-model="checkedTests" color="orange"></v-switch>
+                            <v-switch :label="test.title" :value="test.name" v-model="checkedTests[test.name]" color="orange"></v-switch>
                           </v-col>
-                          <!-- button state -->
                           <v-col xs12 md4>
-                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.sonar != 0">
-                              <!-- passed -->
-                              <span v-if="cb.logs.test.sonar == 1">
-                                <v-btn @click="runTests" slot="activator" color="green" dark>
-                                  <v-icon icon="mdi-check"></v-icon> {{ $t('message.settings_component_test_passed') }}
-                                </v-btn>
-                              </span>
-                              <!-- failed -->
-                              <span v-else>
-                                <v-btn @click="runTests" slot="activator" color="red" dark>
-                                  <v-icon icon="mdi-exclamation"></v-icon> {{ $t('message.settings_component_test_failed') }}
-                                </v-btn>
-                              </span>
-                            </span>
-                            <!-- not tested -->
-                            <span v-else>
-                              <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                <v-icon icon="mdi-help"></v-icon> {{ $t('message.settings_component_test_not_tested') }}
-                              </v-btn>
-                            </span>
-                          </v-col>
-                        </v-row>
-                        <!-- MOTORS -->
-                        <v-row row wrap justify-center>
-                          <!-- switch -->
-                          <v-col xs12 offset-md2 md5>
-                            <v-switch v-bind:label="$t('message.settings_component_test_motors')" value="motors" v-model="checkedTests" color="orange">
-                            </v-switch>
-                          </v-col>
-                          <!-- button state -->
-                          <v-col xs12 md4>
-                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.motors != 0">
-                              <!-- passed -->
-                              <span v-if="cb.logs.test.motors== 1">
-                                <v-btn @click="runTests" slot="activator" color="green" dark>
-                                  <v-icon icon="mdi-check"></v-icon> {{ $t('message.settings_component_test_passed') }}
-                                </v-btn>
-                              </span>
-                              <!-- failed -->
-                              <span v-else>
-                                <v-btn @click="runTests" slot="activator" color="red" dark>
-                                  <v-icon icon="mdi-exclamation"></v-icon> {{ $t('message.settings_component_test_failed') }}
-                                </v-btn>
-                              </span>
-                            </span>
-                            <!-- not tested -->
-                            <span v-else>
-                              <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                <v-icon icon="mdi-help"></v-icon> {{ $t('message.settings_component_test_not_tested') }}
-                              </v-btn>
-                            </span>
-                          </v-col>
-                        </v-row>
-
-                        <!-- SPEAKER -->
-                        <v-row row wrap justify-center>
-                          <!-- switch -->
-                          <v-col xs12 offset-md2 md5>
-                            <v-switch v-bind:label="$t('message.settings_component_test_speaker')" value="speaker" v-model="checkedTests" color="orange">
-                            </v-switch>
-                          </v-col>
-                          <!-- button state -->
-                          <v-col xs12 md4>
-                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.speaker != 0">
-                              <!-- passed -->
-                              <span v-if="cb.logs.test.speaker== 1">
-                                <v-btn @click="runTests" slot="activator" color="green" dark>
-                                  <v-icon icon="mdi-check"></v-icon> {{ $t('message.settings_component_test_passed') }}
-                                </v-btn>
-                              </span>
-                              <!-- failed -->
-                              <span v-else>
-                                <v-btn @click="runTests" slot="activator" color="red" dark>
-                                  <v-icon icon="mdi-exclamation"></v-icon> {{ $t('message.settings_component_test_not_failed') }}
-                                </v-btn>
-                              </span>
-                            </span>
-                            <!-- not tested -->
-                            <span v-else>
-                              <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                <v-icon icon="mdi-help"></v-icon> {{ $t('message.settings_component_test_not_tested') }}
-                              </v-btn>
-                            </span>
-                          </v-col>
-                        </v-row>
-
-                        <!-- OCR -->
-                        <v-row row wrap justify-center>
-                          <!-- switch -->
-                          <v-col xs12 offset-md2 md5>
-                            <v-switch v-bind:label="$t('message.settings_component_test_ocr')" value="ocr" v-model="checkedTests" color="orange">
-                            </v-switch>
-                          </v-col>
-                          <!-- button state -->
-                          <v-col xs12 md4>
-                            <span v-if="cb.logs != null && cb.logs.test != null && cb.logs.test.ocr != 0">
-                              <!-- passed -->
-                              <span v-if="cb.logs.test.ocr== 1">
-                                <v-btn @click="runTests" slot="activator" color="green" dark>
-                                  <v-icon icon="mdi-check"></v-icon> {{ $t('message.settings_component_test_passed') }}
-                                </v-btn>
-                              </span>
-                              <!-- failed -->
-                              <span v-else>
-                                <v-btn @click="runTests" slot="activator" color="red" dark>
-                                  <v-icon icon="mdi-exclamation"></v-icon> {{ $t('message.settings_component_test_failed') }}
-                                </v-btn>
-                              </span>
-                            </span>
-                            <!-- not tested -->
-                            <span v-else>
-                              <v-btn @click="runTests" slot="activator" color="grey" dark>
-                                <v-icon icon="mdi-help"></v-icon> {{ $t('message.settings_component_test_not_tested') }}
-                              </v-btn>
-                            </span>
+                            <v-chip slot="activator" :color="testStatusColor(test.name)" dark>
+                              <v-icon icon="mdi-check"></v-icon> {{ testStatusLabel(test.name) }}
+                            </v-chip>
                           </v-col>
                         </v-row>
                       </div>
-                      <br>
-                      <v-card-actions>
-
-                        <v-btn v-if="cb.logs != null && !cb.logs.runningTest" block @click="runTests" slot="activator" color="orange" dark>
-                          <v-icon icon="mdi-animation-play"></v-icon> {{ $t('message.settings_component_test_run') }}
-                        </v-btn>
-                        <v-btn v-else block disabled>
-                          <v-icon icon="mdi-clock-outline"></v-icon> {{ $t('message.settings_component_test_text_1') }}
-                        </v-btn>
-                      </v-card-actions>
                     </v-card-text>
+                    <v-card-actions>
+                      <v-btn v-if="!testsRunning" block @click="runTests" slot="activator" color="orange" dark>
+                        <v-icon icon="mdi-animation-play"></v-icon> {{ $t('message.settings_component_test_run') }}
+                      </v-btn>
+                      <v-btn v-else block>
+                        <v-icon icon="mdi-clock-outline"></v-icon> {{ $t('message.settings_component_test_text_1') }}
+                      </v-btn>
+                    </v-card-actions>
                   </v-card>
                 </v-col>
               </v-row>
@@ -821,20 +704,8 @@
                        {{ $t('message.settings_music_packages_add') }} 
                     </v-card-title>
                     <v-card-text>
-                      <template v-if="updateStatus==1">
-                        <b>{{ $t('message.settings_music_package_installed') }}</b>
-                        <br>
-                        {{ updateStatusText }}
-                        <v-btn @click="refresh" color="error">{{ $t('message.settings_music_packages_update') }}</v-btn>
-                      </template>
-                      <template v-if="updateStatus==2 || updateStatus==3">
-                        <b>{{ $t('message.settings_music_packages_installation_failed') }}</b>
-                        <br>
-                        {{ updateStatusText }}
-                        <v-btn @click="refresh" color="error">{{ $t('message.settings_music_packages_update') }}</v-btn>
-                      </template>
                       <template v-if="updateStatus==0">
-                        <v-text-field label="$t('message.settings_music_packages_select')" @click='pickFile' v-model='fileName'
+                        <v-text-field :label="$t('message.settings_music_packages_select')" @click='pickFile' v-model='fileName'
                           prepend-icon='attach_file'></v-text-field>
                         <input type="file" style="display: none" ref="file" @change="onFilePicked">
                         <template v-if="this.fileObj">{{ $t('message.settings_music_packages_install_confirm_text') }}<br></template>
@@ -907,6 +778,7 @@ import useVuelidate from '@vuelidate/core';
 import {
   required, alpha, integer, decimal, between, minValue, maxValue
 } from '@vuelidate/validators';
+import i18n from '../i18n';
 
 import sidebar from './Sidebar.vue';
 
@@ -964,8 +836,7 @@ export default {
     },
     requirePassword() {
       return this.settings.adminPassword != null && this.settings.adminPassword != '' && !this.passwordVerified;
-    }
-
+    },
   },
   methods: {
     pickFile() {
@@ -981,23 +852,25 @@ export default {
       this.formdata.append('file_to_upload', files[0], files[0].name);
     },
     uploadPackage() {
-      /*
-      const qs = this.$qs;
-      const pkgName = qs.stringify({
-        nameID: this.fileName,
-      });
-      */
-      this.$coderbot.updatePackages(this.formData).then((result) => {
-        this.updateStatus = result.data;
+      this.$coderbot.uploadMusicPackage(this.formdata).then((result) => {
+        console.log(result);
+        this.updateStatus = 0;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
+        this.fileObj = null;
+        this.fileName = null;
         this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_1');
-        if (this.updateStatus == 2) {
-          this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_2');
-        }
-        if (this.updateStatus == 3) {
-          this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_3');
-        }
+        this.$coderbot.loadMusicPackages().then(() => {
+          this.musicPackages = this.$store.getters.musicPackages;
+        });
+      }).catch((result) => {
+        console.log(result);
+        this.updateStatus = 0;
+        this.uploadCompleted = true;
+        this.uploadInProgress = false;
+        this.fileObj = null;
+        this.fileName = null;
+        this.updateStatusText = this.$i18n.t('message.settings_music_packages_text_3');
       });
     },
     upload() {
@@ -1017,27 +890,8 @@ export default {
       });
     },
     refresh() {
-      window.location.reload();
-      /*
-      readTextFile
-      this.musicPackages = packageList
-      this.$http.get('vue/index.html#/settings').then((results) => {
-            console.log(results.data.data);
-            }, (results) => {
-                console.log('ERROR');
-                console.log(results);
-              });
-      readTextFile(file, callback) {
-      var rawFile = new XMLHttpRequest();
-      rawFile.overrideMimeType("application/json");
-      rawFile.open("GET", file, true);
-      rawFile.onreadystatechange = function() {
-          if (rawFile.readyState === 4 && rawFile.status == "200") {
-              callback(rawFile.responseText);
-          }
-      }
-      rawFile.send(null);
-      */
+      this.$coderbot.loadMusicPackages();
+      this.musicPackages = this.$store.getters.musicPackages;
     },
     pollWifiStatus() {
       this.$wifi_connect.status().then((result) => {
@@ -1058,12 +912,14 @@ export default {
         });
     },
     runTests() {
-      this.cb.logs.runningTest = true;
-      this.$coderbot.test(this.checkedTests).then((response) => {
-        this.cb.logs.test = response.data;
+      this.runningTest = true;
+      let tests = Object.values(this.checkedTests);
+      this.$coderbot.test(tests).then((response) => {
+        console.log(response.data);
+        this.testResults = response.data;
         this.snackText = 'Running tests';
         this.snackbar = true;
-        this.cb.logs.runningTest = false;
+        this.testsRunning = false;
       });
     },
     reset() {
@@ -1093,6 +949,9 @@ export default {
         console.log('Pacchetto rimosso');
         this.snackText = this.$i18n.t('message.settings_music_package_removed');
         this.snackbar = true;
+        this.$coderbot.loadMusicPackages().then(() => {
+          this.musicPackages = this.$store.getters.musicPackages;
+        });
       });
     },
     save() {
@@ -1139,6 +998,26 @@ export default {
             });
           }
         }
+      }
+    },
+    testStatusColor(name) {
+      switch (this.testResults[name]) {
+        case 1:
+          return "green";
+        case -1:
+          return "red";
+        case 0:
+          return "default";
+      }
+    },
+    testStatusLabel(name) {
+      switch (this.testResults[name]) {
+        case 1:
+          return this.$i18n.t('message.settings_component_test_passed');
+        case -1:
+          return this.$i18n.t('message.settings_component_test_failed');
+        case 0:
+          return this.$i18n.t('message.settings_component_test_not_tested');
       }
     },
     toggleSidebar() {
@@ -1264,6 +1143,7 @@ export default {
       cb: {
         info: {},
         status: {},
+        logs: {},
       },
       drawer: null,
       tab: null,
@@ -1284,6 +1164,19 @@ export default {
         this.$i18n.t('message.settings_tabs_audio'),
         this.$i18n.t('message.settings_tabs_music_packages')
       ],
+      tests: [
+        { name: "sonar", title: this.$i18n.t('message.settings_component_test_sonar') },
+        { name: "motors", title: this.$i18n.t('message.settings_component_test_motors') },
+        { name: "speaker", title: this.$i18n.t('message.settings_component_test_speaker') },
+        { name: "OCR", title: this.$i18n.t('message.settings_component_test_ocr') },
+      ],
+      testResults: {
+        sonar: null,
+        motors: null,
+        speaker: null,
+        OCR: null,
+      },
+      testsRunning: false,
       networks: [],
       wifi_status: null,
       wifi_pwd_show: false,
