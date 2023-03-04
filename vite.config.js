@@ -1,7 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import EnvironmentPlugin from 'vite-plugin-environment';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import istanbul from 'vite-plugin-istanbul';
 
@@ -16,12 +15,6 @@ export default defineConfig({
           dest: 'media'
         }
       ]
-    }),
-    EnvironmentPlugin({
-      // Backend location. Must point to the exposed Flask instance
-      //  By default, if you run the backend locally, it's available at localhost:5000
-      VITE_CB_ENDPOINT: (process.env.NODE_ENV == 'development' ? 'http://localhost:8090' : 'http://localhost:8090'),
-      // Legacy APIs
     }),
     istanbul({
       include: 'src/*',

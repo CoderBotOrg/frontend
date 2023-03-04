@@ -8,28 +8,28 @@ import * as de_messages from './locales/de/messages.json';
 
 const locales = {
   it: {
-    message: it_messages.default,
+    message: it_messages,
   },
   en: {
-    message: en_messages.default,
+    message: en_messages,
   },
   fr: {
-    message: fr_messages.default,
+    message: fr_messages,
   },
   es: {
-    message: es_messages.default,
+    message: es_messages,
   },
   de: {
-    message: de_messages.default,
+    message: de_messages,
   },
 };
 
-const language = (window.navigator.userLanguage || window.navigator.language).substring(0, 2);
+const language = (window.navigator.language).substring(0, 2);
 
 console.log(language);
 
 /* eslint-disable new-cap */
-export default new createI18n({
+export default createI18n({
   locale: language,
   messages: locales,
   fallbackLocale: 'en',

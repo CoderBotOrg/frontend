@@ -62,7 +62,6 @@ app.config.globalProperties.$axios = $axios;
 app.config.globalProperties.$coderbot = $coderbot;
 app.config.globalProperties.$wifi_connect = $wifi_connect;
 app.mount('#app');
-app.defaultTheme = 'dark';
 
 function loadConfig() {
   $coderbot.load().then(() => {

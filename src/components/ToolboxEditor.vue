@@ -76,7 +76,7 @@
     </v-dialog>
   </v-container>
 </template>
-<script>
+<script lang="js">
 import BlocklyWorkspace from './BlocklyWorkspace.vue';
 import * as toolbox_full from '@/assets/toolbox_adv.json';
 

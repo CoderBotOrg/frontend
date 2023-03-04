@@ -98,7 +98,7 @@
     </v-app>
   </div>
 </template>
-<script>
+<script lang="js">
 import sidebar from './Sidebar.vue';
 
 export default {

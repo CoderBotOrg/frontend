@@ -33,7 +33,7 @@
   </template>
  </div>
 </template>
-<script>
+<script lang="js">
 import image_1 from './assets/images/coderbot_wide1.jpg';
 
 export default {

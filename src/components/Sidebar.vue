@@ -59,7 +59,7 @@
       </v-navigation-drawer>
   </div>
 </template>
-<script>
+<script lang="js">
 export default {
   name: 'Sidebar',
   computed: {

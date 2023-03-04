@@ -773,7 +773,7 @@
     </v-app>
   </div>
 </template>
-<script>
+<script lang="js">
 import useVuelidate from '@vuelidate/core';
 import {
   required, alpha, integer, decimal, between, minValue, maxValue

@@ -8,7 +8,7 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="js">
 import Blockly from 'blockly';
 import DarkTheme from '@blockly/theme-dark';
 import 'blockly/blocks';

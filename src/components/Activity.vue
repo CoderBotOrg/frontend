@@ -276,7 +276,7 @@
     </v-app>
   </div>
 </template>
-<script>
+<script lang="js">
 import 'prismjs';
 import 'prismjs/components/prism-python.js';
 import Prism from 'vue-prism-component';

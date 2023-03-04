@@ -7,13 +7,10 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
 /* eslint-disable new-cap */
-export default new createVuetify({
+export default createVuetify({
   components,
   directives,
-  icons: {
-    defaultSet: 'mdi',
-  },
   theme: {
-    // defaultTheme: 'dark'
+    defaultTheme: 'light'
   }
 });

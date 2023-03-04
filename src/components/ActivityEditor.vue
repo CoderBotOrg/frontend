@@ -367,7 +367,7 @@
     </v-app>
   </div>
 </template>
-<script>
+<script lang="js">
 import useVuelidate from '@vuelidate/core';
 // import VSwatches from 'vue3-swatches';
 
