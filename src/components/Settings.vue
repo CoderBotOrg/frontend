@@ -717,6 +717,10 @@
               </v-row>
             </v-container>
           </v-window-item>
+          <!-- SYNC TAB -->
+          <v-window-item>
+            <sync :syncmodes="settings.syncmodes"></sync>
+          </v-window-item>
         </v-window>
       </v-main>
       <!-- Admin password dialog -->
@@ -781,10 +785,12 @@ import {
 import i18n from '../i18n';
 
 import sidebar from './Sidebar.vue';
+import sync from './Sync.vue';
 
 export default {
   components: {
-    sidebar
+    sidebar,
+    sync
   },
   name: 'Settings',
   setup() {
@@ -1137,7 +1143,8 @@ export default {
         startupProgram: null,
         progLevel: null,
         adminPassword: null,
-        locale: null
+        locale: null,
+        syncmodes: null,
       },
       musicPackages: null,
       cb: {
@@ -1162,7 +1169,8 @@ export default {
         this.$i18n.t('message.settings_tabs_network'),
         this.$i18n.t('message.settings_tabs_test'),
         this.$i18n.t('message.settings_tabs_audio'),
-        this.$i18n.t('message.settings_tabs_music_packages')
+        this.$i18n.t('message.settings_tabs_music_packages'),
+        this.$i18n.t('message.settings_tabs_cloud_sync')
       ],
       tests: [
         { name: "sonar", title: this.$i18n.t('message.settings_component_test_sonar') },
@@ -1194,7 +1202,7 @@ export default {
         { key: 'fr', text: this.$i18n.t('message.activity_lang_french') },
         { key: 'es', text: this.$i18n.t('message.activity_lang_spanish') },
         { key: 'de', text: this.$i18n.t('message.activity_lang_german') },
-      ]
+      ],
     };
   },
   validations() {
