@@ -53,6 +53,32 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: ${{ github.ref_name }}
+        draft: ${{ contains( github.ref_name, 'rc') }}
+        prerelease: false
+    - name: Create archive
+      run: tar czf frontend.tar.gz dist
+    - name: Upload Built Frontend
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: frontend.tar.gz
+        asset_name: frontend.tar.gz
+        asset_content_type: application/gzip
+    - uses: eregon/publish-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_id: ${{ steps.create_release.outputs.id }}
     - name: Archive dist
       uses: actions/upload-artifact@v3
       with:
