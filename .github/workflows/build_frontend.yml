@@ -59,7 +59,7 @@ jobs:
         name: dist
         path: dist
     - name: Create Release
-      if: github.ref_type == "tag"
+      if: ${{ github.ref_type == "tag" }}
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -70,10 +70,10 @@ jobs:
         draft: ${{ contains( github.ref_name, 'rc') }}
         prerelease: false
     - name: Create archive
-      if: github.ref_type == "tag"
+      if: ${{ github.ref_type == "tag" }}
       run: tar czf frontend.tar.gz dist
     - name: Upload Built Frontend
-      if: github.ref_type == "tag"
+      if: ${{ github.ref_type == "tag" }}
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -83,7 +83,7 @@ jobs:
         asset_name: frontend.tar.gz
         asset_content_type: application/gzip
     - uses: eregon/publish-release@v1
-      if: github.ref_type == "tag"
+      if: ${{ github.ref_type == "tag" }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
