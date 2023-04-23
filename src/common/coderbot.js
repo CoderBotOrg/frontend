@@ -202,7 +202,7 @@ class CoderBot {
     data.movementUseMotion = remoteConfig.movement_use_motion;
     data.movementUseEncoder = remoteConfig.movement_use_encoder;
     data.locale = remoteConfig.locale;
-    data.syncmodes = remoteConfig.syncmodes == null ? [0, 0, 0] : remoteConfig.syncmodes;
+    data.syncmodes = remoteConfig.syncmodes == null ? {"activities": "b", "programs": "b", "settings": "b"} : remoteConfig.syncmodes;
     this.$store.commit('setSettings', data);
   }
 

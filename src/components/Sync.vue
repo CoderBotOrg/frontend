@@ -8,13 +8,13 @@
           </v-card-title>
           <v-card-text>
             <v-list>
-              <v-list-item v-for="item, i in syncmodes">
+              <v-list-item v-for="v, k, i in syncmodes">
                 <v-list-item-title>{{ synctexts[i].text }}</v-list-item-title>
-                <v-radio-group inline v-model="syncmodes[i]">
-                  <v-radio label="Disabilato" value="0"></v-radio>
-                  <v-radio label="CoderBot Master" value="1"></v-radio>
-                  <v-radio label="Cloud Master" value="2"></v-radio>
-                  <v-radio label="Bidireazionale" value="3"></v-radio>
+                <v-radio-group inline v-model="syncmodes[k]">
+                  <v-radio label="Disabilato" value="n"></v-radio>
+                  <v-radio label="CoderBot Master" value="u"></v-radio>
+                  <v-radio label="Cloud Master" value="d"></v-radio>
+                  <v-radio label="Bidireazionale" value="b"></v-radio>
                 </v-radio-group>
               </v-list-item>
             </v-list>
@@ -30,7 +30,7 @@
           </v-card-title>
           <v-card-text>
             <v-list>
-              <v-list-item v-for="item, i in syncmodes">
+              <v-list-item v-for="v, k, i in syncmodes">
                 <v-list-item-title><v-icon icon="mdi-check"></v-icon> {{ synctexts[i].text }}</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -45,14 +45,6 @@
 </template>
 <script lang="ts">
 
-/*
-enum Direction {
-  None = 0,
-  Up,
-  Down,
-  Both,
-};
-*/
 
 export default {
   components: {
