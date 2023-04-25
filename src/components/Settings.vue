@@ -719,7 +719,11 @@
           </v-window-item>
           <!-- SYNC TAB -->
           <v-window-item>
-            <sync :syncmodes="settings.syncmodes"></sync>
+            <sync :syncModesInit="settings.syncModes" v-model:syncModes="settings.syncModes"
+                  :syncPeriodInit="settings.syncPeriod" v-model:syncPeriod="settings.syncPeriod"
+                  @update:syncPeriod="(newValue) => {settings.syncPeriod = newValue; v$.settings.syncPeriod.$touch}"
+                  v-bind:label="$t('message.settings_sync_period')"
+                  ></sync>
           </v-window-item>
         </v-window>
       </v-main>
@@ -1144,7 +1148,8 @@ export default {
         progLevel: null,
         adminPassword: null,
         locale: null,
-        syncmodes: null,
+        syncModes: null,
+        syncPeriod: null,
       },
       musicPackages: null,
       cb: {
@@ -1209,7 +1214,7 @@ export default {
     return {
       settings: {
         cv_image_factor: {
-          required: true
+          required
         },
         camera_color_object_size_max: {
           required,
@@ -1364,6 +1369,12 @@ export default {
         adminPassword: {
         },
         locale: {
+        },
+        syncPeriod: {
+          required,
+          integer,
+          minValue: minValue(10),
+          maxValue: maxValue(300)
         }
       },
     };

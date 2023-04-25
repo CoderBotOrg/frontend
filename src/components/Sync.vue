@@ -8,16 +8,21 @@
           </v-card-title>
           <v-card-text>
             <v-list>
-              <v-list-item v-for="v, k, i in syncmodes">
+              <v-list-item v-for="v, k, i in syncModes">
                 <v-list-item-title>{{ synctexts[i].text }}</v-list-item-title>
-                <v-radio-group inline v-model="syncmodes[k]">
-                  <v-radio label="Disabilato" value="n"></v-radio>
-                  <v-radio label="CoderBot Master" value="u"></v-radio>
-                  <v-radio label="Cloud Master" value="d"></v-radio>
-                  <v-radio label="Bidireazionale" value="b"></v-radio>
+                <v-radio-group inline v-model="syncModes[k]">
+                  <v-radio :label="$t('message.settings_sync_disabled')" value="n"></v-radio>
+                  <v-radio :label="$t('message.settings_sync_upstream')" value="u"></v-radio>
+                  <v-radio :label="$t('message.settings_sync_downstream')" value="d"></v-radio>
+                  <v-radio :label="$t('message.settings_sync_bidirectional')" value="b"></v-radio>
                 </v-radio-group>
               </v-list-item>
             </v-list>
+            <v-text-field 
+              v-model="syncPeriod"
+              @update:modelValue="{$emit('update:syncPeriod', syncPeriod); v$.syncPeriod.$touch()}"
+              v-bind:label="$t('message.settings_sync_period')"
+              v-bind:error-messages="v$.syncPeriod.$error == true ? $t('message.validation_settings_sync_period') : ''"></v-text-field>
           </v-card-text>
         </v-card>
       </v-col>
@@ -30,7 +35,7 @@
           </v-card-title>
           <v-card-text>
             <v-list>
-              <v-list-item v-for="v, k, i in syncmodes">
+              <v-list-item v-for="v, k, i in syncModes">
                 <v-list-item-title><v-icon icon="mdi-check"></v-icon> {{ synctexts[i].text }}</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -45,14 +50,20 @@
 </template>
 <script lang="ts">
 
+import useVuelidate from '@vuelidate/core';
+import {
+  required, integer, minValue, maxValue
+} from '@vuelidate/validators';
 
 export default {
   components: {
   },
-  props: ['syncmodes'],
+  props: ['syncModesInit', 'syncPeriodInit'],
+  emits: ['update:syncModes', 'update:syncPeriod'],
   name: 'Sync',
   setup() {
     return {
+      v$: useVuelidate(),
       synctexts: [
         { text: "Activities" },
         { text: "Programs" },
@@ -70,7 +81,19 @@ export default {
   },
   data() {
     return {
+      syncModes: this.syncModesInit,
+      syncPeriod: this.syncPeriodInit
     };
   },
+  validations() {
+    return {
+      syncPeriod: {
+        required,
+        integer,
+        minValue: minValue(10),
+        maxValue: maxValue(300),
+      },
+    };
+  }
 };
 </script>

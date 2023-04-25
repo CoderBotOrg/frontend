@@ -273,6 +273,7 @@
     "settings_tabs_camera": "Camera",
     "settings_tabs_audio": "Audio", 
     "settings_tabs_music_packages": "Pacchetti Musica", 
+    "settings_tabs_cloud_sync": "Gestione remota", 
     "settings_general_info": "Stato e Informazioni",
     "settings_info": "Informazioni",
     "settings_status": "Stato",
@@ -286,6 +287,13 @@
     "settings_music_package_removed": "Pacchetto rimosso",
     "settings_updated": "Impostazioni aggiornate",
     "settings_network_updated": "Impostazioni di rete aggiornate",
+    "settings_sync_title": "Modalità di sincronizzaione",
+    "settings_sync_status": "Stato sincronizzaione",
+    "settings_sync_disabled": "Disattivato",
+    "settings_sync_upstream": "Locale",
+    "settings_sync_downstream": "Remoto",
+    "settings_sync_bidirectional": "Bidirezionale",
+    "settings_sync_period": "Frequenza sincronizzazione (in secondi)",
     "coderbot_status_shutting_down": "Coderbot in spegnimento...",
     "coderbot_status_rebooting": "Riavvio iniziato...",
     "coderbot_restart_start": "Riavvio iniziato...",
@@ -306,5 +314,6 @@
     "validation_integer": "Inserire un numero intero (1234)",
     "validation_decimal": "Inserire un numero decimale (12.34)",
     "validation_integer_positive": "Inserire un numero intero maggiore o uguale a 0",
-    "validation_decimal_positive": "Inserire un numero decimale maggiore o uguale a 0.0"
+    "validation_decimal_positive": "Inserire un numero decimale maggiore o uguale a 0.0",
+    "validation_settings_sync_period": "Inserire un valore compreso tra 10 e 300"
 }    

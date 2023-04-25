@@ -202,7 +202,8 @@ class CoderBot {
     data.movementUseMotion = remoteConfig.movement_use_motion;
     data.movementUseEncoder = remoteConfig.movement_use_encoder;
     data.locale = remoteConfig.locale;
-    data.syncmodes = remoteConfig.syncmodes == null ? {"activities": "b", "programs": "b", "settings": "b"} : remoteConfig.syncmodes;
+    data.syncModes = remoteConfig.sync_modes;
+    data.syncPeriod = remoteConfig.sync_period;
     this.$store.commit('setSettings', data);
   }
 
@@ -256,7 +257,8 @@ class CoderBot {
       movement_use_motion: settings.movementUseMotion,
       movement_use_encoder: settings.movementUseEncoder,
       locale: settings.locale,
-      syncmodes: settings.syncmodes,
+      sync_modes: settings.syncModes,
+      sync_period: settings.syncPeriod
     };
     this.$store.commit('setSettings', settings);
     return this.$axios.put(`${this.CB}/settings`, legacySettings);
