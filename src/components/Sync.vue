@@ -82,7 +82,7 @@ export default {
   data() {
     return {
       syncModes: this.syncModesInit,
-      syncPeriod: this.syncPeriodInit
+      syncPeriod: this.syncPeriodInit,
     };
   },
   validations() {
