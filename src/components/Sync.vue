@@ -46,6 +46,33 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-card-title>
+          <h4 class="text-xs-left"> {{ $t('message.settings_registration_status') }}</h4>
+          </v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item v-if="regStatus==null">
+                <v-list-item-title>
+                  <v-text-field v-model="regOtp" prepend-icon="mdi-key"
+                  @update:modelValue="{$emit('update:regOtp', regOtp); v$.regOtp.$touch()}"
+                  ></v-text-field>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="regStatus=='registered'">
+                <v-list-item-title><v-icon icon="mdi-check"></v-icon> {{ org.name }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn v-if="regStatus==null" @click="register()" prepend-icon="mdi-cloud-check">Register</v-btn>
+            <v-btn v-if="regStatus=='registered'" @click="unregister()" icon="mdi-cloud-off">Reset registration</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 <script lang="ts">
@@ -54,12 +81,13 @@ import useVuelidate from '@vuelidate/core';
 import {
   required, integer, minValue, maxValue
 } from '@vuelidate/validators';
+import { LOGIC_NULL } from 'blockly/msg/msg';
 
 export default {
   components: {
   },
-  props: ['syncModesInit', 'syncPeriodInit'],
-  emits: ['update:syncModes', 'update:syncPeriod'],
+  props: ['syncModesInit', 'syncPeriodInit', 'regOtpInit', 'regStatusInit'],
+  emits: ['update:syncModes', 'update:syncPeriod', 'update:regOtp', 'update:regStatus'],
   name: 'Sync',
   setup() {
     return {
@@ -76,13 +104,24 @@ export default {
   methods: {
     sync() {
         console.log("sync called");
-        //accessToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkNaMVFtVGM1WGZIV2NfQ1dPVG9kcm1QaXZFNFJ2ckFXaFZ3T28yTm85eDAifQ.eyJpc3MiOiJDb2RlckJvdCBDbG91ZCBBUEkiLCJpYXQiOjE2Nzc3MDI4NjIsImV4cCI6MTcwOTIzODg2MiwiYXVkIjoic3QtYXBpLmNvZGVyYm90Lm9yZyIsInN1YiI6ImNvZGVyQGJvdHMuY29kZXJib3Qub3JnIiwiZW1haWwiOiJjb2RlckBib3RzLmNvZGVyYm90Lm9yZyIsInBpY3R1cmUiOiJodHRwczovL3N0LWFwcC5jb2RlcmJvdC5vcmcvcGljdHVyZXMvbm9waWMifQ.UqTs46YmcIyHN13DpqVZjpHgFtDepHO87OKx3uTYQkTpm5Dwx-mw259O39kJ-nDFfHhU8zs37fyZ0AiXDHPQUrrfMHYeUdnznyBF7VGCeWNR0Izebw0dz_RpgdSO0O8BsbqMUuUofoao7g4dDou5mkqWO8bIIgs0SY35LmyIB9yEuSV5ilvz_wakz8rAXD8dSfdrBg31K9QMh05vbyA9Fc8JYvhGFUJi048QEYD8u-jeGQZqrcc8K5gFEW4MuBsv16drTcmrmO7FMy2x_klCeI8PxftG8mhTP3vtST8uFUdnDiaZNJo6YJkGpyBfC5W3rjVlAVF_hlWSHtqgvJKbMA",
     },
+    register() {
+
+    },
+    unregister() {
+      
+    }
   },
   data() {
     return {
       syncModes: this.syncModesInit,
       syncPeriod: this.syncPeriodInit,
+      regOtp: this.regOtpInit,
+      regStatus: this.regStatusInit,
+      org: {
+        name: null,
+        description: null,
+      }
     };
   },
   validations() {
@@ -92,6 +131,10 @@ export default {
         integer,
         minValue: minValue(10),
         maxValue: maxValue(300),
+      },
+      regOtp: {
+      },
+      regStatus: {
       },
     };
   }

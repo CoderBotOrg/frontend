@@ -204,6 +204,8 @@ class CoderBot {
     data.locale = remoteConfig.locale;
     data.syncModes = remoteConfig.sync_modes;
     data.syncPeriod = remoteConfig.sync_period;
+    data.regStatus = remoteConfig.reg_status;
+    data.regOtp = remoteConfig.reg_otp;
     this.$store.commit('setSettings', data);
   }
 
@@ -258,9 +260,12 @@ class CoderBot {
       movement_use_encoder: settings.movementUseEncoder,
       locale: settings.locale,
       sync_modes: settings.syncModes,
-      sync_period: settings.syncPeriod
+      sync_period: settings.syncPeriod,
+      reg_status: settings.regStatus,
+      reg_otp: settings.regOtp,
     };
     this.$store.commit('setSettings', settings);
+    console.log(legacySettings);
     return this.$axios.put(`${this.CB}/settings`, legacySettings);
   }
 
