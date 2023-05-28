@@ -96,7 +96,7 @@
                 {{ program.name }}
               </v-list-item-title>
               <template v-slot:append>
-                <v-btn v-if="!program.default" @click="deleteProgramDlg(program.name)">
+                <v-btn v-if="program.kind!='stock'" @click="deleteProgramDlg(program.name)">
                   <v-icon icon="mdi-delete"></v-icon>
                 </v-btn>
               </template>
@@ -295,7 +295,7 @@ export default {
     return {
       theme: useTheme(),
       experimental: 0,
-      isDefault: '',
+      isStock: '',
     };
   },
   data: () => ({
@@ -416,13 +416,13 @@ export default {
     getProgramData() {
       // Build the program object
       const name = this.programName;
-      const { isDefault } = this;
+      const { isStock } = this;
       const { dom_code, code } = this.$refs.workspace.getProgramData();
       return {
         name,
         dom_code,
         code,
-        default: isDefault,
+        stock: isStock,
       };
     },
 
@@ -475,7 +475,7 @@ export default {
 
     saveProgramAs() {
       if (this.newProgramName != '') {
-        if (this.isDefault == 'True' && this.programName == this.newProgramName) {
+        if (this.isStock == 'True' && this.programName == this.newProgramName) {
           this.cannotOverwrite = true;
           console.error('error');
         } else {
@@ -497,7 +497,7 @@ export default {
           if (prog_data.data == 'askOverwrite') {
             this.$data.overwriteDialog = true;
           } else {
-            this.$data.isDefault = '';
+            this.$data.isStock = '';
             this.$data.overwrite = true;
             console.log('saved');
             this.dirty = false;
@@ -529,7 +529,7 @@ export default {
       this.$data.programName = program;
       this.$coderbot.loadProgram(this.$data.programName).then((data) => {
         this.$refs.workspace.loadProgram(data.data.dom_code);
-        this.$data.isDefault = data.data.default;
+        this.$data.isStock = data.data.kind == "stock";
       });
     },
 
