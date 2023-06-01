@@ -480,7 +480,8 @@ export default {
       snackbarText: '',
       b: 0,
       activity: {
-        stock: null,
+        kind: 'user',
+        status: 'active',
         default: null,
         theme: null,
         defaultView: null,

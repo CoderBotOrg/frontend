@@ -39,7 +39,7 @@
                       </v-list-item-subtitle>
                       </div>
                       <template v-slot:append>
-                      <v-btn color="grey" variant="text" v-if="activity.stock!=true" ripple @click="confirmDeleteDlg = true">
+                      <v-btn color="grey" variant="text" v-if="activity.kind!='stock'" ripple @click="confirmDeleteDlg = true">
                         <v-icon icon="mdi-delete"></v-icon>
                             <v-row justify="center">
                               <v-dialog
