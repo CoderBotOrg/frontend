@@ -284,7 +284,9 @@ import { useTheme } from 'vuetify';
 import sidebar from './Sidebar.vue';
 import BlocklyWorkspace from './BlocklyWorkspace.vue';
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'Activity',
   components: {
     sidebar,
@@ -600,10 +602,8 @@ export default {
           }
         });
     },
-
   },
-
-};
+});
 </script>
 <style scoped>
 .application {

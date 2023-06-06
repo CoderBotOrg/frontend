@@ -453,6 +453,13 @@ class CoderBot {
     return `${this.CB}/media/${name}`;
   }
 
+  cloudSyncRequest() {
+    return this.$axios.post(`${this.CB}/cloud/sync`);
+  }
+
+  cloudSyncStatus() {
+    return this.$axios.get(`${this.CB}/cloud/sync`);
+  }
 }
 
 export default CoderBot;

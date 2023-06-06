@@ -83,7 +83,9 @@ import * as toolbox_full from '@/assets/toolbox_adv.json';
 const categoryToolbox = 'categoryToolbox';
 const flyoutToolbox = 'flyoutToolbox';
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   components: {
     BlocklyWorkspace
   },
@@ -244,7 +246,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 <style scoped>
 .application {

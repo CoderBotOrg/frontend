@@ -794,7 +794,9 @@ import i18n from '../i18n';
 import sidebar from './Sidebar.vue';
 import sync from './Sync.vue';
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   components: {
     sidebar,
     sync
@@ -1386,7 +1388,7 @@ export default {
       },
     };
   },
-};
+});
 </script>
 <style scoped>
 .cardContent {

@@ -379,7 +379,9 @@ import {
 import sidebar from './Sidebar.vue';
 import ToolboxEditor from './ToolboxEditor.vue';
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'ActivityEditor',
   components: {
     // VSwatches,
@@ -735,7 +737,7 @@ export default {
     onToolboxSave() {
     },
   },
-};
+});
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

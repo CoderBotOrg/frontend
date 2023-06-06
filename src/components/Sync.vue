@@ -39,6 +39,7 @@
                 <v-list-item-title><v-icon icon="mdi-check"></v-icon> {{ synctexts[i].text }}</v-list-item-title>
               </v-list-item>
             </v-list>
+            {{ sync_status }}
           </v-card-text>
           <v-card-actions>
             <v-btn @click="sync()" icon="mdi-cached"></v-btn>
@@ -83,7 +84,9 @@ import {
 } from '@vuelidate/validators';
 import { LOGIC_NULL } from 'blockly/msg/msg';
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   components: {
   },
   props: ['syncModesInit', 'syncPeriodInit', 'regOtpInit', 'regStatusInit'],
@@ -100,16 +103,30 @@ export default {
     }
   },
   mounted() {
+    this.sync_status_handler = setInterval(() => {this.syncStatus()}, 1000);
+  },
+  unmounted() {
+    clearInterval(this.sync_status_handler);
   },
   methods: {
     sync() {
         console.log("sync called");
+        this.$coderbot.cloudSyncRequest()
+          .then(() => {
+            console.log("ok")
+        });
+    },
+    syncStatus() {
+      console.log("sync status");
+        this.$coderbot.cloudSyncStatus()
+          .then((response) => {
+            this.sync_status = response.data;
+            console.log(this.sync_status)
+        });
     },
     register() {
-
     },
     unregister() {
-      
     }
   },
   data() {
@@ -121,7 +138,9 @@ export default {
       org: {
         name: null,
         description: null,
-      }
+      },
+      sync_status: {},
+      sync_status_handler: null,
     };
   },
   validations() {
@@ -138,5 +157,5 @@ export default {
       },
     };
   }
-};
+});
 </script>

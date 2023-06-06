@@ -101,7 +101,9 @@
 <script lang="js">
 import sidebar from './Sidebar.vue';
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   components: {
     sidebar
   },
@@ -138,7 +140,7 @@ export default {
       confirmDeleteDlg: null,
     };
   },
-};
+});
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

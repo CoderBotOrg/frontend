@@ -13,7 +13,9 @@
 <script lang="js">
 import sidebar from './Sidebar.vue';
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   components: {
     sidebar
   },
@@ -29,5 +31,5 @@ export default {
       drawer: null,
     };
   },
-};
+});
 </script>

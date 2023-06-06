@@ -52,7 +52,9 @@ Blockly.setLocale(blockly_locales[locale]);
 Blockly.Blocks.CoderBotSettings.instrumentlist = [];
 Blockly.Blocks.CoderBotSettings.animalist = [];
 
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'BlocklyWorkspace',
   props: [
     'settings',
@@ -247,7 +249,7 @@ export default {
       return capacity;
     }
   },
-};
+});
 </script>
 <style scoped>
 .blocklyDiv {
