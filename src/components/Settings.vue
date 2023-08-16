@@ -721,10 +721,7 @@
           <v-window-item>
             <sync :syncModesInit="settings.syncModes" v-model:syncModes="settings.syncModes"
                   :syncPeriodInit="settings.syncPeriod" v-model:syncPeriod="settings.syncPeriod"
-                  :regStatusInit="settings.regStatus" v-model:regStatus="settings.regStatus"
-                  :regOtpInit="settings.regOtp" v-model:regOtp="settings.regOtp"
                   @update:syncPeriod="(newValue) => {settings.syncPeriod = newValue; v$.settings.syncPeriod.$touch}"
-                  @update:regOtp="(newValue) => {settings.regOtp = newValue; v$.settings.regOtp.$touch}"
                   v-bind:label="$t('message.settings_sync_period')"
                   ></sync>
           </v-window-item>
@@ -1155,8 +1152,6 @@ export default defineComponent({
         locale: null,
         syncModes: null,
         syncPeriod: null,
-        regStatus: null,
-        regOtp: null,
       },
       musicPackages: null,
       cb: {
@@ -1383,8 +1378,6 @@ export default defineComponent({
           minValue: minValue(10),
           maxValue: maxValue(300)
         },
-        regOtp: {
-        }
       },
     };
   },

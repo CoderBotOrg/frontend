@@ -287,6 +287,7 @@
     "settings_music_package_removed": "Pacchetto rimosso",
     "settings_updated": "Impostazioni aggiornate",
     "settings_network_updated": "Impostazioni di rete aggiornate",
+    "settings_registration_status": "Stato registrazione",
     "settings_sync_title": "Modalità di sincronizzaione",
     "settings_sync_status": "Stato sincronizzaione",
     "settings_sync_disabled": "Disattivato",

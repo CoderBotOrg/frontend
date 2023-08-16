@@ -1,6 +1,75 @@
 <template>
   <v-container grid-list-md text-xs-center>
-    <v-row >
+    <v-row>
+      <v-col>
+        <v-card v-if="!regStatus.registered">
+          <v-card-title>
+          <h4 class="text-xs-left"> {{ $t('message.settings_registration_status') }}</h4>
+          </v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-text-field v-model="regOtp" prepend-icon="mdi-key"
+                  @update:modelValue="{$emit('update:regOtp', regOtp); v$.regOtp.$touch()}"
+                  ></v-text-field>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-text-field v-model="regName"
+                  @update:modelValue="{$emit('update:regOtp', regName); v$.regName.$touch()}"
+                  ></v-text-field>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-text-field v-model="regDescription"
+                  @update:modelValue="{$emit('update:regDescription', regName); v$.regDescription.$touch()}"
+                  ></v-text-field>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="register()" prepend-icon="mdi-cloud-sync">Register</v-btn>
+          </v-card-actions>
+        </v-card>
+        <v-card v-if="regStatus.registered">
+          <v-card-title>
+          <h4 class="text-xs-left"> {{ $t('message.settings_registration_status') }}</h4>
+          </v-card-title>
+          <v-card-text>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-icon icon="mdi-cloud-check"></v-icon> Registered
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-text-field v-model="regStatus.name" label="Name" readonly></v-text-field>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-text-field v-model="regStatus.description" label="Description" readonly></v-text-field>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-text-field v-model="regStatus.org_name" label="Organization" readonly></v-text-field>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="unregister()" prepend-icon="mdi-cloud-off-outline">Reset registration</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row v-if="regStatus.registered">
       <v-col>
         <v-card>
           <v-card-title>
@@ -9,7 +78,7 @@
           <v-card-text>
             <v-list>
               <v-list-item v-for="v, k, i in syncModes">
-                <v-list-item-title>{{ synctexts[i].text }}</v-list-item-title>
+                <v-list-item-title>{{ syncItemsTexts[k] }}</v-list-item-title>
                 <v-radio-group inline v-model="syncModes[k]">
                   <v-radio :label="$t('message.settings_sync_disabled')" value="n"></v-radio>
                   <v-radio :label="$t('message.settings_sync_upstream')" value="u"></v-radio>
@@ -35,41 +104,13 @@
           </v-card-title>
           <v-card-text>
             <v-list>
-              <v-list-item v-for="v, k, i in syncModes">
-                <v-list-item-title><v-icon icon="mdi-check"></v-icon> {{ synctexts[i].text }}</v-list-item-title>
+              <v-list-item v-for="v, k in syncItemsTexts">
+                <v-list-item-title><v-icon :icon="syncItemsIcons[sync_status[k]]"></v-icon>{{ syncItemsTexts[k] }}</v-list-item-title>
               </v-list-item>
             </v-list>
-            {{ sync_status }}
           </v-card-text>
           <v-card-actions>
             <v-btn @click="sync()" icon="mdi-cached"></v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-card>
-          <v-card-title>
-          <h4 class="text-xs-left"> {{ $t('message.settings_registration_status') }}</h4>
-          </v-card-title>
-          <v-card-text>
-            <v-list>
-              <v-list-item v-if="regStatus==null">
-                <v-list-item-title>
-                  <v-text-field v-model="regOtp" prepend-icon="mdi-key"
-                  @update:modelValue="{$emit('update:regOtp', regOtp); v$.regOtp.$touch()}"
-                  ></v-text-field>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item v-if="regStatus=='registered'">
-                <v-list-item-title><v-icon icon="mdi-check"></v-icon> {{ org.name }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn v-if="regStatus==null" @click="register()" prepend-icon="mdi-cloud-check">Register</v-btn>
-            <v-btn v-if="regStatus=='registered'" @click="unregister()" icon="mdi-cloud-off">Reset registration</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -82,42 +123,51 @@ import useVuelidate from '@vuelidate/core';
 import {
   required, integer, minValue, maxValue
 } from '@vuelidate/validators';
-import { LOGIC_NULL } from 'blockly/msg/msg';
 
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   components: {
   },
-  props: ['syncModesInit', 'syncPeriodInit', 'regOtpInit', 'regStatusInit'],
-  emits: ['update:syncModes', 'update:syncPeriod', 'update:regOtp', 'update:regStatus'],
+  props: ['syncModesInit', 'syncPeriodInit', 'regStatusInit'],
+  emits: ['update:syncModes', 'update:syncPeriod', 'update:regStatus'],
   name: 'Sync',
   setup() {
     return {
       v$: useVuelidate(),
-      synctexts: [
-        { text: "Activities" },
-        { text: "Programs" },
-        { text: "Setting" },
-      ]
-    }
+      syncItemsTexts: { 
+        activities: "Activities",
+        programs: "Programs",
+        settings: "Settings",
+      },
+      syncItemsIcons: {
+        'syncing': 'mdi-sync',
+        'synced': 'mdi-check-circle-outline',
+        'failed': 'mdi-sync-alert',
+      },
+      registrationIcons: {
+        'missing_data': 'mdi-checkbox-blank-circle-outline',
+        'registering': 'mdi-sync',
+        'failed': 'mdi-sync-alert',
+        'registered': 'mdi-check-circle-outline',
+      },
+    };
   },
   mounted() {
     this.sync_status_handler = setInterval(() => {this.syncStatus()}, 1000);
+    this.registrationStatus();
   },
   unmounted() {
     clearInterval(this.sync_status_handler);
   },
   methods: {
     sync() {
-        console.log("sync called");
         this.$coderbot.cloudSyncRequest()
           .then(() => {
             console.log("ok")
         });
     },
     syncStatus() {
-      console.log("sync status");
         this.$coderbot.cloudSyncStatus()
           .then((response) => {
             this.sync_status = response.data;
@@ -125,22 +175,45 @@ export default defineComponent({
         });
     },
     register() {
+      let registration_request = {
+        otp: this.regOtp,
+        name: this.regName,
+        description: this.regDescription,
+      };
+      this.$coderbot.cloudRegistrationRequest(registration_request)
+          .then(() => {
+            console.log("ok")
+        });
     },
     unregister() {
-    }
+      this.$coderbot.cloudRegistrationRemove()
+          .then(() => {
+            console.log("ok")
+        });
+    },
+    registrationStatus() {
+      console.log("registration status");
+        this.$coderbot.cloudRegistrationStatus()
+          .then((response) => {
+            this.regStatus = response.data;
+            console.log(this.regStatus)
+        });
+    },
   },
   data() {
     return {
       syncModes: this.syncModesInit,
       syncPeriod: this.syncPeriodInit,
-      regOtp: this.regOtpInit,
-      regStatus: this.regStatusInit,
+      regOtp: null,
+      regName: null,
+      regDescription: null,
+      regStatus: {},
       org: {
         name: null,
         description: null,
       },
-      sync_status: {},
-      sync_status_handler: null,
+      sync_status: {} as any,
+      sync_status_handler: null as any,
     };
   },
   validations() {
@@ -152,8 +225,6 @@ export default defineComponent({
         maxValue: maxValue(300),
       },
       regOtp: {
-      },
-      regStatus: {
       },
     };
   }

@@ -155,57 +155,61 @@ class CoderBot {
     // handle success
     const data = {};
     const remoteConfig = result.data;
+    const remoteSettings = remoteConfig.settings;
     data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig
       .move_power_angle_3
     ];
-    data.ctrl_hud_image = remoteConfig.ctrl_hud_image;
-    data.cv_image_factor = remoteConfig.cv_image_factor;
-    data.camera_color_object_size_max = remoteConfig.camera_color_object_size_max;
-    data.camera_color_object_size_min = remoteConfig.camera_color_object_size_min;
-    data.camera_exposure_mode = remoteConfig.camera_exposure_mode;
-    data.camera_framerate = remoteConfig.camera_framerate;
-    data.camera_jpeg_bitrate = remoteConfig.camera_jpeg_bitrate;
-    data.camera_jpeg_quality = remoteConfig.camera_jpeg_quality;
-    data.camera_path_object_size_max = remoteConfig.camera_path_object_size_max;
-    data.camera_path_object_size_min = remoteConfig.camera_path_object_size_min;
-    data.cnn_default_model = remoteConfig.cnn_default_model;
-    data.btnFun = remoteConfig.button_func;
-    data.wifiMode = remoteConfig.wifi_mode;
-    data.wifiSSID = remoteConfig.wifi_ssid;
-    data.wifiPsw = remoteConfig.wifi_psk;
-    data.trimFactor = remoteConfig.move_motor_trim;
-    data.motorMinPower = remoteConfig.motor_min_power;
-    data.motorMaxPower = remoteConfig.motor_max_power;
-    data.startSound = remoteConfig.sound_start;
-    data.stopSound = remoteConfig.sound_stop;
-    data.shutterSound = remoteConfig.sound_shutter;
-    data.startupProgram = remoteConfig.load_at_start;
-    data.progLevel = remoteConfig.prog_level;
-    data.moveFwdElapse = remoteConfig.move_fw_elapse;
-    data.moveFwdSpeed = remoteConfig.move_fw_speed;
-    data.moveTurnElapse = remoteConfig.move_tr_elapse;
-    data.moveTurnSpeed = remoteConfig.move_tr_speed;
-    data.ctrlFwdElapse = remoteConfig.ctrl_fw_elapse;
-    data.ctrlFwdSpeed = remoteConfig.ctrl_fw_speed;
-    data.ctrlTurnElapse = remoteConfig.ctrl_tr_elapse;
-    data.ctrlTurnSpeed = remoteConfig.ctrl_tr_speed;
-    data.pidKP = remoteConfig.pid_kp
-    data.pidKD = remoteConfig.pid_kd;
-    data.pidKI = remoteConfig.pid_ki;
-    data.pidMaxSpeed = remoteConfig.pid_max_speed,
-    data.pidSampleTime = remoteConfig.pid_sample_time,
-    data.audioLevel = remoteConfig.audio_volume_level;
-    data.adminPassword = remoteConfig.admin_password;
-    data.hardwareVersion = remoteConfig.hardware_version;
-    data.progScrollbars = remoteConfig.prog_scrollbars;
-    data.movementUseMPU = remoteConfig.movement_use_mpu;
-    data.movementUseMotion = remoteConfig.movement_use_motion;
-    data.movementUseEncoder = remoteConfig.movement_use_encoder;
-    data.locale = remoteConfig.locale;
-    data.syncModes = remoteConfig.sync_modes;
-    data.syncPeriod = remoteConfig.sync_period;
-    data.regStatus = remoteConfig.reg_status;
-    data.regOtp = remoteConfig.reg_otp;
+    data.ctrl_hud_image = remoteSettings.ctrl_hud_image;
+    data.cv_image_factor = remoteSettings.cv_image_factor;
+    data.camera_color_object_size_max = remoteSettings.camera_color_object_size_max;
+    data.camera_color_object_size_min = remoteSettings.camera_color_object_size_min;
+    data.camera_exposure_mode = remoteSettings.camera_exposure_mode;
+    data.camera_framerate = remoteSettings.camera_framerate;
+    data.camera_jpeg_bitrate = remoteSettings.camera_jpeg_bitrate;
+    data.camera_jpeg_quality = remoteSettings.camera_jpeg_quality;
+    data.camera_path_object_size_max = remoteSettings.camera_path_object_size_max;
+    data.camera_path_object_size_min = remoteSettings.camera_path_object_size_min;
+    data.cnn_default_model = remoteSettings.cnn_default_model;
+    data.btnFun = remoteSettings.button_func;
+    data.trimFactor = remoteSettings.move_motor_trim;
+    data.motorMinPower = remoteSettings.motor_min_power;
+    data.motorMaxPower = remoteSettings.motor_max_power;
+    data.startSound = remoteSettings.sound_start;
+    data.stopSound = remoteSettings.sound_stop;
+    data.shutterSound = remoteSettings.sound_shutter;
+    data.startupProgram = remoteSettings.load_at_start;
+    data.progLevel = remoteSettings.prog_level;
+    data.moveFwdElapse = remoteSettings.move_fw_elapse;
+    data.moveFwdSpeed = remoteSettings.move_fw_speed;
+    data.moveTurnElapse = remoteSettings.move_tr_elapse;
+    data.moveTurnSpeed = remoteSettings.move_tr_speed;
+    data.ctrlFwdElapse = remoteSettings.ctrl_fw_elapse;
+    data.ctrlFwdSpeed = remoteSettings.ctrl_fw_speed;
+    data.ctrlTurnElapse = remoteSettings.ctrl_tr_elapse;
+    data.ctrlTurnSpeed = remoteSettings.ctrl_tr_speed;
+    data.pidKP = remoteSettings.pid_kp;
+    data.pidKD = remoteSettings.pid_kd;
+    data.pidKI = remoteSettings.pid_ki;
+    data.pidMaxSpeed = remoteSettings.pid_max_speed,
+    data.pidSampleTime = remoteSettings.pid_sample_time,
+    data.audioLevel = remoteSettings.audio_volume_level;
+    data.adminPassword = remoteSettings.admin_password;
+    data.hardwareVersion = remoteSettings.hardware_version;
+    data.progScrollbars = remoteSettings.prog_scrollbars;
+    data.movementUseMPU = remoteSettings.movement_use_mpu;
+    data.movementUseMotion = remoteSettings.movement_use_motion;
+    data.movementUseEncoder = remoteSettings.movement_use_encoder;
+    data.locale = remoteSettings.locale;
+
+    const remoteNetwork = remoteConfig.network
+    data.wifiMode = remoteNetwork.wifi_mode;
+    data.wifiSSID = remoteNetwork.wifi_ssid;
+    data.wifiPsw = remoteNetwork.wifi_psk;
+
+    const remoteCloud = remoteConfig.cloud
+    data.syncModes = remoteCloud.sync_modes;
+    data.syncPeriod = remoteCloud.sync_period;
+
     this.$store.commit('setSettings', data);
   }
 
@@ -223,9 +227,6 @@ class CoderBot {
       camera_path_object_size_max: settings.camera_path_object_size_max,
       camera_path_object_size_min: settings.camera_path_object_size_min,
       cnn_default_model: settings.cnn_default_model,
-      wifi_mode: settings.wifiMode,
-      wifi_ssid: settings.wifiSSID,
-      wifi_psk: settings.wifiPsw,
       move_power_angle_1: settings.power[0],
       move_power_angle_2: settings.power[1],
       move_power_angle_3: settings.power[2],
@@ -259,14 +260,24 @@ class CoderBot {
       movement_use_motion: settings.movementUseMotion,
       movement_use_encoder: settings.movementUseEncoder,
       locale: settings.locale,
+    };
+    const networkSettings = {
+      wifi_mode: settings.wifiMode,
+      wifi_ssid: settings.wifiSSID,
+      wifi_psk: settings.wifiPsw,
+    };
+    const cloudSettings = {
       sync_modes: settings.syncModes,
       sync_period: settings.syncPeriod,
-      reg_status: settings.regStatus,
-      reg_otp: settings.regOtp,
     };
-    this.$store.commit('setSettings', settings);
+    const config = {
+      settings: legacySettings,
+      network: networkSettings,
+      cloud: cloudSettings
+    };
+    this.$store.commit('setSettings', legacySettings);
     console.log(legacySettings);
-    return this.$axios.put(`${this.CB}/settings`, legacySettings);
+    return this.$axios.put(`${this.CB}/settings`, config);
   }
 
   reset() {
@@ -459,6 +470,18 @@ class CoderBot {
 
   cloudSyncStatus() {
     return this.$axios.get(`${this.CB}/cloud/sync`);
+  }
+
+  cloudRegistrationRequest(request) {
+    return this.$axios.post(`${this.CB}/cloud/registration`, request);
+  }
+
+  cloudRegistrationRemove(request) {
+    return this.$axios.delete(`${this.CB}/cloud/registration`);
+  }
+
+  cloudRegistrationStatus() {
+    return this.$axios.get(`${this.CB}/cloud/registration`);
   }
 }
 
