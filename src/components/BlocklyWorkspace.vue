@@ -233,7 +233,7 @@ export default defineComponent({
 
     loadProgram(dom_code) {
       this.workspace.clear();
-      const xml = Blockly.Xml.textToDom(dom_code);
+      const xml = Blockly.utils.xml.textToDom(dom_code);
       Blockly.Xml.domToWorkspace(xml, this.workspace);
     },
 
