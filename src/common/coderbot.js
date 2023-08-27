@@ -20,7 +20,6 @@ class CoderBot {
 
   initActivity() {
     this.loadActivity(null, true).then((activity) => {
-      console.log("activity name: ", activity);
       if (activity.data == '') {
         const defaultActivity = {
           kind: 'stock',
