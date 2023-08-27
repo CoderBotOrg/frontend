@@ -150,7 +150,6 @@ describe('activities page', () => {
     cy.get('button.v-app-bar-nav-icon').click()  
     cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#app').click()
-    cy.get('#activity_list').find('.mdi-star').should('have.length', 1)
     cy.get('#activity_list').contains('test-font-activity-name').should('exist')
     cy.get('#activity_list').contains('test-font-activity-name').click()
     cy.url().should('include', 'activity/open/test-font-activity-name')

@@ -40,14 +40,14 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.10.0",
+    "@cypress/code-coverage": "^3.11.0",
     "vite-plugin-istanbul": "^3.0.2",
     "@vitejs/plugin-vue": "^4.0.0",
     "@types/jsdom": "^20.0.1",
     "@types/node": "^18.11.12",
     "@types/webfontloader": "^1.6.35",
     "stylus": "0.59.0",
-    "cypress": "^12.3.0",
+    "cypress": "^12.17.4",
     "eslint": "^8.22.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
