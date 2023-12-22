@@ -372,7 +372,7 @@ import useVuelidate from '@vuelidate/core';
 // import VSwatches from 'vue3-swatches';
 
 import {
-  alphaNum, integer, minValue,
+  alphaNum, integer, minValue, helpers,
 } from '@vuelidate/validators';
 
 // import wsFactory from '../components/wsFactory';
@@ -380,6 +380,8 @@ import sidebar from './Sidebar.vue';
 import ToolboxEditor from './ToolboxEditor.vue';
 
 import { defineComponent } from 'vue';
+
+const activityNameValidator = helpers.regex(/^[A-Za-zÀ-ÖØ-öø-ÿ \_\-0-9]*$/)
 
 export default defineComponent({
   name: 'ActivityEditor',
@@ -618,7 +620,7 @@ export default defineComponent({
         codeFont: { },
         viewSource: { },
         autoRecVideo: { },
-        name: { required: true, alphaNum },
+        name: { required: true, activityNameValidator },
         description: { },
         maxBlocks: { integer, minValue: minValue(0) }
       },
