@@ -39,40 +39,8 @@
                       </v-list-item-subtitle>
                       </div>
                       <template v-slot:append>
-                      <v-btn color="grey" variant="text" v-if="activity.kind!='stock'" ripple @click="confirmDeleteDlg = true">
+                      <v-btn color="grey" variant="text" v-if="activity.kind!='stock'" ripple @click="this.activity = activity; confirmDeleteDlg = true">
                         <v-icon icon="mdi-delete"></v-icon>
-                            <v-row justify="center">
-                              <v-dialog
-                                v-model="confirmDeleteDlg"
-                                persistent
-                                max-width="290"
-                              >
-                                <v-card>
-                                  <v-card-title class="text-h5">
-                                    {{ $t("message.activity_list_delete_confirm_title") }}
-                                  </v-card-title>
-                                  <v-card-text>{{ $t("message.activity_list_delete_confirm_text") }}</v-card-text>
-                                  <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                      color="green darken-1"
-                                      text
-                                      @click="confirmDeleteDlg = false"
-                                    >
-                                      {{ $t("message.cancel") }}
-                                    </v-btn>
-                                    <v-btn
-                                      color="green darken-1"
-                                      text
-                                      @click="confirmDeleteDlg = false; deleteActivity(activity.name)"
-                                      id="confirmDeleteDlg_ok"
-                                    >
-                                      {{ $t("message.ok") }}
-                                    </v-btn>
-                                  </v-card-actions>
-                                </v-card>
-                              </v-dialog>
-                            </v-row>
                       </v-btn>
                       <v-btn variant="text" ripple :href="'#/activity/edit/'+activity.name">
                         <v-icon icon="mdi-pencil"></v-icon>
@@ -92,6 +60,38 @@
                 </v-card-actions>
               </v-card>
             </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-dialog
+              v-model="confirmDeleteDlg"
+              persistent
+              max-width="290"
+            >
+              <v-card>
+                <v-card-title class="text-h5">
+                  {{ $t("message.activity_list_delete_confirm_title") }}
+                </v-card-title>
+                <v-card-text>{{ $t("message.activity_list_delete_confirm_text") }}</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="confirmDeleteDlg = false"
+                  >
+                    {{ $t("message.cancel") }}
+                  </v-btn>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="confirmDeleteDlg = false; deleteActivity(activity.name)"
+                    id="confirmDeleteDlg_ok"
+                  >
+                    {{ $t("message.ok") }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-row>
         </v-container>
       </v-main>
@@ -138,6 +138,7 @@ export default defineComponent({
       drawer: null,
       source: null,
       confirmDeleteDlg: null,
+      activity: null,
     };
   },
 });

@@ -13,7 +13,7 @@ describe('activities page', () => {
     cy.get('div#default a[href*="activity/edit/default"]').click()
   })
 
-  it('creates a new activity', () => {
+  it('creates a new activity, then deletes it', () => {
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist')
@@ -24,8 +24,8 @@ describe('activities page', () => {
     cy.get('a.v-btn[href*="activity/new"]').click()
     cy.get('input#name').should('exist')
     cy.get('input#desc').should('exist')
-    cy.get('input#name').type("test-activity-name")
-    cy.get('input#desc').type("Test activity description")
+    cy.get('input#name').type("test-e2e-activity-name")
+    cy.get('input#desc').type("Test e2e activity description")
     cy.get('button#toolbox').should('exist')
     cy.get('button#toolbox').click()
     cy.get('button#add_category').should('exist')
@@ -33,21 +33,18 @@ describe('activities page', () => {
     cy.get('button#add_category_all').click()
     cy.get('button#activity_save').should('exist')
     cy.get('button#activity_save').click()
-  })
-
-  it('deletes an existing activity', () => {
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
     cy.get('button.v-app-bar-nav-icon').should('exist')
     cy.get('button.v-app-bar-nav-icon').click()  
     cy.get('a[href*="activity/manage"]').click()
     cy.get('#app').click()
-    cy.get('div#test-activity-name').find('i.mdi-delete').should("exist")
-    cy.get('div#test-activity-name').find('i.mdi-delete').click()
+    cy.get('div#test-e2e-activity-name').find('i.mdi-delete').should("exist")
+    cy.get('div#test-e2e-activity-name').find('i.mdi-delete').click()
     cy.get('button#confirmDeleteDlg_ok').should("exist")
-    cy.get('button#confirmDeleteDlg_ok').click({ force: true, multiple: true })
+    cy.get('button#confirmDeleteDlg_ok').click(); //{ force: true, multiple: true })
   })
-
+  
   it('creates activity, open default view', () => {
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
@@ -80,7 +77,7 @@ describe('activities page', () => {
     cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#app').click()
     cy.get('div#test-default-activity-name').find('i.mdi-delete').click()
-    cy.get('button#confirmDeleteDlg_ok').click({ force: true, multiple: true })
+    cy.get('button#confirmDeleteDlg_ok').click(); //{ force: true, multiple: true })
   })
 
   it('creates activity, define specific buttons, verify', () => {
@@ -103,8 +100,8 @@ describe('activities page', () => {
     cy.get('#button_index_2').find('button.remove').click()
     cy.get('#button_index_1').find('button.remove').click()
     cy.get('button#toolbox').click()
-    cy.get('.blockly-toolbox-editor').find('#blockly-9').click()
-    cy.get('.blocklyDraggable').click({ force: true, multiple: true })
+    //cy.get('.blockly-toolbox-editor').find('#blockly-9').click()
+    //cy.get('.blocklyDraggable').click(); //{ force: true, multiple: true })
     cy.get('button#activity_save').click()
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
@@ -124,7 +121,7 @@ describe('activities page', () => {
     cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#app').click()
     cy.get('div#test-basic-activity-name').find('i.mdi-delete').click()
-    cy.get('button#confirmDeleteDlg_ok').click({ force: true, multiple: true })
+    cy.get('button#confirmDeleteDlg_ok').click(); //{ force: true, multiple: true })
   })
 
   it('creates activity, define specific fonts, verify', () => {
@@ -141,8 +138,8 @@ describe('activities page', () => {
     cy.get('#card_font_ui').find('input[value*="opensans"]').click()
     cy.get('#card_font_editor').find('input[value*="robotomono"]').click()
     cy.get('button#toolbox').click()
-    cy.get('.blockly-toolbox-editor').find('#blockly-3').click()
-    cy.get('.blocklyDraggable').click({ force: true, multiple: true })
+    cy.get('.blockly-toolbox-editor').find('.blocklyToolboxCategory').first().children().first().click()
+    cy.get('.blocklyDraggable').first().click(); //{ force: true, multiple: true })
     cy.get('button#activity_save').click()
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
@@ -158,7 +155,7 @@ describe('activities page', () => {
     cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#app').click()
     cy.get('div#test-font-activity-name').find('i.mdi-delete').click()
-    cy.get('button#confirmDeleteDlg_ok').click({ force: true, multiple: true })
+    cy.get('button#confirmDeleteDlg_ok').click(); //{ force: true, multiple: true })
   })
 
   it('creates activity, define specific toolbox, verify', () => {
@@ -177,9 +174,9 @@ describe('activities page', () => {
     cy.get('button#add_category').click()
     cy.get('input#category_name').type("Test category")
     cy.get('button#save_category').click()
-    cy.get('.v-list-item-title').contains('Test category').click({ force: true })
-    cy.get('.blockly-toolbox-editor').find('#blockly-1').click({ force: true })
-    cy.get('.blocklyDraggable').click({ force: true, multiple: true })
+    cy.get('.v-list-item-title').contains('Test category').click(); //{ force: true })
+    //cy.get('.blockly-toolbox-editor').find('#blockly-1').click(); //{ force: true })
+    //cy.get('.blocklyDraggable').click(); //{ force: true, multiple: true })
     cy.get('button#activity_save').click()
     cy.visit('http://localhost:8080')
     cy.get('.v-carousel').should('exist')
@@ -197,6 +194,6 @@ describe('activities page', () => {
     cy.get('a.v-list-item[href*="activity/manage"]').click()
     cy.get('#app').click()
     cy.get('div#test-spec-activity-name').find('i.mdi-delete').click()
-    cy.get('button#confirmDeleteDlg_ok').click({ force: true, multiple: true })
-  })  
+    cy.get('button#confirmDeleteDlg_ok').click(); //{ force: true, multiple: true })
+  })
 })

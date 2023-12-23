@@ -137,7 +137,7 @@ describe('load homepage', () => {
     cy.get('a.v-list-item[href*="/program"]').click()
     cy.get('#app').click()
     cy.get('.blocklyToolboxContents').children().first().children().first().click({ force: true })
-    cy.get('.blocklyDraggable').click({ force: true, multiple: true })
+    cy.get('.blocklyDraggable').first().click(); //{ force: true, multiple: true })
     cy.get('button#toggleSaveAs').click()
     cy.get('#card_program_save_as').find('#program_save_as_name').type('test_sonars')
     cy.get('#card_program_save_as').find('.ok').click()

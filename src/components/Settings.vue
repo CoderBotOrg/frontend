@@ -368,14 +368,20 @@
                       {{ $t('message.settings_motion_parameters') }}
                     </v-card-title>
                     <v-card-text>
-                      <v-text-field v-model="settings.power[0]"
+                      <v-text-field v-model="settings.move_power_angle_1"
                         v-bind:label="$t('message.settings_movement_parameters_power_1')"
+                        @input="v$.settings.move_power_angle_1.$touch"
+                        v-bind:error-messages="v$.settings.move_power_angle_1.$error == true ? $t('message.validation_decimal') : ''"
                       />
-                      <v-text-field v-model="settings.power[1]"
+                      <v-text-field v-model="settings.move_power_angle_2"
                         v-bind:label="$t('message.settings_movement_parameters_power_2')"
+                        @input="v$.settings.move_power_angle_1.$touch"
+                        v-bind:error-messages="v$.settings.move_power_angle_1.$error == true ? $t('message.validation_decimal') : ''"
                       />
-                      <v-text-field v-model="settings.power[2]"
+                      <v-text-field v-model="settings.move_power_angle_3"
                         v-bind:label="$t('message.settings_movement_parameters_power_3')"
+                        @input="v$.settings.move_power_angle_1.$touch"
+                        v-bind:error-messages="v$.settings.move_power_angle_1.$error == true ? $t('message.validation_decimal') : ''"
                       />
                     </v-card-text>
                   </v-card>
@@ -817,6 +823,7 @@ export default defineComponent({
     };
   },
   mounted() {
+    this.settings = this.$store.getters.settings;
     this.interval_wifi = setInterval(() => {this.pollWifiStatus()}, 1000);
     this.interval_info = setInterval(() => {this.pollInfo()}, 1000);
     this.$wifi_connect.networks().then((result) => {
@@ -865,7 +872,6 @@ export default defineComponent({
     },
     uploadPackage() {
       this.$coderbot.uploadMusicPackage(this.formdata).then((result) => {
-        console.log(result);
         this.updateStatus = 0;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
@@ -876,7 +882,6 @@ export default defineComponent({
           this.musicPackages = this.$store.getters.musicPackages;
         });
       }).catch((result) => {
-        console.log(result);
         this.updateStatus = 0;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
@@ -912,7 +917,7 @@ export default defineComponent({
     },
     pollInfo() {
       this.$coderbot.getInfo();
-      this.settings = this.$store.getters.settings;
+      //this.settings = this.$store.getters.settings;
       this.cb.status = this.$store.getters.status;
       this.cb.info = this.$store.getters.info;
     },
@@ -927,7 +932,6 @@ export default defineComponent({
       this.runningTest = true;
       let tests = Object.values(this.checkedTests);
       this.$coderbot.test(tests).then((response) => {
-        console.log(response.data);
         this.testResults = response.data;
         this.snackText = 'Running tests';
         this.snackbar = true;
@@ -966,7 +970,7 @@ export default defineComponent({
         });
       });
     },
-    save() {
+    async save() {
       if (this.v$.$invalid) {
         console.log(this.v$)
         this.snackText = this.$i18n.t('message.settings_errors');
@@ -981,13 +985,12 @@ export default defineComponent({
             needRestartFlag = true;
           }
         });
-        this.$coderbot.saveSettings(this.settings).then(() => {
-          console.log('Updated settings');
-          this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
-          this.snackbar = true;
-          this.v$.settings.$reset();
-          console.log('set dirty false');
-        });
+        this.settings = await this.$coderbot.saveSettings(this.settings);
+        console.log(this.settings);
+        this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
+        this.snackbar = true;
+        this.v$.settings.$reset();
+        console.log('set dirty false');
         if (this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty) {
           if(this.settings.wifiMode=="client") {
             const network = this.networks.find(item => { return item.ssid==this.settings.wifiSSID });
@@ -1119,8 +1122,9 @@ export default defineComponent({
         camera_path_object_size_min: null,
         cnn_default_model: null,
         cbName: 'CoderBot',
-        power: [null, null, null],
-        btnFun: null,
+        move_power_angle_1: null,
+        move_power_angle_2: null,
+        move_power_angle_3: null,        
         wifiMode: 'ap',
         wifiSSID: null,
         wifiUser: null,
@@ -1355,6 +1359,18 @@ export default defineComponent({
           decimal
         },
         trimFactor: {
+          required,
+          decimal
+        },
+        move_power_angle_1: {
+          required,
+          decimal
+        },
+        move_power_angle_2: {
+          required,
+          decimal
+        },
+        move_power_angle_3: {
           required,
           decimal
         },

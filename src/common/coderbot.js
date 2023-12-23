@@ -154,12 +154,18 @@ class CoderBot {
   async loadSettings() {
     const result = await this.$axios.get(`${this.CB}/settings`);
     // handle success
+    const data = this.settingsBackend2FrontEnd(result.data);
+
+    this.$store.commit('setSettings', data);
+  }
+
+  settingsBackend2FrontEnd(result) {
     const data = {};
-    const remoteConfig = result.data;
+    const remoteConfig = result;
     const remoteSettings = remoteConfig.settings;
-    data.power = [remoteConfig.move_power_angle_1, remoteConfig.move_power_angle_2, remoteConfig
-      .move_power_angle_3
-    ];
+    data.move_power_angle_1 = remoteSettings.move_power_angle_1;
+    data.move_power_angle_2 = remoteSettings.move_power_angle_2;
+    data.move_power_angle_3 = remoteSettings.move_power_angle_3;
     data.ctrl_hud_image = remoteSettings.ctrl_hud_image;
     data.cv_image_factor = remoteSettings.cv_image_factor;
     data.camera_color_object_size_max = remoteSettings.camera_color_object_size_max;
@@ -202,20 +208,26 @@ class CoderBot {
     data.movementUseEncoder = remoteSettings.movement_use_encoder;
     data.locale = remoteSettings.locale;
 
-    const remoteNetwork = remoteConfig.network
+    const remoteNetwork = remoteConfig.network;
     data.wifiMode = remoteNetwork.wifi_mode;
     data.wifiSSID = remoteNetwork.wifi_ssid;
     data.wifiPsw = remoteNetwork.wifi_psk;
 
-    const remoteCloud = remoteConfig.cloud
+    const remoteCloud = remoteConfig.cloud;
     data.syncModes = remoteCloud.sync_modes;
     data.syncPeriod = remoteCloud.sync_period;
-
-    this.$store.commit('setSettings', data);
+    return data;
   }
 
   async saveSettings(settings) {
     /* eslint-enable */
+    const { legacySettings, config } = this.settingsFrontend2Backend(settings);
+    this.$store.commit('setSettings', legacySettings);
+    let response = await this.$axios.put(`${this.CB}/settings`, config);
+    return this.settingsBackend2FrontEnd(response.data);
+  }
+
+  settingsFrontend2Backend(settings) {
     const legacySettings = {
       ctrl_hud_image: settings.ctrl_hud_image,
       cv_image_factor: settings.cv_image_factor,
@@ -228,9 +240,9 @@ class CoderBot {
       camera_path_object_size_max: settings.camera_path_object_size_max,
       camera_path_object_size_min: settings.camera_path_object_size_min,
       cnn_default_model: settings.cnn_default_model,
-      move_power_angle_1: settings.power[0],
-      move_power_angle_2: settings.power[1],
-      move_power_angle_3: settings.power[2],
+      move_power_angle_1: settings.move_power_angle_1,
+      move_power_angle_2: settings.move_power_angle_2,
+      move_power_angle_3: settings.move_power_angle_3,
       button_func: settings.btnFun,
       move_motor_trim: settings.trimFactor,
       motor_min_power: settings.motorMinPower,
@@ -253,6 +265,9 @@ class CoderBot {
       ctrl_fw_speed: settings.ctrlFwdSpeed,
       ctrl_tr_elapse: settings.ctrlTurnElapse,
       ctrl_tr_speed: settings.ctrlTurnSpeed,
+      move_power_angle_1: settings.move_power_angle_1,
+      move_power_angle_2: settings.move_power_angle_2,
+      move_power_angle_3: settings.move_power_angle_3,
       audio_volume_level: settings.audioLevel,
       admin_password: settings.adminPassword,
       hardware_version: settings.hardwareVersion,
@@ -276,9 +291,7 @@ class CoderBot {
       network: networkSettings,
       cloud: cloudSettings
     };
-    this.$store.commit('setSettings', legacySettings);
-    console.log(legacySettings);
-    return this.$axios.put(`${this.CB}/settings`, config);
+    return { legacySettings, config };
   }
 
   reset() {
