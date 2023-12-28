@@ -89,7 +89,7 @@ const routes = [
   },
   {
     name: 'activity_open',
-    path: '/activity/open/:name',
+    path: '/activity/open/:id',
     component: activity,
     meta: {
       title: `CoderBot - ${i18n.global.t('message.activity_open')}`

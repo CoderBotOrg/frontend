@@ -192,11 +192,11 @@ export default defineComponent({
         });
     },
     registrationStatus() {
-      console.log("registration status");
+      //console.log("registration status");
         this.$coderbot.cloudRegistrationStatus()
           .then((response) => {
             this.regStatus = response.data;
-            console.log(this.regStatus)
+            console.log(`registration status: ${this.regStatus}`)
         });
     },
   },

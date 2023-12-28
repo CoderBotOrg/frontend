@@ -92,11 +92,11 @@
           </v-card-title>
           <v-list>
             <v-list-item v-for="program in programList" :key="program.el" @click="{}">
-              <v-list-item-title ripple @click="loadProgram(program.name)">
+              <v-list-item-title ripple @click="loadProgram(program.id)">
                 {{ program.name }}
               </v-list-item-title>
               <template v-slot:append>
-                <v-btn v-if="program.kind!='stock'" @click="deleteProgramDlg(program.name)">
+                <v-btn v-if="program.kind!='stock'" @click="deleteProgramDlg(program)">
                   <v-icon icon="mdi-delete"></v-icon>
                 </v-btn>
               </template>
@@ -131,7 +131,7 @@
         </v-card>
       </v-dialog>
       <!-- Name error -->
-      <v-dialog v-model="invalidName" width="290">
+      <v-dialog v-model="invalidName" width="480">
         <v-card id="card_program_name_must_be_filled">
           <v-card-title class="headline">Error</v-card-title>
           <v-card-text>
@@ -145,7 +145,7 @@
         </v-card>
       </v-dialog>
       <!-- Overwrite error -->
-      <v-dialog v-model="cannotOverwrite" width="290">
+      <v-dialog v-model="cannotOverwrite" width="480">
         <v-card id="card_program_overwrite_cannot">
           <v-card-title class="headline">Error</v-card-title>
           <v-card-text>
@@ -178,7 +178,7 @@
         </v-card>
       </v-dialog>
       <!-- Clear Program -->
-      <v-dialog v-model="clear" width="290">
+      <v-dialog v-model="clear" width="480">
         <v-card id="card_clear_workspace">
           <v-card-title class="headline">
             {{ $t("message.delete") }}
@@ -198,7 +198,7 @@
         </v-card>
       </v-dialog>
       <!-- Delete Program -->
-      <v-dialog v-model="del" width="290">
+      <v-dialog v-model="del" width="480">
         <v-card id="card_program_delete_confirm">
           <v-card-title class="headline">
             {{ $t("message.delete") }}
@@ -211,7 +211,7 @@
               {{ $t("message.no") }}
             </v-btn>
             <v-btn color="green darken-1 ok" text="text"
-              @click="del = false, carica = false, deleteProgram(programName)">
+              @click="del = false, carica = false, deleteProgram(programId)">
               {{ $t("message.yes") }}
             </v-btn>
           </v-card-actions>
@@ -234,7 +234,7 @@
         </v-card>
       </v-dialog>
       <!-- Generic dialog -->
-      <v-dialog v-model="generalDialog" max-width="290">
+      <v-dialog v-model="generalDialog" max-width="390">
         <v-card id="card_program_general">
           <v-card-title class="headline">{{ generalDialogTitle }}</v-card-title>
           <v-card-text>
@@ -249,7 +249,7 @@
         </v-card>
       </v-dialog>
       <!-- Confirm exit dialog -->
-      <v-dialog v-model="confirm_exit_dialog" max-width="290">
+      <v-dialog v-model="confirm_exit_dialog" max-width="390">
         <v-card id="card_confirm_exit_dialog">
           <v-card-title class="headline">{{ $t("message.confirm") }}</v-card-title>
           <v-card-text>
@@ -325,6 +325,7 @@ export default defineComponent({
     carica: false,
     programList: '',
     save: false,
+    programId: '',
     programName: '',
     newProgramName: '',
     invalidName: false,
@@ -348,13 +349,13 @@ export default defineComponent({
   mounted() { 
     this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
-    let activityName = this.$route.params.name;
+    let activityId = this.$route.params.id;
     let activityDefault = null;
     if (this.$router.currentRoute.value.name == 'program') {
-      activityName = this.$route.params.name;
+      activityId = this.$route.params.id;
       activityDefault = true;
     }
-    this.$coderbot.loadActivity(activityName, activityDefault).then((activity) => {
+    this.$coderbot.loadActivity(activityId, activityDefault).then((activity) => {
       this.activity = activity.data;
       this.theme.global.name.value = this.activity.theme != 'dark' ? 'light' : 'dark';
       this.settings.maxBlocks = this.activity.maxBlocks;
@@ -417,10 +418,12 @@ export default defineComponent({
 
     getProgramData() {
       // Build the program object
+      const id = this.programId;
       const name = this.programName;
       const { isStock } = this;
       const { dom_code, code } = this.$refs.workspace.getProgramData();
       return {
+        id,
         name,
         dom_code,
         code,
@@ -484,6 +487,7 @@ export default defineComponent({
           this.defaultProgramName = this.programName;
           this.programName = this.newProgramName;
           this.newProgramName = '';
+          this.programId = '';
           this.$data.overwrite = false;
           this.saveProgram();
         }
@@ -495,28 +499,47 @@ export default defineComponent({
     saveProgram() {
       if (this.programName != '') {
         const data = this.getProgramData();
-        this.$coderbot.saveProgram(this.$data.overwrite, data.name, data.dom_code, data.code, false).then((prog_data) => {
-          if (prog_data.data == 'askOverwrite') {
-            this.$data.overwriteDialog = true;
-          } else {
-            this.$data.isStock = '';
-            this.$data.overwrite = true;
-            console.log('saved');
-            this.dirty = false;
-          }
-        }).catch((error) => {
-          if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
-            console.warn('trying to overwrite a default program');
-            this.$data.programName = this.$data.defaultProgramName;
-              this.$data.defaultProgramName = '';
-              this.$data.cannotOverwrite = true;
-          }
-        });
+        if (data.id != '') {
+          this.$coderbot.saveProgram(this.$data.overwrite, data.id, data.name, data.dom_code, data.code, false).then((prog_data) => {
+            if (prog_data.data == 'askOverwrite') {
+              this.$data.overwriteDialog = true;
+            } else {
+              this.$data.isStock = '';
+              this.$data.overwrite = true;
+              console.log('saved');
+              this.dirty = false;
+            }
+          }).catch((error) => {
+            if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
+              console.warn('trying to overwrite a default program');
+              this.$data.programName = this.$data.defaultProgramName;
+                this.$data.defaultProgramName = '';
+                this.$data.cannotOverwrite = true;
+            }
+          });
+        } else {
+          this.$coderbot.saveNewProgram(this.$data.overwrite, data.name, data.dom_code, data.code, false).then((prog_data) => {
+            if (prog_data.data == 'askOverwrite') {
+              this.$data.overwriteDialog = true;
+            } else {
+              this.$data.isStock = '';
+              this.$data.overwrite = true;
+              console.log('saved');
+              this.dirty = false;
+            }
+          }).catch((error) => {
+            if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
+              console.warn('trying to overwrite a default program');
+              this.$data.programName = this.$data.defaultProgramName;
+                this.$data.defaultProgramName = '';
+                this.$data.cannotOverwrite = true;
+            }
+          });
+        }
       } else {
         this.invalidName = true;
       }
     },
-
     loadProgramList() {
       // Get the list of available programs and populate the popup
       this.$coderbot.listPrograms()
@@ -526,10 +549,11 @@ export default defineComponent({
         });
     },
 
-    loadProgram(program) {
+    loadProgram(id) {
       this.$data.carica = false;
-      this.$data.programName = program;
-      this.$coderbot.loadProgram(this.$data.programName).then((data) => {
+      this.$data.programId = id;
+      this.$coderbot.loadProgram(this.$data.programId).then((data) => {
+        this.programName = data.data.name;
         this.$refs.workspace.loadProgram(data.data.dom_code);
         this.$data.isStock = data.data.kind == "stock";
       });
@@ -540,7 +564,7 @@ export default defineComponent({
     },
 
     clearProgram() {
-      this.$data.programName = '';
+      this.$data.programId = '';
       this.$data.code = '';
       this.$refs.workspace.clear();
       this.$data.clear = false;
@@ -548,17 +572,18 @@ export default defineComponent({
     },
 
     deleteProgramDlg(program) {
-      this.$data.programName = program;
+      this.$data.programId = program.id;
+      this.$data.programName = program.name;
       this.$data.del = true;
     },
 
-    deleteProgram(program) {
-      if (this.$data.programName == program) {
-        this.$data.programName = '';
+    deleteProgram(id) {
+      if (this.$data.programId == id) {
+        this.$data.programId = '';
         this.$data.code = '';
         this.$refs.workspace.clear();
       }
-      this.$coderbot.deleteProgram(program).then(() => {
+      this.$coderbot.deleteProgram(id).then(() => {
         console.info('deleted');
       });
     },
@@ -572,8 +597,8 @@ export default defineComponent({
       // POST /program/save
       console.info("Startin program");
       const { code } = this.$refs.workspace.getProgramData();
-      const programName = this.programName != '' ? this.programName : 'untitled';
-      this.$coderbot.runProgram(programName, code).then(() => {
+      const programId = this.programId != '' ? this.programId : 'untitled';
+      this.$coderbot.runProgram(programId, code).then(() => {
         this.runtimeDialog = true;
         setTimeout(() => {
           this.updateExecStatus();

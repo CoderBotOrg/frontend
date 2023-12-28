@@ -29,8 +29,8 @@
                   </i18n-t>
                   </span>
                   <template v-for="activity in activityList" :key="activity.el">
-                    <v-list-item link :id="activity.name">
-                      <div @click="goToActivity(activity.name)">
+                    <v-list-item link :id="activity.id">
+                      <div @click="goToActivity(activity.id)">
                       <v-list-item-title>
                         {{ activity.name }}
                       </v-list-item-title>
@@ -42,7 +42,7 @@
                       <v-btn color="grey" variant="text" v-if="activity.kind!='stock'" ripple @click="this.activity = activity; confirmDeleteDlg = true">
                         <v-icon icon="mdi-delete"></v-icon>
                       </v-btn>
-                      <v-btn variant="text" ripple :href="'#/activity/edit/'+activity.name">
+                      <v-btn variant="text" ripple :href="'#/activity/edit/'+activity.id">
                         <v-icon icon="mdi-pencil"></v-icon>
                       </v-btn>
                       </template>
@@ -84,7 +84,7 @@
                   <v-btn
                     color="green darken-1"
                     text
-                    @click="confirmDeleteDlg = false; deleteActivity(activity.name)"
+                    @click="confirmDeleteDlg = false; deleteActivity(activity.id)"
                     id="confirmDeleteDlg_ok"
                   >
                     {{ $t("message.ok") }}
@@ -112,8 +112,8 @@ export default defineComponent({
     this.getActivities();
   },
   methods: {
-    goToActivity(name) {
-      this.$router.push({ name: 'activity_open', params: { name } });
+    goToActivity(id) {
+      this.$router.push({ name: 'activity_open', params: { id } });
     },
     getActivities() {
       // let programList = this.$data.programList
@@ -122,8 +122,8 @@ export default defineComponent({
           this.$data.activityList = response.data;
         });
     },
-    deleteActivity(name) {
-      this.$coderbot.deleteActivity(name).then(() => {
+    deleteActivity(id) {
+      this.$coderbot.deleteActivity(id).then(() => {
         this.getActivities();
       });
     },

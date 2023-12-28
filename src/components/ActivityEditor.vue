@@ -651,12 +651,25 @@ export default defineComponent({
   methods: {
     save() {
       if (this.activity.name) {
-        this.$coderbot.saveActivity(this.activity).then(() => {
-          this.snackbarText = this.$i18n.t('message.activity_saved');
-          this.snackbar = true;
-          this.saved = true;
-          this.v$.$reset();
-        });
+        if(this.activity.id) {
+          console.log("saveActivity")
+          this.$coderbot.saveActivity(this.activity).then((response) => {
+            this.snackbarText = this.$i18n.t('message.activity_saved');
+            this.snackbar = true;
+            this.saved = true;
+            this.activity = response.data;
+            this.v$.$reset();
+          });
+        } else {
+          console.log("saveNewActivity")
+          this.$coderbot.saveNewActivity(this.activity).then((response) => {
+            this.snackbarText = this.$i18n.t('message.activity_saved');
+            this.snackbar = true;
+            this.saved = true;
+            this.activity = response.data;
+            this.v$.$reset();
+          });          
+        }
       } else {
         this.snackbarText = this.$i18n.t('message.activity_save_error');
         this.snackbar = true;

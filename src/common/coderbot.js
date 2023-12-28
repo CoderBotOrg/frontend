@@ -365,22 +365,40 @@ class CoderBot {
     return this.$axios.get(`${this.CB}/activities`);
   }
 
-  deleteActivity(name) {
-    return this.$axios.delete(`${this.CB}/activities/${name}`, {
-      name,
+  deleteActivity(id) {
+    return this.$axios.delete(`${this.CB}/activities/${id}`, {
+      id,
     });
   }
 
-  saveActivity(an_activity) {
+  saveNewActivity(an_activity) {
     // defaults requird by API
     an_activity.description = an_activity.description == null ? '' : an_activity.description;
     an_activity.default = an_activity.default == null ? false : an_activity.default;
     return this.$axios.post(`${this.CB}/activities`, an_activity);
   }
 
-  saveProgram(overwrite, name, dom_code, code, is_default) {
-    return this.$axios.put(`${this.CB}/programs/${name}`, {
+  saveActivity(an_activity) {
+    // defaults requird by API
+    an_activity.description = an_activity.description == null ? '' : an_activity.description;
+    an_activity.default = an_activity.default == null ? false : an_activity.default;
+    return this.$axios.put(`${this.CB}/activities/${an_activity.id}`, an_activity);
+  }
+
+  saveNewProgram(overwrite, name, dom_code, code, is_default) {
+    return this.$axios.post(`${this.CB}/programs`, {
       overwrite,
+      name,
+      dom_code,
+      code,
+      default: is_default
+    });
+  }
+
+  saveProgram(overwrite, id, name, dom_code, code, is_default) {
+    return this.$axios.put(`${this.CB}/programs/${id}`, {
+      overwrite,
+      id,
       name,
       dom_code,
       code,
@@ -392,27 +410,28 @@ class CoderBot {
     return this.$axios.get(`${this.CB}/programs`);
   }
 
-  loadProgram(name) {
-    return this.$axios.get(`${this.CB}/programs/${name}`);
+  loadProgram(id) {
+    return this.$axios.get(`${this.CB}/programs/${id}`);
   }
 
-  deleteProgram(name) {
-    return this.$axios.delete(`${this.CB}/programs/${name}`);
+  deleteProgram(id) {
+    console.log(`${this.CB}/programs/${id}`);
+    return this.$axios.delete(`${this.CB}/programs/${id}`);
   }
 
-  runProgram(name, code) {
-    return this.$axios.post(`${this.CB}/programs/${name}/run`, {
+  runProgram(id, code) {
+    return this.$axios.post(`${this.CB}/programs/${id}/run`, {
       name: name,
       code: code,
     });
   }
 
-  stopProgram(name) {
-    return this.$axios.patch(`${this.CB}/programs/${name}/stop`, {});
+  stopProgram(id) {
+    return this.$axios.patch(`${this.CB}/programs/${id}/stop`, {});
   }
 
-  programStatus(name) {
-    return this.$axios.get(`${this.CB}/programs/${name}/status`);
+  programStatus(id) {
+    return this.$axios.get(`${this.CB}/programs/${id}/status`);
   }
 
   status() {
