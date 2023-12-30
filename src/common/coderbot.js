@@ -22,6 +22,7 @@ class CoderBot {
     this.loadActivity(null, true).then((activity) => {
       if (activity.data == '') {
         const defaultActivity = {
+          id: '744d9de0-4680-426f-8962-163fd2473148',
           kind: 'stock',
           status: "active",
           default: true,

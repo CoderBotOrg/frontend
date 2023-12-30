@@ -526,6 +526,8 @@ export default defineComponent({
               this.$data.overwrite = true;
               console.log('saved');
               this.dirty = false;
+              this.programId = prog_data.data.id;
+              this.programName = prog_data.name;
             }
           }).catch((error) => {
             if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
@@ -565,6 +567,7 @@ export default defineComponent({
 
     clearProgram() {
       this.$data.programId = '';
+      this.$data.programName = '';
       this.$data.code = '';
       this.$refs.workspace.clear();
       this.$data.clear = false;
@@ -594,10 +597,37 @@ export default defineComponent({
     },
 
     runProgram() {
-      // POST /program/save
-      console.info("Startin program");
+      const data = this.getProgramData();
+      if (this.programId == '') {
+        this.$coderbot.saveNewProgram(this.$data.overwrite, 'untitled', data.dom_code, data.code, false).then((prog_data) => {
+          if (prog_data.data == 'askOverwrite') {
+            this.$data.overwriteDialog = true;
+          } else {
+            this.$data.isStock = '';
+            this.$data.overwrite = true;
+            console.log('saved');
+            this.dirty = false;
+            this.programId = prog_data.data.id;
+            this.programName = prog_data.name;
+            this.runProgramInternal();
+          }
+        }).catch((error) => {
+          if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
+            console.warn('trying to overwrite a default program');
+            this.$data.programName = this.$data.defaultProgramName;
+              this.$data.defaultProgramName = '';
+              this.$data.cannotOverwrite = true;
+          }
+        });
+      } else {
+        this.$coderbot.saveProgram(this.$data.overwrite, data.id, data.name, data.dom_code, data.code, false).then((prog_data) => {
+          this.runProgramInternal();
+        });
+      }
+    },
+    runProgramInternal() {
       const { code } = this.$refs.workspace.getProgramData();
-      const programId = this.programId != '' ? this.programId : 'untitled';
+      const programId = this.programId;
       this.$coderbot.runProgram(programId, code).then(() => {
         this.runtimeDialog = true;
         setTimeout(() => {
@@ -605,7 +635,6 @@ export default defineComponent({
         }, 1000);
       });
     },
-
     stopProgram() {
       console.info('Stopping program');
       this.$coderbot.stopProgram();
