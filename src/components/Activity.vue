@@ -437,12 +437,11 @@ export default defineComponent({
       const blob = new Blob([data], {
         type: 'text/json'
       });
-      const e = document.createEvent('MouseEvents');
       const a = document.createElement('a');
       a.download = `${this.programName}.json` || 'noname.json';
       a.href = window.URL.createObjectURL(blob);
       a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
-      e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      const e = new MouseEvent('click', { bubbles: true, cancelable: false });
       a.dispatchEvent(e);
     },
 
@@ -558,6 +557,7 @@ export default defineComponent({
         this.programName = data.data.name;
         this.$refs.workspace.loadProgram(data.data.dom_code);
         this.$data.isStock = data.data.kind == "stock";
+        this.dirty = false;
       });
     },
 
@@ -605,7 +605,6 @@ export default defineComponent({
           } else {
             this.$data.isStock = '';
             this.$data.overwrite = true;
-            console.log('saved');
             this.dirty = false;
             this.programId = prog_data.data.id;
             this.programName = prog_data.name;
@@ -620,9 +619,13 @@ export default defineComponent({
           }
         });
       } else {
-        this.$coderbot.saveProgram(this.$data.overwrite, data.id, data.name, data.dom_code, data.code, false).then((prog_data) => {
+        if (!this.$data.isStock) {
+          this.$coderbot.saveProgram(this.$data.overwrite, data.id, data.name, data.dom_code, data.code, false).then((prog_data) => {
+            this.runProgramInternal();
+          });
+        } else {
           this.runProgramInternal();
-        });
+        }
       }
     },
     runProgramInternal() {
