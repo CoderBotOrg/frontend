@@ -96,7 +96,7 @@ jobs:
         architecture: 
           - arch: linux/arm/v7
             dockerfile: Dockerfile
-          - arch: linux/arm/v8
+          - arch: linux/arm64
             dockerfile: Dockerfile
     needs: build
     steps:
