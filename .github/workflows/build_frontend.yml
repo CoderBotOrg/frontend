@@ -91,6 +91,13 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: 
+          - arch: linux/arm/v7
+            dockerfile: Dockerfile
+          - arch: linux/arm/v8
+            dockerfile: Dockerfile
     needs: build
     steps:
     - uses: actions/checkout@v3 # Checking out the repo
@@ -136,9 +143,9 @@ jobs:
       uses: docker/build-push-action@v3
       with:
           push: true
-          platforms: linux/arm/v7
+          platforms: ${{ matrix.architecture.arch }}
+          file: docker/${{ matrix.architecture.dockerfile }}
           tags: ${{ steps.meta.outputs.tags }}
           context: .
-          file: docker/Dockerfile
           cache-from: type=registry,ref=ghcr.io/coderbotorg/frontend:latest
           cache-to: type=inline

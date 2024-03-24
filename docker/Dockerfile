@@ -1,4 +1,4 @@
-FROM nginx:1.23.1-alpine
+FROM nginx:1.25.4-alpine3.18-slim
 
 ADD dist /usr/share/nginx/html
 ADD cb_docs /usr/share/nginx/html/docs
