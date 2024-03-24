@@ -94,9 +94,7 @@ jobs:
     strategy:
       matrix:
         architecture: 
-          - arch: linux/arm/v7
-            dockerfile: Dockerfile
-          - arch: linux/arm64
+          - arch: linux/arm64,linux/arm/v7
             dockerfile: Dockerfile
     needs: build
     steps:
