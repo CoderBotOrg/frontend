@@ -15,11 +15,11 @@ jobs:
       run: docker login ghcr.io -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
     - name: Run stub
       run: docker run -d -p 5000:5000 -p 9090:9090 --name backend-stub ghcr.io/coderbotorg/backend:stub-latest
-    - name: install and run nginx
-      run: apt-get update -y && \
-        apt-get install nginx && \
-        cp docker/nginx.conf /etc/nginx/nginx.conf && \
-        cp docker/default.conf /etc/nginx/default.conf
+    - name: Run nginx
+      run: docker run -d -p 80:80 \
+        --name backend-fe nginx:1.25.4-alpine3.18-slim \
+        -v docker/nginx.conf:/etc/nginx/nginx.conf \
+        -v docker/default.conf:/etc/nginx/default.conf
     # Install NPM dependencies, cache them correctly
     # and run all Cypress tests
     - name: Cypress run
