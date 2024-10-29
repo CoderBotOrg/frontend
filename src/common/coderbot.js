@@ -39,7 +39,7 @@ class CoderBot {
           bodyFont: 'Roboto',
           codeFont: 'ubuntumono',
           maxBlocks: 0,
-          availableViews: [],
+          editor: 'blockly',
           viewSource: null,
           autoRecVideo: null,
           toolbox: null,
