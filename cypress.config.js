@@ -10,4 +10,7 @@ module.exports = defineConfig({
       return config
     },
   },
-});
+  browser: {
+    chromeWebSecurity: false,
+  }}
+);

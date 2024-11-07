@@ -213,7 +213,6 @@ export default {
       Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
       const code = Blockly.Python.workspaceToCode(this.workspace);
       Blockly.Python.INFINITE_LOOP_TRAP = null;
-
       return {
         dom_code,
         code,

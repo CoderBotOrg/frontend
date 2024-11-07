@@ -299,9 +299,6 @@
   </div>
 </template>
 <script>
-import 'prismjs';
-import 'prismjs/components/prism-python.js';
-import Prism from 'vue-prism-component';
 import hljs from 'highlight.js';
 import CodeEditor from "simple-code-editor";
 import { useTheme } from 'vuetify';
@@ -313,7 +310,6 @@ export default {
   components: {
     sidebar,
     BlocklyWorkspace,
-    Prism,
     CodeEditor,
   },
   setup() {
@@ -443,18 +439,28 @@ export default {
       this.$store.commit('toggleDrawer', !currentStatus);
     },
 
+    getProgramCode() {
+      if (this.activity.editor == 'code') {
+        this.code = this.code;
+      } else if (this.activity.editor == 'blockly') {
+        this.code = this.$refs.workspace.getProgramCode();
+      }
+      this.dialogCode = true;
+    },
+
     getProgramData() {
       // Build the program object
       const name = this.programName;
       const { isDefault } = this;
       var code = '';
       var dom_code = '';
+      
       if (this.activity.editor == 'code') {
         code = this.code;
       } else if (this.activity.editor == 'blockly') {
-        const { _dom_code, _code } = this.$refs.workspace.getProgramCode();
-        dom_code = _dom_code;
-        code = _code;
+        const prog_data = this.$refs.workspace.getProgramData();
+        code = prog_data.code
+        dom_code = prog_data.dom_code;
       }
       return {
         name,
@@ -549,6 +555,7 @@ export default {
             this.dirty = false;
           }
         }).catch((error) => {
+          console.error(error, data);
           if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
             console.warn('trying to overwrite a default program');
             this.$data.programName = this.$data.defaultProgramName;
@@ -620,23 +627,14 @@ export default {
       });
     },
 
-    getProgramCode() {
-      if (this.$data.activity.editor == 'code') {
-        this.code = this.$data.code;
-      } else if (this.$data.activity.editor == 'blockly') {
-        this.code = this.$refs.workspace.getProgramCode();
-      }
-      this.dialogCode = true;
-    },
-
     runProgram() {
       // POST /program/save
-      console.info("Startin program");
+      console.info("Starting program");
       var code = '';
       if(this.$data.activity.editor == 'code') {
         code = this.$data.code;
       } else if (this.$data.activity.editor == 'blockly') {
-        code = this.$refs.workspace.getProgramData();
+        code = this.$refs.workspace.getProgramCode();
       }
       const programName = this.programName != '' ? this.programName : 'untitled';
       this.$coderbot.runProgram(programName, code).then(() => {
