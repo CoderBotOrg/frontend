@@ -33,6 +33,7 @@
       <v-main>
         <!-- Blockly -->
         <blockly-workspace
+          v-if="activity.editor!='code'"
           ref="workspace"
           :settings="settings"
           :toolbox="toolbox"
@@ -40,6 +41,17 @@
           @workspace-changed="onWorkspaceChanged()"
         >
         </blockly-workspace>
+        <CodeEditor
+          v-else
+          theme="default"
+          :languages="[['python', 'Python']]"
+          :tab-spaces="4"
+          border-radius="0px"
+          :line-nums="true"
+          width="100%"
+          height="100%"
+          v-model="code">
+        </CodeEditor>
       </v-main>
       <!-- Hidden file input. Its file dialog it's event-click triggered by the "pickFile" method -->
       <input type="file" style="display: none" ref="file" @change="importProgram">
@@ -222,7 +234,17 @@
         <v-card id="card_program_code">
           <v-card-title class="headline">{{ $t("message.program_code") }}</v-card-title>
           <v-card-text class="text-xs-left">
-            <prism language="python">{{ code }} </prism>
+            <CodeEditor 
+              theme="default"
+              :languages="[['python', 'Python']]"
+              :tab-spaces="4"
+              border-radius="0px"
+              :line-nums="true"
+              width="100%"
+              height="100%"
+              v-model="code"
+              :read-only="true">
+            </CodeEditor>
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
@@ -277,9 +299,8 @@
   </div>
 </template>
 <script>
-import 'prismjs';
-import 'prismjs/components/prism-python.js';
-import Prism from 'vue-prism-component';
+import hljs from 'highlight.js';
+import CodeEditor from "simple-code-editor";
 import { useTheme } from 'vuetify';
 import sidebar from './Sidebar.vue';
 import BlocklyWorkspace from './BlocklyWorkspace.vue';
@@ -289,7 +310,7 @@ export default {
   components: {
     sidebar,
     BlocklyWorkspace,
-    Prism,
+    CodeEditor,
   },
   setup() {
     return {
@@ -340,10 +361,15 @@ export default {
   }),
   computed: {
     remainingCapacity() {
-      return this.$refs.workspace.remainingCapacity();
+      if (this.$data.activity.editor == 'code') {
+        return 0;
+      } else if (this.$data.activity.editor == 'blockly') {
+        return this.$refs.workspace.remainingCapacity();
+      }
     },
   },
   mounted() { 
+    console.log(this.$data.activity)
     this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
     let activityName = this.$route.params.name;
@@ -413,11 +439,29 @@ export default {
       this.$store.commit('toggleDrawer', !currentStatus);
     },
 
+    getProgramCode() {
+      if (this.activity.editor == 'code') {
+        this.code = this.code;
+      } else if (this.activity.editor == 'blockly') {
+        this.code = this.$refs.workspace.getProgramCode();
+      }
+      this.dialogCode = true;
+    },
+
     getProgramData() {
       // Build the program object
       const name = this.programName;
       const { isDefault } = this;
-      const { dom_code, code } = this.$refs.workspace.getProgramData();
+      var code = '';
+      var dom_code = '';
+      
+      if (this.activity.editor == 'code') {
+        code = this.code;
+      } else if (this.activity.editor == 'blockly') {
+        const prog_data = this.$refs.workspace.getProgramData();
+        code = prog_data.code
+        dom_code = prog_data.dom_code;
+      }
       return {
         name,
         dom_code,
@@ -461,7 +505,15 @@ export default {
         fr.readAsText(files[0]);
         fr.addEventListener('load', () => {
           const importedProgram = JSON.parse(fr.result);
-          this.$refs.workspace.loadProgram(importedProgram.dom_code);
+          if (this.activity.editor == 'code') {
+            this.$data.code = importedProgram.code;
+          } else if (this.activity.editor == 'blockly' && importedProgram.dom_code != '') {
+            this.$refs.workspace.loadProgram(importedProgram.dom_code);
+          } else if (this.activity.editor == 'blockly' && importedProgram.dom_code == '') {
+            this.$data.generalDialogTitle = 'Error';
+            this.$data.generalDialogText = 'Cannot load python program in blockly editor';
+            this.$data.generalDialog = true;
+          }
         });
       } else {
         console.error('Something went wrong importing');
@@ -503,6 +555,7 @@ export default {
             this.dirty = false;
           }
         }).catch((error) => {
+          console.error(error, data);
           if(error.response.status == 400 && error.response.data == 'defaultCannotOverwrite') {
             console.warn('trying to overwrite a default program');
             this.$data.programName = this.$data.defaultProgramName;
@@ -528,7 +581,16 @@ export default {
       this.$data.carica = false;
       this.$data.programName = program;
       this.$coderbot.loadProgram(this.$data.programName).then((data) => {
-        this.$refs.workspace.loadProgram(data.data.dom_code);
+        if (this.activity.editor == 'code') {
+          this.$data.code = data.data.code;
+        } else if (this.activity.editor == 'blockly' && data.data.dom_code != '') {
+          this.$refs.workspace.loadProgram(data.data.dom_code);
+        } else if (this.activity.editor == 'blockly' && data.data.dom_code == '') {
+          console.error('Cannot load python program in blockly editor');
+          this.$data.generalDialogTitle = 'Error';
+          this.$data.generalDialogText = 'Cannot load python program in blockly editor';
+          this.$data.generalDialog = true;
+        }
         this.$data.isDefault = data.data.default;
       });
     },
@@ -540,7 +602,9 @@ export default {
     clearProgram() {
       this.$data.programName = '';
       this.$data.code = '';
-      this.$refs.workspace.clear();
+      if (this.$data.activity.editor == 'blockly') {
+        this.$refs.workspace.clear();
+      }
       this.$data.clear = false;
       this.dirty = true;
     },
@@ -554,22 +618,24 @@ export default {
       if (this.$data.programName == program) {
         this.$data.programName = '';
         this.$data.code = '';
-        this.$refs.workspace.clear();
+        if (this.$data.activity.editor == 'blockly') {
+          this.$refs.workspace.clear();
+        }
       }
       this.$coderbot.deleteProgram(program).then(() => {
         console.info('deleted');
       });
     },
 
-    getProgramCode() {
-      this.code = this.$refs.workspace.getProgramCode();
-      this.dialogCode = true;
-    },
-
     runProgram() {
       // POST /program/save
-      console.info("Startin program");
-      const { code } = this.$refs.workspace.getProgramData();
+      console.info("Starting program");
+      var code = '';
+      if(this.$data.activity.editor == 'code') {
+        code = this.$data.code;
+      } else if (this.$data.activity.editor == 'blockly') {
+        code = this.$refs.workspace.getProgramCode();
+      }
       const programName = this.programName != '' ? this.programName : 'untitled';
       this.$coderbot.runProgram(programName, code).then(() => {
         this.runtimeDialog = true;

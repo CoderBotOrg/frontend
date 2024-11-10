@@ -141,14 +141,16 @@
                     </v-card-title>
                     <v-card-text>
                       <v-layout row wrap>
-                        <!--
 												<v-col>
-													<v-checkbox v-model="activity.availableViews" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
+                          <v-radio-group v-model="activity.editor" 
+                            v-bind:label="$t('message.activity_editor')" required
+                            @change="v$.activity.editor.$touch">
+                            <v-radio value="blockly" label="Blocchi (Blockly)"></v-radio>
+                            <v-radio value="code" label="Python"></v-radio>
+                          </v-radio-group>
+													<!--v-checkbox v-model="activity.editor" label="Programmazione a Blocchi" value="blockly"></v-checkbox>
+													<v-checkbox v-model="activity.editor" label="Editor Python" value="python"></v-checkbox-->
 												</v-col>
-												<v-col>
-													<v-checkbox v-model="activity.availableViews" label="Editor Python" value="python"></v-checkbox>
-												</v-col>
-                        -->
                         <v-col>
                           <v-checkbox v-model="activity.autoRecVideo"
                             v-bind:label="$t('message.activity_auto_rec_video')"
@@ -499,7 +501,7 @@ export default {
         bodyFont: 'Roboto',
         codeFont: 'ubuntumono',
         maxBlocks: 0,
-        availableViews: [],
+        editor: 'blockly',
         viewSource: null,
         autoRecVideo: null,
         toolbox: {
@@ -613,6 +615,7 @@ export default {
         capsSwitch: { },
         bodyFont: { },
         codeFont: { },
+        editor: { },
         viewSource: { },
         autoRecVideo: { },
         name: { required: true, alphaNum },
