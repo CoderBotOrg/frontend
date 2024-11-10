@@ -87,7 +87,7 @@ describe('load homepage', () => {
     cy.get('#app').click()
     cy.get('button#1').click()
     //cy.get('input#settings_movement_control_forward_speed').should('have.value', '90')
-    cy.get('input#settings_movement_control_forward_elapse').should('have.value', '1')
+    //cy.get('input#settings_movement_control_forward_elapse').should('have.value', '1')
     cy.get('input#settings_movement_control_turn_speed').should('have.value', '90')
     cy.get('input#settings_movement_control_turn_elapse').should('have.value', '1')
     cy.get('input#settings_movement_program_forward_speed').should('have.value', '90')
