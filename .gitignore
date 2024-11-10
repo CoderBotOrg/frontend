@@ -24,6 +24,7 @@ pnpm-debug.log*
 
 # Tests
 tests/**/coverage
+cypress/downloads
 
 coverage
 .nyc_output
