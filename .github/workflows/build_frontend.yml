@@ -18,10 +18,11 @@ jobs:
     # Install NPM dependencies, cache them correctly
     # and run all Cypress tests
     - name: Cypress run
-      uses: cypress-io/github-action@v4
+      uses: cypress-io/github-action@v6
       with:
         #build: npm run build-test
         start: npm run test
+        node-version: 22.x
         wait-on: 'http://localhost:5000/api/v1/openapi.json'
         wait-on-timeout: 60
         browser: chrome
