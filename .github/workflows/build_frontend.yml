@@ -11,6 +11,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: 'npm'
     - name: Docker login
       run: docker login ghcr.io -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
     - name: Run stub
@@ -22,7 +27,6 @@ jobs:
       with:
         #build: npm run build-test
         start: npm run test
-        node-version: 22.x
         wait-on: 'http://localhost:5000/api/v1/openapi.json'
         wait-on-timeout: 60
         browser: chrome
