@@ -764,7 +764,7 @@
         </v-card>
       </v-dialog>
       <!-- Notification Snackbar -->
-      <v-snackbar v-model="snackbar">
+      <v-snackbar v-model="snackbar" id="snackId">
         {{ snackText }}
         <v-btn color="pink" text @click="snackbar = false">
           {{ $t('message.close') }}
