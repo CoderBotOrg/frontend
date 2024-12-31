@@ -72,36 +72,21 @@ describe('load homepage', () => {
     cy.get('a.v-list-item[href*="/settings"]').click()
     cy.get('#app').click()
     cy.get('button#1').click()
-    cy.get('input#settings_movement_control_forward_speed').clear()
-    cy.get('input#settings_movement_control_forward_speed').clear()
-    cy.get('input#settings_movement_control_forward_speed').clear()
+    cy.get('input#settings_movement_control_forward_speed').focus().clear();
     cy.get('input#settings_movement_control_forward_speed').type('90')
-    cy.get('input#settings_movement_control_forward_elapse').clear()
-    cy.get('input#settings_movement_control_forward_elapse').clear()
-    cy.get('input#settings_movement_control_forward_elapse').clear()
+    cy.get('input#settings_movement_control_forward_elapse').focus().clear();
     cy.get('input#settings_movement_control_forward_elapse').type('1')
-    cy.get('input#settings_movement_control_turn_speed').clear()
-    cy.get('input#settings_movement_control_turn_speed').clear()
-    cy.get('input#settings_movement_control_turn_speed').clear()
+    cy.get('input#settings_movement_control_turn_speed').focus().clear();
     cy.get('input#settings_movement_control_turn_speed').type('90')
-    cy.get('input#settings_movement_control_turn_elapse').clear()
-    cy.get('input#settings_movement_control_turn_elapse').clear()
+    cy.get('input#settings_movement_control_turn_elapse').focus().clear();
     cy.get('input#settings_movement_control_turn_elapse').type('1')
-    cy.get('input#settings_movement_program_forward_speed').clear()
-    cy.get('input#settings_movement_program_forward_speed').clear()
-    cy.get('input#settings_movement_program_forward_speed').clear()
+    cy.get('input#settings_movement_program_forward_speed').focus().clear();
     cy.get('input#settings_movement_program_forward_speed').type('90')
-    cy.get('input#settings_movement_program_forward_elapse').clear()
-    cy.get('input#settings_movement_program_forward_elapse').clear()
-    cy.get('input#settings_movement_program_forward_elapse').clear()
+    cy.get('input#settings_movement_program_forward_elapse').focus().clear();
     cy.get('input#settings_movement_program_forward_elapse').type('1')
-    cy.get('input#settings_movement_program_turn_speed').clear()
-    cy.get('input#settings_movement_program_turn_speed').clear()
-    cy.get('input#settings_movement_program_turn_speed').clear()
+    cy.get('input#settings_movement_program_turn_speed').focus().clear();
     cy.get('input#settings_movement_program_turn_speed').type('90')
-    cy.get('input#settings_movement_program_turn_elapse').clear()
-    cy.get('input#settings_movement_program_turn_elapse').clear()
-    cy.get('input#settings_movement_program_turn_elapse').clear()
+    cy.get('input#settings_movement_program_turn_elapse').focus().clear();
     cy.get('input#settings_movement_program_turn_elapse').type('1')
     cy.get('button#save').click()
     cy.get('#snackId').should('exist')
