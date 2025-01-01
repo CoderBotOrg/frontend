@@ -166,7 +166,6 @@ export default {
       this.toolbox.contents.splice(i, 1);
       if (this.toolbox.contents.length == 0) {
         this.toolbox.kind = flyoutToolbox;
-        console.log('category is now flyoutToolbox');
       }
     },
 
@@ -178,7 +177,6 @@ export default {
     },
 
     saveCategory() {
-      console.log(this.category.color_rgb);
       const category = {
         name: this.category.name,
         // colour: this.category.color_rgb.hsla.h,
@@ -190,11 +188,9 @@ export default {
       } else {
         if (this.toolbox.kind == flyoutToolbox) {
           this.toolbox.kind = categoryToolbox;
-          console.log('category is now categoryToolbox');
           category.contents = this.toolbox.contents;
           this.toolbox.contents = [];
         }
-        console.log('saveCategory.end');
         this.toolbox.contents.push(category);
       }
 

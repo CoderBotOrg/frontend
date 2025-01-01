@@ -116,6 +116,7 @@
     "activity_default": "Vordefinierte Aktivität",
     "activity_button_text_white": "Weiß",
     "activity_button_text_black": "Schwarz",
+    "activity_editor": "Code-Editoren",
     "blockly_toolbox_category_base": "Basis",
     "blockly_toolbox_category_cycles": "Schleifen",
     "blockly_toolbox_category_math": "Mathe",

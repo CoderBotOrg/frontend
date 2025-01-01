@@ -116,6 +116,7 @@
     "activity_default": "Attività predefinita",
     "activity_button_text_white": "Bianco",
     "activity_button_text_black": "Nero",
+    "activity_editor": "Editor di codice",
     "blockly_toolbox_category_base": "Base",
     "blockly_toolbox_category_cycles": "Cicli",
     "blockly_toolbox_category_math": "Matematica",

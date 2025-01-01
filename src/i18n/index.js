@@ -26,7 +26,7 @@ const locales = {
 
 const language = (window.navigator.userLanguage || window.navigator.language).substring(0, 2);
 
-console.log(language);
+console.log("locale: " + language);
 
 /* eslint-disable new-cap */
 export default new createI18n({

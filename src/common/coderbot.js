@@ -309,7 +309,6 @@ class CoderBot {
   }
 
   test(checkedTests) {
-    console.log(checkedTests);
     return this.$axios.post(`${this.CB}/system/test`, {
       tests: checkedTests
     });
