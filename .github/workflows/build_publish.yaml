@@ -9,7 +9,7 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Create Release
@@ -36,19 +36,19 @@ jobs:
     needs: [release]
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [22.x]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
 
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v4
       with:
         name: info
 
@@ -76,7 +76,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v4
       with:
         name: info
     - name: Set publish_info

@@ -10,7 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: 'npm'
     - name: Docker login
       run: docker login ghcr.io -u previ -p ${{ secrets.GHCR_BACKEND_STUB_RO }}
     - name: Run stub
@@ -18,7 +23,7 @@ jobs:
     # Install NPM dependencies, cache them correctly
     # and run all Cypress tests
     - name: Cypress run
-      uses: cypress-io/github-action@v4
+      uses: cypress-io/github-action@v6
       with:
         #build: npm run build-test
         start: npm run test
@@ -36,7 +41,7 @@ jobs:
     - name: Clean up
       run: docker stop backend-stub && docker rm backend-stub
     - name: Archive coverage
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage
         path: coverage
@@ -45,16 +50,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 16.x
-      uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 22.x
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
     - name: Archive dist
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dist
         path: dist
@@ -93,7 +98,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - uses: actions/checkout@v3 # Checking out the repo
+    - uses: actions/checkout@v4 # Checking out the repo
     - name: Docker meta
       id: meta
       uses: docker/metadata-action@v4
@@ -113,7 +118,7 @@ jobs:
           # push event
           type=sha,enable=true,prefix=git-,format=short
     - name: Download dist artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: dist 
         path: dist
@@ -133,7 +138,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build and push
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v6
       with:
           push: true
           platforms: linux/arm/v7

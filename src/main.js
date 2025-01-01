@@ -67,7 +67,7 @@ app.defaultTheme = 'dark';
 function loadConfig() {
   $coderbot.load().then(() => {
     console.log('config loaded');
-    if(store.getters.settings.locale != 'browser') {
+    if(store.getters.settings.locale != 'browser' && store.getters.settings.locale != undefined) {
       i18n.global.locale = store.getters.settings.locale;
     }
   }).catch((errors) => {

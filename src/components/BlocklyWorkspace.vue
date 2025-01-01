@@ -9,7 +9,10 @@
   </div>
 </template>
 <script>
-import Blockly from 'blockly';
+import * as Blockly from 'blockly/core';
+import {pythonGenerator} from 'blockly/python';
+var Blockly_Python = pythonGenerator;
+
 import DarkTheme from '@blockly/theme-dark';
 import 'blockly/blocks';
 import 'blockly/python';
@@ -38,7 +41,7 @@ const coderbot_locales = {
   de: bot_de.default
 };
 
-Blockly.Msg = { ...Blockly.Msg, ...coderbot_locales[locale] };
+Blockly.setLocale(coderbot_locales[locale]);
 
 const blockly_locales = {
   it: blockly_it,
@@ -210,9 +213,9 @@ export default {
       const xml_code = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
       const dom_code = Blockly.Xml.domToText(xml_code);
       window.LoopTrap = 1000;
-      Blockly.Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
-      const code = Blockly.Python.workspaceToCode(this.workspace);
-      Blockly.Python.INFINITE_LOOP_TRAP = null;
+      Blockly_Python.INFINITE_LOOP_TRAP = 'get_prog_eng().check_end()\n';
+      const code = Blockly_Python.workspaceToCode(this.workspace);
+      Blockly_Python.INFINITE_LOOP_TRAP = null;
       return {
         dom_code,
         code,
@@ -220,17 +223,17 @@ export default {
     },
 
     getProgramCode() {
-      Blockly.Python.STATEMENT_PREFIX = null;
-      Blockly.Python.addReservedWords();
-      Blockly.Python.INFINITE_LOOP_TRAP = null;
-      const code = Blockly.Python.workspaceToCode(this.workspace);
+      Blockly_Python.STATEMENT_PREFIX = null;
+      Blockly_Python.addReservedWords();
+      Blockly_Python.INFINITE_LOOP_TRAP = null;
+      const code = Blockly_Python.workspaceToCode(this.workspace);
 
       return code;
     },
 
     loadProgram(dom_code) {
       this.workspace.clear();
-      const xml = Blockly.Xml.textToDom(dom_code);
+      const xml = Blockly.utils.xml.textToDom(dom_code);
       Blockly.Xml.domToWorkspace(xml, this.workspace);
     },
 

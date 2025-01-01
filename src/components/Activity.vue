@@ -369,7 +369,6 @@ export default {
     },
   },
   mounted() { 
-    console.log(this.$data.activity)
     this.webcamStream = this.$coderbot.streamVideoURL();
     this.settings = this.$store.getters.settings;
     let activityName = this.$route.params.name;
@@ -551,7 +550,6 @@ export default {
           } else {
             this.$data.isDefault = '';
             this.$data.overwrite = true;
-            console.log('saved');
             this.dirty = false;
           }
         }).catch((error) => {

@@ -764,7 +764,7 @@
         </v-card>
       </v-dialog>
       <!-- Notification Snackbar -->
-      <v-snackbar v-model="snackbar">
+      <v-snackbar v-model="snackbar" id="snackId">
         {{ snackText }}
         <v-btn color="pink" text @click="snackbar = false">
           {{ $t('message.close') }}
@@ -853,7 +853,6 @@ export default {
     },
     uploadPackage() {
       this.$coderbot.uploadMusicPackage(this.formdata).then((result) => {
-        console.log(result);
         this.updateStatus = 0;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
@@ -864,7 +863,6 @@ export default {
           this.musicPackages = this.$store.getters.musicPackages;
         });
       }).catch((result) => {
-        console.log(result);
         this.updateStatus = 0;
         this.uploadCompleted = true;
         this.uploadInProgress = false;
@@ -915,7 +913,6 @@ export default {
       this.runningTest = true;
       let tests = Object.values(this.checkedTests);
       this.$coderbot.test(tests).then((response) => {
-        console.log(response.data);
         this.testResults = response.data;
         this.snackText = 'Running tests';
         this.snackbar = true;
@@ -931,7 +928,6 @@ export default {
     },
     shutdown() {
       this.$coderbot.halt().then(() => {
-        console.log(response);
         this.dialog_shutdown = false;
         this.snackText = this.$i18n.t('message.coderbot_status_shutting_down');
         this.snackbar = true;
@@ -946,7 +942,7 @@ export default {
     },
     deletePkg(pkgNameID) {
       this.$coderbot.deleteMusicPackage(pkgNameID).then(() => {
-        console.log('Pacchetto rimosso');
+        console.log('music package removed');
         this.snackText = this.$i18n.t('message.settings_music_package_removed');
         this.snackbar = true;
         this.$coderbot.loadMusicPackages().then(() => {
@@ -956,7 +952,6 @@ export default {
     },
     save() {
       if (this.v$.$invalid) {
-        console.log(this.v$)
         this.snackText = this.$i18n.t('message.settings_errors');
         this.snackbar = true;
       } else {
@@ -974,7 +969,6 @@ export default {
           this.snackText = this.$i18n.t('message.settings_updated') + (needRestartFlag ? this.$i18n.t('message.settings_restart_needed') : '');
           this.snackbar = true;
           this.v$.settings.$reset();
-          console.log('set dirty false');
         });
         if (this.v$.settings.wifiMode.$dirty || this.v$.settings.wifiSSID.$dirty || this.v$.settings.wifiPsw.$dirty) {
           if(this.settings.wifiMode=="client") {
