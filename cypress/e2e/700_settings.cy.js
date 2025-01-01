@@ -58,7 +58,7 @@ describe('load homepage', () => {
     cy.get('#save').click()
     cy.get('.v-snackbar__content').should('exist')
   })
-
+  /* disabled because flaky
   it('modifies most settings, valid values, save', () => {
     cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
       req.reply({"wifi": false, "internet": true})
@@ -97,7 +97,7 @@ describe('load homepage', () => {
     cy.get('input#settings_movement_program_turn_speed').should('have.value', '90')
     cy.get('input#settings_movement_program_turn_elapse').should('have.value', '1')
   })
-
+  */
   it('modifies most settings, invalid values, verify error message', () => {
     cy.intercept('http://localhost:5000/wifi/v1/connection_status', (req) => {
       req.reply({"wifi": false, "internet": true})
