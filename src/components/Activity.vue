@@ -628,14 +628,15 @@ export default {
     runProgram() {
       // POST /program/save
       console.info("Starting program");
-      var code = '';
+      var python_code = '';
       if(this.$data.activity.editor == 'code') {
-        code = this.$data.code;
+        python_code = this.$data.code;
       } else if (this.$data.activity.editor == 'blockly') {
-        code = this.$refs.workspace.getProgramCode();
+        let {code, dom_code} = this.$refs.workspace.getProgramData();
+        python_code = code;
       }
       const programName = this.programName != '' ? this.programName : 'untitled';
-      this.$coderbot.runProgram(programName, code).then(() => {
+      this.$coderbot.runProgram(programName, python_code).then(() => {
         this.runtimeDialog = true;
         setTimeout(() => {
           this.updateExecStatus();
