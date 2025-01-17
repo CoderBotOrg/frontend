@@ -1954,7 +1954,7 @@ Blockly.Blocks['coderbot_atmega_set_led'] = {
   }
 };
 
-Blockly_Python['coderbot_atmega_set_led'] = function(block) {
+Blockly_Python.forBlock['coderbot_atmega_set_led'] = function(block) {
   // input index: 0, 10 are Digital
   var begin = Blockly_Python.valueToCode(block, 'BEGIN', Blockly_Python.ORDER_NONE);
   var end = Blockly_Python.valueToCode(block, 'END', Blockly_Python.ORDER_NONE);
