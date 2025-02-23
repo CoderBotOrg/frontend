@@ -17,6 +17,10 @@
 
 import * as Blockly from 'blockly/core';
 import {pythonGenerator} from 'blockly/python';
+import {registerFieldColour, FieldColour} from '@blockly/field-colour';
+
+registerFieldColour();
+
 var Blockly_Python = pythonGenerator;
 
 Blockly.utils.colour.setHsvSaturation(0.9);
@@ -297,6 +301,24 @@ Blockly_Python.forBlock["text_print"] = function (block) {
   return `${sbsPrefix}get_cam().set_text(${argument0})\n`;
 };
 
+Blockly.Blocks.colour_picker = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(
+        new FieldColour('#ff4040', null, {
+        }),
+        'COLOUR',
+      );
+    this.setOutput(true, 'String');
+  },
+};
+
+Blockly_Python.forBlock["colour_picker"] = function (block) {
+  // Print statement.
+  const colour = block.getFieldValue('COLOUR');
+  const code = `"${colour}"`;
+  return [code, Blockly_Python.ORDER_ATOMIC];
+};
 Blockly.Blocks.coderbot_moveForward = {
   // Block for moving forward.
   init() {
@@ -543,15 +565,17 @@ Blockly_Python.forBlock["coderbot_adv_move_distance"] = function (block) {
   const OPERATORS = {
     FORWARD: ['forward'],
     BACKWARD: ['backward'],
-    LEFT: ['motor_control'],
-    RIGHT: ['motor_control'],
+    LEFT: ['left'],
+    RIGHT: ['right'],
   };
   const tuple = OPERATORS[block.getFieldValue('ACTION')];
   const action = tuple[0];
   const speed = 100;
   const distance = Blockly_Python.valueToCode(block, 'DISTANCE', Blockly_Python.ORDER_NONE);
   let code = '';
-  if(action == 'motor_control') {
+  if(action == 'left') {
+    code = `${sbsPrefix}get_bot().motor_control(speed_left=-${speed}, speed_right=${speed}, target_distance=${distance})\n`;
+  } else if(action == 'right') {
     code = `${sbsPrefix}get_bot().motor_control(speed_left=${speed}, speed_right=-${speed}, target_distance=${distance})\n`;
   } else {
     code = `${sbsPrefix}get_bot().${action}(speed=${speed}, distance=${distance})\n`;
